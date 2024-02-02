@@ -1,19 +1,18 @@
+# Doc: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+
 # Build system selection
 [build-system]
-requires = ["setuptools >= 40.9.0",]
+requires = ["setuptools >= 40.7.0",]
 build-backend = "setuptools.build_meta"
-
-[owner]
-name = "Panchdev Singh Chauhan"
-
-authors = [{ name = "Panchdev Chauhan", email = "erpanchdev@gmail.com" }]
 
 # Project details
 [project]
 name = "nrobo"
+version = "2024.2.12"
+authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
+maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "An Automated Testing Framework For Web Testing By NamasteyDigitalIndia.com"
 readme = "README.md"
-version = "2024.2.0"
 keywords = ["test automation", "test automation framework", "automated testing", "automation testing", "testing", "qa", "acceptance test", "automation"]
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
@@ -35,6 +34,7 @@ dependencies = ["pytest", "cowsay"]
 
 [project.optional-dependencies]
 dev = ["pytest", "cowsay"]
+test = ["pytest", "cowsay"]
 
 [project.urls]
 "Homepage" = "https://pypi.org/project/nrobo/"
@@ -54,8 +54,9 @@ testpaths = [
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["nrobo*",]
-namespaces = true
+include = ["nrobo*"]
+exclude = []
+namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.*"]
