@@ -2,6 +2,8 @@ class CONST(object):
     """
     Holds several constants
     """
+    NEWLINE = "\n"
+
     EMPTY = ""
     EQUAL = "="
     BLANK = EMPTY
@@ -43,3 +45,11 @@ class CONST(object):
     # Currencies
     DOLLAR = "$"
     RUPEE = u'\u20B9'
+
+    # Greetings
+    FOLDED_HAND = '\uF09F\u998F'
+    HEART_RED = '\u2764\ufe0f'
+
+    # Path seperators
+    SLASH = FORWARD_SLASH
+    BACKSLASH = u'\u005C'
