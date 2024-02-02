@@ -4,7 +4,7 @@ install command line utility of nrobo-copy framework.
 from nrobo.util.process import run_command
 from nrobo.util.python import verify_set_python_command
 from nrobo.util.constants import CONST
-from nrobo.util.commands.ncommands import clear_screen
+from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
 
 # refer to global defined in nrobo.util.process
 global __PYTHON__
@@ -38,6 +38,8 @@ def main():
     clear_screen()
     verify_set_python_command()
     greet_the_guest()
+    remove_files_recursively("dist")
+
 
 
 
