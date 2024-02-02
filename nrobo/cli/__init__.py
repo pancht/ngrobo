@@ -4,5 +4,5 @@ def main():
 
     :return:
     """
-    pass
+    print(f'Namastey Wolrd! _/\_')
 
