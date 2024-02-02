@@ -1,4 +1,5 @@
-# Doc: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+# pyproject.toml specification: https://packaging.python.org/en/latest/specifications/pyproject-toml/
+# setuptools doc: https://setuptools.pypa.io/en/latest/
 
 # Build system selection
 [build-system]
