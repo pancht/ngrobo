@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.2.14"
+version = "2024.3.1"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "An Automated Testing Framework For Web Testing By NamasteyDigitalIndia.com"
