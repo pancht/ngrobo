@@ -22,8 +22,12 @@ def install_requirements(requirements_file):
 
 
 def greet_the_guest():
-    greet_msg = 'Namastey Wolrd!. Thank you for choosing.'.format(CONST.NEWLINE)
-    print('{}\n{}'.format(greet_msg, CONST.HEART_RED * (len(greet_msg)//2)))
+    greet_msg = 'Namastey Wolrd!. Thank you for choosing, NROBO.'.format(CONST.NEWLINE)
+    formatted_heart_string = CONST.HEART_RED * (len(greet_msg)//2)
+
+    print('\n{}\n{}\n{}'.format(formatted_heart_string, greet_msg, formatted_heart_string))
+    print('\nWe are still in the process of refactoring next gen nrobo.'
+          '\nStay tuned!\n')
 
 def main():
     """
@@ -32,8 +36,9 @@ def main():
     :return:
     """
     clear_screen()
-    greet_the_guest()
     verify_set_python_command()
+    greet_the_guest()
+
 
 
 
