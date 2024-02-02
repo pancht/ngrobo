@@ -7,3 +7,5 @@ pip3 install --upgrade <package-name>
 # show list of installed packages
 pip3 list
 
+#upgrade pip
+python3 -m pip install --upgrade pip
