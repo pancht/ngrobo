@@ -1,6 +1,6 @@
 def main():
     """
-    Entry point of command line utility.
+    Entry point of nrobo command-line-utility.
 
     :return:
     """
