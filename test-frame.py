@@ -1,3 +1,3 @@
-from nrobo.cli import main
+from nrobo import main
 
 main()
