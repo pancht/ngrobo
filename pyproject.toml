@@ -40,7 +40,7 @@ dev = ["pytest", "cowsay"]
 "changelog" = "https://github.com/pancht/nrobodocs/blob/master/CHANGELOG.md"
 
 [project.scripts]
-nrobo = "nrobo:launch_nRoBo"
+nrobo = "nrobo.cli:main"
 
 
 #[build-system]
