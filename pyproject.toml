@@ -1,3 +1,4 @@
+# Build system selection
 [build-system]
 requires = ["setuptools >= 40.9.0",]
 build-backend = "setuptools.build_meta"
@@ -7,6 +8,7 @@ name = "Panchdev Singh Chauhan"
 
 authors = [{ name = "Panchdev Chauhan", email = "erpanchdev@gmail.com" }]
 
+# Project details
 [project]
 name = "nrobo"
 description = "An Automated Testing Framework For Web Testing By NamasteyDigitalIndia.com"
@@ -42,20 +44,7 @@ dev = ["pytest", "cowsay"]
 [project.scripts]
 nrobo = "nrobo.cli:main"
 
-
-#[build-system]
-#requires = ["hatchling"]
-#build-backend = "hatchling.build"
-#
-#[tool.hatch.build]
-#include = [
-#  "nrobo-copy/*.*", "nrobo-copy/**","nrobo-copy/**/*.*", "nrobo-copy/**/**", "nrobo-copy/**/**/*.*"
-#]
-
-#[build-system]
-#requires = ["setuptools"]
-#build-backend = "setuptools.build_meta"
-
+# Tools configurations
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
@@ -63,23 +52,9 @@ testpaths = [
     "tests_performance"
 ]
 
-#[tool.hatch.build.targets.wheel]
-#packages = ["nrobo-copy"]
-#
-#[tool.hatch.build.targets.sdist]
-#include = [
-#  "nrobo-copy"
-#]
-
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["nrobo*",]
-#            "nrobo-copy/**",
-#            "nrobo-copy/**/*.*",
-#            "nrobo-copy/assets/chartjs/**",
-#            "nrobo-copy/assets/chartjs/**/*.*",
-#            "nrobo-copy/assets/chartjs/*.*",
-#            "nrobo-copy/tests_advanced_reports*"]  # alternatively: `exclude = ["additional*"]`
 namespaces = true
 
 [tool.setuptools.package-data]
