@@ -1,19 +1,21 @@
 # Holds python command to run other commands.
 # Options: python | python3
 __PYTHON__ = "python"
+__PIP__ = "pip"
 
 import re
 import platform
+from nrobo.util.process import terminal
 
-from nrobo.cli import run_command
 
-
-def verify_set_python_command():
+def verify_set_python_install_pip_command():
     """
     Verifies if python is installed on the host system.
 
     If found, sets the appropriate python command
     Else exit the nrobo framework with message.
+
+    If found and sets python command, install pip as well.
 
     :return:
     """
@@ -37,5 +39,8 @@ def verify_set_python_command():
             global __PYTHON__
             __PYTHON__ = python3
 
-            if run_command([__PYTHON__, "--version"]) != 0:
+            if terminal([__PYTHON__, "--version"]) != 0:
                 __PYTHON__ = "python"
+
+    # Install pip now!
+    terminal([__PYTHON__, '-m', 'ensurepip', '--upgrade'])

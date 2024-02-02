@@ -1,33 +1,49 @@
 """
-install command line utility of nrobo-copy framework.
+Trigger for nrobo framework!
+
 """
-from nrobo.util.process import run_command
-from nrobo.util.python import verify_set_python_command
-from nrobo.util.constants import CONST
+
+import argparse
+import os
+
+from nrobo.cli.install import install_dependencies, __REQUIREMENTS__
 from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
+from nrobo.util.constants import CONST
+from nrobo.util.python import verify_set_python_install_pip_command
+from nrobo import FRAMEWORK_PATHS
 
 # refer to global defined in nrobo.util.process
 global __PYTHON__
 
 
-def install_requirements(requirements_file):
-    """
-    Install requirements from requirements.txt
-    :return:
-    """
-    try:
-        run_command(__PYTHON__ + " install -r {}".format(requirements_file))
-    except Exception as e:
-        print(e)
-
-
 def greet_the_guest():
     greet_msg = 'Namastey Wolrd!. Thank you for choosing, NROBO.'.format(CONST.NEWLINE)
-    formatted_heart_string = CONST.HEART_RED * (len(greet_msg)//2)
+    formatted_heart_string = CONST.HEART_RED * (len(greet_msg) // 2)
 
     print('\n{}\n{}\n{}'.format(formatted_heart_string, greet_msg, formatted_heart_string))
     print('\nWe are still in the process of refactoring next gen nrobo.'
           '\nStay tuned!\n')
+
+
+def parse_cli_args():
+    """
+    Parse command-line-arguments
+    Doc: https://docs.python.org/3/library/argparse.html#example
+
+    :return:
+    """
+    parser = argparse.ArgumentParser(
+        prog="nrobo",
+        description='Run tests through nrobo framework')
+    parser.add_argument("-i", "--install", action="store_true")
+
+    args = parser.parse_args()
+
+    if args.install:
+        # Install dependencies
+        print("Installing dependencies...")
+        install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
+
 
 def main():
     """
@@ -35,12 +51,9 @@ def main():
 
     :return:
     """
+
     clear_screen()
-    verify_set_python_command()
     greet_the_guest()
+    verify_set_python_install_pip_command()
     remove_files_recursively("dist")
-
-
-
-
-
+    parse_cli_args()

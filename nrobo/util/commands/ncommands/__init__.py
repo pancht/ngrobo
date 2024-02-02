@@ -2,7 +2,7 @@ from nrobo.exceptions import *
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
 from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
-from nrobo.util.process import run_command
+from nrobo.util.process import terminal
 
 
 class N_COMMANDS:
@@ -42,7 +42,7 @@ def clear_screen():
 
     :return:
     """
-    run_command([get_command(N_COMMANDS.CLEAR_SCREEN)])
+    terminal([get_command(N_COMMANDS.CLEAR_SCREEN)])
 
 
 def remove_files_recursively(directory):
@@ -52,5 +52,5 @@ def remove_files_recursively(directory):
     :param directory:
     :return:
     """
-    run_status = run_command(["rm", "-rf", directory])
+    run_status = terminal(["rm", "-rf", directory])
     return run_status
