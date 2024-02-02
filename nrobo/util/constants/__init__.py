@@ -1,0 +1,45 @@
+class CONST(object):
+    """
+    Holds several constants
+    """
+    EMPTY = ""
+    EQUAL = "="
+    BLANK = EMPTY
+    SPACE = " "
+    STAR = "*"
+    ASTERISK = STAR
+    UNDERSCORE = "_"
+    FORWARD_SLASH = "/"
+    MINUS = "-"
+    HYPHEN = MINUS
+    TILD = "~"
+    CARET = "`"
+    QUESTION = "?"
+    EXCLAMATION = "!"
+    HASH = "#"
+
+    # Brackets
+    PARENTHESIS_OPEN = "("
+    PARENTHESIS_CLOSE = ")"
+    CURLY_BRACE_OPEN = "{"
+    CURLY_BRACE_CLOSE = "}"
+    SQUARE_BRACKET_OPEN = "["
+    SQUARE_BRACKET_CLOSE = "]"
+
+    # Web and browser
+    HTTPS = "https://"
+    HTTP = "http://"
+    DOT = "."
+    COLON = ":"
+    ADDRESS_OF = "@"
+    AT_THE_RATE = ADDRESS_OF
+
+    # Day, Date and Time
+    HOURS_PER_DAY = 24
+    MINUTES_PER_HOUR = 60
+    SECONDS_PER_MINUTE = 60
+    PERCENTAGE = '%'
+
+    # Currencies
+    DOLLAR = "$"
+    RUPEE = u'\u20B9'

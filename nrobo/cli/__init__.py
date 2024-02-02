@@ -3,6 +3,7 @@ install command line utility of nrobo-copy framework.
 """
 from nrobo.util.process import run_command
 from nrobo.util.python import verify_set_python_command
+from nrobo.util.constants import CONST
 
 # refer to global defined in nrobo.util.process
 global __PYTHON__
@@ -25,5 +26,5 @@ def main():
 
     :return:
     """
-    print('[italic red]Namastey Wolrd! _/\\_')
+    print('[italic red]Namastey Wolrd! ' + CONST.RUPEE + '_/\\_')
     verify_set_python_command()
