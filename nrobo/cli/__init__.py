@@ -4,6 +4,8 @@ Trigger for nrobo framework!
 """
 
 import argparse
+import time
+
 from nrobo.util.process import terminal
 import os
 
@@ -12,6 +14,11 @@ from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
 from nrobo.util.constants import CONST
 from nrobo.util.python import verify_set_python_install_pip_command
 from nrobo import FRAMEWORK_PATHS
+from rich import print
+from rich.console import Console
+
+console = Console()
+from nrobo.cli.formatting import STYLES, ELE
 
 # refer to global defined in nrobo.util.process
 global __PYTHON__
@@ -22,7 +29,9 @@ def greet_the_guest():
     greet_msg = 'Namastey Wolrd!. Thank you for choosing, NROBO.'.format(CONST.NEWLINE)
     formatted_heart_string = CONST.HEART_RED * (len(greet_msg) // 2)
 
-    print('\n{}\n{}\n{}'.format(formatted_heart_string, greet_msg, formatted_heart_string))
+    print(f'\n{STYLES[ELE.HLRed]}{formatted_heart_string}'
+          f'\n{STYLES[ELE.HLOrange]}{greet_msg}'
+          f'\n{STYLES[ELE.HLRed]}{formatted_heart_string}')
     print('\nWe are still in the process of refactoring next gen nrobo.'
           '\nStay tuned!\n')
 
@@ -43,7 +52,8 @@ def parse_cli_args():
     parser.add_argument("-l", "--link", help="Link of application under test.yaml")
     parser.add_argument("-u", "--username", help="Username for login", default="")
     parser.add_argument("-p", "--password", help="Password for login", default="")
-    parser.add_argument("-n", "--instances", help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
+    parser.add_argument("-n", "--instances",
+                        help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
     parser.add_argument("-r", "--rerun", help="Number of reruns for a test.yaml if it fails", default=0)
     parser.add_argument("--report", help="Report target. Default HTML or Rich Allure report. Options are html | allure",
@@ -134,39 +144,40 @@ def parse_cli_args():
 
     if args.install:
         # Install dependencies
-        print("Installing dependencies...")
-        install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
-        exit(1)
+        with console.status(f"{STYLES[ELE.TASK]}Installing dependencies...\n"):
+            install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
+            exit(1)
 
     # build pytest command
     command = ["pytest"]
 
     # Rest of the options if present
-    print("====")
-    print(args)
-    print("====")
-    print(args.__dict__)
-    for key, value in args.__dict__.items():
-        # process pytest keys first
-        if value and key not in non_pytest_args:
-            command.append(key)
-            command.append(str(value))
+    with console.status(f"{STYLES[ELE.TASK]}Parsing command-line-args...\n"):
+        for key, value in args.__dict__.items():
+            # process pytest keys first
+            if value and key not in non_pytest_args:
+                command.append(key)
+                command.append(str(value))
 
-    # process non-pytest keys now except testsdir
-    # Will do it later
+        # process non-pytest keys now except testsdir
+        # Will do it later
 
-    # process exception arg: key
-    if args.key:
-        command.append("-k")
-        command.append(str(args.key))
+        # process exception arg: key
+        if args.key:
+            command.append("-k")
+            command.append(str(args.key))
 
-    # process testsdir key at the end
-    if args.testsdir:
-        command.append(args.testsdir)
+        # process testsdir key at the end
+        if args.testsdir:
+            command.append(args.testsdir)
 
-    print("Running tests...")
-    print("{}".format(command))
-    terminal(command)
+    with console.status(f"{STYLES[ELE.TASK]}:smiley: Running tests...\n"):
+        print("{}".format(command))
+        terminal(command)
+
+    with console.status(f"{STYLES[ELE.TASK]} Test report is ready! Please analyze results...\n"):
+        print("End of test run.")
+
 
 def main():
     """
