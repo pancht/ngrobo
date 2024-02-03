@@ -1,15 +1,25 @@
-class ELE:
-    TASK = "Task"
-    STEP = "Step"
-    HLOrange = "HighlightTextItalicOrange"
-    HLRed = "HighlightTextStyleItalicRed"
-    HLGreen = "HighlightTextStyleItalicGreen"
+from rich.theme import Theme
 
 
-STYLES = {
-    ELE.TASK: "[bold blue]",
-    ELE.STEP: "[italic green]",
-    ELE.HLOrange: "[italic dark_orange3]",
-    ELE.HLRed: "[italic red]",
-    ELE.HLGreen: "[italic green]"
-}
+class STYLE:
+    TASK = "task"
+    STEP = "step"
+    HLOrange = "highlight_text_style_orange"
+    HLRed = "highlight_text_style_red"
+    HLGreen = "highlight_text_style_green"
+    WARNING = "warning",
+    INFO = "info",
+    DANGER = "danger"
+
+
+themes = Theme({
+    # doc: https://rich.readthedocs.io/en/latest/style.html#style-themes
+    STYLE.TASK: "bold blue",
+    STYLE.STEP: "italic green",
+    STYLE.HLOrange: "italic dark_orange3",
+    STYLE.HLRed: "italic red",
+    STYLE.HLGreen: "italic green",
+    STYLE.INFO: "dim cyan",
+    STYLE.WARNING: "magenta",
+    STYLE.DANGER: "bold red"
+})

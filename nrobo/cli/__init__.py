@@ -16,9 +16,10 @@ from nrobo.util.python import verify_set_python_install_pip_command
 from nrobo import FRAMEWORK_PATHS
 from rich import print
 from rich.console import Console
+from nrobo.cli.formatting import themes as th, STYLE
 
-console = Console()
-from nrobo.cli.formatting import STYLES, ELE
+
+console = Console(theme=th)
 
 # refer to global defined in nrobo.util.process
 global __PYTHON__
@@ -29,9 +30,9 @@ def greet_the_guest():
     greet_msg = 'Namastey Wolrd!. Thank you for choosing, NROBO.'.format(CONST.NEWLINE)
     formatted_heart_string = CONST.HEART_RED * (len(greet_msg) // 2)
 
-    print(f'\n{STYLES[ELE.HLRed]}{formatted_heart_string}'
-          f'\n{STYLES[ELE.HLOrange]}{greet_msg}'
-          f'\n{STYLES[ELE.HLRed]}{formatted_heart_string}')
+    console.print(f'\n[{STYLE.HLRed}]{formatted_heart_string}'
+          f'\n[{STYLE.HLOrange}]{greet_msg}'
+          f'\n[{STYLE.HLRed}]{formatted_heart_string}')
     print('\nWe are still in the process of refactoring next gen nrobo.'
           '\nStay tuned!\n')
 
@@ -144,7 +145,7 @@ def parse_cli_args():
 
     if args.install:
         # Install dependencies
-        with console.status(f"{STYLES[ELE.TASK]}Installing dependencies...\n"):
+        with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
             exit(1)
 
@@ -152,7 +153,7 @@ def parse_cli_args():
     command = ["pytest"]
 
     # Rest of the options if present
-    with console.status(f"{STYLES[ELE.TASK]}Parsing command-line-args...\n"):
+    with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
         for key, value in args.__dict__.items():
             # process pytest keys first
             if value and key not in non_pytest_args:
@@ -171,12 +172,12 @@ def parse_cli_args():
         if args.testsdir:
             command.append(args.testsdir)
 
-    with console.status(f"{STYLES[ELE.TASK]}:smiley: Running tests...\n"):
+    with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         print("{}".format(command))
         terminal(command)
 
-    with console.status(f"{STYLES[ELE.TASK]} Test report is ready! Please analyze results...\n"):
-        print("End of test run.")
+    with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
+        pass
 
 
 def main():
