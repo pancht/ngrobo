@@ -13,3 +13,10 @@ On MacOS: twine check dist/*
 On Windows: twine check . dist/*
 # upload packages to testpypi or pypi
 python3 -m twine upload --repository testpypi dist/*
+
+
+### nrobo framework commands
+# bundle package
+python package_upload.py -b -t test
+
+# check package
