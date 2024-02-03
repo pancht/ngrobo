@@ -12,3 +12,6 @@ numpy==1.26.3
 
 # pytest: simple powerful testing with Python
 pytest==8.0.0
+
+# YAML parser and emitter for Python
+PyYAML==6.0.1

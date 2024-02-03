@@ -39,13 +39,13 @@ def parse_cli_args():
         prog="nrobo",
         description='Run tests through nrobo framework')
     parser.add_argument("-i", "--install", action="store_true")
-    parser.add_argument("-a", "--app", help="Name of your test project")
-    parser.add_argument("-l", "--link", help="Link of application under test")
+    parser.add_argument("-a", "--app", help="Name of your test.yaml project")
+    parser.add_argument("-l", "--link", help="Link of application under test.yaml")
     parser.add_argument("-u", "--username", help="Username for login", default="")
     parser.add_argument("-p", "--password", help="Password for login", default="")
-    parser.add_argument("-n", "--instances", help="Number of parallel test instances. Default to 1 meaning sequential.",
+    parser.add_argument("-n", "--instances", help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
-    parser.add_argument("-r", "--rerun", help="Number of reruns for a test if it fails", default=0)
+    parser.add_argument("-r", "--rerun", help="Number of reruns for a test.yaml if it fails", default=0)
     parser.add_argument("--report", help="Report target. Default HTML or Rich Allure report. Options are html | allure",
                         default="html")
     parser.add_argument("--testsdir", help="Tests directory. Defaults to tests", default="tests")
@@ -59,9 +59,9 @@ def parse_cli_args():
     Only run tests which match the given substring
                         expression. An expression is a python evaluatable
                         expression where all names are substring-matched
-                        against test names and their parent classes.
+                        against test.yaml names and their parent classes.
                         Example: -k 'test_method or test_other' matches all
-                        test functions and classes whose name contains
+                        test.yaml functions and classes whose name contains
                         'test_method' or 'test_other', while -k 'not
                         test_method' matches those that don't contain
                         'test_method' in their names. -k 'not test_method
@@ -80,7 +80,7 @@ def parse_cli_args():
     Show markers (builtin, plugin and per-project ones).
     """)
     parser.add_argument("-x", "--exitfirst", help="""
-    exit instantly on first error or failed test.
+    exit instantly on first error or failed test.yaml.
     """)
     parser.add_argument("--fixtures", help="""
     show available fixtures, sorted by plugin appearance
@@ -90,7 +90,7 @@ def parse_cli_args():
         show available fixtures, sorted by plugin appearance
                             (fixtures with leading '_' are only shown with '-v')
                             """)
-    parser.add_argument("--fixtures-per-test", help="show fixtures per test")
+    parser.add_argument("--fixtures-per-test.yaml", help="show fixtures per test.yaml")
     parser.add_argument("--pdb", help="""
     start the interactive Python debugger on errors or
                         KeyboardInterrupt.
@@ -101,9 +101,9 @@ def parse_cli_args():
                         errors. For example:
                         --pdbcls=IPython.terminal.debugger:TerminalPdb
                         """)
-    parser.add_argument("--trace", help="Immediately break when running each test.")
+    parser.add_argument("--trace", help="Immediately break when running each test.yaml.")
     parser.add_argument("--capture", help="""
-    --capture=method      per-test capturing method: one of fd|sys|no|tee-sys. 
+    --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys. 
     """)
     parser.add_argument("-s", help="shortcut for --capture=no.")
     parser.add_argument("--runxfail", help="""
@@ -125,6 +125,7 @@ def parse_cli_args():
                         """)
 
     args = parser.parse_args()
+
     non_pytest_args = [
         "install", "app", "link",
         "username", "password", "instances",
