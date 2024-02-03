@@ -1,0 +1,17 @@
+# requirements for nrobo framework
+
+
+# Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal
+rich==13.7.0
+
+# Fundamental package for array computing in Python
+numpy==1.26.3
+
+# Virtual Python Environment builder
+# virtualenv==20.25.0
+
+# pytest: simple powerful testing with Python
+pytest==8.0.0
+
+# YAML parser and emitter for Python
+PyYAML==6.0.1
