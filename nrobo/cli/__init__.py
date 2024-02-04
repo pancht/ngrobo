@@ -17,7 +17,8 @@ from nrobo import FRAMEWORK_PATHS
 from rich import print
 from rich.console import Console
 from nrobo.cli.formatting import themes as th, STYLE
-
+from nrobo.cli.cli_constansts import nCLI as CLI
+from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
 
 console = Console(theme=th)
 
@@ -31,8 +32,8 @@ def greet_the_guest():
     formatted_heart_string = CONST.HEART_RED * (len(greet_msg) // 2)
 
     console.print(f'\n[{STYLE.HLRed}]{formatted_heart_string}'
-          f'\n[{STYLE.HLOrange}]{greet_msg}'
-          f'\n[{STYLE.HLRed}]{formatted_heart_string}')
+                  f'\n[{STYLE.HLOrange}]{greet_msg}'
+                  f'\n[{STYLE.HLRed}]{formatted_heart_string}')
     print('\nWe are still in the process of refactoring next gen nrobo.'
           '\nStay tuned!\n')
 
@@ -48,25 +49,26 @@ def parse_cli_args():
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
-    parser.add_argument("-i", "--install", action="store_true")
-    parser.add_argument("-a", "--app", help="Name of your test.yaml project")
-    parser.add_argument("-l", "--link", help="Link of application under test.yaml")
-    parser.add_argument("-u", "--username", help="Username for login", default="")
-    parser.add_argument("-p", "--password", help="Password for login", default="")
-    parser.add_argument("-n", "--instances",
+    parser.add_argument("-i", f"--{CLI.INSTALL}", action="store_true")
+    parser.add_argument("-a", f"--{CLI.APP}", help="Name of your test.yaml project")
+    parser.add_argument("-l", f"--{CLI.LINK}", help="Link of application under test.yaml")
+    parser.add_argument("-u", f"--{CLI.USERNAME}", help="Username for login", default="")
+    parser.add_argument("-p", f"--{CLI.PASSWORD}", help="Password for login", default="")
+    parser.add_argument("-n", f"--{CLI.INSTANCES}",
                         help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
-    parser.add_argument("-r", "--rerun", help="Number of reruns for a test.yaml if it fails", default=0)
-    parser.add_argument("--report", help="Report target. Default HTML or Rich Allure report. Options are html | allure",
+    parser.add_argument("-r", f"--{CLI.RERUN}", help="Number of reruns for a test.yaml if it fails", default=0)
+    parser.add_argument(f"--{CLI.REPORT}",
+                        help="Report target. Default HTML or Rich Allure report. Options are html | allure",
                         default="html")
-    parser.add_argument("--testsdir", help="Tests directory. Defaults to tests", default="tests")
-    parser.add_argument("-b", "--browser", help="""
+    parser.add_argument(f"--{CLI.TESTDIR}", help="Tests directory. Defaults to tests", default="tests")
+    parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
         (Only chrome is supported at present.)
     """)
-    parser.add_argument("-k", "--key", help="""
+    parser.add_argument("-k", f"--{CLI.KEY}", help="""
     Only run tests which match the given substring
                         expression. An expression is a python evaluatable
                         expression where all names are substring-matched
@@ -137,11 +139,12 @@ def parse_cli_args():
 
     args = parser.parse_args()
 
-    non_pytest_args = [
+    non_pytest_args = {
         "install", "app", "link",
         "username", "password", "instances",
         "rerun", "report", "testsdir",
-        "browser", "key"]
+        "browser", "key"
+    }
 
     if args.install:
         # Install dependencies
@@ -153,24 +156,29 @@ def parse_cli_args():
     command = ["pytest"]
 
     # Rest of the options if present
+    console.print(f"args={CLI.ARGS.keys()}")
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
         for key, value in args.__dict__.items():
             # process pytest keys first
-            if value and key not in non_pytest_args:
-                command.append(key)
-                command.append(str(value))
+            if value:
+                if key not in CLI.ARGS.keys():
+                    command.append(key)
+                    command.append(str(value))
+                elif key == CLI.KEY:
+                    command.append("-k")
+                    command.append(str(args.key))
+                elif key == CLI.INSTANCES:
+                    command.append("-n")
+                    command.append(str(value))
+                elif key == CLI.TESTDIR:
+                    command.append(value)
 
-        # process non-pytest keys now except testsdir
-        # Will do it later
-
-        # process exception arg: key
-        if args.key:
-            command.append("-k")
-            command.append(str(args.key))
-
-        # process testsdir key at the end
-        if args.testsdir:
-            command.append(args.testsdir)
+    # Finally test if testsdir arg is present or not
+    if not args.testsdir:
+        if __HOST_PLATFORM__ in [PLATFORMS.MACOS, PLATFORMS.LINUX, PLATFORMS.DARWIN]:
+            command.append("tests")
+        elif __HOST_PLATFORM__ == PLATFORMS.WINDOWS:
+            command.append("tests")
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         print("{}".format(command))
