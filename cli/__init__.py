@@ -23,11 +23,19 @@ def nrobo_cli():
     args = parser.parse_args()
 
     if args.build:
-        build(args.target)
+        if args.target:
+            build(args.target)
+        else:
+            print("Missing CLI arg -t | --target")
+            exit(1)
     elif args.check:
         check()
     elif args.publish:
-        publish(args.target)
+        if args.target:
+            publish(args.target)
+        else:
+            print("Missing CLI arg -t | --target")
+            exit(1)
     else:
         print("Invalid argument or missing arguments!")
         exit(1)
