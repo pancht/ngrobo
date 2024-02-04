@@ -21,3 +21,6 @@ selenium==4.17.2
 
 # pytest plugin for generating HTML reports
 pytest-html==4.1.1
+
+# pytest xdist plugin for distributed testing, most importantly across multiple CPUs
+pytest-xdist==3.5.0
