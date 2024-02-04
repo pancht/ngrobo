@@ -62,54 +62,323 @@ def parse_cli_args():
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
     """)
-    # parser.add_argument("--markers", help="""
-    # Show markers (builtin, plugin and per-project ones).
-    # """)
-    # parser.add_argument("-x", "--exitfirst", help="""
-    # exit instantly on first error or failed test.yaml.
-    # """)
-    # parser.add_argument("--fixtures", help="""
-    # show available fixtures, sorted by plugin appearance
-    #                     (fixtures with leading '_' are only shown with '-v')
-    #                     """)
-    # parser.add_argument("--funcargs", help="""
-    #     show available fixtures, sorted by plugin appearance
-    #                         (fixtures with leading '_' are only shown with '-v')
-    #                         """)
-    # parser.add_argument("--fixtures-per-test.yaml", help="show fixtures per test.yaml")
-    # parser.add_argument("--pdb", help="""
-    # start the interactive Python debugger on errors or
-    #                     KeyboardInterrupt.
-    #                     """)
-    # parser.add_argument("--pdbcls", help="""
-    # --pdbcls=modulename:classname
-    #                     start a custom interactive Python debugger on
-    #                     errors. For example:
-    #                     --pdbcls=IPython.terminal.debugger:TerminalPdb
-    #                     """)
-    # parser.add_argument("--trace", help="Immediately break when running each test.yaml.")
-    # parser.add_argument("--capture", help="""
-    # --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys.
-    # """)
-    # parser.add_argument("-s", help="shortcut for --capture=no.")
-    # parser.add_argument("--runxfail", help="""
-    # report the results of xfail tests as if they were
-    #                     not marked
-    #                     """)
-    # parser.add_argument("-lf", "--last-failed", help="""
-    # rerun only the tests that failed at the last run (or
-    #                     all if none failed)
-    #                     """)
-    # parser.add_argument("--ff", "--failed-first", help="""
-    # run all tests, but run the last failures first.
-    #                     This may re-order tests and thus lead to repeated
-    #                     fixture setup/teardown.
-    #                     """)
-    # parser.add_argument("--nf", "--new-first", help="""
-    # run tests from new files first, then the rest of the
-    #                     tests sorted by file mtime
-    #                     """)
+    parser.add_argument("--markers", help="""
+    Show markers (builtin, plugin and per-project ones).
+    """)
+    parser.add_argument("-x", "--exitfirst", help="""
+    exit instantly on first error or failed test.yaml.
+    """)
+    parser.add_argument("--fixtures", help="""
+    show available fixtures, sorted by plugin appearance
+                        (fixtures with leading '_' are only shown with '-v')
+                        """)
+    parser.add_argument("--funcargs", help="""
+        show available fixtures, sorted by plugin appearance
+                            (fixtures with leading '_' are only shown with '-v')
+                            """)
+    parser.add_argument("--fixtures-per-test.yaml", help="show fixtures per test.yaml")
+    parser.add_argument("--pdb", help="""
+    start the interactive Python debugger on errors or
+                        KeyboardInterrupt.
+                        """)
+    parser.add_argument("--pdbcls", help="""
+    --pdbcls=modulename:classname
+                        start a custom interactive Python debugger on
+                        errors. For example:
+                        --pdbcls=IPython.terminal.debugger:TerminalPdb
+                        """)
+    parser.add_argument("--trace", help="Immediately break when running each test.yaml.")
+    parser.add_argument("--capture", help="""
+    --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys.
+    """)
+    parser.add_argument("-s", help="shortcut for --capture=no.")
+    parser.add_argument("--runxfail", help="""
+    report the results of xfail tests as if they were
+                        not marked
+                        """)
+    parser.add_argument("-lf", "--last-failed", help="""
+    rerun only the tests that failed at the last run (or
+                        all if none failed)
+                        """)
+    parser.add_argument("--ff", "--failed-first", help="""
+    run all tests, but run the last failures first.
+                        This may re-order tests and thus lead to repeated
+                        fixture setup/teardown.
+                        """)
+    parser.add_argument("--nf", "--new-first", help="""
+    run tests from new files first, then the rest of the
+                        tests sorted by file mtime
+                        """)
+    parser.add_argument("--cache-show", help="""
+        --cache-show=[CACHESHOW]
+                        show cache contents, don't perform collection or
+                        tests. Optional argument: glob (default: '*').
+                            """, default='*')
+    parser.add_argument("--cache-clear",  help="""
+        remove all cache contents at start of test run.
+                            """)
+    parser.add_argument("--lfnf", help="""
+        --lfnf={all,none}, --last-failed-no-failures={all,none}
+                        which tests to run with no previously (known)
+                        failures.
+                            """)
+    parser.add_argument("--sw", "--stepwise", help="""
+        exit on test failure and continue from last failing
+                        test next time
+                            """)
+    parser.add_argument("--sw-skip", "--stepwise-skip", help="""
+        ignore the first failing test but stop on the next
+                        failing test
+                            """)
+    parser.add_argument("--durations", help="""
+        --durations=N         show N slowest setup/test durations (N=0 for all).
+                            """)
+    parser.add_argument("--durations-min", help="""
+        Minimal duration in seconds for inclusion in slowest
+                        list. Default 0.005
+                            """)
+    parser.add_argument("-v", "--verbose", help="""
+        increase verbosity.
+                            """)
+    parser.add_argument("--no-header", help="""
+        disable header
+                            """)
+    parser.add_argument("--no-summary", help="""
+        disable summary
+        """)
+    parser.add_argument("-q", "--quiet", help="""
+        decrease verbosity.
+                            """)
+    parser.add_argument("--verbosity", help="""
+        --verbosity=VERBOSE   
+        set verbosity. Default is 0.
+                            """)
+    parser.add_argument("-r", help="""
+        -r chars              show extra test summary info as specified by chars:
+                        (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed,
+                        (p)assed, (P)assed with output, (a)ll except passed
+                        (p/P), or (A)ll. (w)arnings are enabled by default
+                        (see --disable-warnings), 'N' can be used to reset
+                        the list. (default: 'fE').
+                            """)
+    parser.add_argument("--disable-warnings", "--disable-pytest-warnings", help="""
+            disable warnings summary
+            """)
+    parser.add_argument("-l", "--showlocals",  help="""
+            show locals in tracebacks (disabled by default).
+            """)
+    parser.add_argument("--tb", help="""
+            --tb=style.            traceback print mode
+                        (auto/long/short/line/native/no).
+            """)
+    parser.add_argument("--show-capture", help="""
+           --show-capture={no,stdout,stderr,log,all}.
+                        Controls how captured stdout/stderr/log is shown on
+                        failed tests. Default is 'all'.
+            """)
+    parser.add_argument("--full-trace", help="""
+            don't cut any tracebacks (default is to cut).
+            """)
+    parser.add_argument("--color", help="""
+            --color=color. color terminal output (yes/no/auto).
+            """)
+    parser.add_argument("--code-highlight", help="""
+            --code-highlight={yes,no}.
+                        Whether code should be highlighted (only if --color
+                        is also enabled)
+            """)
+    parser.add_argument("--pastebin", help="""
+            --pastebin=mode.      send failed|all info to bpaste.net pastebin service.
+            """)
+    parser.add_argument("--junit-xml", help="""
+            --junit-xml=path.      create junit-xml style report file at given path.
+            """)
+    parser.add_argument("--junit-prefix", help="""
+            --junit-prefix=str. prepend prefix to classnames in junit-xml output
+            """)
+    parser.add_argument("-W", "--pythonwarnings", help="""
+            -W PYTHONWARNINGS, --pythonwarnings=PYTHONWARNINGS
+                        set which warnings to report, see -W option of
+                        python itself.
+            """)
+    parser.add_argument("--maxfail", help="""
+            --maxfail=num. exit after first num failures or errors.
+            """)
+    parser.add_argument("--strict-config", help="""
+            any warnings encountered while parsing the `pytest`
+                        section of the configuration file raise errors.
+            """)
+    parser.add_argument("--strict-markers", help="""
+            markers not registered in the `markers` section of
+                        the configuration file raise errors.
+            """)
+    parser.add_argument("--strict", help="""
+            (deprecated) alias to --strict-markers.
+            """)
+    parser.add_argument("-c", help="""
+            -c file. load configuration from `file` instead of trying to
+                        locate one of the implicit configuration files.
+            """)
+    parser.add_argument("--continue-on-collection-errors", help="""
+            --continue-on-collection-errors.
+                        Force test execution even if collection errors
+                        occur.
+            """)
+    parser.add_argument("--rootdir", help="""
+            --rootdir=ROOTDIR. Define root directory for tests. Can be relative
+                        path: 'root_dir', './root_dir',
+                        'root_dir/another_dir/'; absolute path:
+                        '/home/user/root_dir'; path with variables:
+                        '$HOME/root_dir'.
+            """)
+    parser.add_argument("--co", "--collect-only", help="""
+            only collect tests, don't execute them.
+            """)
+    parser.add_argument("--pyargs", help="""
+            try to interpret all arguments as python packages.
+            """)
+    parser.add_argument("--ignore", help="""
+            --ignore=path. ignore path during collection (multi-allowed).
+            """)
+    parser.add_argument("--ignore-glob", help="""
+            --ignore-glob=path. ignore path pattern during collection (multi-
+                        allowed).
+            """)
+    parser.add_argument("--deselect", help="""
+            --deselect=nodeid_prefix. deselect item (via node id prefix) during collection
+                        (multi-allowed).
+            """)
+    parser.add_argument("--confcutdir", help="""
+            --confcutdir=dir. only load conftest.py's relative to specified dir.
+            """)
+    parser.add_argument("--noconftest", help="""
+            Don't load any conftest.py files.
+            """)
+    parser.add_argument("--no-summary", help="""
+            disable summary
+            """)
+    parser.add_argument("--keep-duplicates", help="""
+            Keep duplicate tests.
+            """)
+    parser.add_argument("--collect-in-virtualenv", help="""
+                    Don't ignore tests in a local virtualenv directory
+                    """)
+    parser.add_argument("--import-mode", help="""
+                    --import-mode={prepend,append,importlib}. prepend/append to sys.path when importing test
+                    """)
+    parser.add_argument("--doctest-modules", help="""
+                    run doctests in all .py modules
+                    """)
+    parser.add_argument("--doctest-report", help="""
+                    --doctest-report={none,cdiff,ndiff,udiff,only_first_failure}. 
+                    choose another output format for diffs on doctest
+                        failure
+                    """)
+    parser.add_argument("--doctest-glob", help="""
+                    --doctest-glob=pat. doctests file matching pattern, default: test*.txt
+                    """)
+    parser.add_argument("--doctest-ignore-import-errors", help="""
+                    ignore doctest ImportErrors
+                    """)
+    parser.add_argument("--doctest-continue-on-failure", help="""
+                    for a given doctest, continue to run after the first
+                        failure
+                    """)
+    parser.add_argument("--basetemp", help="""
+                    --basetemp=dir. base temporary directory for this test run.(warning:
+                        this directory is removed if it exists)
+                    """)
+    parser.add_argument("-V", "--version", help="""
+                    display pytest version and information about
+                        plugins.When given twice, also display information
+                        about plugins.
+                    """)
+    parser.add_argument("-h", "--help", help="""
+                    show help message and configuration info
+                    """)
+    parser.add_argument("-p", help="""
+                    -p name               early-load given plugin module name or entry point
+                        (multi-allowed).
+                        To avoid loading of plugins, use the `no:` prefix,
+                        e.g. `no:doctest`.
+                    """)
+    parser.add_argument("--trace-config", help="""
+                    trace considerations of conftest.py files.
+                    """)
+    parser.add_argument("--debug", help="""
+                    store internal tracing debug information in
+                        'pytestdebug.log'.
+                    """)
+    parser.add_argument("-o", "--override-ini", help="""
+                    -o OVERRIDE_INI, --override-ini=OVERRIDE_INI
+                        override ini option with "option=value" style, e.g.
+                        `-o xfail_strict=True -o cache_dir=cache`.
+                    """)
+    parser.add_argument("--assert", help="""
+                    --assert=MODE         Control assertion debugging tools.
+                        'plain' performs no assertion debugging.
+                        'rewrite' (the default) rewrites assert statements
+                        in test modules on import to provide assert
+                        expression information.
+                    """)
+    parser.add_argument("--setup-only", help="""
+                    only setup fixtures, do not execute tests.
+                    """)
+    parser.add_argument("--setup-show", help="""
+                    show setup of fixtures while executing tests.
+                    """)
+    parser.add_argument("--setup-plan", help="""
+                    show what fixtures and tests would be executed but
+                        don't execute anything.
+                    """)
+    parser.add_argument("--log-level", help="""
+                    --log-level=LEVEL     level of messages to catch/display.
+                        Not set by default, so it depends on the root/parent
+                        log handler's effective level, where it is "WARNING"
+                        by default.
+                    """)
+    parser.add_argument("--log-format", help="""
+                    --log-format=LOG_FORMAT
+                        log format as used by the logging module.
+                    """)
+    parser.add_argument("--log-date-format", help="""
+                    --log-date-format=LOG_DATE_FORMAT
+                        log date format as used by the logging module.
+                    """)
+    parser.add_argument("--log-cli-level", help="""
+                    --log-cli-level=LOG_CLI_LEVEL
+                        cli logging level.
+                    """)
+    parser.add_argument("--log-cli-format", help="""
+                    --log-cli-format=LOG_CLI_FORMAT
+                        log format as used by the logging module.
+                    """)
+    parser.add_argument("--log-cli-date-format", help="""
+                    --log-cli-date-format=LOG_CLI_DATE_FORMAT
+                        log date format as used by the logging module.
+                    """)
+    parser.add_argument("--log-file", help="""
+                    --log-file=LOG_FILE   path to a file when logging will be written to.
+                    """)
+    parser.add_argument("--log-file-level", help="""
+                    --log-file-level=LOG_FILE_LEVEL
+                        log file logging level.
+                    """)
+    parser.add_argument("--log-file-format", help="""
+                    --log-file-format=LOG_FILE_FORMAT
+                        log format as used by the logging module.
+                    """)
+    parser.add_argument("--log-file-date-format", help="""
+                    --log-file-date-format=LOG_FILE_DATE_FORMAT
+                        log date format as used by the logging module.
+                    """)
+    parser.add_argument("--log-auto-indent", help="""
+                    --log-auto-indent=LOG_AUTO_INDENT
+                        Auto-indent multiline messages passed to the logging
+                        module. Accepts true|on, false|off or an integer.
+                    """)
 
+    # Get parsed args
     args = parser.parse_args()
 
     if args.install:
