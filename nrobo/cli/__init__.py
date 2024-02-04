@@ -87,53 +87,53 @@ def parse_cli_args():
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
     """)
-    parser.add_argument("--markers", help="""
-    Show markers (builtin, plugin and per-project ones).
-    """)
-    parser.add_argument("-x", "--exitfirst", help="""
-    exit instantly on first error or failed test.yaml.
-    """)
-    parser.add_argument("--fixtures", help="""
-    show available fixtures, sorted by plugin appearance
-                        (fixtures with leading '_' are only shown with '-v')
-                        """)
-    parser.add_argument("--funcargs", help="""
-        show available fixtures, sorted by plugin appearance
-                            (fixtures with leading '_' are only shown with '-v')
-                            """)
-    parser.add_argument("--fixtures-per-test.yaml", help="show fixtures per test.yaml")
-    parser.add_argument("--pdb", help="""
-    start the interactive Python debugger on errors or
-                        KeyboardInterrupt.
-                        """)
-    parser.add_argument("--pdbcls", help="""
-    --pdbcls=modulename:classname
-                        start a custom interactive Python debugger on
-                        errors. For example:
-                        --pdbcls=IPython.terminal.debugger:TerminalPdb
-                        """)
-    parser.add_argument("--trace", help="Immediately break when running each test.yaml.")
-    parser.add_argument("--capture", help="""
-    --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys. 
-    """)
-    parser.add_argument("-s", help="shortcut for --capture=no.")
-    parser.add_argument("--runxfail", help="""
-    report the results of xfail tests as if they were
-                        not marked
-                        """)
-    parser.add_argument("-lf", "--last-failed", help="""
-    rerun only the tests that failed at the last run (or
-                        all if none failed)
-                        """)
-    parser.add_argument("--ff", "--failed-first", help="""
-    run all tests, but run the last failures first.
-                        This may re-order tests and thus lead to repeated
-                        fixture setup/teardown.
-                        """)
-    parser.add_argument("--nf", "--new-first", help="""
-    run tests from new files first, then the rest of the
-                        tests sorted by file mtime
-                        """)
+    # parser.add_argument("--markers", help="""
+    # Show markers (builtin, plugin and per-project ones).
+    # """)
+    # parser.add_argument("-x", "--exitfirst", help="""
+    # exit instantly on first error or failed test.yaml.
+    # """)
+    # parser.add_argument("--fixtures", help="""
+    # show available fixtures, sorted by plugin appearance
+    #                     (fixtures with leading '_' are only shown with '-v')
+    #                     """)
+    # parser.add_argument("--funcargs", help="""
+    #     show available fixtures, sorted by plugin appearance
+    #                         (fixtures with leading '_' are only shown with '-v')
+    #                         """)
+    # parser.add_argument("--fixtures-per-test.yaml", help="show fixtures per test.yaml")
+    # parser.add_argument("--pdb", help="""
+    # start the interactive Python debugger on errors or
+    #                     KeyboardInterrupt.
+    #                     """)
+    # parser.add_argument("--pdbcls", help="""
+    # --pdbcls=modulename:classname
+    #                     start a custom interactive Python debugger on
+    #                     errors. For example:
+    #                     --pdbcls=IPython.terminal.debugger:TerminalPdb
+    #                     """)
+    # parser.add_argument("--trace", help="Immediately break when running each test.yaml.")
+    # parser.add_argument("--capture", help="""
+    # --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys.
+    # """)
+    # parser.add_argument("-s", help="shortcut for --capture=no.")
+    # parser.add_argument("--runxfail", help="""
+    # report the results of xfail tests as if they were
+    #                     not marked
+    #                     """)
+    # parser.add_argument("-lf", "--last-failed", help="""
+    # rerun only the tests that failed at the last run (or
+    #                     all if none failed)
+    #                     """)
+    # parser.add_argument("--ff", "--failed-first", help="""
+    # run all tests, but run the last failures first.
+    #                     This may re-order tests and thus lead to repeated
+    #                     fixture setup/teardown.
+    #                     """)
+    # parser.add_argument("--nf", "--new-first", help="""
+    # run tests from new files first, then the rest of the
+    #                     tests sorted by file mtime
+    #                     """)
 
     args = parser.parse_args()
 
