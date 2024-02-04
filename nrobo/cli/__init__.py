@@ -17,7 +17,7 @@ from nrobo import FRAMEWORK_PATHS
 from rich import print
 from rich.console import Console
 from nrobo.cli.formatting import themes as th, STYLE
-from nrobo.cli.cli_constansts import nCLI as CLI
+from nrobo.cli.cli_constansts import nCLI as CLI, REPORT_TYPES
 from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
 
 console = Console(theme=th)
@@ -161,6 +161,7 @@ def parse_cli_args():
         for key, value in args.__dict__.items():
             # process pytest keys first
             if value:
+                console.print(f"[{STYLE.HLGreen}]>>>>{key}=={value}")
                 if key not in CLI.ARGS.keys():
                     command.append(key)
                     command.append(str(value))
@@ -170,15 +171,26 @@ def parse_cli_args():
                 elif key == CLI.INSTANCES:
                     command.append("-n")
                     command.append(str(value))
+                elif key == CLI.REPORT:
+                    if value == REPORT_TYPES.HTML:
+                        console.print(f"+++++")
+                        command.append(f"--{REPORT_TYPES.HTML}")
+                        command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
+                    elif key == REPORT_TYPES.ALLURE:
+                        pass
+                    else:
+                        console.print(f"Incorrect report type! Valid report types are html | allure.")
+                        exit(1)
                 elif key == CLI.TESTDIR:
                     command.append(value)
 
-    # Finally test if testsdir arg is present or not
-    if not args.testsdir:
-        if __HOST_PLATFORM__ in [PLATFORMS.MACOS, PLATFORMS.LINUX, PLATFORMS.DARWIN]:
-            command.append("tests")
-        elif __HOST_PLATFORM__ == PLATFORMS.WINDOWS:
-            command.append("tests")
+    #
+    # # Finally test if testsdir arg is present or not
+    # if not args.testsdir:
+    #     if __HOST_PLATFORM__ in [PLATFORMS.MACOS, PLATFORMS.LINUX, PLATFORMS.DARWIN]:
+    #         command.append("tests")
+    #     elif __HOST_PLATFORM__ == PLATFORMS.WINDOWS:
+    #         command.append("tests")
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         print("{}".format(command))

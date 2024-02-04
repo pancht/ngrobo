@@ -24,3 +24,9 @@ class nCLI:
         BROWSER: "browser",
         KEY: "key",
     }
+
+
+class REPORT_TYPES:
+    HTML = "html"
+    ALLURE = "allure"
+    HTML_REPORT_PATH = "results/report.html"
