@@ -23,14 +23,14 @@ def parse_cli_args():
         prog="nrobo",
         description='Run tests through nrobo framework')
     parser.add_argument("-i", f"--{CLI.INSTALL}", action="store_true")
-    parser.add_argument("-a", f"--{CLI.APP}", help="Name of your test.yaml project")
-    parser.add_argument("-l", f"--{CLI.LINK}", help="Link of application under test.yaml")
-    parser.add_argument("-u", f"--{CLI.USERNAME}", help="Username for login", default="")
-    parser.add_argument("-p", f"--{CLI.PASSWORD}", help="Password for login", default="")
+    parser.add_argument(f"--{CLI.APP}", help="Name of your test.yaml project")
+    parser.add_argument(f"--{CLI.URL}", help="Link of application under test.yaml")
+    parser.add_argument(f"--{CLI.USERNAME}", help="Username for login", default="")
+    parser.add_argument(f"--{CLI.PASSWORD}", help="Password for login", default="")
     parser.add_argument("-n", f"--{CLI.INSTANCES}",
                         help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
-    parser.add_argument("-r", f"--{CLI.RERUN}", help="Number of reruns for a test.yaml if it fails", default=0)
+    parser.add_argument("--rr", f"--{CLI.RERUN}", help="Number of reruns for a test.yaml if it fails", default=0)
     parser.add_argument(f"--{CLI.REPORT}",
                         help="Report target. Default HTML or Rich Allure report. Options are html | allure",
                         default="html")
@@ -113,7 +113,7 @@ def parse_cli_args():
         --cache-show=[CACHESHOW]
                         show cache contents, don't perform collection or
                         tests. Optional argument: glob (default: '*').
-                            """, default='*')
+                            """)
     parser.add_argument("--cache-clear",  help="""
         remove all cache contents at start of test run.
                             """)
@@ -254,9 +254,6 @@ def parse_cli_args():
     parser.add_argument("--noconftest", help="""
             Don't load any conftest.py files.
             """)
-    parser.add_argument("--no-summary", help="""
-            disable summary
-            """)
     parser.add_argument("--keep-duplicates", help="""
             Keep duplicate tests.
             """)
@@ -293,9 +290,9 @@ def parse_cli_args():
                         plugins.When given twice, also display information
                         about plugins.
                     """)
-    parser.add_argument("-h", "--help", help="""
-                    show help message and configuration info
-                    """)
+    # parser.add_argument("-h", "--help", help="""
+    #                 show help message and configuration info
+    #                 """)
     parser.add_argument("-p", help="""
                     -p name               early-load given plugin module name or entry point
                         (multi-allowed).
@@ -414,6 +411,29 @@ def parse_cli_args():
                     else:
                         console.print(f"Incorrect report type! Valid report types are html | allure.")
                         exit(1)
+
+    # Add single parameter commands by default
+    # That make sense.
+
+    # Clear cache before test run
+    command.append("--cache-clear")
+    # command.append("-V") # This setting is not working. With this, tests are even not running at all.
+
+    # color terminal output
+    command.append("--color")
+    command.append("yes")
+
+    # show extra test summary info
+    command.append("-r")
+    command.append("fE")
+
+    # Whether code should be highlighted
+    command.append("--code-highlight")
+    command.append("yes")
+
+    # create junit-xml style report file at given path.
+    command.append("--junit-xml")
+    command.append("results/junit-report.xml")
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         console.print(f"[{STYLE.INFO}]{command}")

@@ -1,7 +1,7 @@
 class nCLI:
     INSTALL = "install"
     APP = "app"
-    LINK = "link"
+    URL = "url"
     USERNAME = "username"
     PASSWORD = "password"
     INSTANCES = "instances"
@@ -14,7 +14,7 @@ class nCLI:
     ARGS = {
         INSTALL: "install",
         APP: "app",
-        LINK: "link",
+        URL: "link",
         USERNAME: "username",
         PASSWORD: "password",
         INSTANCES: "instances",
