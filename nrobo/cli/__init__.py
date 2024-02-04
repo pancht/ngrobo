@@ -182,18 +182,13 @@ def parse_cli_args():
                         console.print(f"Incorrect report type! Valid report types are html | allure.")
                         exit(1)
                 elif key == CLI.TESTDIR:
-                    command.append(value)
-
-    #
-    # # Finally test if testsdir arg is present or not
-    # if not args.testsdir:
-    #     if __HOST_PLATFORM__ in [PLATFORMS.MACOS, PLATFORMS.LINUX, PLATFORMS.DARWIN]:
-    #         command.append("tests")
-    #     elif __HOST_PLATFORM__ == PLATFORMS.WINDOWS:
-    #         command.append("tests")
+                    if __HOST_PLATFORM__ in [PLATFORMS.MACOS, PLATFORMS.LINUX, PLATFORMS.DARWIN]:
+                        command.append("tests")
+                    elif __HOST_PLATFORM__ == PLATFORMS.WINDOWS:
+                        command.append("tests")
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
-        print("{}".format(command))
+        console.print(f"f[{STYLE.INFO}]{command}")
         terminal(command)
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
