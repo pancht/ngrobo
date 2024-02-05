@@ -61,3 +61,4 @@ namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.*"]
+

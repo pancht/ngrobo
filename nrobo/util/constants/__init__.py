@@ -4,6 +4,7 @@ class CONST(object):
     """
     NEWLINE = "\n"
 
+    SINGLE_INVERTED_COMMA = "'"
     EMPTY = ""
     EQUAL = "="
     BLANK = EMPTY

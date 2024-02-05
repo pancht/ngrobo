@@ -18,6 +18,8 @@ from nrobo.util.common import Common
 from nrobo.cli.cli_constansts import nCLI as CLI
 import os.path as path
 
+from nrobo.util.constants import CONST
+
 global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
 
 
@@ -71,7 +73,8 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
-    parser.addoption(
+    group = parser.getgroup("nrobo header options")
+    group.addoption(
         f"--{CLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
@@ -79,11 +82,28 @@ def pytest_addoption(parser):
         (Only chrome is supported at present.)
     """
     )
-    parser.addoption(f"--{CLI.APP}", help="Name of your app project under test")
-    parser.addoption(f"--{CLI.URL}", help="Link of application under test.yaml")
-    parser.addoption(f"--{CLI.USERNAME}", help="Username for login", default="")
-    parser.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
-    parser.addoption(f"--{CLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{CLI.APP}", help="Name of your app project under test")
+    group.addoption(f"--{CLI.URL}", help="Link of application under test.yaml")
+    group.addoption(f"--{CLI.USERNAME}", help="Username for login", default="")
+    group.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
+    group.addoption(f"--{CLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{CLI.PACKAGES}", help="Browser config file path for setting requested options")
+
+    # ini option
+    parser.addini(f"{CLI.APP}", type="string",
+                  help="Name of your app project under test")
+    parser.addini(f"{CLI.URL}", type='string',
+                  help="Link of application under test.yaml")
+    parser.addini(f"{CLI.USERNAME}", type="string",
+                  help="Username for login")
+    parser.addini(f"{CLI.PASSWORD}", type='string',
+                  help="Password for login")
+    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+                  help="Browser config file path for setting requested options")
+    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+                  help="Browser config file path for setting requested options")
+    parser.addini(f"{CLI.PACKAGES}", type='string',
+                  help="Browser config file path for setting requested options")
 
 
 @pytest.fixture()
@@ -222,3 +242,30 @@ def logger(request):
 
     # yield logger instance to calling test method
     yield logger
+
+
+def pytest_report_header(config):
+    """
+    Session-scoped fixture that returns the session’s pytest.Config object.
+
+    Doc: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytestconfig
+
+    :param config:
+    :return:
+    """
+    # if not config.getoption(f"--{CLI.APP}") and not config.getini(f"{CLI.APP}"):
+    #     return
+    #
+    # app_name_option = config.getoption(f"{CLI.APP}")
+    # app_name_ini = config.getini(f"{CLI.APP}")
+    #
+    # header = ""
+    # if app_name_option is not None:
+    #     if isinstance(app_name_option, str):
+    #         header = repr(app_name_option)
+    #
+    # elif app_name_ini is not None:
+    #     if isinstance(app_name_ini, str):
+    #         header = repr(app_name_ini)
+
+    return f"test summary".title()

@@ -34,6 +34,7 @@ class nCLI:
     BROWSER = "browser"
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
+    PACKAGES = "packages"
 
     ARGS = {
         INSTALL: "install",
@@ -48,6 +49,7 @@ class nCLI:
         BROWSER: "browser",
         BROWSER_CONFIG: "browser-config",
         KEY: "key",
+        PACKAGES: "packages"
     }
 
     DEFAULT_ARGS = {
