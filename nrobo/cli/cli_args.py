@@ -75,6 +75,9 @@ def parse_cli_args():
                         which have names assigned directly to them. The
                         matching is case-insensitive.
     """)
+    parser.add_argument("--alluredir", help="""
+        Path to the directory where Allure Pytest will save the test results.
+        """)
     parser.add_argument("-m", "--marker", help="""
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
@@ -454,12 +457,17 @@ def parse_cli_args():
                         command.append(f"--{key}")
                         command.append(value)
                     elif key == CLI.REPORT:
-                        if value in [NREPORT.HTML, NREPORT.ALLURE]:
-                            command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
-                        else:
+                        if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")
                             exit(1)
+                        if str(value).lower() in NREPORT.HTML:
+                            command.append(f"--{NREPORT.HTML}")
+                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                        elif str(value).lower() in NREPORT.ALLURE:
+                            command.append(f"--{NREPORT.HTML}")
+                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"--alluredir")
+                            command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
 
     # Debug code line
     # print(__BROWSER__)
@@ -477,7 +485,7 @@ def parse_cli_args():
         terminal(command)
 
         if args.report and args.report == NREPORT.ALLURE:
-            terminal([NREPORT.ALLURE, f"serve", NREPORT.REPORT_DIR])
+            terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
         pass

@@ -52,6 +52,12 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass  # do nothing
 
+    if not os.path.exists(NREPORT.ALLURE_REPORT_PATH):
+        try:
+            os.makedirs(NREPORT.ALLURE_REPORT_PATH)
+        except FileExistsError as e:
+            pass  # do nothing
+
 
 def process_browser_config_options(_config_path):
     """
@@ -314,10 +320,19 @@ def pytest_runtest_makereport(item, call):
             # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
 
+            # Attach screenshot to allure report
+            allure.attach(
+                # Not working. Still work in progress...
+                driver.get_screenshot_as_png(),
+                name='screenshot',
+                attachment_type=allure.attachment_type.PNG
+            )
+
+            # Attach screenshot to html report
             # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
-            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'\
-                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE)\
-                .replace(CONST.SCOPE_RESOLUTION_OPERATOR,CONST.UNDERSCORE)\
+            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png' \
+                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
+                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
                 .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
             screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
             screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename

@@ -10,6 +10,7 @@ class NREPORT:
     LOG_EXTENTION = ".log"
     LOG_DIR_TEST = "test-logs"
     SCREENSHOTS_DIR = "screenshots"
+    ALLURE_REPORT_PATH = REPORT_DIR + os.sep + ALLURE
 
 
 class nCLI:
