@@ -1,1 +1,5 @@
 pytest-cli: https://docs.pytest.org/en/6.2.x/reference.html#command-line-flags
+
+# run the following command to see list of pytest fixtures available
+pytest --fixtures [testpath]
+

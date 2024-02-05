@@ -16,7 +16,7 @@ from nrobo.util.python import verify_set_python_install_pip_command
 from rich import print
 from rich.console import Console
 from nrobo.cli.formatting import themes as th, STYLE
-from nrobo.cli.cli_constansts import nCLI as CLI, REPORT_TYPES
+from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
 from nrobo.cli.cli_args import parse_cli_args
 
 console = Console(theme=th)
@@ -49,4 +49,5 @@ def main():
     install_dependencies()
     verify_set_python_install_pip_command()
     remove_files_recursively("dist")
+    remove_files_recursively(NREPORT.REPORT_DIR)
     parse_cli_args()

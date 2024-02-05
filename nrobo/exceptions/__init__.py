@@ -12,3 +12,17 @@ class MissingCommandImplementation(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+
+class BrowserNotSupported(Exception):
+    """
+    This exception raise when <browser> is not supported or
+    implementation to mimic <browser> is not yet implemented
+    """
+
+    # constructor
+    def __init__(self, browser):
+        self.value = f'browser <{browser}> is not supported in nrobo.'
+
+    def __str__(self):
+        return repr(self.value)

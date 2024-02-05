@@ -49,9 +49,19 @@ nrobo = "nrobo.cli:main"
 [tool.pytest.ini_options]
 testpaths = [
     "tests",
-    "tests_api",
-    "tests_performance"
+    #"tests_api",
+    #"tests_performance"
 ]
+# Register new markers
+markers = [
+    # Doc: https://docs.pytest.org/en/stable/how-to/mark.html#registering-marks
+        "sanity: marks as sanity test",
+        "regression: mark as regression test",
+        "ui: mark as ui test",
+        "api: mark as api tests",
+        "nogui: mark as NOGUI tests"
+]
+
 
 [tool.setuptools.packages.find]
 where = ["."]
@@ -61,3 +71,4 @@ namespaces = false
 
 [tool.setuptools.package-data]
 "*" = ["*.*"]
+

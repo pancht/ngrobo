@@ -3,9 +3,12 @@ import os
 
 from nrobo import FRAMEWORK_PATHS
 from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
-from nrobo.cli.cli_constansts import nCLI as CLI, REPORT_TYPES
+from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
 from rich.console import Console
 from nrobo.cli.formatting import themes as th
+from nrobo.cli.nglobals import *
+
+global __APP_NAME__, __URL__,__PASSWORD__,__USERNAME__, __BROWSER__
 
 from nrobo.util.process import terminal
 
@@ -40,9 +43,21 @@ def parse_cli_args():
     parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
-        chrome | firefox | safari | edge.
+        chrome | chrome_headless | 
+        firefox | safari | edge.
         (Only chrome is supported at present.)
     """)
+    parser.add_argument(f"--{CLI.BROWSER_CONFIG}", help="""
+        Path of browser config file containing additional options which are needed to be applied
+        in driver instantiation. Each line in file should contain one option only.
+        For example: you want to appy, --start-maximized, chrome option for chrome driver.
+        and the browser config file is 'chrome_config.txt', then
+        the content of file should be as below:
+        
+        --start-maximized
+        
+        There will be no conversion taking place by nrobo!!!
+        """)
     parser.add_argument("-k", f"--{CLI.KEY}", help="""
     Only run tests which match the given substring
                         expression. An expression is a python evaluatable
@@ -60,6 +75,9 @@ def parse_cli_args():
                         which have names assigned directly to them. The
                         matching is case-insensitive.
     """)
+    parser.add_argument("--alluredir", help="""
+        Path to the directory where Allure Pytest will save the test results.
+        """)
     parser.add_argument("-m", "--marker", help="""
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
@@ -150,7 +168,7 @@ def parse_cli_args():
         """)
     parser.add_argument("-q", "--quiet", help="""
         decrease verbosity.
-                            """)
+                            """, action="store_true")
     parser.add_argument("--verbosity", help="""
         --verbosity=VERBOSE   
         set verbosity. Default is 0.
@@ -403,24 +421,61 @@ def parse_cli_args():
                     continue  # proceed with next key
                 elif key not in CLI.ARGS.keys():
                     """Check for all no nrobo cli keys. All pytest keys"""
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.KEY:
-                    command.append(f"-k")
-                    command.append(value)
-                elif key == CLI.INSTANCES:
-                    command.append(f"-n")
-                    command.append(str(value))
-                elif key == CLI.RERUNS:
-                    command.append(f"--{key}")
-                    command.append(value)
-                elif key == CLI.REPORT:
-                    if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
-                        command.append(f"--{REPORT_TYPES.HTML}")
-                        command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
+                    # print(key)
+                    if key == "c":
+                        command.append(f"-{key}")
+                        command.append(str(value))
                     else:
-                        console.print(f"Incorrect report type! Valid report types are html | allure.")
-                        exit(1)
+                        command.append(f"--{key}")
+                        command.append(str(value))
+                elif key in CLI.ARGS:
+                    if key in [CLI.APP, CLI.URL, CLI.USERNAME, CLI.PASSWORD, CLI.BROWSER_CONFIG]:
+                        if key == CLI.APP:
+                            __APP_NAME__ = value
+                        elif key == CLI.URL:
+                            __URL__ = value
+                        elif key == CLI.USERNAME:
+                            __USERNAME__ = value
+                        elif key == CLI.PASSWORD:
+                            __PASSWORD__ = value
+
+                        command.append(f"--{key}")
+                        command.append(str(value))
+
+                    if key == CLI.BROWSER:
+                        __BROWSER__ = value
+                        raise_exception_if_browser_not_supported(__BROWSER__)
+                        command.append(f"--{key}")
+                        command.append(str(value))
+                    elif key == CLI.KEY:
+                        command.append(f"-k")
+                        command.append(value)
+                    elif key == CLI.INSTANCES:
+                        command.append(f"-n")
+                        command.append(str(value))
+                    elif key == CLI.RERUNS:
+                        command.append(f"--{key}")
+                        command.append(value)
+                    elif key == CLI.REPORT:
+                        if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
+                            console.print(f"Incorrect report type! Valid report types are html | allure.")
+                            exit(1)
+                        if str(value).lower() in NREPORT.HTML:
+                            command.append(f"--{NREPORT.HTML}")
+                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                        elif str(value).lower() in NREPORT.ALLURE:
+                            command.append(f"--{NREPORT.HTML}")
+                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"--alluredir")
+                            command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
+                            # command.append(f"--allure-no-capture")
+
+                            # Doc: https://allurereport.org/docs/gettingstarted-installation/
+
+    # Debug code line
+    # print(__BROWSER__)
+    # print(command)
+    # exit(1)
 
     # Add single parameter commands by default
     # That make sense.
@@ -432,8 +487,9 @@ def parse_cli_args():
         console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
 
-        if args.report and args.report == REPORT_TYPES.ALLURE:
-            terminal([REPORT_TYPES.ALLURE, f"serve", REPORT_TYPES.REPORT_DIR])
+        if args.report and args.report == NREPORT.ALLURE:
+            # https://allurereport.org/docs/gettingstarted-installation/
+            terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
         pass

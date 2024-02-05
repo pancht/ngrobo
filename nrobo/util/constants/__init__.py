@@ -4,6 +4,7 @@ class CONST(object):
     """
     NEWLINE = "\n"
 
+    SINGLE_INVERTED_COMMA = "'"
     EMPTY = ""
     EQUAL = "="
     BLANK = EMPTY
@@ -20,13 +21,14 @@ class CONST(object):
     EXCLAMATION = "!"
     HASH = "#"
 
-    # Brackets
+    # Brackets & PROGRAMING LANGUAGES
     PARENTHESIS_OPEN = "("
     PARENTHESIS_CLOSE = ")"
     CURLY_BRACE_OPEN = "{"
     CURLY_BRACE_CLOSE = "}"
     SQUARE_BRACKET_OPEN = "["
     SQUARE_BRACKET_CLOSE = "]"
+    SCOPE_RESOLUTION_OPERATOR = "::"
 
     # Web and browser
     HTTPS = "https://"
