@@ -118,4 +118,6 @@ class TestWebSamples():
         message = driver.find_element(by=By.ID, value="message")
         text = message.text
 
+        raise Exception("Forcefully raise an exception to make test fail.")
+
         driver.quit()
