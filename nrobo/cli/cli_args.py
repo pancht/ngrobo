@@ -415,12 +415,20 @@ def parse_cli_args():
                         command.append(str(value))
                 elif key == CLI.APP:
                     __APP_NAME__ = value
+                    command.append(f"--{key}")
+                    command.append(str(value))
                 elif key == CLI.URL:
                     __URL__ = value
+                    command.append(f"--{key}")
+                    command.append(str(value))
                 elif key == CLI.USERNAME:
                     __USERNAME__ = value
+                    command.append(f"--{key}")
+                    command.append(str(value))
                 elif key == CLI.PASSWORD:
                     __PASSWORD__ = value
+                    command.append(f"--{key}")
+                    command.append(str(value))
                 elif key == CLI.BROWSER:
                     __BROWSER__ = value
                     raise_exception_if_browser_not_supported(__BROWSER__)
