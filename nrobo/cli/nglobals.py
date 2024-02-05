@@ -16,13 +16,14 @@ from nrobo.exceptions import BrowserNotSupported
 
 class Browsers:
     CHROME = 'chrome'
+    CHROME_HEADLESS = "chrome_headless"
     EDGE = 'edge'
     FIREFOX = 'firefox'
     IE = "ie"
     SAFARI = 'safari'
 
 
-supported_browsers = [Browsers.CHROME]
+supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS]
 supported_browsers_in_future = [Browsers.SAFARI, Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
 
 

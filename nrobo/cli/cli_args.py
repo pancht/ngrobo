@@ -43,9 +43,21 @@ def parse_cli_args():
     parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
-        chrome | firefox | safari | edge.
+        chrome | chrome_headless | 
+        firefox | safari | edge.
         (Only chrome is supported at present.)
     """)
+    parser.add_argument(f"--{CLI.BROWSER_CONFIG}", help="""
+        Path of browser config file containing additional options which are needed to be applied
+        in driver instantiation. Each line in file should contain one option only.
+        For example: you want to appy, --start-maximized, chrome option for chrome driver.
+        and the browser config file is 'chrome_config.txt', then
+        the content of file should be as below:
+        
+        --start-maximized
+        
+        There will be no conversion taking place by nrobo!!!
+        """)
     parser.add_argument("-k", f"--{CLI.KEY}", help="""
     Only run tests which match the given substring
                         expression. An expression is a python evaluatable
@@ -413,43 +425,41 @@ def parse_cli_args():
                     else:
                         command.append(f"--{key}")
                         command.append(str(value))
-                elif key == CLI.APP:
-                    __APP_NAME__ = value
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.URL:
-                    __URL__ = value
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.USERNAME:
-                    __USERNAME__ = value
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.PASSWORD:
-                    __PASSWORD__ = value
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.BROWSER:
-                    __BROWSER__ = value
-                    raise_exception_if_browser_not_supported(__BROWSER__)
-                    command.append(f"--{key}")
-                    command.append(str(value))
-                elif key == CLI.KEY:
-                    command.append(f"-k")
-                    command.append(value)
-                elif key == CLI.INSTANCES:
-                    command.append(f"-n")
-                    command.append(str(value))
-                elif key == CLI.RERUNS:
-                    command.append(f"--{key}")
-                    command.append(value)
-                elif key == CLI.REPORT:
-                    if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
-                        command.append(f"--{REPORT_TYPES.HTML}")
-                        command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
-                    else:
-                        console.print(f"Incorrect report type! Valid report types are html | allure.")
-                        exit(1)
+                elif key in CLI.ARGS:
+                    if key in [CLI.APP, CLI.URL, CLI.USERNAME, CLI.PASSWORD, CLI.BROWSER_CONFIG]:
+                        if key == CLI.APP:
+                            __APP_NAME__ = value
+                        elif key == CLI.URL:
+                            __URL__ = value
+                        elif key == CLI.USERNAME:
+                            __USERNAME__ = value
+                        elif key == CLI.PASSWORD:
+                            __PASSWORD__ = value
+
+                        command.append(f"--{key}")
+                        command.append(str(value))
+
+                    if key == CLI.BROWSER:
+                        __BROWSER__ = value
+                        raise_exception_if_browser_not_supported(__BROWSER__)
+                        command.append(f"--{key}")
+                        command.append(str(value))
+                    elif key == CLI.KEY:
+                        command.append(f"-k")
+                        command.append(value)
+                    elif key == CLI.INSTANCES:
+                        command.append(f"-n")
+                        command.append(str(value))
+                    elif key == CLI.RERUNS:
+                        command.append(f"--{key}")
+                        command.append(value)
+                    elif key == CLI.REPORT:
+                        if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
+                            command.append(f"--{REPORT_TYPES.HTML}")
+                            command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
+                        else:
+                            console.print(f"Incorrect report type! Valid report types are html | allure.")
+                            exit(1)
 
     # Debug code line
     # print(__BROWSER__)

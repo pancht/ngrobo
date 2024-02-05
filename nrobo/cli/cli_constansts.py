@@ -9,6 +9,15 @@ class REPORT_TYPES:
 
 
 class nCLI:
+    """
+    List of nrobo defined cli options.
+
+    NOTE:
+        when you add/remove an option from nCLI class,
+        Make sure that the same option is also removed from the
+        nCLI.ARGS dictionary too!!!
+
+    """
     INSTALL = "install"
     APP = "app"
     URL = "url"
@@ -20,6 +29,7 @@ class nCLI:
     REPORT = "report"
     TESTDIR = "testsdir"
     BROWSER = "browser"
+    BROWSER_CONFIG = "browser-config"
     KEY = "key"
 
     ARGS = {
@@ -33,6 +43,7 @@ class nCLI:
         REPORT: "report",
         TESTDIR: "testsdir",
         BROWSER: "browser",
+        BROWSER_CONFIG: "browser-config",
         KEY: "key",
     }
 
