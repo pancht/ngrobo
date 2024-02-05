@@ -3,7 +3,7 @@ import os
 
 from nrobo import FRAMEWORK_PATHS
 from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
-from nrobo.cli.cli_constansts import nCLI as CLI, REPORT_TYPES
+from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
 from rich.console import Console
 from nrobo.cli.formatting import themes as th
 from nrobo.cli.nglobals import *
@@ -454,9 +454,9 @@ def parse_cli_args():
                         command.append(f"--{key}")
                         command.append(value)
                     elif key == CLI.REPORT:
-                        if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
-                            command.append(f"--{REPORT_TYPES.HTML}")
-                            command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
+                        if value in [NREPORT.HTML, NREPORT.ALLURE]:
+                            command.append(f"--{NREPORT.HTML}")
+                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
                         else:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")
                             exit(1)
@@ -476,8 +476,8 @@ def parse_cli_args():
         console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
 
-        if args.report and args.report == REPORT_TYPES.ALLURE:
-            terminal([REPORT_TYPES.ALLURE, f"serve", REPORT_TYPES.REPORT_DIR])
+        if args.report and args.report == NREPORT.ALLURE:
+            terminal([NREPORT.ALLURE, f"serve", NREPORT.REPORT_DIR])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
         pass

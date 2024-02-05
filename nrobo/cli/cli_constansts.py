@@ -1,11 +1,12 @@
 import os
 
 
-class REPORT_TYPES:
+class NREPORT:
     HTML = "html"
     ALLURE = "allure"
     REPORT_DIR = "results"
     HTML_REPORT_PATH = REPORT_DIR + os.sep + "report.html"
+    LOG_DIR_DRIVER = "driver-logs"
     LOG_EXTENTION = ".log"
 
 
@@ -53,7 +54,7 @@ class nCLI:
         '--color': ['--color', 'yes'],
         '-r': ['-r', 'fE'],
         '--code-highlight': ['--code-highlight', 'yes'],
-        '--junit-xml': ['--junit-xml', REPORT_TYPES.REPORT_DIR + os.sep + f"junit-report.xml"]
+        '--junit-xml': ['--junit-xml', NREPORT.REPORT_DIR + os.sep + f"junit-report.xml"]
     }
 
 

@@ -20,6 +20,12 @@ import os.path as path
 global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
 
 
+def ensure_driver_logs_dir_exists():
+    """checks if driver logs dir exists. if not creates on the fly."""
+    from nrobo.cli.cli_constansts import NREPORT
+    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER):
+        os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER)
+
 def process_browser_config_options(_config_path):
     """
     process browser config options from the <_config_path>
@@ -137,10 +143,14 @@ def driver(request):
         # current test function name
         # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
         test_method_name = request.node.name
-        from nrobo.cli.cli_constansts import REPORT_TYPES
-        log_path = REPORT_TYPES.REPORT_DIR + os.sep + test_method_name + REPORT_TYPES.LOG_EXTENTION
+        from nrobo.cli.cli_constansts import NREPORT
 
-        service = webdriver.ChromeService(log_output=log_path)
+        ensure_driver_logs_dir_exists()
+        driver_log_path = NREPORT.REPORT_DIR + os.sep + \
+                   NREPORT.LOG_DIR_DRIVER + os.sep + \
+                   test_method_name + NREPORT.LOG_EXTENTION
+
+        service = webdriver.ChromeService(log_output=driver_log_path)
         _driver = webdriver.Chrome(options=options, service=service)
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
@@ -164,10 +174,13 @@ def driver(request):
         # current test function name
         # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
         test_method_name = request.node.name
-        from nrobo.cli.cli_constansts import REPORT_TYPES
-        log_path = REPORT_TYPES.REPORT_DIR + os.sep + test_method_name + REPORT_TYPES.LOG_EXTENTION
+        from nrobo.cli.cli_constansts import NREPORT
+        ensure_driver_logs_dir_exists()
+        driver_log_path = NREPORT.REPORT_DIR + os.sep + \
+                   NREPORT.LOG_DIR_DRIVER + os.sep + \
+                   test_method_name + NREPORT.LOG_EXTENTION
 
-        service = webdriver.ChromeService(log_output=log_path)
+        service = webdriver.ChromeService(log_output=driver_log_path)
         _driver = webdriver.Chrome(options=options, service=service)
 
     # yield driver instance to calling test method
