@@ -6,6 +6,9 @@ from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
 from nrobo.cli.cli_constansts import nCLI as CLI, REPORT_TYPES
 from rich.console import Console
 from nrobo.cli.formatting import themes as th
+from nrobo.cli.nglobals import *
+
+global __APP_NAME__, __URL__,__PASSWORD__,__USERNAME__, __BROWSER__
 
 from nrobo.util.process import terminal
 
@@ -405,6 +408,17 @@ def parse_cli_args():
                     """Check for all no nrobo cli keys. All pytest keys"""
                     command.append(f"--{key}")
                     command.append(str(value))
+                elif key == CLI.APP:
+                    __APP_NAME__ = value
+                elif key == CLI.URL:
+                    __URL__ = value
+                elif key == CLI.USERNAME:
+                    __USERNAME__ = value
+                elif key == CLI.PASSWORD:
+                    __PASSWORD__ = value
+                elif key == CLI.BROWSER:
+                    __BROWSER__ = value
+                    raise_exception_if_browser_not_supported(__BROWSER__)
                 elif key == CLI.KEY:
                     command.append(f"-k")
                     command.append(value)
