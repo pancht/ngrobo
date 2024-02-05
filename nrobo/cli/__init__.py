@@ -49,4 +49,5 @@ def main():
     install_dependencies()
     verify_set_python_install_pip_command()
     remove_files_recursively("dist")
+    remove_files_recursively(REPORT_TYPES.REPORT_DIR)
     parse_cli_args()

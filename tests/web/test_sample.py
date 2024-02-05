@@ -44,4 +44,25 @@ class TestWebSamples():
         message = driver.find_element(by=By.ID, value="message")
         text = message.text
 
-        raise Exception("Forcing test to fail")
+        driver.quit()
+
+    def test_keep_browser_open(self):
+        options = webdriver.ChromeOptions()
+
+        options.add_experimental_option("detach", True)
+
+        driver = webdriver.Chrome(options=options)
+        driver.get('http://selenium.dev')
+
+        driver.quit()
+
+    def test_log_to_file(self):
+        log_path = "log.log"
+        service = webdriver.ChromeService(log_output=log_path)
+
+        driver = webdriver.Chrome(service=service)
+
+        with open(log_path, 'r') as fp:
+            assert "Starting ChromeDriver" in fp.readline()
+
+        driver.quit()

@@ -6,9 +6,12 @@ Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
 
 Contains fixtures for nrobo framework
 """
+import os
 
 import pytest
 from selenium import webdriver
+
+import nrobo.cli.cli_constansts
 from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
 from nrobo.util.common import Common
 from nrobo.cli.cli_constansts import nCLI as CLI
@@ -25,6 +28,9 @@ def process_browser_config_options(_config_path):
     If file not found, then raise exception.
 
     """
+    if not _config_path:
+        return []
+
     if path.exists(_config_path):
         """if path exists"""
 
@@ -128,7 +134,14 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        _driver = webdriver.Chrome(options=options)
+        # current test function name
+        # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
+        test_method_name = request.node.name
+        from nrobo.cli.cli_constansts import REPORT_TYPES
+        log_path = REPORT_TYPES.REPORT_DIR + os.sep + test_method_name + REPORT_TYPES.LOG_EXTENTION
+
+        service = webdriver.ChromeService(log_output=log_path)
+        _driver = webdriver.Chrome(options=options, service=service)
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
@@ -148,7 +161,14 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        _driver = webdriver.Chrome(options=options)
+        # current test function name
+        # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
+        test_method_name = request.node.name
+        from nrobo.cli.cli_constansts import REPORT_TYPES
+        log_path = REPORT_TYPES.REPORT_DIR + os.sep + test_method_name + REPORT_TYPES.LOG_EXTENTION
+
+        service = webdriver.ChromeService(log_output=log_path)
+        _driver = webdriver.Chrome(options=options, service=service)
 
     # yield driver instance to calling test method
     yield _driver

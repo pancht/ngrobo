@@ -6,6 +6,7 @@ class REPORT_TYPES:
     ALLURE = "allure"
     REPORT_DIR = "results"
     HTML_REPORT_PATH = REPORT_DIR + os.sep + "report.html"
+    LOG_EXTENTION = ".log"
 
 
 class nCLI:
