@@ -86,7 +86,14 @@ def driver(request):
 
     if browser == Browsers.CHROME:
         """if browser requested is chrome"""
-        _driver = webdriver.Chrome()
+
+        # Chrome Flags for Tooling
+        # Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
+        # Command line switches
+        # Doc: https://peter.sh/experiments/chromium-command-line-switches/
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        _driver = webdriver.Chrome(options=options)
 
     # yield driver instance to calling test method
     yield _driver
