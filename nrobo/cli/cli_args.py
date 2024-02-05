@@ -153,7 +153,7 @@ def parse_cli_args():
         """)
     parser.add_argument("-q", "--quiet", help="""
         decrease verbosity.
-                            """)
+                            """, action="store_true")
     parser.add_argument("--verbosity", help="""
         --verbosity=VERBOSE   
         set verbosity. Default is 0.
@@ -406,8 +406,13 @@ def parse_cli_args():
                     continue  # proceed with next key
                 elif key not in CLI.ARGS.keys():
                     """Check for all no nrobo cli keys. All pytest keys"""
-                    command.append(f"--{key}")
-                    command.append(str(value))
+                    # print(key)
+                    if key == "c":
+                        command.append(f"-{key}")
+                        command.append(str(value))
+                    else:
+                        command.append(f"--{key}")
+                        command.append(str(value))
                 elif key == CLI.APP:
                     __APP_NAME__ = value
                 elif key == CLI.URL:
@@ -419,6 +424,8 @@ def parse_cli_args():
                 elif key == CLI.BROWSER:
                     __BROWSER__ = value
                     raise_exception_if_browser_not_supported(__BROWSER__)
+                    command.append(f"--{key}")
+                    command.append(str(value))
                 elif key == CLI.KEY:
                     command.append(f"-k")
                     command.append(value)
@@ -435,6 +442,11 @@ def parse_cli_args():
                     else:
                         console.print(f"Incorrect report type! Valid report types are html | allure.")
                         exit(1)
+
+    # Debug code line
+    # print(__BROWSER__)
+    # print(command)
+    # exit(1)
 
     # Add single parameter commands by default
     # That make sense.

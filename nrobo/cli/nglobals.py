@@ -13,15 +13,25 @@ __BROWSER__ = ""
 
 from nrobo.exceptions import BrowserNotSupported
 
-supported_browsers = ['chrome']
-supported_browsers_in_future = ['edge', 'firefox', 'ie', 'safari']
+
+class Browsers:
+    CHROME = 'chrome'
+    EDGE = 'edge'
+    FIREFOX = 'firefox'
+    IE = "ie"
+    SAFARI = 'safari'
+
+
+supported_browsers = [Browsers.CHROME]
+supported_browsers_in_future = [Browsers.SAFARI, Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
 
 
 def raise_exception_if_browser_not_supported(browser_name):
     """raise exception if <browser_name> is not supported in nrobo framework"""
     if str(browser_name).lower() in supported_browsers_in_future:
-        console.print(f"[{STYLE.HLOrange}]Support for {browser_name} browser will be coming in upcoming releases. Sorry for the "
-              f"convenience.")
+        console.print(
+            f"[{STYLE.HLOrange}]Support for {browser_name} browser will be coming in upcoming releases. Sorry for the "
+            f"convenience.")
         exit(1)
     if browser_name not in supported_browsers:
         raise BrowserNotSupported(browser_name)

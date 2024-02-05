@@ -1,39 +1,95 @@
 """
 nrobo conftest.py file.
+Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
+Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
+Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
 
 Contains fixtures for nrobo framework
 """
-import argparse
 
 import pytest
-from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__
+from selenium import webdriver
+from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
+from nrobo.util.common import Common
+from nrobo.cli.cli_constansts import nCLI as CLI
+
+global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
 
 
-@pytest.fixture(autouse=True)
-def url():
+def pytest_addoption(parser):
+    """
+    Pass different values to a test function, depending on command line options
+
+    Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    :param parser:
+    :return:
+    """
+    parser.addoption(
+        f"--{CLI.BROWSER}", help="""
+    Target browser name. Default is chrome.
+    Options could be:
+        chrome | firefox | safari | edge.
+        (Only chrome is supported at present.)
+    """
+    )
+    parser.addoption(f"--{CLI.APP}", help="Name of your app project under test")
+    parser.addoption(f"--{CLI.URL}", help="Link of application under test.yaml")
+    parser.addoption(f"--{CLI.USERNAME}", help="Username for login", default="")
+    parser.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
+
+
+@pytest.fixture()
+def url(request):
     # Global fixture returning app url
-    return __URL__
+    # Access pytest command line options
+    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    return request.config.getoption(f"--{CLI.URL}")
 
 
-@pytest.fixture(autouse=True)
-def app():
+@pytest.fixture()
+def app(request):
     # Global fixture returning app name
-    return __APP_NAME__
+    # Access pytest command line options
+    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    return request.config.getoption(f"--{CLI.APP}")
 
 
-@pytest.fixture(autouse=True)
-def username():
+@pytest.fixture()
+def username(request):
     # Global fixture returning admin username
-    return __USERNAME__
+    # Access pytest command line options
+    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    return request.config.getoption(f"--{CLI.USERNAME}")
 
 
-@pytest.fixture(autouse=True)
-def password():
+@pytest.fixture()
+def password(request):
     # Global fixture returning admin password
-    return __PASSWORD__
+    # Access pytest command line options
+    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    return request.config.getoption(f"--{CLI.PASSWORD}")
 
 
-@pytest.fixture(autouse=True)
-def driver():
-    # need implementation
-    return 'driver'
+@pytest.fixture(scope='function')
+def driver(request):
+    """
+    Fixture for instantiating driver for given browser.
+    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
+    Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
+
+    """
+    # Access pytest command line options
+    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    browser = request.config.getoption(f"--{CLI.BROWSER}")
+
+    _driver = None
+
+    if browser == Browsers.CHROME:
+        """if browser requested is chrome"""
+        _driver = webdriver.Chrome()
+
+    # yield driver instance to calling test method
+    yield _driver
+
+    # quit the browser
+    _driver.quit()
