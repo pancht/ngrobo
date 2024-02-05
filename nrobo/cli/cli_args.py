@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from nrobo import FRAMEWORK_PATHS
 from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
@@ -30,7 +31,8 @@ def parse_cli_args():
     parser.add_argument("-n", f"--{CLI.INSTANCES}",
                         help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
-    parser.add_argument("--rr", f"--{CLI.RERUN}", help="Number of reruns for a test.yaml if it fails", default=0)
+    parser.add_argument(f"--{CLI.RERUNS}", help="Number of reruns for a test.yaml if it fails", default=0)
+    parser.add_argument(f"--{CLI.RERUNS_DELAY}", help="Rerun delay. Default=1")
     parser.add_argument(f"--{CLI.REPORT}",
                         help="Report target. Default HTML or Rich Allure report. Options are html | allure",
                         default="html")
@@ -114,9 +116,9 @@ def parse_cli_args():
                         show cache contents, don't perform collection or
                         tests. Optional argument: glob (default: '*').
                             """)
-    parser.add_argument("--cache-clear",  help="""
+    parser.add_argument("--cache-clear", help="""
         remove all cache contents at start of test run.
-                            """)
+                            """, action="store_true")
     parser.add_argument("--lfnf", help="""
         --lfnf={all,none}, --last-failed-no-failures={all,none}
                         which tests to run with no previously (known)
@@ -164,7 +166,7 @@ def parse_cli_args():
     parser.add_argument("--disable-warnings", "--disable-pytest-warnings", help="""
             disable warnings summary
             """)
-    parser.add_argument("-l", "--showlocals",  help="""
+    parser.add_argument("-l", "--showlocals", help="""
             show locals in tracebacks (disabled by default).
             """)
     parser.add_argument("--tb", help="""
@@ -233,7 +235,7 @@ def parse_cli_args():
             """)
     parser.add_argument("--co", "--collect-only", help="""
             only collect tests, don't execute them.
-            """)
+            """, action="store_true")
     parser.add_argument("--pyargs", help="""
             try to interpret all arguments as python packages.
             """)
@@ -391,18 +393,28 @@ def parse_cli_args():
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
         for key, value in args.__dict__.items():
             # process pytest keys first
+
+            # replace hyphen with dash if hyphen is present in key
+            key = key.replace('_', '-')
+
             if value:
-                if key not in CLI.ARGS.keys():
-                    command.append(key)
+                if type(value) is bool:
+                    command.append(f"--{key}")
+                    continue  # proceed with next key
+                elif key not in CLI.ARGS.keys():
+                    """Check for all no nrobo cli keys. All pytest keys"""
+                    command.append(f"--{key}")
                     command.append(str(value))
                 elif key == CLI.KEY:
-                    command.append("-k")
-                    command.append(str(args.key))
+                    command.append(f"-k")
+                    command.append(value)
                 elif key == CLI.INSTANCES:
-                    command.append("-n")
+                    command.append(f"-n")
                     command.append(str(value))
+                elif key == CLI.RERUNS:
+                    command.append(f"--{key}")
+                    command.append(value)
                 elif key == CLI.REPORT:
-                    console.print(f"{key}={value}")
                     if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
                         command.append(f"--{REPORT_TYPES.HTML}")
                         command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
@@ -412,33 +424,16 @@ def parse_cli_args():
 
     # Add single parameter commands by default
     # That make sense.
-
-    # Clear cache before test run
-    command.append("--cache-clear")
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
-
-    # color terminal output
-    command.append("--color")
-    command.append("yes")
-
-    # show extra test summary info
-    command.append("-r")
-    command.append("fE")
-
-    # Whether code should be highlighted
-    command.append("--code-highlight")
-    command.append("yes")
-
-    # create junit-xml style report file at given path.
-    command.append("--junit-xml")
-    command.append("results/junit-report.xml")
+    for k, v in CLI.DEFAULT_ARGS.items():
+        command = command + v
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
 
         if args.report and args.report == REPORT_TYPES.ALLURE:
-            terminal([REPORT_TYPES.ALLURE, "serve", REPORT_TYPES.REPORT_DIR])
+            terminal([REPORT_TYPES.ALLURE, f"serve", REPORT_TYPES.REPORT_DIR])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
         pass

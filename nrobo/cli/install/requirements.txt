@@ -28,6 +28,10 @@ pytest-html==4.1.1
 pytest-xdist==3.5.0
 psutil==5.9.8
 
+# pytest plugin to re-run tests to eliminate flaky failures
+# Doc: https://pypi.org/project/pytest-rerunfailures/
+pytest-rerunfailures==13.0
+
 # Allure reports
 # Doc: https://docs.qameta.io/allure-report/
 allure-pytest==2.13.2
