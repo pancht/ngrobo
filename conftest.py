@@ -8,14 +8,19 @@ Contains fixtures for nrobo framework
 """
 import logging
 import os
+import pathlib
+import time
+from datetime import datetime
 
+import allure
 import pytest
+import pytest_html
 from selenium import webdriver
 
 import nrobo.cli.cli_constansts
 from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
 from nrobo.util.common import Common
-from nrobo.cli.cli_constansts import nCLI as CLI
+from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
 import os.path as path
 
 from nrobo.util.constants import CONST
@@ -37,6 +42,13 @@ def ensure_logs_dir_exists():
         """ensure test logs dir"""
         try:
             os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST)
+        except FileExistsError as e:
+            pass  # do nothing
+
+    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR):
+        """ensure test logs dir"""
+        try:
+            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR)
         except FileExistsError as e:
             pass  # do nothing
 
@@ -149,6 +161,8 @@ def driver(request):
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     browser = request.config.getoption(f"--{CLI.BROWSER}")
+    global __URL__
+    __URL__ = request.config.getoption(f"--{CLI.URL}")
 
     # initialize driver with None
     _driver = None
@@ -208,6 +222,8 @@ def driver(request):
         service = webdriver.ChromeService(log_output=_driver_log_path)
         _driver = webdriver.Chrome(options=options, service=service)
 
+    # store web driver ref in request
+    request.node.funcargs['driver'] = _driver
     # yield driver instance to calling test method
     yield _driver
 
@@ -269,3 +285,59 @@ def pytest_report_header(config):
     #         header = repr(app_name_ini)
 
     return f"test summary".title()
+
+
+# set up a hook to be able to check if a test has failed
+@pytest.hookimpl(tryfirst=True, hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """
+    Doc: https://stackoverflow.com/questions/70761764/pytest-html-not-displaying-image
+    Doc: https://github.com/pytest-dev/pytest/blob/main/doc/en/how-to/writing_hook_functions.rst#hookwrapper-executing-around-other-hooks
+
+    Doc: https://pytest-html.readthedocs.io/en/latest/
+
+    :param item:
+    :param call:
+    :return:
+    """
+    # outcome = yield
+    # report = outcome.get_result()
+    # extras = getattr(report, "extras", [])
+    # if report.when == "call":
+    #     # always add url to report
+    #     extras.append(pytest_html.extras.url(__URL__))
+    #     xfail = hasattr(report, "wasxfail")
+    #     if (report.skipped and xfail) or (report.failed and not xfail):
+    #         # only add additional html on failure
+    #         extras.append(pytest_html.extras.html("<div>Additional HTML</div>"))
+    #     report.extras = extras
+    # always add url to report
+    # extra.append(pytest_html.extras.url('E:\Python Projects\StackField\screenshot'))
+    # pytest_html = item.config.pluginmanager.getplugin('html')
+    outcome = yield
+    report = outcome.get_result()
+    extras = getattr(report, 'extras', [])
+    if report.when == 'call':
+        xfail = hasattr(report, 'wasxfail')
+        if report.failed and not xfail:
+            nodeid = item.nodeid
+            feature_request = item.funcargs['request']
+            driver = feature_request.getfixturevalue('driver')
+
+            img_name = f'{nodeid}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'.replace("/", "_").replace("::",
+                                                                                                               "_").replace(
+                ':', "").replace('.py', '')
+            img_path = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + img_name
+            relative_fileName = NREPORT.SCREENSHOTS_DIR + os.sep + img_name
+            driver.save_screenshot(img_path)
+
+            # get base64 screenshot
+            # failure_screen_shot = driver.get_screenshot_as_base64()
+
+            # attach screenshot with html report
+            extras.append(pytest_html.extras.image(relative_fileName))
+            # add relative url to screenshot in the html report
+            extras.append(pytest_html.extras.url(relative_fileName))
+
+        # update the report.extras
+        report.extras = extras

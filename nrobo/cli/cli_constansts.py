@@ -9,6 +9,7 @@ class NREPORT:
     LOG_DIR_DRIVER = "driver-logs"
     LOG_EXTENTION = ".log"
     LOG_DIR_TEST = "test-logs"
+    SCREENSHOTS_DIR = "screenshots"
 
 
 class nCLI:
