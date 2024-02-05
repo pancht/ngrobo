@@ -468,6 +468,9 @@ def parse_cli_args():
                             command.append(f"{NREPORT.HTML_REPORT_PATH}")
                             command.append(f"--alluredir")
                             command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
+                            # command.append(f"--allure-no-capture")
+
+                            # Doc: https://allurereport.org/docs/gettingstarted-installation/
 
     # Debug code line
     # print(__BROWSER__)
@@ -485,6 +488,7 @@ def parse_cli_args():
         terminal(command)
 
         if args.report and args.report == NREPORT.ALLURE:
+            # https://allurereport.org/docs/gettingstarted-installation/
             terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
