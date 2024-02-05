@@ -6,6 +6,7 @@ Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
 
 Contains fixtures for nrobo framework
 """
+import logging
 import os
 
 import pytest
@@ -20,11 +21,23 @@ import os.path as path
 global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
 
 
-def ensure_driver_logs_dir_exists():
+def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constansts import NREPORT
     if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER):
-        os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER)
+        """ensure driver logs dir"""
+        try:
+            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER)
+        except FileExistsError as e:
+            pass  # Do nothing
+
+    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST):
+        """ensure test logs dir"""
+        try:
+            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST)
+        except FileExistsError as e:
+            pass  # do nothing
+
 
 def process_browser_config_options(_config_path):
     """
@@ -117,7 +130,18 @@ def driver(request):
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     browser = request.config.getoption(f"--{CLI.BROWSER}")
 
+    # initialize driver with None
     _driver = None
+
+    # Set driver log name
+    # current test function name
+    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
+    test_method_name = request.node.name
+    from nrobo.cli.cli_constansts import NREPORT
+    ensure_logs_dir_exists()
+    _driver_log_path = NREPORT.REPORT_DIR + os.sep + \
+                       NREPORT.LOG_DIR_DRIVER + os.sep + \
+                       test_method_name + NREPORT.LOG_EXTENTION
 
     if browser == Browsers.CHROME:
         """if browser requested is chrome"""
@@ -140,17 +164,7 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        # current test function name
-        # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
-        test_method_name = request.node.name
-        from nrobo.cli.cli_constansts import NREPORT
-
-        ensure_driver_logs_dir_exists()
-        driver_log_path = NREPORT.REPORT_DIR + os.sep + \
-                   NREPORT.LOG_DIR_DRIVER + os.sep + \
-                   test_method_name + NREPORT.LOG_EXTENTION
-
-        service = webdriver.ChromeService(log_output=driver_log_path)
+        service = webdriver.ChromeService(log_output=_driver_log_path)
         _driver = webdriver.Chrome(options=options, service=service)
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
@@ -171,16 +185,7 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        # current test function name
-        # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
-        test_method_name = request.node.name
-        from nrobo.cli.cli_constansts import NREPORT
-        ensure_driver_logs_dir_exists()
-        driver_log_path = NREPORT.REPORT_DIR + os.sep + \
-                   NREPORT.LOG_DIR_DRIVER + os.sep + \
-                   test_method_name + NREPORT.LOG_EXTENTION
-
-        service = webdriver.ChromeService(log_output=driver_log_path)
+        service = webdriver.ChromeService(log_output=_driver_log_path)
         _driver = webdriver.Chrome(options=options, service=service)
 
     # yield driver instance to calling test method
@@ -188,3 +193,32 @@ def driver(request):
 
     # quit the browser
     _driver.quit()
+
+
+@pytest.fixture(scope='function')
+def logger(request):
+    """
+    Fixer that instantiate logger instance for each test
+
+    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/troubleshooting/test_logging.py
+    """
+    # Set driver log name
+    # current test function name
+    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
+    test_method_name = request.node.name
+    from nrobo.cli.cli_constansts import NREPORT
+    ensure_logs_dir_exists()
+
+    # Setup logger for tests
+    logger = logging.getLogger('selenium')
+    logger.setLevel(logging.DEBUG)
+    _test_logs_path = NREPORT.REPORT_DIR + os.sep + \
+                      NREPORT.LOG_DIR_TEST + os.sep + \
+                      test_method_name + NREPORT.LOG_EXTENTION
+    handler = logging.FileHandler(_test_logs_path)
+    logger.addHandler(handler)
+    logging.getLogger('selenium.webdriver.remote').setLevel(logging.WARN)
+    logging.getLogger('selenium.webdriver.common').setLevel(logging.DEBUG)
+
+    # yield logger instance to calling test method
+    yield logger
