@@ -295,49 +295,43 @@ def pytest_runtest_makereport(item, call):
     Doc: https://github.com/pytest-dev/pytest/blob/main/doc/en/how-to/writing_hook_functions.rst#hookwrapper-executing-around-other-hooks
 
     Doc: https://pytest-html.readthedocs.io/en/latest/
+    Doc: https://pytest-html.readthedocs.io/en/latest/deprecations.html
 
     :param item:
     :param call:
     :return:
     """
-    # outcome = yield
-    # report = outcome.get_result()
-    # extras = getattr(report, "extras", [])
-    # if report.when == "call":
-    #     # always add url to report
-    #     extras.append(pytest_html.extras.url(__URL__))
-    #     xfail = hasattr(report, "wasxfail")
-    #     if (report.skipped and xfail) or (report.failed and not xfail):
-    #         # only add additional html on failure
-    #         extras.append(pytest_html.extras.html("<div>Additional HTML</div>"))
-    #     report.extras = extras
-    # always add url to report
-    # extra.append(pytest_html.extras.url('E:\Python Projects\StackField\screenshot'))
-    # pytest_html = item.config.pluginmanager.getplugin('html')
     outcome = yield
     report = outcome.get_result()
     extras = getattr(report, 'extras', [])
     if report.when == 'call':
         xfail = hasattr(report, 'wasxfail')
         if report.failed and not xfail:
-            nodeid = item.nodeid
+            # Get test method identifier
+            node_id = item.nodeid
+            # Get reference to test method
             feature_request = item.funcargs['request']
+            # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
 
-            img_name = f'{nodeid}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'.replace("/", "_").replace("::",
-                                                                                                               "_").replace(
-                ':', "").replace('.py', '')
-            img_path = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + img_name
-            relative_fileName = NREPORT.SCREENSHOTS_DIR + os.sep + img_name
-            driver.save_screenshot(img_path)
+            # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
+            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png'\
+                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE)\
+                .replace(CONST.SCOPE_RESOLUTION_OPERATOR,CONST.UNDERSCORE)\
+                .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
+            screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+            screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+
+            # Create and save screenshot at <screenshot_filepath>
+            driver.save_screenshot(screenshot_filepath)
 
             # get base64 screenshot
             # failure_screen_shot = driver.get_screenshot_as_base64()
 
-            # attach screenshot with html report
-            extras.append(pytest_html.extras.image(relative_fileName))
-            # add relative url to screenshot in the html report
-            extras.append(pytest_html.extras.url(relative_fileName))
+            # attach screenshot with html report. Use relative path to report directory
+            extras.append(pytest_html.extras.image(screenshot_relative_path))
+            # add relative path to screenshot in the html report
+            extras.append(pytest_html.extras.url(screenshot_relative_path))
 
         # update the report.extras
         report.extras = extras
