@@ -1,6 +1,6 @@
 > hatch run which python
 
-# run test
+# run test.yaml
 > hatch run test
 
 > hatch run pytest

@@ -1,5 +1,7 @@
 import os
 
+from nrobo.cli.cli_constansts import nCLI, PACKAGES
+
 from nrobo.util.process import terminal
 from nrobo.util.python import __PYTHON__, __PIP__
 
@@ -15,4 +17,9 @@ def install_dependencies(requirements_file=None):
     if requirements_file is None:
         requirements_file = __REQUIREMENTS__
 
-    terminal([__PIP__, 'install', '-r', requirements_file])
+    if os.path.exists(__REQUIREMENTS__):
+        requirements_file = __REQUIREMENTS__
+    elif os.path.exists(PACKAGES.NROBO + os.sep + PACKAGES.CLI + os.sep + nCLI.INSTALL + os.sep + __REQUIREMENTS__):
+        requirements_file = PACKAGES.NROBO + os.sep + PACKAGES.CLI + os.sep + nCLI.INSTALL + os.sep + __REQUIREMENTS__
+
+    terminal([__PIP__, nCLI.INSTALL, '-r', requirements_file])
