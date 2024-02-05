@@ -23,4 +23,11 @@ selenium==4.17.2
 pytest-html==4.1.1
 
 # pytest xdist plugin for distributed testing, most importantly across multiple CPUs
+# Doc: https://pytest-xdist.readthedocs.io/en/stable/
+# Doc: https://psutil.readthedocs.io/en/latest/
 pytest-xdist==3.5.0
+psutil==5.9.8
+
+# Allure reports
+# Doc: https://docs.qameta.io/allure-report/
+allure-pytest==2.13.2

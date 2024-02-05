@@ -1,3 +1,6 @@
+import os
+
+
 class nCLI:
     INSTALL = "install"
     APP = "app"
@@ -29,4 +32,10 @@ class nCLI:
 class REPORT_TYPES:
     HTML = "html"
     ALLURE = "allure"
-    HTML_REPORT_PATH = "results/report.html"
+    REPORT_DIR = "results"
+    HTML_REPORT_PATH = REPORT_DIR + os.sep + "report.html"
+
+
+class PACKAGES:
+    NROBO = "nrobo"
+    CLI = "cli"

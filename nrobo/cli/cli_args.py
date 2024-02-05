@@ -402,12 +402,10 @@ def parse_cli_args():
                     command.append("-n")
                     command.append(str(value))
                 elif key == CLI.REPORT:
-                    if value == REPORT_TYPES.HTML:
+                    console.print(f"{key}={value}")
+                    if value in [REPORT_TYPES.HTML, REPORT_TYPES.ALLURE]:
                         command.append(f"--{REPORT_TYPES.HTML}")
                         command.append(f"{REPORT_TYPES.HTML_REPORT_PATH}")
-                    elif key == REPORT_TYPES.ALLURE:
-                        console.print(f"Allure support is still in pipeline. Please come again later!")
-                        exit(1)
                     else:
                         console.print(f"Incorrect report type! Valid report types are html | allure.")
                         exit(1)
@@ -438,6 +436,9 @@ def parse_cli_args():
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
+
+        if args.report and args.report == REPORT_TYPES.ALLURE:
+            terminal([REPORT_TYPES.ALLURE, "serve", REPORT_TYPES.REPORT_DIR])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
         pass

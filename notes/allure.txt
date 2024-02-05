@@ -1,0 +1,4 @@
+doc: https://allurereport.org/docs/gettingstarted-installation/
+
+# install allure
+brew install allure
