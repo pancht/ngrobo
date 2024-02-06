@@ -37,21 +37,23 @@ class nCLI:
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
     PACKAGES = "packages"
+    GRID = "grid"
 
     ARGS = {
-        INSTALL: "install",
-        APP: "app",
-        URL: "link",
-        USERNAME: "username",
-        PASSWORD: "password",
-        INSTANCES: "instances",
-        RERUNS: "rerun",
-        REPORT: "report",
-        TESTDIR: "testsdir",
-        BROWSER: "browser",
-        BROWSER_CONFIG: "browser-config",
-        KEY: "key",
-        PACKAGES: "packages"
+        INSTALL: INSTALL,
+        APP: APP,
+        URL: URL,
+        USERNAME: USERNAME,
+        PASSWORD: PASSWORD,
+        INSTANCES: INSTANCES,
+        RERUNS: RERUNS,
+        REPORT: REPORT,
+        TESTDIR: TESTDIR,
+        BROWSER: BROWSER,
+        BROWSER_CONFIG: BROWSER_CONFIG,
+        KEY: KEY,
+        PACKAGES: PACKAGES,
+        GRID: GRID
     }
 
     DEFAULT_ARGS = {

@@ -78,6 +78,9 @@ def parse_cli_args():
     parser.add_argument("--alluredir", help="""
         Path to the directory where Allure Pytest will save the test results.
         """)
+    parser.add_argument(f"--{CLI.GRID}", help="""
+            Remote webdriver grid url
+            """)
     parser.add_argument("-m", "--marker", help="""
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
@@ -471,6 +474,9 @@ def parse_cli_args():
                             # command.append(f"--allure-no-capture")
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
+                    else:
+                        command.append(f"--{key}")
+                        command.append(value)
 
     # Debug code line
     # print(__BROWSER__)

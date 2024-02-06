@@ -1,6 +1,9 @@
 #selenium grid doc
 https://www.selenium.dev/documentation/grid/getting_started/
 
+# Example:
+https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/drivers/test_remote_webdriver.py
+
 Prerequisites
 -------------
 - Java 11 or higher installed
@@ -21,4 +24,8 @@ To learn more about the different configuration options, go through the sections
 
 Commands
 ---------
-java -jar selenium-server-4.17.0.jar standalone --selenium-manager true
+# Following did not work
+java -jar selenium-server-4.17.0.jar standalone --selenium-manager true 
+
+# Following works
+java -jar selenium-server-4.17.0.jar standalone

@@ -108,6 +108,7 @@ def pytest_addoption(parser):
     group.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
     group.addoption(f"--{CLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
     group.addoption(f"--{CLI.PACKAGES}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{CLI.GRID}", help="Url of remote selenium grid server")
 
     # ini option
     parser.addini(f"{CLI.APP}", type="string",
@@ -124,6 +125,7 @@ def pytest_addoption(parser):
                   help="Browser config file path for setting requested options")
     parser.addini(f"{CLI.PACKAGES}", type='string',
                   help="Browser config file path for setting requested options")
+    parser.addini(f"--{CLI.GRID}", type='string', help="Url of remote selenium grid server")
 
 
 @pytest.fixture()
@@ -171,6 +173,7 @@ def driver(request):
     browser = request.config.getoption(f"--{CLI.BROWSER}")
     global __URL__
     __URL__ = request.config.getoption(f"--{CLI.URL}")
+    _grid_server_url = request.config.getoption(f"--{CLI.GRID}")
 
     # initialize driver with None
     _driver = None
@@ -208,10 +211,17 @@ def driver(request):
 
         # Replace with ChromeDriverManager
         # service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options,
-                                   service=ChromeService(
-                                       ChromeDriverManager().install(),
-                                        log_output=_driver_log_path))
+        # Doc for webdriver manager: https://pypi.org/project/webdriver-manager/
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _driver = webdriver.Chrome(options=options,
+                                       service=ChromeService(
+                                           ChromeDriverManager().install(),
+                                           log_output=_driver_log_path))
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
@@ -233,7 +243,14 @@ def driver(request):
 
         # Replace with ChromeDriverManager
         # service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options,
+        # Doc for webdriver manager: https://pypi.org/project/webdriver-manager/
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _driver = webdriver.Chrome(options=options,
                                    service=ChromeService(
                                        ChromeDriverManager().install(),
                                        log_output=_driver_log_path))
