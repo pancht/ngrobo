@@ -16,6 +16,8 @@ import allure
 import pytest
 import pytest_html
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 import nrobo.cli.cli_constansts
 from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
@@ -204,8 +206,12 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options, service=service)
+        # Replace with ChromeDriverManager
+        # service = webdriver.ChromeService(log_output=_driver_log_path)
+        _driver = webdriver.Chrome(options=options,
+                                   service=ChromeService(
+                                       ChromeDriverManager().install(),
+                                        log_output=_driver_log_path))
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
@@ -225,8 +231,12 @@ def driver(request):
         for _option in _chrome_config_options:
             options.add_argument(_option)
 
-        service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options, service=service)
+        # Replace with ChromeDriverManager
+        # service = webdriver.ChromeService(log_output=_driver_log_path)
+        _driver = webdriver.Chrome(options=options,
+                                   service=ChromeService(
+                                       ChromeDriverManager().install(),
+                                       log_output=_driver_log_path))
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver

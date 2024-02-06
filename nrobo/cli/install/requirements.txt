@@ -19,6 +19,9 @@ PyYAML==6.0.1
 # Python language bindings for Selenium WebDriver.
 selenium==4.17.2
 
+# Library provides the way to automatically manage drivers for different browsers
+webdriver-manager==4.0.1
+
 # pytest plugin for generating HTML reports
 pytest-html==4.1.1
 
