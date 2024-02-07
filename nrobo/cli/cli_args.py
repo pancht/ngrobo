@@ -478,11 +478,18 @@ def parse_cli_args():
     # print(command)
     # exit(1)
 
+    if not args.browser:
+        """browser not provided"""
+        command.append(f"--{CLI.BROWSER}")
+        command.append(f"{Browsers.CHROME}")
+
+
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
     for k, v in CLI.DEFAULT_ARGS.items():
         command = command + v
+
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         console.print(f"[{STYLE.INFO}]{command}")
@@ -493,4 +500,5 @@ def parse_cli_args():
             terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
-        pass
+        if not args.browser:
+            console.print(f"[{STYLE.HLOrange}]NOTE:\n\t--browser switch was missing. Default browser {Browsers.CHROME} is selected by nrobo...")
