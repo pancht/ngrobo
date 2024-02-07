@@ -2,7 +2,7 @@ import argparse
 import os
 
 from nrobo import FRAMEWORK_PATHS
-from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
+from nrobo.cli import install_nrobo, STYLE, __REQUIREMENTS__
 from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
 from nrobo.cli.nglobals import *
 
@@ -401,7 +401,7 @@ def parse_cli_args():
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
-            install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
+            install_nrobo(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
             exit(1)
 
     # build pytest command

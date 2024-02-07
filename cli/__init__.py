@@ -1,8 +1,9 @@
-from nrobo_cli.build import build
-from nrobo_cli.check import check
-from nrobo_cli.publish import publish
+from cli.build import build
+from cli.check import check
+from cli.publish import publish
 import argparse
 from nrobo.util.commands.ncommands import clear_screen
+
 
 def nrobo_cli():
     """

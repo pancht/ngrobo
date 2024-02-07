@@ -9,7 +9,7 @@ import time
 from nrobo.util.process import terminal
 import os
 
-from nrobo.cli.install import install_dependencies, __REQUIREMENTS__
+from nrobo.cli.install import install_nrobo, __REQUIREMENTS__
 from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
 from nrobo.util.constants import CONST
 from nrobo.util.python import verify_set_python_install_pip_command
@@ -46,7 +46,7 @@ def main():
 
     clear_screen()
     greet_the_guest()
-    install_dependencies()
+    install_nrobo()
     verify_set_python_install_pip_command()
     remove_files_recursively("dist")
     remove_files_recursively(NREPORT.REPORT_DIR)

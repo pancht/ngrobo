@@ -1,9 +1,7 @@
 import logging
 from selenium.webdriver.remote.webdriver import WebDriver
 from typing import Union
-
 from nrobo.selenese import NRobo
-
 AnyBrowser = Union[None, WebDriver]
 
 
@@ -16,6 +14,9 @@ class Page(NRobo):
         self.driver = driver
         self.logger = logger
 
+    ##################################################
+    # Implement application specific page methods here
+    ##################################################
 
 
 

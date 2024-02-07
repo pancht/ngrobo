@@ -3,8 +3,8 @@ import os
 from nrobo.util.process import terminal
 from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
 from nrobo.util.python import verify_set_python_install_pip_command, __PYTHON__
-from nrobo_cli.check import check
-from nrobo_cli.build import build, __CUR_ENV__, ENVIRONMENT
+from cli.check import check
+from cli.build import build, __CUR_ENV__, ENVIRONMENT
 from nrobo.util.constants import CONST
 
 global __CUR_ENV__
