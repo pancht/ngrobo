@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from nrobo import FRAMEWORK_PATHS
 from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
@@ -404,6 +405,7 @@ def parse_cli_args():
 
     # build pytest command
     command = ["pytest"]
+    command_builder_notes = []
 
     # Rest of the options if present
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
@@ -482,14 +484,17 @@ def parse_cli_args():
         """browser not provided"""
         command.append(f"--{CLI.BROWSER}")
         command.append(f"{Browsers.CHROME}")
-
+        command_builder_notes.append(
+            f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
+    if not args.rootdir:
+        command_builder_notes.append(
+            f"[{STYLE.HLOrange}]\t--rootdir switch was missing. Default test path <current-dir> is selected...")
 
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
     for k, v in CLI.DEFAULT_ARGS.items():
         command = command + v
-
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
         console.print(f"[{STYLE.INFO}]{command}")
@@ -500,5 +505,11 @@ def parse_cli_args():
             terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
-        if not args.browser:
-            console.print(f"[{STYLE.HLOrange}]NOTE:\n\t--browser switch was missing. Default browser {Browsers.CHROME} is selected by nrobo...")
+        if len(command_builder_notes) == 1:
+            console.print(f"[{STYLE.HLOrange}]Note:")
+        elif len(command_builder_notes) >= 2:
+            console.print(f"[{STYLE.HLOrange}]Notes:")
+
+        if command_builder_notes:
+            for note in command_builder_notes:
+                console.print(note)
