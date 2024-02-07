@@ -250,6 +250,8 @@ def driver(request):
         """if browser requested is safari"""
 
         options = webdriver.SafariOptions()
+        options.add_argument("ShowOverlayStatusBar=YES")
+
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
@@ -263,7 +265,8 @@ def driver(request):
                                        options=options)
         else:
             """Get instance of local chrom driver"""
-            _driver = webdriver.Safari(options=options)
+            _service = webdriver.SafariService(service_args=["--diagnose"])
+            _driver = webdriver.Safari(options=options, service=_service)
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver
