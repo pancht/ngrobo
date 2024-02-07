@@ -45,7 +45,7 @@ def read_nrobo_configs():
     return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
 
 
-class WebdriverWrapperNrobo(PageFactory, WebDriver):
+class WebdriverWrapperNrobo(WebDriver):
     """
     Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
 
@@ -431,7 +431,7 @@ class WebdriverWrapperNrobo(PageFactory, WebDriver):
         :rtype: WebElement
         """
 
-        WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT])\
+        WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
             .until(expected_conditions.presence_of_element_located([by, value]))
         return self.driver.find_element(by, value)
 
@@ -737,8 +737,8 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
     def tag_name(self, by=By.ID, value: Optional[str] = None) -> str:
         """This element's ``tagName`` property."""
@@ -978,8 +978,8 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
     def wait_for_page_to_be_loaded(self):
         """Waits for give timeout time for page to completely load.
@@ -999,7 +999,6 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             nprint(f"Exception: {ae}", STYLE.HLRed)
         nprint("End of Wait for page load...", style=STYLE.PURPLE4)
 
-    @staticmethod
     def wait_for_a_while(time_in_sec):
         """
         Pause for <time_in_sec>
@@ -1044,14 +1043,13 @@ class ActionChainsNrobo(WebElementWrapperNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
-        self.action_chain = ActionChains(self.driver)
+        # self.driver = driver
+        # self.logger = logger
+        self._action_chain = ActionChains(self.driver)
 
-    @property
     def action_chain(self):
         """Return ActionChains object"""
-        return ActionChains(self.action_chain)
+        return ActionChains(self._action_chain)
 
 
 class AlertNrobo(ActionChainsNrobo):
@@ -1063,8 +1061,8 @@ class AlertNrobo(ActionChainsNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
     def accept_alert(self) -> None:
         """accept alert"""
@@ -1109,8 +1107,8 @@ class ByNrobo(AlertNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
 
 class DesiredCapabilitiesNrobo(ByNrobo):
@@ -1126,8 +1124,8 @@ class DesiredCapabilitiesNrobo(ByNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
 
 class SelectNrobo(DesiredCapabilitiesNrobo):
@@ -1139,8 +1137,8 @@ class SelectNrobo(DesiredCapabilitiesNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
     def select(self, by=By.ID, value: Optional[str] = None) -> Select:
         """
@@ -1151,11 +1149,6 @@ class SelectNrobo(DesiredCapabilitiesNrobo):
         :return:
         """
         return Select(self.find_element(by, value))
-
-
-
-
-    
 
 
 class NRobo(SelectNrobo):
@@ -1169,8 +1162,8 @@ class NRobo(SelectNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self.driver = driver
-        self.logger = logger
+        # self.driver = driver
+        # self.logger = logger
 
         # objects from common classes
         self.keys = Keys()
@@ -1179,4 +1172,4 @@ class NRobo(SelectNrobo):
         self.window_types = WindowTypes()
 
         # wait for page load
-        self.wait_for_page_to_be_loaded()
+        # self.wait_for_page_to_be_loaded()

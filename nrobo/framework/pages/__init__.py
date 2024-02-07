@@ -13,5 +13,9 @@ class Page(NRobo):
         """constructor"""
         # call parent constructor
         super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+
 
 
