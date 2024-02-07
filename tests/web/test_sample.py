@@ -8,7 +8,7 @@ class TestWebSamples():
 
     @pytest.mark.sanity
     @pytest.mark.regression
-    @pytest.mark.skip
+    #@pytest.mark.skip
     def test_sample_1(self, driver, logger):
         # driver = webdriver.Chrome()
 
