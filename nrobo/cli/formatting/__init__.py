@@ -10,6 +10,7 @@ class STYLE:
     WARNING = "warning",
     INFO = "info",
     DANGER = "danger"
+    PURPLE4 = "purple4"
 
 
 themes = Theme({
@@ -21,5 +22,5 @@ themes = Theme({
     STYLE.HLGreen: "italic green",
     STYLE.INFO: "dim cyan",
     STYLE.WARNING: "magenta",
-    STYLE.DANGER: "bold red"
+    STYLE.DANGER: "bold red",
 })

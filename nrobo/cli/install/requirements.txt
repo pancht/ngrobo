@@ -22,6 +22,9 @@ selenium==4.17.2
 # Library provides the way to automatically manage drivers for different browsers
 webdriver-manager==4.0.1
 
+# Python library provides page factory approach to implement page object model in selenium
+selenium-page-factory==2.6
+
 # pytest plugin for generating HTML reports
 pytest-html==4.1.1
 

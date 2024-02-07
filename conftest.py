@@ -160,7 +160,7 @@ def password(request):
     return request.config.getoption(f"--{CLI.PASSWORD}")
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(autouse=True, scope='function')
 def driver(request):
     """
     Fixture for instantiating driver for given browser.

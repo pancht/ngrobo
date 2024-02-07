@@ -1,18 +1,13 @@
 import argparse
-import os
 
 from nrobo import FRAMEWORK_PATHS
 from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
 from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
-from rich.console import Console
-from nrobo.cli.formatting import themes as th
 from nrobo.cli.nglobals import *
 
-global __APP_NAME__, __URL__,__PASSWORD__,__USERNAME__, __BROWSER__
-
+global __APP_NAME__, __URL__, __PASSWORD__, __USERNAME__, __BROWSER__
 from nrobo.util.process import terminal
-
-console = Console(theme=th)
+from nrobo.cli.tools import console
 
 
 def parse_cli_args():
