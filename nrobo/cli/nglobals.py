@@ -19,12 +19,15 @@ class Browsers:
     CHROME_HEADLESS = "chrome_headless"
     EDGE = 'edge'
     FIREFOX = 'firefox'
+    FIREFOX_HEADLESS = "firefox_headless"
     IE = "ie"
     SAFARI = 'safari'
+    OPERA = 'opera'
 
 
-supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI]
-supported_browsers_in_future = [Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
+supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI,
+                      Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE]
+supported_browsers_in_future = [Browsers.IE, Browsers.OPERA]
 
 
 def raise_exception_if_browser_not_supported(browser_name):

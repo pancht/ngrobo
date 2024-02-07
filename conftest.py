@@ -15,6 +15,7 @@ from datetime import datetime
 import allure
 import pytest
 import pytest_html
+from nrobo.cli import STYLE
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
@@ -229,7 +230,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-                    request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -252,10 +253,9 @@ def driver(request):
         options = webdriver.SafariOptions()
         options.add_argument("ShowOverlayStatusBar=YES")
 
-
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-                    request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -267,6 +267,52 @@ def driver(request):
             """Get instance of local chrom driver"""
             _service = webdriver.SafariService(service_args=["--diagnose"])
             _driver = webdriver.Safari(options=options, service=_service)
+
+    elif browser in [Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS]:
+        """if browser requested is firefox"""
+
+        options = webdriver.FirefoxOptions()
+
+        if browser == Browsers.FIREFOX_HEADLESS:
+            options.add_argument("-headless")
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.FirefoxService(log_output=_driver_log_path, service_args=['--log', 'debug'])
+            _driver = webdriver.Firefox(options=options, service=_service)
+    elif browser == Browsers.EDGE:
+        """if browser requested is microsoft edge"""
+
+        options = webdriver.EdgeOptions()
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url, options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.EdgeService(log_output=_driver_log_path)
+            _driver = webdriver.Edge(options=options, service=_service)
+    else:
+        from nrobo.cli.tools import console
+        console.rule(f"[{STYLE.HLRed}]DriverNotConfigured Error!")
+        console.print(f"[{STYLE.HLRed}]Driver not configured in nrobo for browser <{browser}>")
+        exit(1)
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver
