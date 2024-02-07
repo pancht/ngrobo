@@ -6,6 +6,7 @@ from abc import ABC, ABCMeta
 import logging
 from typing import List, Optional, Union
 
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common import by
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
@@ -44,7 +45,7 @@ def read_nrobo_configs():
     return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
 
 
-class NRoboWebdriverWrapper(PageFactory, WebDriver):
+class WebdriverWrapperNrobo(PageFactory, WebDriver):
     """
     Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
 
@@ -720,7 +721,7 @@ class NRoboWebdriverWrapper(PageFactory, WebDriver):
         return self.driver.delete_downloadable_files()
 
 
-class NRoboWebElementWrapper(NRoboWebdriverWrapper):
+class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     """NRobo webelement wrapper class"""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
@@ -947,7 +948,7 @@ class NRoboWebElementWrapper(NRoboWebdriverWrapper):
         return self.find_element(by, value).id
 
 
-class NRoboWaitImplementations(NRoboWebElementWrapper):
+class WaitImplementationsNrobo(WebElementWrapperNrobo):
     """
     Nrobo implementation of wait methods
     """
@@ -1017,7 +1018,26 @@ class NRoboWaitImplementations(NRoboWebElementWrapper):
         super().element_to_be_clickable(timeout)
 
 
-class NRobo(NRoboWaitImplementations):
+class ActionChainsNrobo(WebElementWrapperNrobo):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor - NroboSeleniumWrapper
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+        self.action_chain = ActionChains(self.driver)
+
+    @property
+    def action_chain(self):
+        """Return ActionChains object"""
+        return ActionChains(self.action_chain)
+
+
+class NRobo(ActionChainsNrobo):
     """NRobo class"""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
