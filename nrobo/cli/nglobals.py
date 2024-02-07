@@ -23,8 +23,8 @@ class Browsers:
     SAFARI = 'safari'
 
 
-supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS]
-supported_browsers_in_future = [Browsers.SAFARI, Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
+supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI]
+supported_browsers_in_future = [Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
 
 
 def raise_exception_if_browser_not_supported(browser_name):

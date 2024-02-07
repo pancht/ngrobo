@@ -61,7 +61,7 @@ def ensure_logs_dir_exists():
             pass  # do nothing
 
 
-def process_browser_config_options(_config_path):
+def read_browser_config_options(_config_path):
     """
     process browser config options from the <_config_path>
     and return list of those.
@@ -199,15 +199,9 @@ def driver(request):
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
         # enable/disable chrome options from a file
-        _chrome_config_path = request.config.getoption(f"--{CLI.BROWSER_CONFIG}")
-        _chrome_config_options = process_browser_config_options(_chrome_config_path)
-
-        # Common.write_text_to_file("config.chrome.txt", _chrome_config_options)
-        # exit(1)
-
+        _browser_options = read_browser_config_options(request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
         # apply chrome options
-        for _option in _chrome_config_options:
-            options.add_argument(_option)
+        [options.add_argument(_option) for _option in _browser_options]
 
         # Replace with ChromeDriverManager
         # service = webdriver.ChromeService(log_output=_driver_log_path)
@@ -234,12 +228,10 @@ def driver(request):
         options.add_argument('--headless=new')
 
         # enable/disable chrome options from a file
-        _chrome_config_path = request.config.getoption(f"--{CLI.BROWSER_CONFIG}")
-        _chrome_config_options = process_browser_config_options(_chrome_config_path)
-
+        _browser_options = read_browser_config_options(
+                    request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
         # apply chrome options
-        for _option in _chrome_config_options:
-            options.add_argument(_option)
+        [options.add_argument(_option) for _option in _browser_options]
 
         # Replace with ChromeDriverManager
         # service = webdriver.ChromeService(log_output=_driver_log_path)
@@ -251,9 +243,27 @@ def driver(request):
         else:
             """Get instance of local chrom driver"""
             _driver = webdriver.Chrome(options=options,
-                                   service=ChromeService(
-                                       ChromeDriverManager().install(),
-                                       log_output=_driver_log_path))
+                                       service=ChromeService(
+                                           ChromeDriverManager().install(),
+                                           log_output=_driver_log_path))
+    elif browser == Browsers.SAFARI:
+        """if browser requested is safari"""
+
+        options = webdriver.SafariOptions()
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+                    request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _driver = webdriver.Chrome(options=options)
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver
