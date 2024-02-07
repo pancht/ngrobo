@@ -29,3 +29,5 @@ java -jar selenium-server-4.17.0.jar standalone --selenium-manager true
 
 # Following works
 java -jar selenium-server-4.17.0.jar standalone
+
+python test-nrobo-framework.py --browser safari --rootdir nrobo/ --grid http://192.168.1.6:4444
