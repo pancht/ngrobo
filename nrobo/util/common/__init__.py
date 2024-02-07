@@ -2,10 +2,10 @@ import json
 import os.path as path
 import string
 import sys
-from random import random
+import random
 from time import time
-
 import yaml
+
 
 class Common:
     """
@@ -143,3 +143,20 @@ class Common:
         with open(file_path, 'w') as file:  # Open given file in write mode
             yaml.dump(dictionary, file)
 
+    @staticmethod
+    def generate_random_numbers(min, max):
+        """
+        Generate and return a random number in given range denoted by min and max
+
+        :param min:
+        :param max:
+        :return:
+        """
+        """
+        Returns a random string of given length
+
+        @Returns string a random string
+        """
+        random_number = random.randint(min, max)
+
+        return random_number

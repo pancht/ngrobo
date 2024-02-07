@@ -424,13 +424,20 @@ def pytest_runtest_makereport(item, call):
     extras = getattr(report, 'extras', [])
     if report.when == 'call':
         xfail = hasattr(report, 'wasxfail')
-        if report.failed and not xfail:
+        if (report.failed and not xfail) \
+                    or (report.passed and not xfail):
             # Get test method identifier
             node_id = item.nodeid
             # Get reference to test method
             feature_request = item.funcargs['request']
             # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
+
+            # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
+            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}_{Common.generate_random_numbers(1000, 9999)}.png' \
+                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
+                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
+                .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
 
             # Attach screenshot to allure report
             allure.attach(
@@ -441,11 +448,6 @@ def pytest_runtest_makereport(item, call):
             )
 
             # Attach screenshot to html report
-            # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
-            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png' \
-                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
-                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
-                .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
             screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
             screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
 
