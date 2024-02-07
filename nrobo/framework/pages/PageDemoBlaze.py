@@ -20,6 +20,7 @@ class PageDemoBlaze(Page):
 
     def go_login_page(self):
         # return self.find_element(*self.linkLogin).tag_name
+
         return self.tag_name(*self.lnkLogin)
 
 

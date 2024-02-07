@@ -1037,7 +1037,49 @@ class ActionChainsNrobo(WebElementWrapperNrobo):
         return ActionChains(self.action_chain)
 
 
-class NRobo(ActionChainsNrobo):
+class AlertNrobo(ActionChainsNrobo):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor - NroboSeleniumWrapper
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+    def accept_alert(self) -> None:
+        """accept alert"""
+        self.switch_to_alert().accept()
+
+    def dismiss_alert(self) -> None:
+        """dismiss alert"""
+        self.switch_to_alert().dismiss()
+
+    def send_keys_to_alert(self, keysToSend: str) -> None:
+        """Send Keys to the Alert.
+
+        :Args:
+         - keysToSend: The text to be sent to Alert.
+        """
+        self.switch_to_alert().send_keys(keysToSend)
+
+    def send_keys_and_accept_alert(self, keysToSend: str) -> None:
+        """Send Keys to the Alert and accept it.
+
+        :Args:
+         - keysToSend: The text to be sent to Alert.
+        """
+        self.send_keys_to_alert(keysToSend)
+        self.accept_alert()
+
+    def get_alert_text(self) -> None:
+        """Get alert text"""
+        return self.switch_to_alert().text
+
+
+class NRobo(AlertNrobo):
     """NRobo class"""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
