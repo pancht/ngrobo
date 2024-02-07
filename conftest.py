@@ -263,7 +263,7 @@ def driver(request):
                                        options=options)
         else:
             """Get instance of local chrom driver"""
-            _driver = webdriver.Chrome(options=options)
+            _driver = webdriver.Safari(options=options)
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver
