@@ -26,8 +26,8 @@ class Browsers:
 
 
 supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI,
-                      Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE]
-supported_browsers_in_future = [Browsers.IE, Browsers.OPERA]
+                      Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE, Browsers.IE]
+supported_browsers_in_future = [Browsers.OPERA]
 
 
 def raise_exception_if_browser_not_supported(browser_name):

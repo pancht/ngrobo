@@ -9,6 +9,7 @@ Contains fixtures for nrobo framework
 import logging
 import os
 import pathlib
+import sys
 import time
 from datetime import datetime
 
@@ -308,6 +309,31 @@ def driver(request):
             """Get instance of local firefox driver"""
             _service = webdriver.EdgeService(log_output=_driver_log_path)
             _driver = webdriver.Edge(options=options, service=_service)
+    elif browser == Browsers.IE:
+        """if browser requested is microsoft internet explorer"""
+
+        if sys.platform != "win32":
+            """No need to proceed"""
+            from nrobo.cli.tools import console
+            console.rule("IE support available on WIN32 platform only! Quiting test run.")
+            console.print("""Please note that the Internet Explorer (IE) 11 desktop application ended support for certain operating systems on June 15, 2022. Customers are encouraged to move to Microsoft Edge with IE mode.""")
+            exit(1)
+
+        options = webdriver.IeOptions()
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url, options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.IeService(log_output=_driver_log_path)
+            _driver = webdriver.Ie(options=options)
     else:
         from nrobo.cli.tools import console
         console.rule(f"[{STYLE.HLRed}]DriverNotConfigured Error!")
