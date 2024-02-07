@@ -39,10 +39,11 @@ def parse_cli_args():
     parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
-        chrome | chrome_headless | 
-        firefox | safari | edge.
-        (Only chrome is supported at present.)
-    """)
+        {} | {} | 
+        {} | {} | {} | {}
+    """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS,
+               Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
+               Browsers.SAFARI, Browsers.EDGE))
     parser.add_argument(f"--{CLI.BROWSER_CONFIG}", help="""
         Path of browser config file containing additional options which are needed to be applied
         in driver instantiation. Each line in file should contain one option only.
