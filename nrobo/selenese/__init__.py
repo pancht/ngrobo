@@ -7,17 +7,17 @@ import logging
 from typing import List, Optional, Union
 
 from selenium.webdriver import ActionChains
-from selenium.webdriver.common import by
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
 from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions, required_virtual_authenticator, \
     Credential
+from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
 from selenium.webdriver.remote.shadowroot import ShadowRoot
-from selenium.webdriver.remote.switch_to import SwitchTo
 from selenium.webdriver.remote.webdriver import WebDriver
+from selenium.webdriver.support.select import Select
 
 from nrobo.cli.tools import nprint
 from nrobo.cli import STYLE
@@ -27,9 +27,8 @@ from selenium.common import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from seleniumpagefactory import PageFactory
 from selenium.webdriver.support import expected_conditions
-from selenium import webdriver
-
 from nrobo.util.common import Common
+from selenium.webdriver.common.keys import Keys
 
 
 class WAITS:
@@ -38,6 +37,7 @@ class WAITS:
     SLEEP = "sleep"
     WAIT = "static_wait"
     TIMEOUT = "timeout"
+    ELE_WAIT = "ele_wait"
 
 
 @functools.lru_cache(maxsize=None)
@@ -430,6 +430,9 @@ class WebdriverWrapperNrobo(PageFactory, WebDriver):
 
         :rtype: WebElement
         """
+
+        WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT])\
+            .until(expected_conditions.presence_of_element_located([by, value]))
         return self.driver.find_element(by, value)
 
     def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
@@ -442,6 +445,8 @@ class WebdriverWrapperNrobo(PageFactory, WebDriver):
 
         :rtype: list of WebElement
         """
+        WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
+            .until(expected_conditions.presence_of_element_located([by, value]))
         return self.driver.find_elements(by, value)
 
     @property
@@ -746,6 +751,18 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     def click(self, by=By.ID, value: Optional[str] = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
+
+    def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
+        """
+        wait for <wait> seconds mentioned in nrobo-config.yaml till the element is clickble.
+
+        :param by:
+        :param value:
+        :return:
+        """
+        WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
+            expected_conditions.element_to_be_clickable([by, value]))
+        self.click(by, value)
 
     def submit(self, by=By.ID, value: Optional[str] = None):
         """Submits a form."""
@@ -1079,7 +1096,69 @@ class AlertNrobo(ActionChainsNrobo):
         return self.switch_to_alert().text
 
 
-class NRobo(AlertNrobo):
+class ByNrobo(AlertNrobo):
+    """
+    Doc: https://www.selenium.dev/selenium/docs/api/py/webdriver/selenium.webdriver.common.by.html#module-selenium.webdriver.common.by
+    """
+
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+
+class DesiredCapabilitiesNrobo(ByNrobo):
+    """
+        Doc: https://www.selenium.dev/selenium/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html#module-selenium.webdriver.common.desired_capabilities
+        """
+
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+
+class SelectNrobo(DesiredCapabilitiesNrobo):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+    def select(self, by=By.ID, value: Optional[str] = None) -> Select:
+        """
+        Get SELECT element
+
+        :param by:
+        :param value:
+        :return:
+        """
+        return Select(self.find_element(by, value))
+
+
+
+
+    
+
+
+class NRobo(SelectNrobo):
     """NRobo class"""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
@@ -1092,6 +1171,12 @@ class NRobo(AlertNrobo):
         super().__init__(driver, logger)
         self.driver = driver
         self.logger = logger
+
+        # objects from common classes
+        self.keys = Keys()
+        self.by = By()
+        self.print_options = PrintOptions()
+        self.window_types = WindowTypes()
 
         # wait for page load
         self.wait_for_page_to_be_loaded()

@@ -2,3 +2,4 @@
 sleep: 1
 wait: 0.5
 timeout: 30
+ele_wait: 3
