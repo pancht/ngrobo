@@ -1,16 +1,16 @@
 import logging
-
-from selenium import webdriver
 from selenium.webdriver.remote.webdriver import WebDriver
-from nrobo.selenese import NRoboWebdriverWrapper, NRoboWaitImplementations
 from typing import Union
+
+from nrobo.selenese import NRobo
 
 AnyBrowser = Union[None, WebDriver]
 
 
-class Page(NRoboWebdriverWrapper, NRoboWaitImplementations):
+class Page(NRobo):
 
     def __init__(self, driver=AnyBrowser, logger=None | logging.Logger):
         """constructor"""
         # call parent constructor
         super().__init__(driver, logger)
+

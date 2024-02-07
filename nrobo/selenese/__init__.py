@@ -6,6 +6,7 @@ from abc import ABC, ABCMeta
 import logging
 from typing import List, Optional, Union
 
+from selenium.webdriver.common import by
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.print_page_options import PrintOptions
@@ -13,6 +14,7 @@ from selenium.webdriver.common.timeouts import Timeouts
 from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions, required_virtual_authenticator, \
     Credential
 from selenium.webdriver.remote.file_detector import FileDetector
+from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.switch_to import SwitchTo
 from selenium.webdriver.remote.webdriver import WebDriver
 
@@ -42,7 +44,7 @@ def read_nrobo_configs():
     return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
 
 
-class NRoboWebdriverWrapper(ABC, PageFactory, WebDriver):
+class NRoboWebdriverWrapper(PageFactory, WebDriver):
     """
     Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
 
@@ -67,7 +69,6 @@ class NRoboWebdriverWrapper(ABC, PageFactory, WebDriver):
         self.driver = driver
         self.logger = logger
         self.nconfig = read_nrobo_configs()
-
 
     """
     Following are selenium webdriver wrapper methods and properties
@@ -428,7 +429,7 @@ class NRoboWebdriverWrapper(ABC, PageFactory, WebDriver):
 
         :rtype: WebElement
         """
-        return self.find_element(by, value)
+        return self.driver.find_element(by, value)
 
     def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
         """Find elements given a By strategy and locator.
@@ -647,7 +648,7 @@ class NRoboWebdriverWrapper(ABC, PageFactory, WebDriver):
 
     """
     Research needed to wrap this method!
-    
+
     @asynccontextmanager
     async def bidi_connection(self):
     """
@@ -719,10 +720,9 @@ class NRoboWebdriverWrapper(ABC, PageFactory, WebDriver):
         return self.driver.delete_downloadable_files()
 
 
-class NRoboWaitImplementations(ABC):
-    """
-    Nrobo implementation of wait methods
-    """
+class NRoboWebElementWrapper(NRoboWebdriverWrapper):
+    """NRobo webelement wrapper class"""
+
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
         """
         Constructor - NroboSeleniumWrapper
@@ -734,8 +734,234 @@ class NRoboWaitImplementations(ABC):
         self.driver = driver
         self.logger = logger
 
-        # wait for page load
-        self.wait_for_page_to_be_loaded()
+    def tag_name(self, by=By.ID, value: Optional[str] = None) -> str:
+        """This element's ``tagName`` property."""
+        return super().find_element(by, value).tag_name
+
+    def text(self, by=By.ID, value: Optional[str] = None) -> str:
+        """The text of the element."""
+        return self.find_element(by, value).text
+
+    def click(self, by=By.ID, value: Optional[str] = None) -> None:
+        """Clicks the element."""
+        self.find_element(by, value).click()
+
+    def submit(self, by=By.ID, value: Optional[str] = None):
+        """Submits a form."""
+        self.find_element(by, value).submit()
+
+    def clear(self, by=By.ID, value: Optional[str] = None) -> None:
+        """Clears the text if it's a text entry element."""
+        self.find_element(by, value).clear()
+
+    def get_property(self, name, by=By.ID, value: Optional[str] = None) -> str | bool | WebElement | dict:
+        """Gets the given property of the element.
+
+        :Args:
+            - name - Name of the property to retrieve.
+
+        :Usage:
+            ::
+
+                text_length = target_element.get_property("text_length")
+        """
+        return self.find_element(by, value).get_property(name)
+
+    def get_dom_attribute(self, name, by=By.ID, value: Optional[str] = None) -> str:
+        """Gets the given attribute of the element. Unlike
+        :func:`~selenium.webdriver.remote.BaseWebElement.get_attribute`, this
+        method only returns attributes declared in the element's HTML markup.
+
+        :Args:
+            - name - Name of the attribute to retrieve.
+
+        :Usage:
+            ::
+
+                text_length = target_element.get_dom_attribute("class")
+        """
+        return self.find_element(by, value).get_dom_attribute(name)
+
+    def get_attribute(self, name, by=By.ID, value: Optional[str] = None) -> str | None:
+        """Gets the given attribute or property of the element.
+
+        This method will first try to return the value of a property with the
+        given name. If a property with that name doesn't exist, it returns the
+        value of the attribute with the same name. If there's no attribute with
+        that name, ``None`` is returned.
+
+        Values which are considered truthy, that is equals "true" or "false",
+        are returned as booleans.  All other non-``None`` values are returned
+        as strings.  For attributes or properties which do not exist, ``None``
+        is returned.
+
+        To obtain the exact value of the attribute or property,
+        use :func:`~selenium.webdriver.remote.BaseWebElement.get_dom_attribute` or
+        :func:`~selenium.webdriver.remote.BaseWebElement.get_property` methods respectively.
+
+        :Args:
+            - name - Name of the attribute/property to retrieve.
+
+        Example::
+
+            # Check if the "active" CSS class is applied to an element.
+            is_active = "active" in target_element.get_attribute("class")
+        """
+        return self.find_element(by, value).get_attribute(name)
+
+    def is_selected(self, by=By.ID, value: Optional[str] = None) -> bool:
+        """Returns whether the element is selected.
+
+        Can be used to check if a checkbox or radio button is selected.
+        """
+        return self.find_element(by, value).is_selected()
+
+    def is_enabled(self, by=By.ID, value: Optional[str] = None) -> bool:
+        """Returns whether the element is enabled."""
+        return self.find_element(by, value).is_enabled()
+
+    def send_keys(self, by=By.ID, value: Optional[str] = None, *text) -> None:
+        """Simulates typing into the element.
+
+        :Args:
+            - text - A string for typing, or setting form fields.  For setting
+              file inputs, this could be a local file path.
+
+        Use this to send simple key events or to fill out form fields::
+
+            form_textfield = driver.find_element(By.NAME, 'username')
+            form_textfield.send_keys("admin")
+
+        This can also be used to set file inputs.
+
+        ::
+
+            file_input = driver.find_element(By.NAME, 'profilePic')
+            file_input.send_keys("path/to/profilepic.gif")
+            # Generally it's better to wrap the file path in one of the methods
+            # in os.path to return the actual path to support cross OS testing.
+            # file_input.send_keys(os.path.abspath("path/to/profilepic.gif"))
+        """
+        self.find_element(by, value).send_keys(text)
+
+    def shadow_root(self, by=By.ID, value: Optional[str] = None) -> ShadowRoot:
+        """Returns a shadow root of the element if there is one or an error.
+        Only works from Chromium 96, Firefox 96, and Safari 16.4 onwards.
+
+        :Returns:
+          - ShadowRoot object or
+          - NoSuchShadowRoot - if no shadow root was attached to element
+        """
+        return self.find_element(by, value).shadow_root
+
+    # RenderedWebElement Items
+    def is_displayed(self, by=By.ID, value: Optional[str] = None) -> bool:
+        """Whether the element is visible to a user."""
+        return self.find_element(by, value).is_displayed
+
+    def location_once_scrolled_into_view(self, by=By.ID, value: Optional[str] = None) -> dict:
+        """THIS PROPERTY MAY CHANGE WITHOUT WARNING. Use this to discover where
+        on the screen an element is so that we can click it. This method should
+        cause the element to be scrolled into view.
+
+        Returns the top lefthand corner location on the screen, or zero
+        coordinates if the element is not visible.
+        """
+        return self.find_element(by, value).location_once_scrolled_into_view
+
+    def size(self, by=By.ID, value: Optional[str] = None) -> dict:
+        """The size of the element."""
+        return self.find_element(by, value).size
+
+    def value_of_css_property(self, property_name, by=By.ID, value: Optional[str] = None) -> str:
+        """The value of a CSS property."""
+        return self.find_element(by, value).value_of_css_property(property_name)
+
+    def location(self, by=By.ID, value: Optional[str] = None) -> dict:
+        """The location of the element in the renderable canvas."""
+        return self.find_element(by, value).location
+
+    def rect(self, by=By.ID, value: Optional[str] = None) -> dict:
+        """A dictionary with the size and location of the element."""
+        return self.find_element(by, value).rect
+
+    def aria_role(self, by=By.ID, value: Optional[str] = None) -> str:
+        """Returns the ARIA role of the current web element."""
+        return self.find_element(by, value).aria_role
+
+    def accessible_name(self, by=By.ID, value: Optional[str] = None) -> str:
+        """Returns the ARIA Level of the current webelement."""
+        return self.find_element(by, value).accessible_name
+
+    def screenshot_as_base64(self, by=By.ID, value: Optional[str] = None) -> str:
+        """Gets the screenshot of the current element as a base64 encoded
+        string.
+
+        :Usage:
+            ::
+
+                img_b64 = element.screenshot_as_base64
+        """
+        return self.find_element(by, value).screenshot_as_base64
+
+    def screenshot_as_png(self, by=By.ID, value: Optional[str] = None) -> bytes:
+        """Gets the screenshot of the current element as a binary data.
+
+        :Usage:
+            ::
+
+                element_png = element.screenshot_as_png
+        """
+        return self.find_element(by, value).screenshot_as_png
+
+    def screenshot(self, filename, by=By.ID, value: Optional[str] = None) -> bool:
+        """Saves a screenshot of the current element to a PNG image file.
+        Returns False if there is any IOError, else returns True. Use full
+        paths in your filename.
+
+        :Args:
+         - filename: The full path you wish to save your screenshot to. This
+           should end with a `.png` extension.
+
+        :Usage:
+            ::
+
+                element.screenshot('/Screenshots/foo.png')
+        """
+        return self.find_element(by, value).screenshot(filename)
+
+    def parent(self, by=By.ID, value: Optional[str] = None):
+        """Internal reference to the WebDriver instance this element was found
+        from."""
+        return self.find_element(by, value).parent
+
+    def id(self, by=By.ID, value: Optional[str] = None) -> str:
+        """Internal ID used by selenium.
+
+        This is mainly for internal use. Simple use cases such as checking if 2
+        webelements refer to the same element, can be done using ``==``::
+
+            if element1 == element2:
+                print("These 2 are equal")
+        """
+        return self.find_element(by, value).id
+
+
+class NRoboWaitImplementations(NRoboWebElementWrapper):
+    """
+    Nrobo implementation of wait methods
+    """
+
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor - NroboSeleniumWrapper
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
 
     def wait_for_page_to_be_loaded(self):
         """Waits for give timeout time for page to completely load.
@@ -743,6 +969,10 @@ class NRoboWaitImplementations(ABC):
 
         nprint("Wait for page load...", style=STYLE.HLOrange)
         try:
+            # Webdriver implementation of page load timeout
+            super().set_page_load_timeout(self.nconfig[WAITS.TIMEOUT])
+
+            # Custom page load timeout
             WebDriverWait(self.driver, self.nconfig[WAITS.TIMEOUT]).until(
                 lambda driver: driver.execute_script('return document.readyState') == 'complete')
         except TimeoutException as te:
@@ -786,3 +1016,20 @@ class NRoboWaitImplementations(ABC):
         """
         super().element_to_be_clickable(timeout)
 
+
+class NRobo(NRoboWaitImplementations):
+    """NRobo class"""
+
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+        """
+        Constructor - NroboSeleniumWrapper
+
+        :param driver: reference to selenium webdriver
+        :param logger: reference to logger instance
+        """
+        super().__init__(driver, logger)
+        self.driver = driver
+        self.logger = logger
+
+        # wait for page load
+        self.wait_for_page_to_be_loaded()
