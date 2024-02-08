@@ -224,7 +224,17 @@ Support for two kinds of test reports:
 Videos
 ------
 
-.. note:: This section will be updated soon!
+.. image:: http://www.namasteydigitalindia.com/connect/wp-content/uploads/2023/01/nrobo-intro-and-installation-YouTube-Thumnail.png
+    :alt: nRobo image not found!
+    :height: 200
+    :width: 400
+    :target: https://youtu.be/DPTjSKUI-NE
+
+.. image:: http://www.namasteydigitalindia.com/connect/wp-content/uploads/2023/01/nRoBo-Test-Run-Demo.png
+    :alt: nRobo image not found!
+    :height: 200
+    :width: 400
+    :target: https://youtu.be/EjBaPI-I9Fw
 
 .. Features
 

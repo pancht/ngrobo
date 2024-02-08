@@ -45,22 +45,22 @@ def parse_cli_args():
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
-    parser.add_argument("-i", f"--{nCLI.INSTALL}", action="store_true")
-    parser.add_argument(f"--{nCLI.APP}", help="Name of your test.yaml project")
-    parser.add_argument(f"--{nCLI.URL}", help="Link of application under test.yaml")
-    parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login", default="")
-    parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login", default="")
+    parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system", action="store_true")
+    parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
+                                              "and should only having alphanumeric values.")
+    parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
+    parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login.", default="")
+    parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login.", default="")
     parser.add_argument("-n", f"--{nCLI.INSTANCES}",
-                        help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
+                        help="Number of parallel tests to reduce test-run-time. Default value is 1. Meaning single test at a time in sequence.",
                         default=1)
-    parser.add_argument(f"--{nCLI.RERUNS}", help="Number of reruns for a test.yaml if it fails", default=0)
-    parser.add_argument(f"--{nCLI.RERUNS_DELAY}", help="Rerun delay. Default=1")
+    parser.add_argument(f"--{nCLI.RERUNS}", help=f"Retries to rerun the failed tests n times specified by --{nCLI.RERUNS} switch.", default=0)
+    parser.add_argument(f"--{nCLI.RERUNS_DELAY}", help="Delay time in second(s) before a rerun for a failed test. Default is 1 second.", default=1)
     parser.add_argument(f"--{nCLI.REPORT}",
-                        help="Report target. Default HTML or Rich Allure report. Options are html | allure",
+                        help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
-    # parser.add_argument(f"--{nCLI.TESTDIR}", help="Tests directory. Defaults to tests")
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
-    Target browser name. Default is chrome.
+    Target browser. Default is chrome.
     Options could be:
         {} | {} | 
         {} | {} | {} | {}
@@ -68,21 +68,22 @@ def parse_cli_args():
                Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
                Browsers.SAFARI, Browsers.EDGE))
     parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""
-        Path of browser config file containing additional options which are needed to be applied
-        in driver instantiation. Each line in file should contain one option only.
-        For example: you want to appy, --start-maximized, chrome option for chrome driver.
-        and the browser config file is 'chrome_config.txt', then
-        the content of file should be as below:
+        Path of browser-config-file containing additional options that is/are needed to be applied
+        before browser instantiation. Each line in file should contain one option only.
+        For example: You want to apply, --start-maximized, chrome switch for chrome browser.
+        and if the browser-config-file is names as 'chrome_config.txt', then
+        the content of file would be as following:
 
         --start-maximized
 
-        There will be no conversion taking place by nrobo!!!
+        There will be no conversion taking place by nRoBo! The browser switches will be applied to the browser instance.
         """)
     parser.add_argument("-k", f"--{nCLI.KEY}", help="""
-    Only run tests which match the given substring
-                        expression. An expression is a python evaluatable
+    Only run tests that match the given substring
+                        expression. An expression is a python resolvable
                         expression where all names are substring-matched
-                        against test.yaml names and their parent classes.
+                        against test names and their parent classes.
+                        
                         Example: -k 'test_method or test_other' matches all
                         test.yaml functions and classes whose name contains
                         'test_method' or 'test_other', while -k 'not
@@ -95,11 +96,11 @@ def parse_cli_args():
                         which have names assigned directly to them. The
                         matching is case-insensitive.
     """)
-    parser.add_argument("--alluredir", help="""
-        Path to the directory where Allure Pytest will save the test results.
-        """)
+    # parser.add_argument("--alluredir", help="""
+    #     Path to the directory where Allure Pytest will save the test results.
+    #     """)
     parser.add_argument(f"--{nCLI.GRID}", help="""
-            Remote webdriver grid url
+            Remote Grid server url. Tests will be running on the machine when Grid server is running pointed by Grid url.
             """)
     parser.add_argument("-m", "--marker", help="""
     Only run tests matching given mark expression.
