@@ -17,8 +17,10 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
     :return: status code
     """
     try:
-        return subprocess.check_call(command)
-
+        if stdout and stderr:
+            return subprocess.check_call(command, stdout=stdout, stderr=stderr)
+        else:
+            return subprocess.check_call(command)
     except subprocess.CalledProcessError as e:
         print(f"Command failed with return code {e.returncode}")
 

@@ -193,8 +193,17 @@ C. Pure PyTest CLI Switches
                                 path with variables: '$HOME/root_dir'.
     --co, --collect-only     only collect tests, don't execute them.
 
-    Full list of PyTest switches are enlisted and explained at the following web address: `Pure PyTest CLI Switches <https://docs.pytest.org/en/6.2.x/reference.html#command-line-flags>`_
-    Note: nRoBo shadows all the PyTest switches, so no need to worry about. We can use each of them within the nRoBo framework. Isn't it great!
+    Note:
+        * Full list of PyTest switches are enlisted and explained at the following web address: `Pure PyTest CLI Switches <https://docs.pytest.org/en/6.2.x/reference.html#command-line-flags>`_
+        * Full list of all switches can be seen by running the following nrobo cli:
+
+            .. code-block:: bash
+
+                nrobo -h
+                #or
+                nrobo --help
+
+        * nRoBo shadows all the PyTest switches, so no need to worry about. We can use each of them within the nRoBo framework. Isn't it great!
 
 Personalization
 ---------------

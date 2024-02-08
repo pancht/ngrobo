@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.3.13"
+version = "2024.3.14"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "Automated Testing Framework in Python loaded with powers of Selenium and PyTest and many other tools well integrated together. Yet, Easy to USE!"

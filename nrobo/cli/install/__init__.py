@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 
+from nrobo.cli import *
 from nrobo.cli.cli_constansts import *
 from nrobo.cli.nglobals import *
 from nrobo.cli.cli_args import *
@@ -28,7 +29,7 @@ def copy_file(src, dest):
         print(e)
 
 
-def install_nrobo(requirements_file: Optional[str]=None):
+def install_nrobo(requirements_file: Optional[str] = None):
     """
     Install nrobo
 
@@ -45,7 +46,15 @@ def install_nrobo(requirements_file: Optional[str]=None):
     if requirements_file is None:
         requirements_file = f"{os.environ[EnvKeys.DirNrobo]}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
 
-    terminal([__PIP__, nCLI.INSTALL, '-r', requirements_file])
+        return_code = terminal(command=[__PIP__, nCLI.INSTALL, '-r', requirements_file],
+                               stdout=subprocess.DEVNULL,
+                               stderr=subprocess.STDOUT)
+
+        if return_code:
+            """non-zero return code means a success"""
+            print(f"Requirements are installed successfully.")
+        else:
+            print(f"Requirements are not installed successfully!")
 
     if os.environ[EnvKeys.Environment] == Environment.PRODUCTION:
         """Install framework on Production environment"""
@@ -70,4 +79,3 @@ def install_nrobo(requirements_file: Optional[str]=None):
                   f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo-config.yaml")
 
         print(f"Installation complete")
-
