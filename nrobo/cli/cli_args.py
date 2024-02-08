@@ -403,7 +403,7 @@ def parse_cli_args():
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
-            install_nrobo(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
+            install_nrobo(None)
             exit(1)
 
     # build pytest command
