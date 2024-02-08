@@ -1,8 +1,10 @@
-from rich.console import Console
-from nrobo.cli.formatting import themes as th
-from nrobo.cli import STYLE
+import sys
 
-console = Console(theme=th)
+from rich.console import *
+from nrobo.cli.formatting import *
+
+from nrobo.cli import *
+console = Console(theme=themes)
 
 # following globals will be set at runtime
 __APP_NAME__ = ""
@@ -39,3 +41,17 @@ def raise_exception_if_browser_not_supported(browser_name):
         exit(1)
     if browser_name not in supported_browsers:
         raise BrowserNotSupported(browser_name)
+
+
+class Environment:
+    """Environments"""
+
+    PRODUCTION = "Production"
+    DEVELOPMENT = "DEVELOPMENT"
+
+
+class EnvKeys:
+    """Keys in the Environment Variables"""
+    Environment = "Environment"
+    DirExecution = "Execution directory"
+    DirNrobo = "Nrobo Framework Root Folder"

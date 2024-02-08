@@ -1,15 +1,17 @@
 import argparse
 import os
 
-from nrobo import FRAMEWORK_PATHS
-from nrobo.cli import install_nrobo, STYLE, __REQUIREMENTS__
-from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
+from nrobo import *
+from nrobo.cli import *
+from nrobo.cli.cli_constansts import *
+from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import *
 
 global __APP_NAME__, __URL__, __PASSWORD__, __USERNAME__, __BROWSER__
-from nrobo.util.process import terminal
-from nrobo.cli.tools import console
+from nrobo.util.process import *
+from nrobo.cli.tools import *
 
+global __REQUIREMENTS__
 
 def parse_cli_args():
     """
@@ -22,21 +24,21 @@ def parse_cli_args():
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
-    parser.add_argument("-i", f"--{CLI.INSTALL}", action="store_true")
-    parser.add_argument(f"--{CLI.APP}", help="Name of your test.yaml project")
-    parser.add_argument(f"--{CLI.URL}", help="Link of application under test.yaml")
-    parser.add_argument(f"--{CLI.USERNAME}", help="Username for login", default="")
-    parser.add_argument(f"--{CLI.PASSWORD}", help="Password for login", default="")
-    parser.add_argument("-n", f"--{CLI.INSTANCES}",
+    parser.add_argument("-i", f"--{nCLI.INSTALL}", action="store_true")
+    parser.add_argument(f"--{nCLI.APP}", help="Name of your test.yaml project")
+    parser.add_argument(f"--{nCLI.URL}", help="Link of application under test.yaml")
+    parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login", default="")
+    parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login", default="")
+    parser.add_argument("-n", f"--{nCLI.INSTANCES}",
                         help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
                         default=1)
-    parser.add_argument(f"--{CLI.RERUNS}", help="Number of reruns for a test.yaml if it fails", default=0)
-    parser.add_argument(f"--{CLI.RERUNS_DELAY}", help="Rerun delay. Default=1")
-    parser.add_argument(f"--{CLI.REPORT}",
+    parser.add_argument(f"--{nCLI.RERUNS}", help="Number of reruns for a test.yaml if it fails", default=0)
+    parser.add_argument(f"--{nCLI.RERUNS_DELAY}", help="Rerun delay. Default=1")
+    parser.add_argument(f"--{nCLI.REPORT}",
                         help="Report target. Default HTML or Rich Allure report. Options are html | allure",
                         default="html")
-    # parser.add_argument(f"--{CLI.TESTDIR}", help="Tests directory. Defaults to tests")
-    parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
+    # parser.add_argument(f"--{nCLI.TESTDIR}", help="Tests directory. Defaults to tests")
+    parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
         {} | {} | 
@@ -44,7 +46,7 @@ def parse_cli_args():
     """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS,
                Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
                Browsers.SAFARI, Browsers.EDGE))
-    parser.add_argument(f"--{CLI.BROWSER_CONFIG}", help="""
+    parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""
         Path of browser config file containing additional options which are needed to be applied
         in driver instantiation. Each line in file should contain one option only.
         For example: you want to appy, --start-maximized, chrome option for chrome driver.
@@ -55,7 +57,7 @@ def parse_cli_args():
         
         There will be no conversion taking place by nrobo!!!
         """)
-    parser.add_argument("-k", f"--{CLI.KEY}", help="""
+    parser.add_argument("-k", f"--{nCLI.KEY}", help="""
     Only run tests which match the given substring
                         expression. An expression is a python evaluatable
                         expression where all names are substring-matched
@@ -75,7 +77,7 @@ def parse_cli_args():
     parser.add_argument("--alluredir", help="""
         Path to the directory where Allure Pytest will save the test results.
         """)
-    parser.add_argument(f"--{CLI.GRID}", help="""
+    parser.add_argument(f"--{nCLI.GRID}", help="""
             Remote webdriver grid url
             """)
     parser.add_argument("-m", "--marker", help="""
@@ -420,7 +422,7 @@ def parse_cli_args():
                 if type(value) is bool:
                     command.append(f"--{key}")
                     continue  # proceed with next key
-                elif key not in CLI.ARGS.keys():
+                elif key not in nCLI.ARGS.keys():
                     """Check for all no nrobo cli keys. All pytest keys"""
                     # print(key)
                     if key == "c":
@@ -429,35 +431,35 @@ def parse_cli_args():
                     else:
                         command.append(f"--{key}")
                         command.append(str(value))
-                elif key in CLI.ARGS:
-                    if key in [CLI.APP, CLI.URL, CLI.USERNAME, CLI.PASSWORD, CLI.BROWSER_CONFIG]:
-                        if key == CLI.APP:
+                elif key in nCLI.ARGS:
+                    if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
+                        if key == nCLI.APP:
                             __APP_NAME__ = value
-                        elif key == CLI.URL:
+                        elif key == nCLI.URL:
                             __URL__ = value
-                        elif key == CLI.USERNAME:
+                        elif key == nCLI.USERNAME:
                             __USERNAME__ = value
-                        elif key == CLI.PASSWORD:
+                        elif key == nCLI.PASSWORD:
                             __PASSWORD__ = value
 
                         command.append(f"--{key}")
                         command.append(str(value))
 
-                    if key == CLI.BROWSER:
+                    if key == nCLI.BROWSER:
                         __BROWSER__ = value
                         raise_exception_if_browser_not_supported(__BROWSER__)
                         command.append(f"--{key}")
                         command.append(str(value))
-                    elif key == CLI.KEY:
+                    elif key == nCLI.KEY:
                         command.append(f"-k")
                         command.append(value)
-                    elif key == CLI.INSTANCES:
+                    elif key == nCLI.INSTANCES:
                         command.append(f"-n")
                         command.append(str(value))
-                    elif key == CLI.RERUNS:
+                    elif key == nCLI.RERUNS:
                         command.append(f"--{key}")
                         command.append(value)
-                    elif key == CLI.REPORT:
+                    elif key == nCLI.REPORT:
                         if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")
                             exit(1)
@@ -483,7 +485,7 @@ def parse_cli_args():
 
     if not args.browser:
         """browser not provided"""
-        command.append(f"--{CLI.BROWSER}")
+        command.append(f"--{nCLI.BROWSER}")
         command.append(f"{Browsers.CHROME}")
         command_builder_notes.append(
             f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
@@ -494,7 +496,7 @@ def parse_cli_args():
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
-    for k, v in CLI.DEFAULT_ARGS.items():
+    for k, v in nCLI.DEFAULT_ARGS.items():
         command = command + v
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):

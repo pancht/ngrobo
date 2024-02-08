@@ -16,15 +16,15 @@ from datetime import datetime
 import allure
 import pytest
 import pytest_html
-from nrobo.cli import STYLE
+from nrobo.cli import *
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
 import nrobo.cli.cli_constansts
-from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
-from nrobo.util.common import Common
-from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
+from nrobo.cli.nglobals import *
+from nrobo.util.common import *
+from nrobo.cli.cli_constansts import *
 import os.path as path
 
 from nrobo.util.constants import CONST
@@ -97,37 +97,37 @@ def pytest_addoption(parser):
     """
     group = parser.getgroup("nrobo header options")
     group.addoption(
-        f"--{CLI.BROWSER}", help="""
+        f"--{nCLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
         (Only chrome is supported at present.)
     """
     )
-    group.addoption(f"--{CLI.APP}", help="Name of your app project under test")
-    group.addoption(f"--{CLI.URL}", help="Link of application under test.yaml")
-    group.addoption(f"--{CLI.USERNAME}", help="Username for login", default="")
-    group.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
-    group.addoption(f"--{CLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
-    group.addoption(f"--{CLI.PACKAGES}", help="Browser config file path for setting requested options")
-    group.addoption(f"--{CLI.GRID}", help="Url of remote selenium grid server")
+    group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")
+    group.addoption(f"--{nCLI.URL}", help="Link of application under test.yaml")
+    group.addoption(f"--{nCLI.USERNAME}", help="Username for login", default="")
+    group.addoption(f"--{nCLI.PASSWORD}", help="Password for login", default="")
+    group.addoption(f"--{nCLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{nCLI.PACKAGES}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{nCLI.GRID}", help="Url of remote selenium grid server")
 
     # ini option
-    parser.addini(f"{CLI.APP}", type="string",
+    parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
-    parser.addini(f"{CLI.URL}", type='string',
+    parser.addini(f"{nCLI.URL}", type='string',
                   help="Link of application under test.yaml")
-    parser.addini(f"{CLI.USERNAME}", type="string",
+    parser.addini(f"{nCLI.USERNAME}", type="string",
                   help="Username for login")
-    parser.addini(f"{CLI.PASSWORD}", type='string',
+    parser.addini(f"{nCLI.PASSWORD}", type='string',
                   help="Password for login")
-    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{CLI.PACKAGES}", type='string',
+    parser.addini(f"{nCLI.PACKAGES}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"--{CLI.GRID}", type='string', help="Url of remote selenium grid server")
+    parser.addini(f"--{nCLI.GRID}", type='string', help="Url of remote selenium grid server")
 
 
 @pytest.fixture()
@@ -135,7 +135,7 @@ def url(request):
     # Global fixture returning app url
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.URL}")
+    return request.config.getoption(f"--{nCLI.URL}")
 
 
 @pytest.fixture()
@@ -143,7 +143,7 @@ def app(request):
     # Global fixture returning app name
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.APP}")
+    return request.config.getoption(f"--{nCLI.APP}")
 
 
 @pytest.fixture()
@@ -151,7 +151,7 @@ def username(request):
     # Global fixture returning admin username
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.USERNAME}")
+    return request.config.getoption(f"--{nCLI.USERNAME}")
 
 
 @pytest.fixture()
@@ -159,7 +159,7 @@ def password(request):
     # Global fixture returning admin password
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.PASSWORD}")
+    return request.config.getoption(f"--{nCLI.PASSWORD}")
 
 
 @pytest.fixture(autouse=True, scope='function')
@@ -172,10 +172,11 @@ def driver(request):
     """
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    browser = request.config.getoption(f"--{CLI.BROWSER}")
+    browser = request.config.getoption(f"--{nCLI.BROWSER}")
+
     global __URL__
-    __URL__ = request.config.getoption(f"--{CLI.URL}")
-    _grid_server_url = request.config.getoption(f"--{CLI.GRID}")
+    __URL__ = request.config.getoption(f"--{nCLI.URL}")
+    _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
 
     # initialize driver with None
     _driver = None
@@ -201,7 +202,7 @@ def driver(request):
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
         # enable/disable chrome options from a file
-        _browser_options = read_browser_config_options(request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+        _browser_options = read_browser_config_options(request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -231,7 +232,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -256,7 +257,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -279,7 +280,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -298,7 +299,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -323,7 +324,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{CLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -387,11 +388,11 @@ def pytest_report_header(config):
     :param config:
     :return:
     """
-    # if not config.getoption(f"--{CLI.APP}") and not config.getini(f"{CLI.APP}"):
+    # if not config.getoption(f"--{nCLI.APP}") and not config.getini(f"{nCLI.APP}"):
     #     return
     #
-    # app_name_option = config.getoption(f"{CLI.APP}")
-    # app_name_ini = config.getini(f"{CLI.APP}")
+    # app_name_option = config.getoption(f"{nCLI.APP}")
+    # app_name_ini = config.getini(f"{nCLI.APP}")
     #
     # header = ""
     # if app_name_option is not None:

@@ -5,7 +5,7 @@ __PIP__ = "pip"
 
 import re
 import platform
-from nrobo.util.process import terminal
+from nrobo.util.process import *
 
 
 def verify_set_python_install_pip_command():

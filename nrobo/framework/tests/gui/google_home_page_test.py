@@ -11,7 +11,6 @@ class TestSample1:
 
     @pytest.mark.sanity
     def test_google_branding_displayed_on_home_page(self, driver, logger):
-
         # Instantiate page object
         page_demo = PageDemo(driver, logger)
         # call page method
