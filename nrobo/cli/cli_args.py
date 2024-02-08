@@ -4,7 +4,7 @@ import os
 from nrobo import *
 from nrobo.cli import *
 from nrobo.cli.cli_constansts import *
-from nrobo.cli.install import install_nrobo
+from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
 global __APP_NAME__, __URL__, __PASSWORD__, __USERNAME__, __BROWSER__
@@ -12,6 +12,24 @@ from nrobo.util.process import *
 from nrobo.cli.tools import *
 
 global __REQUIREMENTS__
+
+
+def set_environment():
+    """set environment"""
+    # Find the directory we executed the script from:
+    os.environ[EnvKeys.DirExecution] = os.getcwd()
+
+    # Find the directory in which the current script resides:
+    file_dir = os.path.dirname(os.path.realpath(__file__))
+
+    import re
+    os.environ[EnvKeys.DirNrobo] = re.findall(r"(.*nrobo)", str(file_dir))[0]
+
+    if os.path.exists(f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo"):
+        os.environ[EnvKeys.Environment] = Environment.DEVELOPMENT
+    else:
+        os.environ[EnvKeys.Environment] = Environment.PRODUCTION
+
 
 def parse_cli_args():
     """
@@ -21,6 +39,9 @@ def parse_cli_args():
 
     :return:
     """
+
+    set_environment()
+
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
@@ -52,9 +73,9 @@ def parse_cli_args():
         For example: you want to appy, --start-maximized, chrome option for chrome driver.
         and the browser config file is 'chrome_config.txt', then
         the content of file should be as below:
-        
+
         --start-maximized
-        
+
         There will be no conversion taking place by nrobo!!!
         """)
     parser.add_argument("-k", f"--{nCLI.KEY}", help="""

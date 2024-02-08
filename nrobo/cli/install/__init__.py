@@ -4,6 +4,7 @@ import sys
 
 from nrobo.cli.cli_constansts import *
 from nrobo.cli.nglobals import *
+from nrobo.cli.cli_args import *
 
 from nrobo.util.process import *
 from nrobo.util.python import __PIP__
@@ -33,19 +34,8 @@ def install_nrobo(requirements_file: Optional[str]=None):
 
     :return:
     """
-    # Find the directory we executed the script from:
-    os.environ[EnvKeys.DirExecution] = os.getcwd()
 
-    # Find the directory in which the current script resides:
-    file_dir = os.path.dirname(os.path.realpath(__file__))
-
-    import re
-    os.environ[EnvKeys.DirNrobo] = re.findall(r"(.*nrobo)", str(file_dir))[0]
-
-    if os.path.exists(f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo"):
-        os.environ[EnvKeys.Environment] = Environment.DEVELOPMENT
-    else:
-        os.environ[EnvKeys.Environment] = Environment.PRODUCTION
+    set_environment()
 
     from nrobo.cli import STYLE
     from nrobo.cli.tools import console

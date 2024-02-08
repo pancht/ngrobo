@@ -29,7 +29,7 @@ from seleniumpagefactory import PageFactory
 from selenium.webdriver.support import expected_conditions
 from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
-
+from nrobo.cli.nglobals import *
 
 class WAITS:
     """Supported wait types in nrobo.
@@ -42,7 +42,10 @@ class WAITS:
 
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
-    return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
+    if os.environ[EnvKeys.Environment] == Environment.PRODUCTION:
+        return Common.read_yaml(f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo-config.yaml")
+    elif os.environ[EnvKeys.Environment] == Environment.DEVELOPMENT:
+        return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
 
 
 class WebdriverWrapperNrobo(WebDriver):
