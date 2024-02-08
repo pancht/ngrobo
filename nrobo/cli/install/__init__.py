@@ -76,6 +76,8 @@ def install_nrobo(requirements_file: Optional[str]=None):
                   f"{os.environ[EnvKeys.DirExecution]}{os.sep}__init__.py")
         copy_file(f"{os.environ[EnvKeys.DirNrobo]}{os.sep}conftest.py",
                   f"{os.environ[EnvKeys.DirExecution]}{os.sep}conftest.py")
+        copy_file(f"{os.environ[EnvKeys.DirNrobo]}{os.sep}framework{os.sep}nrobo-config.yaml",
+                  f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo-config.yaml")
 
         print(f"Installation complete")
 
