@@ -7,7 +7,6 @@ from nrobo.cli.cli_constansts import *
 from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
-global __APP_NAME__, __URL__, __PASSWORD__, __USERNAME__, __BROWSER__
 from nrobo.util.process import *
 from nrobo.cli.tools import *
 
@@ -456,21 +455,21 @@ def parse_cli_args():
                     """process nrobo specific keys"""
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
-                            __APP_NAME__ = value
+                            os.environ[EnvKeys.APP] = value
                         elif key == nCLI.URL:
-                            __URL__ = value
+                            os.environ[EnvKeys.URL] = value
                         elif key == nCLI.USERNAME:
-                            __USERNAME__ = value
+                            os.environ[EnvKeys.USERNAME] = value
                         elif key == nCLI.PASSWORD:
-                            __PASSWORD__ = value
+                            os.environ[EnvKeys.PASSWORD] = value
 
                         # add keys to launcher command
                         command.append(f"--{key}")
                         command.append(str(value))
 
                     if key == nCLI.BROWSER:
-                        __BROWSER__ = value
-                        raise_exception_if_browser_not_supported(__BROWSER__)
+                        os.environ[EnvKeys.BROWSER] = value
+                        raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
                         command.append(f"--{key}")
                         command.append(str(value))
                     elif key == nCLI.KEY:
@@ -502,7 +501,6 @@ def parse_cli_args():
                         command.append(value)
 
     # Debug code line
-    # print(__BROWSER__)
     # print(command)
     # exit(1)
 

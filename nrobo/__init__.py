@@ -6,11 +6,9 @@ from pathlib import Path
 import re
 from rich.console import Console
 from nrobo.cli.formatting import themes as th, STYLE
-
 from nrobo.util.constants import CONST
-from nrobo.cli.tools import *
 
-
+# rich console
 console = Console(theme=th)
 
 
@@ -69,6 +67,11 @@ class EnvKeys:
     NROBO_DIR = "nRoBo Installation Directory"
     ENVIRONMENT = "Environment"
     PYTHON = "Python"
+    APP = "App Name"
+    URL = "App Url"
+    USERNAME = "Username"
+    PASSWORD = "Password"
+    BROWSER = "Browser"
 
 
 # load environment keys with defaults
@@ -77,6 +80,11 @@ os.environ[EnvKeys.EXEC_DIR] = CONST.EMPTY
 os.environ[EnvKeys.NROBO_DIR] = CONST.EMPTY
 os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
 os.environ[EnvKeys.PYTHON] = "python"
+os.environ[EnvKeys.APP] = "nRoBo"
+os.environ[EnvKeys.URL] = ""
+os.environ[EnvKeys.USERNAME] = ""
+os.environ[EnvKeys.PASSWORD] = ""
+os.environ[EnvKeys.BROWSER] = ""
 
 
 def greet_the_guest():

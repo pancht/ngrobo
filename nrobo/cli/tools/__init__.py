@@ -1,7 +1,5 @@
 # rich console
-from rich.console import Console
-from nrobo.cli.formatting import themes as th, STYLE
-console = Console(theme=th)
+from nrobo import console, STYLE
 import logging
 
 

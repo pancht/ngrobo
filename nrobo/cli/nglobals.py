@@ -6,13 +6,6 @@ from nrobo.cli.formatting import *
 from nrobo.cli import *
 console = Console(theme=themes)
 
-# following globals will be set at runtime
-__APP_NAME__ = ""
-__URL__ = ""
-__USERNAME__ = ""
-__PASSWORD__ = ""
-__BROWSER__ = ""
-
 from nrobo.exceptions import BrowserNotSupported
 
 

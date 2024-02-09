@@ -29,8 +29,6 @@ import os.path as path
 
 from nrobo.util.constants import CONST
 
-global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
-
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
@@ -172,10 +170,13 @@ def driver(request):
     """
     # Access pytest command line options
     # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
+    from nrobo import EnvKeys
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
 
-    global __URL__
-    __URL__ = request.config.getoption(f"--{nCLI.URL}")
+    # get and set url
+    _url = request.config.getoption(f"--{nCLI.URL}")
+    os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
+    # get grid url
     _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
 
     # initialize driver with None
@@ -317,7 +318,8 @@ def driver(request):
             """No need to proceed"""
             from nrobo.cli.tools import console
             console.rule("IE support available on WIN32 platform only! Quiting test run.")
-            console.print("""Please note that the Internet Explorer (IE) 11 desktop application ended support for certain operating systems on June 15, 2022. Customers are encouraged to move to Microsoft Edge with IE mode.""")
+            console.print(
+                """Please note that the Internet Explorer (IE) 11 desktop application ended support for certain operating systems on June 15, 2022. Customers are encouraged to move to Microsoft Edge with IE mode.""")
             exit(1)
 
         options = webdriver.IeOptions()
@@ -388,22 +390,8 @@ def pytest_report_header(config):
     :param config:
     :return:
     """
-    # if not config.getoption(f"--{nCLI.APP}") and not config.getini(f"{nCLI.APP}"):
-    #     return
-    #
-    # app_name_option = config.getoption(f"{nCLI.APP}")
-    # app_name_ini = config.getini(f"{nCLI.APP}")
-    #
-    # header = ""
-    # if app_name_option is not None:
-    #     if isinstance(app_name_option, str):
-    #         header = repr(app_name_option)
-    #
-    # elif app_name_ini is not None:
-    #     if isinstance(app_name_ini, str):
-    #         header = repr(app_name_ini)
-
-    return f"test summary".title()
+    from nrobo import EnvKeys
+    return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
 
 
 # set up a hook to be able to check if a test has failed
@@ -426,7 +414,7 @@ def pytest_runtest_makereport(item, call):
     if report.when == 'call':
         xfail = hasattr(report, 'wasxfail')
         if (report.failed and not xfail) \
-                    or (report.passed and not xfail):
+                or (report.passed and not xfail):
             # Get test method identifier
             node_id = item.nodeid
             # Get reference to test method
