@@ -1,6 +1,0 @@
-# install tree linux utility
-brew install tree
-
-# recusrsive directory listing
-tree
-
