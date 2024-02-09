@@ -1,31 +1,34 @@
 """
-nrobo conftest.py file.
-Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
-Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
-Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
-
-Contains fixtures for nrobo framework
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
 """
 import logging
 import os
 import pathlib
+import sys
 import time
 from datetime import datetime
 
 import allure
 import pytest
 import pytest_html
+from nrobo.cli import *
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 
 import nrobo.cli.cli_constansts
-from nrobo.cli.nglobals import __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__, Browsers
-from nrobo.util.common import Common
-from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
+from nrobo.cli.nglobals import *
+from nrobo.util.common import *
+from nrobo.cli.cli_constansts import *
 import os.path as path
 
 from nrobo.util.constants import CONST
-
-global __APP_NAME__, __USERNAME__, __PASSWORD__, __URL__, __BROWSER__
 
 
 def ensure_logs_dir_exists():
@@ -59,7 +62,7 @@ def ensure_logs_dir_exists():
             pass  # do nothing
 
 
-def process_browser_config_options(_config_path):
+def read_browser_config_options(_config_path):
     """
     process browser config options from the <_config_path>
     and return list of those.
@@ -87,95 +90,92 @@ def pytest_addoption(parser):
     """
     Pass different values to a test function, depending on command line options
 
-    Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     :param parser:
     :return:
     """
     group = parser.getgroup("nrobo header options")
     group.addoption(
-        f"--{CLI.BROWSER}", help="""
+        f"--{nCLI.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
         (Only chrome is supported at present.)
     """
     )
-    group.addoption(f"--{CLI.APP}", help="Name of your app project under test")
-    group.addoption(f"--{CLI.URL}", help="Link of application under test.yaml")
-    group.addoption(f"--{CLI.USERNAME}", help="Username for login", default="")
-    group.addoption(f"--{CLI.PASSWORD}", help="Password for login", default="")
-    group.addoption(f"--{CLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
-    group.addoption(f"--{CLI.PACKAGES}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")
+    group.addoption(f"--{nCLI.URL}", help="Link of application under test.yaml")
+    group.addoption(f"--{nCLI.USERNAME}", help="Username for login", default="")
+    group.addoption(f"--{nCLI.PASSWORD}", help="Password for login", default="")
+    group.addoption(f"--{nCLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{nCLI.PACKAGES}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{nCLI.GRID}", help="Url of remote selenium grid server")
 
     # ini option
-    parser.addini(f"{CLI.APP}", type="string",
+    parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
-    parser.addini(f"{CLI.URL}", type='string',
+    parser.addini(f"{nCLI.URL}", type='string',
                   help="Link of application under test.yaml")
-    parser.addini(f"{CLI.USERNAME}", type="string",
+    parser.addini(f"{nCLI.USERNAME}", type="string",
                   help="Username for login")
-    parser.addini(f"{CLI.PASSWORD}", type='string',
+    parser.addini(f"{nCLI.PASSWORD}", type='string',
                   help="Password for login")
-    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{CLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{CLI.PACKAGES}", type='string',
+    parser.addini(f"{nCLI.PACKAGES}", type='string',
                   help="Browser config file path for setting requested options")
+    parser.addini(f"--{nCLI.GRID}", type='string', help="Url of remote selenium grid server")
 
 
 @pytest.fixture()
 def url(request):
     # Global fixture returning app url
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.URL}")
+    return request.config.getoption(f"--{nCLI.URL}")
 
 
 @pytest.fixture()
 def app(request):
     # Global fixture returning app name
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.APP}")
+    return request.config.getoption(f"--{nCLI.APP}")
 
 
 @pytest.fixture()
 def username(request):
     # Global fixture returning admin username
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.USERNAME}")
+    return request.config.getoption(f"--{nCLI.USERNAME}")
 
 
 @pytest.fixture()
 def password(request):
     # Global fixture returning admin password
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    return request.config.getoption(f"--{CLI.PASSWORD}")
+    return request.config.getoption(f"--{nCLI.PASSWORD}")
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(autouse=True, scope='function')
 def driver(request):
     """
-    Fixture for instantiating driver for given browser.
-    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
-    Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
-
+    Instantiating driver for given browser.
     """
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
-    browser = request.config.getoption(f"--{CLI.BROWSER}")
-    global __URL__
-    __URL__ = request.config.getoption(f"--{CLI.URL}")
+    from nrobo import EnvKeys
+    browser = request.config.getoption(f"--{nCLI.BROWSER}")
+
+    # get and set url
+    _url = request.config.getoption(f"--{nCLI.URL}")
+    os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
+    # get grid url
+    _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
 
     # initialize driver with None
     _driver = None
 
     # Set driver log name
     # current test function name
-    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
     test_method_name = request.node.name
     from nrobo.cli.cli_constansts import NREPORT
     ensure_logs_dir_exists()
@@ -186,47 +186,138 @@ def driver(request):
     if browser == Browsers.CHROME:
         """if browser requested is chrome"""
 
-        # Chrome Flags for Tooling
-        # Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-        # Command line switches
-        # Doc: https://peter.sh/experiments/chromium-command-line-switches/
         options = webdriver.ChromeOptions()
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
         # enable/disable chrome options from a file
-        _chrome_config_path = request.config.getoption(f"--{CLI.BROWSER_CONFIG}")
-        _chrome_config_options = process_browser_config_options(_chrome_config_path)
-
-        # Common.write_text_to_file("config.chrome.txt", _chrome_config_options)
-        # exit(1)
-
+        _browser_options = read_browser_config_options(request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply chrome options
-        for _option in _chrome_config_options:
-            options.add_argument(_option)
+        [options.add_argument(_option) for _option in _browser_options]
 
-        service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options, service=service)
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _driver = webdriver.Chrome(options=options,
+                                       service=ChromeService(
+                                           ChromeDriverManager().install(),
+                                           log_output=_driver_log_path))
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
-        # Chrome Flags for Tooling
-        # Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-        # Command line switches
-        # Doc: https://peter.sh/experiments/chromium-command-line-switches/
-        # Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
         options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
 
         # enable/disable chrome options from a file
-        _chrome_config_path = request.config.getoption(f"--{CLI.BROWSER_CONFIG}")
-        _chrome_config_options = process_browser_config_options(_chrome_config_path)
-
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
         # apply chrome options
-        for _option in _chrome_config_options:
-            options.add_argument(_option)
+        [options.add_argument(_option) for _option in _browser_options]
 
-        service = webdriver.ChromeService(log_output=_driver_log_path)
-        _driver = webdriver.Chrome(options=options, service=service)
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _driver = webdriver.Chrome(options=options,
+                                       service=ChromeService(
+                                           ChromeDriverManager().install(),
+                                           log_output=_driver_log_path))
+    elif browser == Browsers.SAFARI:
+        """if browser requested is safari"""
+
+        options = webdriver.SafariOptions()
+        options.add_argument("ShowOverlayStatusBar=YES")
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local chrom driver"""
+            _service = webdriver.SafariService(service_args=["--diagnose"])
+            _driver = webdriver.Safari(options=options, service=_service)
+
+    elif browser in [Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS]:
+        """if browser requested is firefox"""
+
+        options = webdriver.FirefoxOptions()
+
+        if browser == Browsers.FIREFOX_HEADLESS:
+            options.add_argument("-headless")
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url,
+                                       options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.FirefoxService(log_output=_driver_log_path, service_args=['--log', 'debug'])
+            _driver = webdriver.Firefox(options=options, service=_service)
+    elif browser == Browsers.EDGE:
+        """if browser requested is microsoft edge"""
+
+        options = webdriver.EdgeOptions()
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url, options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.EdgeService(log_output=_driver_log_path)
+            _driver = webdriver.Edge(options=options, service=_service)
+    elif browser == Browsers.IE:
+        """if browser requested is microsoft internet explorer"""
+
+        if sys.platform != "win32":
+            """No need to proceed"""
+            from nrobo.cli.tools import console
+            console.rule("IE support available on WIN32 platform only! Quiting test run.")
+            console.print(
+                """Please note that the Internet Explorer (IE) 11 desktop application ended support for certain operating systems on June 15, 2022. Customers are encouraged to move to Microsoft Edge with IE mode.""")
+            exit(1)
+
+        options = webdriver.IeOptions()
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        # apply Safari options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            _driver = webdriver.Remote(_grid_server_url, options=options)
+        else:
+            """Get instance of local firefox driver"""
+            _service = webdriver.IeService(log_output=_driver_log_path)
+            _driver = webdriver.Ie(options=options)
+    else:
+        from nrobo.cli.tools import console
+        console.rule(f"[{STYLE.HLRed}]DriverNotConfigured Error!")
+        console.print(f"[{STYLE.HLRed}]Driver not configured in nrobo for browser <{browser}>")
+        exit(1)
 
     # store web driver ref in request
     request.node.funcargs['driver'] = _driver
@@ -240,13 +331,8 @@ def driver(request):
 @pytest.fixture(scope='function')
 def logger(request):
     """
-    Fixer that instantiate logger instance for each test
-
-    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/troubleshooting/test_logging.py
+    Instantiate logger instance for each test
     """
-    # Set driver log name
-    # current test function name
-    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
     test_method_name = request.node.name
     from nrobo.cli.cli_constansts import NREPORT
     ensure_logs_dir_exists()
@@ -268,57 +354,37 @@ def logger(request):
 
 def pytest_report_header(config):
     """
-    Session-scoped fixture that returns the session’s pytest.Config object.
-
-    Doc: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytestconfig
-
-    :param config:
-    :return:
+    Returns console header
     """
-    # if not config.getoption(f"--{CLI.APP}") and not config.getini(f"{CLI.APP}"):
-    #     return
-    #
-    # app_name_option = config.getoption(f"{CLI.APP}")
-    # app_name_ini = config.getini(f"{CLI.APP}")
-    #
-    # header = ""
-    # if app_name_option is not None:
-    #     if isinstance(app_name_option, str):
-    #         header = repr(app_name_option)
-    #
-    # elif app_name_ini is not None:
-    #     if isinstance(app_name_ini, str):
-    #         header = repr(app_name_ini)
-
-    return f"test summary".title()
+    from nrobo import EnvKeys
+    return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
 
 
 # set up a hook to be able to check if a test has failed
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
-    Doc: https://stackoverflow.com/questions/70761764/pytest-html-not-displaying-image
-    Doc: https://github.com/pytest-dev/pytest/blob/main/doc/en/how-to/writing_hook_functions.rst#hookwrapper-executing-around-other-hooks
-
-    Doc: https://pytest-html.readthedocs.io/en/latest/
-    Doc: https://pytest-html.readthedocs.io/en/latest/deprecations.html
-
-    :param item:
-    :param call:
-    :return:
+    Make report with screenshot attached
     """
     outcome = yield
     report = outcome.get_result()
     extras = getattr(report, 'extras', [])
     if report.when == 'call':
         xfail = hasattr(report, 'wasxfail')
-        if report.failed and not xfail:
+        if (report.failed and not xfail) \
+                or (report.passed and not xfail):
             # Get test method identifier
             node_id = item.nodeid
             # Get reference to test method
             feature_request = item.funcargs['request']
             # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
+
+            # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
+            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}_{Common.generate_random_numbers(1000, 9999)}.png' \
+                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
+                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
+                .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
 
             # Attach screenshot to allure report
             allure.attach(
@@ -329,11 +395,6 @@ def pytest_runtest_makereport(item, call):
             )
 
             # Attach screenshot to html report
-            # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
-            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}.png' \
-                .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
-                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
-                .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
             screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
             screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
 
@@ -350,3 +411,27 @@ def pytest_runtest_makereport(item, call):
 
         # update the report.extras
         report.extras = extras
+
+def pytest_configure(config):
+    """
+    Description
+        configure pytest.
+    """
+    # add custom markers
+    config.addinivalue_line("markers", "sanity: marks as sanity test")
+    config.addinivalue_line("markers", "regression: mark as regression test")
+    config.addinivalue_line("markers", "ui: mark as ui test")
+    config.addinivalue_line("markers", "api: mark as api tests")
+    config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
+
+def pytest_metadata(metadata):
+    """
+    Description
+        pytest metadata
+    """
+
+    # pop all the python environment table data
+    # metadata.pop("Packages", None)
+    # metadata.pop("Platform", None)
+    # metadata.pop("Plugins", None)
+    # metadata.pop("Python", None)

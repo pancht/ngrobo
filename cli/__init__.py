@@ -1,8 +1,11 @@
-from nrobo_cli.build import build
-from nrobo_cli.check import check
-from nrobo_cli.publish import publish
+from cli.build import build
+from cli.check import check
+from cli.publish import publish
+from cli.devlopment import set_switch_environment
 import argparse
 from nrobo.util.commands.ncommands import clear_screen
+from nrobo.util.python import verify_set_python_install_pip_command
+
 
 def nrobo_cli():
     """
@@ -11,6 +14,7 @@ def nrobo_cli():
     :return:
     """
     clear_screen()
+    verify_set_python_install_pip_command()
 
     parser = argparse.ArgumentParser(
         prog="nrobo",
@@ -19,6 +23,7 @@ def nrobo_cli():
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
+    parser.add_argument("-e", "--env", help="Set/switch environment between production and development. Options: test | prod")
 
     args = parser.parse_args()
 
@@ -36,6 +41,10 @@ def nrobo_cli():
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
+    elif args.env:
+
+        set_switch_environment(args.env)
+
     else:
         print("Invalid argument or missing arguments!")
         exit(1)

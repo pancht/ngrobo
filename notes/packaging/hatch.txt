@@ -1,0 +1,67 @@
+> hatch run which python
+
+# run test.yaml
+> hatch run test
+
+> hatch run pytest
+
+# shows help on env
+> hatch env
+# Usage: hatch env [OPTIONS] COMMAND [ARGS]...
+#
+# Options:
+#   -h, --help  Show this message and exit.
+#
+# Commands:
+#   create  Create environments
+#   find    Locate environments
+#   prune   Remove all environments
+#   remove  Remove environments
+#   run     Run commands within project environments
+#   show    Show the available environments
+
+hatch config
+# Usage: hatch config [OPTIONS] COMMAND [ARGS]...
+#
+# Options:
+#   -h, --help  Show this message and exit.
+#
+# Commands:
+#   explore  Open the config location in your file manager
+#   find     Show the location of the config file
+#   restore  Restore the config file to default settings
+#   set      Assign values to config file entries
+#   show     Show the contents of the config file
+#   update   Update the config file with any new fields
+hatch config find
+
+# list all packages
+pip list
+
+# show hatch dependencies
+hatch dep show table
+
+hatch dep show requirements
+
+hatch run
+
+hatch run pip list
+
+# build package
+hatch build
+
+# delete old packages and builds new
+hatch build -c
+
+# publish package to pypi
+hatch publish
+
+hatch version
+
+hatch version minor
+
+
+
+
+
+

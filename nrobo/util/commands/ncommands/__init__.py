@@ -1,7 +1,21 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+"""
+
+import os
+
+from nrobo import *
 from nrobo.exceptions import *
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
-from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
+from nrobo.util.platform import PLATFORMS
 from nrobo.util.process import terminal
 
 
@@ -31,7 +45,7 @@ def get_command(command):
     :return:
     """
     try:
-        return N_COMMANDS.COMMAND[__HOST_PLATFORM__][N_COMMANDS.CLEAR_SCREEN]
+        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][N_COMMANDS.CLEAR_SCREEN]
     except KeyError as ke:
         raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
 

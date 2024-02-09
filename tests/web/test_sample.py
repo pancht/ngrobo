@@ -8,6 +8,7 @@ class TestWebSamples():
 
     @pytest.mark.sanity
     @pytest.mark.regression
+    #@pytest.mark.skip
     def test_sample_1(self, driver, logger):
         # driver = webdriver.Chrome()
 
@@ -29,6 +30,7 @@ class TestWebSamples():
         text = message.text
 
     @pytest.mark.sanity
+    #@pytest.mark.skip
     def test_sample_2(self, driver, logger):
         # driver = webdriver.Chrome()
 
@@ -55,6 +57,7 @@ class TestWebSamples():
         raise Exception("Forcefully failed test for demonstration of screencapture feature!")
 
     @pytest.mark.sanity
+    #@pytest.mark.skip
     def test_sample_3(self, driver, logger):
         # driver = webdriver.Chrome()
 
@@ -75,5 +78,5 @@ class TestWebSamples():
         logger.info("Click submit button")
         submit_button.click()
 
-        message = driver.find_element(by=By.ID, value="messagesss")
+        message = driver.find_element(by=By.ID, value="message")
         text = message.text

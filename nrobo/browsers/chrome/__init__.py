@@ -1,5 +1,11 @@
 """
-Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
 
 Development is still in progress...
 """
@@ -46,7 +52,6 @@ chrome_switches = [
     '--use-file-for-fake-video-capture=<path-to-file>',
     # Interactivity suppression
     # In-progess
-
 ]
 
 task_throttling_feature = [

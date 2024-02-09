@@ -1,9 +1,0 @@
-# automation related chrome switches
-https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-
-# all chrome switches
-https://peter.sh/experiments/chromium-command-line-switches/
-
-# example of adding switches with assignments
-https://stackoverflow.com/questions/42930011/possible-to-add-chrome-option-and-capabilities-together
-

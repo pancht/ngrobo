@@ -1,4 +1,16 @@
-from nrobo.util.platform import __HOST_PLATFORM__
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+
+This class holds definition of nRoBo specific exceptions.
+"""
+from nrobo import *
 
 
 class MissingCommandImplementation(Exception):
@@ -8,7 +20,7 @@ class MissingCommandImplementation(Exception):
 
     # constructor
     def __init__(self, command):
-        self.value = f'Command <{command}> for host platform <{__HOST_PLATFORM__}>'
+        self.value = f'Command <{command}> for host platform <{os.environ[EnvKeys.HOST_PLATFORM]}>'
 
     def __str__(self):
         return repr(self.value)

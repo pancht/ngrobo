@@ -1,3 +1,11 @@
+#=====================CAUTION=======================
+# DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+# FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+# OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+# TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+# FILE OR ALTER ITS LOCATION!!!
+#===================================================
+
 # requirements for nrobo framework
 
 
@@ -18,6 +26,12 @@ PyYAML==6.0.1
 
 # Python language bindings for Selenium WebDriver.
 selenium==4.17.2
+
+# Library provides the way to automatically manage drivers for different browsers
+webdriver-manager==4.0.1
+
+# Python library provides page factory approach to implement page object model in selenium
+selenium-page-factory==2.6
 
 # pytest plugin for generating HTML reports
 pytest-html==4.1.1

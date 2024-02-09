@@ -1,68 +1,88 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+"""
 import argparse
 import os
 
-from nrobo import FRAMEWORK_PATHS
-from nrobo.cli import install_dependencies, STYLE, __REQUIREMENTS__
-from nrobo.cli.cli_constansts import nCLI as CLI, NREPORT
-from rich.console import Console
-from nrobo.cli.formatting import themes as th
+from nrobo import *
+from nrobo.cli import *
+from nrobo.cli.cli_constansts import *
+from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
-global __APP_NAME__, __URL__,__PASSWORD__,__USERNAME__, __BROWSER__
+from nrobo.util.process import *
+from nrobo.cli.tools import *
 
-from nrobo.util.process import terminal
-
-console = Console(theme=th)
+global __REQUIREMENTS__
 
 
 def parse_cli_args():
     """
     Parse command-line-arguments
-    Doc: https://docs.python.org/3/library/argparse.html#example
-    pytest cli: https://docs.pytest.org/en/6.2.x/reference.html#command-line-flags
 
     :return:
     """
+
+    # Need to import set_environment method here
+    # to handle circular import of partially initialized module
+    from nrobo import set_environment
+    set_environment()
+
+    # Define nrobo command line argument parser
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
-    parser.add_argument("-i", f"--{CLI.INSTALL}", action="store_true")
-    parser.add_argument(f"--{CLI.APP}", help="Name of your test.yaml project")
-    parser.add_argument(f"--{CLI.URL}", help="Link of application under test.yaml")
-    parser.add_argument(f"--{CLI.USERNAME}", help="Username for login", default="")
-    parser.add_argument(f"--{CLI.PASSWORD}", help="Password for login", default="")
-    parser.add_argument("-n", f"--{CLI.INSTANCES}",
-                        help="Number of parallel test.yaml instances. Default to 1 meaning sequential.",
+    parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
+                        action="store_true")
+    parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
+                                              "and should only having alphanumeric values.")
+    parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
+    parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login.", default="")
+    parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login.", default="")
+    parser.add_argument("-n", f"--{nCLI.INSTANCES}",
+                        help="Number of parallel tests to reduce test-run-time. Default value is 1. Meaning single test at a time in sequence.",
                         default=1)
-    parser.add_argument(f"--{CLI.RERUNS}", help="Number of reruns for a test.yaml if it fails", default=0)
-    parser.add_argument(f"--{CLI.RERUNS_DELAY}", help="Rerun delay. Default=1")
-    parser.add_argument(f"--{CLI.REPORT}",
-                        help="Report target. Default HTML or Rich Allure report. Options are html | allure",
+    parser.add_argument(f"--{nCLI.RERUNS}",
+                        help=f"Retries to rerun the failed tests n times specified by --{nCLI.RERUNS} switch.",
+                        default=0)
+    parser.add_argument(f"--{nCLI.RERUNS_DELAY}",
+                        help="Delay time in second(s) before a rerun for a failed test. Default is 1 second.",
+                        default=1)
+    parser.add_argument(f"--{nCLI.REPORT}",
+                        help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
-    # parser.add_argument(f"--{CLI.TESTDIR}", help="Tests directory. Defaults to tests")
-    parser.add_argument("-b", f"--{CLI.BROWSER}", help="""
-    Target browser name. Default is chrome.
+    parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
+    Target browser. Default is chrome.
     Options could be:
-        chrome | chrome_headless | 
-        firefox | safari | edge.
-        (Only chrome is supported at present.)
-    """)
-    parser.add_argument(f"--{CLI.BROWSER_CONFIG}", help="""
-        Path of browser config file containing additional options which are needed to be applied
-        in driver instantiation. Each line in file should contain one option only.
-        For example: you want to appy, --start-maximized, chrome option for chrome driver.
-        and the browser config file is 'chrome_config.txt', then
-        the content of file should be as below:
-        
+        {} | {} | 
+        {} | {} | {} | {}
+    """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS,
+               Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
+               Browsers.SAFARI, Browsers.EDGE))
+    parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""
+        Path of browser-config-file containing additional options that is/are needed to be applied
+        before browser instantiation. Each line in file should contain one option only.
+        For example: You want to apply, --start-maximized, chrome switch for chrome browser.
+        and if the browser-config-file is names as 'chrome_config.txt', then
+        the content of file would be as following:
+
         --start-maximized
-        
-        There will be no conversion taking place by nrobo!!!
+
+        There will be no conversion taking place by nRoBo! The browser switches will be applied to the browser instance.
         """)
-    parser.add_argument("-k", f"--{CLI.KEY}", help="""
-    Only run tests which match the given substring
-                        expression. An expression is a python evaluatable
+    parser.add_argument("-k", f"--{nCLI.KEY}", help="""
+    Only run tests that match the given substring
+                        expression. An expression is a python resolvable
                         expression where all names are substring-matched
-                        against test.yaml names and their parent classes.
+                        against test names and their parent classes.
+                        
                         Example: -k 'test_method or test_other' matches all
                         test.yaml functions and classes whose name contains
                         'test_method' or 'test_other', while -k 'not
@@ -75,9 +95,12 @@ def parse_cli_args():
                         which have names assigned directly to them. The
                         matching is case-insensitive.
     """)
-    parser.add_argument("--alluredir", help="""
-        Path to the directory where Allure Pytest will save the test results.
-        """)
+    # parser.add_argument("--alluredir", help="""
+    #     Path to the directory where Allure Pytest will save the test results.
+    #     """)
+    parser.add_argument(f"--{nCLI.GRID}", help="""
+            Remote Grid server url. Tests will be running on the machine when Grid server is running pointed by Grid url.
+            """)
     parser.add_argument("-m", "--marker", help="""
     Only run tests matching given mark expression.
                         For example: -m 'mark1 and not mark2'
@@ -395,68 +418,78 @@ def parse_cli_args():
                         module. Accepts true|on, false|off or an integer.
                     """)
 
-    # Get parsed args
+    # parse command line arguments
     args = parser.parse_args()
 
+    # process each nrobo cli arguments
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
-            install_dependencies(FRAMEWORK_PATHS.REQUIREMENTS + __REQUIREMENTS__)
+            # install_nrobo(None)
             exit(1)
 
-    # build pytest command
-    command = ["pytest"]
+    # build pytest launcher command
+    command = ["pytest"]  # start with programme name
+    command_builder_notes = []  # list for storing notes during cli switch processing
 
-    # Rest of the options if present
+    # process other switches
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
         for key, value in args.__dict__.items():
-            # process pytest keys first
+            """break each arg into key, value pairs and process each key"""
 
-            # replace hyphen with dash if hyphen is present in key
+            # handle hyphens in key names since argparser replaces hyphes with underscore
+            # while parsing cli args
+            # this, replace hyphen with dash if present in key
             key = key.replace('_', '-')
 
             if value:
+                """if key has value, then only proceed with current key"""
                 if type(value) is bool:
+                    """if a bool key is found, only add key to the launcher command, not the value
+                        and proceed with next key"""
                     command.append(f"--{key}")
-                    continue  # proceed with next key
-                elif key not in CLI.ARGS.keys():
-                    """Check for all no nrobo cli keys. All pytest keys"""
-                    # print(key)
+                    continue
+                elif key not in nCLI.ARGS.keys():
+                    """process special short keys(single letter keys) that does not have corresponding long key"""
                     if key == "c":
+                        "process key==-c"
                         command.append(f"-{key}")
                         command.append(str(value))
                     else:
+                        """simply add long keys to launcher command"""
                         command.append(f"--{key}")
                         command.append(str(value))
-                elif key in CLI.ARGS:
-                    if key in [CLI.APP, CLI.URL, CLI.USERNAME, CLI.PASSWORD, CLI.BROWSER_CONFIG]:
-                        if key == CLI.APP:
-                            __APP_NAME__ = value
-                        elif key == CLI.URL:
-                            __URL__ = value
-                        elif key == CLI.USERNAME:
-                            __USERNAME__ = value
-                        elif key == CLI.PASSWORD:
-                            __PASSWORD__ = value
+                elif key in nCLI.ARGS:
+                    """process nrobo specific keys"""
+                    if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
+                        if key == nCLI.APP:
+                            os.environ[EnvKeys.APP] = value
+                        elif key == nCLI.URL:
+                            os.environ[EnvKeys.URL] = value
+                        elif key == nCLI.USERNAME:
+                            os.environ[EnvKeys.USERNAME] = value
+                        elif key == nCLI.PASSWORD:
+                            os.environ[EnvKeys.PASSWORD] = value
 
+                        # add keys to launcher command
                         command.append(f"--{key}")
                         command.append(str(value))
 
-                    if key == CLI.BROWSER:
-                        __BROWSER__ = value
-                        raise_exception_if_browser_not_supported(__BROWSER__)
+                    if key == nCLI.BROWSER:
+                        os.environ[EnvKeys.BROWSER] = value
+                        raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
                         command.append(f"--{key}")
                         command.append(str(value))
-                    elif key == CLI.KEY:
+                    elif key == nCLI.KEY:
                         command.append(f"-k")
                         command.append(value)
-                    elif key == CLI.INSTANCES:
+                    elif key == nCLI.INSTANCES:
                         command.append(f"-n")
                         command.append(str(value))
-                    elif key == CLI.RERUNS:
+                    elif key == nCLI.RERUNS:
                         command.append(f"--{key}")
                         command.append(value)
-                    elif key == CLI.REPORT:
+                    elif key == nCLI.REPORT:
                         if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")
                             exit(1)
@@ -471,25 +504,44 @@ def parse_cli_args():
                             # command.append(f"--allure-no-capture")
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
+                    else:
+                        command.append(f"--{key}")
+                        command.append(value)
 
     # Debug code line
-    # print(__BROWSER__)
     # print(command)
     # exit(1)
+
+    if not args.browser:
+        """browser not provided"""
+        command.append(f"--{nCLI.BROWSER}")
+        command.append(f"{Browsers.CHROME}")
+        command_builder_notes.append(
+            f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
+    if not args.rootdir:
+        command_builder_notes.append(
+            f"[{STYLE.HLOrange}]\t--rootdir switch was missing. Default test path <current-dir> is selected...")
 
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
-    for k, v in CLI.DEFAULT_ARGS.items():
+    for k, v in nCLI.DEFAULT_ARGS.items():
         command = command + v
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
-        console.print(f"[{STYLE.INFO}]{command}")
+        if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
+            console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
 
         if args.report and args.report == NREPORT.ALLURE:
-            # https://allurereport.org/docs/gettingstarted-installation/
             terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
-        pass
+        if len(command_builder_notes) == 1:
+            console.print(f"[{STYLE.HLOrange}]Note:")
+        elif len(command_builder_notes) >= 2:
+            console.print(f"[{STYLE.HLOrange}]Notes:")
+
+        if command_builder_notes:
+            for note in command_builder_notes:
+                console.print(note)

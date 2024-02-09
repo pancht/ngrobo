@@ -1,30 +1,41 @@
-from rich.console import Console
-from nrobo.cli.formatting import themes as th
-from nrobo.cli import STYLE
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
 
-console = Console(theme=th)
-
-# following globals will be set at runtime
-__APP_NAME__ = ""
-__URL__ = ""
-__USERNAME__ = ""
-__PASSWORD__ = ""
-__BROWSER__ = ""
+"""
+import sys
 
 from nrobo.exceptions import BrowserNotSupported
 
+from rich.console import *
+from nrobo.cli.formatting import *
+
+from nrobo.cli import *
+console = Console(theme=themes)
+
 
 class Browsers:
+    """browser names constants"""
     CHROME = 'chrome'
     CHROME_HEADLESS = "chrome_headless"
     EDGE = 'edge'
     FIREFOX = 'firefox'
+    FIREFOX_HEADLESS = "firefox_headless"
     IE = "ie"
     SAFARI = 'safari'
+    OPERA = 'opera'
 
 
-supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS]
-supported_browsers_in_future = [Browsers.SAFARI, Browsers.EDGE, Browsers.IE, Browsers.FIREFOX]
+# list holding supported browser in nRoBo framework
+supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI,
+                      Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE, Browsers.IE]
+# # list holding browsers not supported in nRoBo framework
+supported_browsers_in_future = [Browsers.OPERA]
 
 
 def raise_exception_if_browser_not_supported(browser_name):
@@ -36,3 +47,7 @@ def raise_exception_if_browser_not_supported(browser_name):
         exit(1)
     if browser_name not in supported_browsers:
         raise BrowserNotSupported(browser_name)
+
+
+
+

@@ -1,0 +1,7 @@
+doc: https://allurereport.org/docs/pytest/
+
+# Examples in repository
+doc: https://github.com/allure-examples/allure-python-pytest
+
+# install allure
+brew install allure

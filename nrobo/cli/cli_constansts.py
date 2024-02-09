@@ -1,7 +1,19 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+
+"""
 import os
 
 
 class NREPORT:
+    """nRoBo report related constants"""
     HTML = "html"
     ALLURE = "allure"
     REPORT_DIR = "results"
@@ -37,21 +49,23 @@ class nCLI:
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
     PACKAGES = "packages"
+    GRID = "grid"
 
     ARGS = {
-        INSTALL: "install",
-        APP: "app",
-        URL: "link",
-        USERNAME: "username",
-        PASSWORD: "password",
-        INSTANCES: "instances",
-        RERUNS: "rerun",
-        REPORT: "report",
-        TESTDIR: "testsdir",
-        BROWSER: "browser",
-        BROWSER_CONFIG: "browser-config",
-        KEY: "key",
-        PACKAGES: "packages"
+        INSTALL: INSTALL,
+        APP: APP,
+        URL: URL,
+        USERNAME: USERNAME,
+        PASSWORD: PASSWORD,
+        INSTANCES: INSTANCES,
+        RERUNS: RERUNS,
+        REPORT: REPORT,
+        TESTDIR: TESTDIR,
+        BROWSER: BROWSER,
+        BROWSER_CONFIG: BROWSER_CONFIG,
+        KEY: KEY,
+        PACKAGES: PACKAGES,
+        GRID: GRID
     }
 
     DEFAULT_ARGS = {
@@ -64,5 +78,6 @@ class nCLI:
 
 
 class PACKAGES:
+    """nRoBo packages"""
     NROBO = "nrobo"
     CLI = "cli"
