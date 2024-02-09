@@ -8,6 +8,10 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
 Installer for installing nrobo framework at host system.
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 import os
 import shutil

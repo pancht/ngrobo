@@ -9,6 +9,9 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 Trigger for nrobo framework!
 
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+
 """
 import subprocess
 

@@ -6,6 +6,9 @@ OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
 TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 # rich console
 from nrobo import console, STYLE
