@@ -1,4 +1,13 @@
 """
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+
 nrobo conftest.py file.
 Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
 Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
