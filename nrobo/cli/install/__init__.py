@@ -36,8 +36,11 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
-    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
-        print(f"Welcome to NROBO install")
+    # if conftest file found on production system, meaning nrobo is already installed there
+    nrobo_installed = Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists()
+
+    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION\
+            and not nrobo_installed:
         print(f"Installing requirements")
 
     if requirements_file is None:
@@ -49,32 +52,44 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         if return_code == NROBO_CONST.SUCCESS:
             """return code zero means success"""
-            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION\
+                    and not nrobo_installed:
                 print(f"Requirements are installed successfully.")
         else:
             print(f"Requirements are not installed successfully!")
             exit()
 
     if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
-        """Install framework on Production environment"""
+        """Install or upgrading framework on Production environment"""
 
-        print(f"Installing framework")
         # create framework folders on host system
+        if nrobo_installed:
+            """upgrade"""
+            # Automatic upgrade logic will be developed later
+            pass
+        else:
+            """fresh installation"""
 
-        # Copy framework to current directory
-        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
-                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
-        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
-                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
-        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIS,
-                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIS)
+            print(f"Installing framework")
 
-        # Copy conftest.py and other files to current directory
-        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
-                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
-        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
-                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
-        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.CONFTEST_PY,
-                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+            # Copy conftest.py and other files to current directory
+            # =============================================================
+            # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
+            # =============================================================
+            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.CONFTEST_PY,
+                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
+                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
+            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
+                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
 
-        print(f"Installation complete")
+            # Copy framework to current directory
+            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
+                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
+            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
+                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
+            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIS,
+                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIS)
+
+            print(f"Installation complete")
+

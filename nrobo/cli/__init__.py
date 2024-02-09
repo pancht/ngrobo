@@ -31,9 +31,6 @@ def main():
     # refer to global defined in nrobo.util.process
     __APP_NAME__ = CONST.EMPTY
 
-    # install rich library
-    terminal(["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-
     # clear screen
     clear_screen()
 

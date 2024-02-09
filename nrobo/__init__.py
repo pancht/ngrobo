@@ -10,6 +10,11 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 This module loads nRoBo globals.
 """
+# install rich library
+import subprocess
+from nrobo.util.process import terminal
+terminal(["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
 import os
 from pathlib import Path
 import re
@@ -119,7 +124,10 @@ def set_environment() -> None:
     # grab nrobo installation path
     os.environ[EnvKeys.NROBO_DIR] = re.findall(f"(.*{NROBO_CONST.NROBO})", str(nrobo_loader_file_path))[0]
 
-    if os.path.exists(Path(os.environ[EnvKeys.EXEC_DIR] / NROBO_PATHS.NROBO)):
-        os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
-    else:
-        os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
+    # if os.path.exists(Path(os.environ[EnvKeys.EXEC_DIR] / NROBO_PATHS.NROBO))\
+    #         and os.path.exists(Path(os.environ[EnvKeys.EXEC_DIR] / Path("versions"))):
+    #     os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
+    # else:
+    #     os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
+
+

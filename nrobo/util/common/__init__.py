@@ -15,7 +15,10 @@ import os.path as path
 import string
 import sys
 import random
+from pathlib import Path
 from time import time
+from typing import Union
+
 import yaml
 
 
@@ -29,7 +32,7 @@ class Common:
     """
 
     @staticmethod
-    def read_file_as_string(file_path, encoding=None):
+    def read_file_as_string(file_path: Union[str, Path], encoding=None):
         """
         Read file as string
 
@@ -49,9 +52,10 @@ class Common:
                     return content
         except FileNotFoundError as file_not_found_error:
             print("No such file or directory found: " + file_path)
+            raise file_not_found_error
 
     @staticmethod
-    def write_text_to_file(file_path, content, encoding=None):
+    def write_text_to_file(file_path: Union[str, Path], content, encoding=None):
         """
         Write text to file
 
@@ -73,7 +77,7 @@ class Common:
             print("No such file or directory found: " + file_path)
 
     @staticmethod
-    def read_json(file_path):
+    def read_json(file_path: Union[str, Path]):
         """
         Read Json
 
@@ -91,7 +95,7 @@ class Common:
             print("No such file or directory found: " + file_path)
 
     @staticmethod
-    def write_json(file_path, dictionary):
+    def write_json(file_path: Union[str, Path], dictionary):
         """
         Write dictionary data to file
 
@@ -104,7 +108,7 @@ class Common:
             json.dump(dictionary, file, sort_keys=True, indent=4)
 
     @staticmethod
-    def is_file_exist(file_path):
+    def is_file_exist(file_path: Union[str, Path]):
         """
         Checks if given file exists or not.
 
@@ -114,15 +118,16 @@ class Common:
         return path.exists(file_path)
 
     @staticmethod
-    def read_yaml(file_path):
+    def read_yaml(file_path: Union[str, Path], / , *, fail_on_failure=True) -> Union[str, None]:
         """
         Read yaml file at given path
 
+        :param fail_on_failure: create file if TRUE though file is not present to read.
         :param file_path: Path of file
         :return: Content of yaml file -> dict()
         """
 
-        if not path.exists(file_path):
+        if not path.exists(file_path) and not fail_on_failure:
             """if file does not exist, then let's create it first"""
 
             with open(file_path, 'w') as file:
@@ -130,6 +135,10 @@ class Common:
 
                 # initialize file with empty dictionary
                 yaml.dump({}, file)
+
+        if not path.exists(file_path) and fail_on_failure:
+            """file does not exist"""
+            raise Exception(f"File {file_path} does not exist!")
         else:
             """Do Nothing as file exists"""
 
@@ -143,7 +152,7 @@ class Common:
             return data
 
     @staticmethod
-    def write_yaml(file_path, dictionary):
+    def write_yaml(file_path: Union[str, Path], dictionary):
         """
         Write dictionary data to given file path in yaml format
 

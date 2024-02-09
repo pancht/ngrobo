@@ -411,3 +411,27 @@ def pytest_runtest_makereport(item, call):
 
         # update the report.extras
         report.extras = extras
+
+def pytest_configure(config):
+    """
+    Description
+        configure pytest.
+    """
+    # add custom markers
+    config.addinivalue_line("markers", "sanity: marks as sanity test")
+    config.addinivalue_line("markers", "regression: mark as regression test")
+    config.addinivalue_line("markers", "ui: mark as ui test")
+    config.addinivalue_line("markers", "api: mark as api tests")
+    config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
+
+def pytest_metadata(metadata):
+    """
+    Description
+        pytest metadata
+    """
+
+    # pop all the python environment table data
+    # metadata.pop("Packages", None)
+    # metadata.pop("Platform", None)
+    # metadata.pop("Plugins", None)
+    # metadata.pop("Python", None)

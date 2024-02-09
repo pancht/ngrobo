@@ -529,11 +529,11 @@ def parse_cli_args():
         command = command + v
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
-        console.print(f"[{STYLE.INFO}]{command}")
+        if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
+            console.print(f"[{STYLE.INFO}]{command}")
         terminal(command)
 
         if args.report and args.report == NREPORT.ALLURE:
-            # https://allurereport.org/docs/gettingstarted-installation/
             terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
 
     with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):

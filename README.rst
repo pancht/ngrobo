@@ -120,6 +120,8 @@ Installation
 
     nrobo
 
+.. note:: If there are any errors, run the upgrade command, pip install --upgrade nrobo
+
 6. Run tests
     A. Minimal switches
 
@@ -267,7 +269,7 @@ Support for two kinds of test reports:
 
     .. code-block:: bash
 
-        allure open allure-report
+        allure serve results/allure
 
 .. Video Tutorials
 

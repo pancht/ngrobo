@@ -54,9 +54,13 @@ class WAITS:
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
     if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
-        return Common.read_yaml(f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}nrobo-config.yaml")
+        # print(f"Production selected=>path=>{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE}")
+        # exit()
+        return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
     elif os.environ[EnvKeys.ENVIRONMENT] == Environment.DEVELOPMENT:
-        return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
+        # print(f"Development selected=>path=>{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE}")
+        # exit()
+        return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE)
 
 
 class WebdriverWrapperNrobo(WebDriver):
