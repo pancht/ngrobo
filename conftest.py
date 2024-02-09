@@ -6,14 +6,6 @@ OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
 TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
-
-
-nrobo conftest.py file.
-Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
-Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
-Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
-
-Contains fixtures for nrobo framework
 """
 import logging
 import os
@@ -98,7 +90,6 @@ def pytest_addoption(parser):
     """
     Pass different values to a test function, depending on command line options
 
-    Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     :param parser:
     :return:
     """
@@ -141,7 +132,6 @@ def pytest_addoption(parser):
 def url(request):
     # Global fixture returning app url
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     return request.config.getoption(f"--{nCLI.URL}")
 
 
@@ -149,7 +139,6 @@ def url(request):
 def app(request):
     # Global fixture returning app name
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     return request.config.getoption(f"--{nCLI.APP}")
 
 
@@ -157,7 +146,6 @@ def app(request):
 def username(request):
     # Global fixture returning admin username
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     return request.config.getoption(f"--{nCLI.USERNAME}")
 
 
@@ -165,20 +153,15 @@ def username(request):
 def password(request):
     # Global fixture returning admin password
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     return request.config.getoption(f"--{nCLI.PASSWORD}")
 
 
 @pytest.fixture(autouse=True, scope='function')
 def driver(request):
     """
-    Fixture for instantiating driver for given browser.
-    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
-    Doc2: https://docs.pytest.org/en/7.1.x/example/simple.html
-
+    Instantiating driver for given browser.
     """
     # Access pytest command line options
-    # Doc: https://docs.pytest.org/en/7.1.x/example/simple.html
     from nrobo import EnvKeys
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
 
@@ -193,7 +176,6 @@ def driver(request):
 
     # Set driver log name
     # current test function name
-    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
     test_method_name = request.node.name
     from nrobo.cli.cli_constansts import NREPORT
     ensure_logs_dir_exists()
@@ -204,10 +186,6 @@ def driver(request):
     if browser == Browsers.CHROME:
         """if browser requested is chrome"""
 
-        # Chrome Flags for Tooling
-        # Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-        # Command line switches
-        # Doc: https://peter.sh/experiments/chromium-command-line-switches/
         options = webdriver.ChromeOptions()
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
 
@@ -216,9 +194,6 @@ def driver(request):
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
-        # Replace with ChromeDriverManager
-        # service = webdriver.ChromeService(log_output=_driver_log_path)
-        # Doc for webdriver manager: https://pypi.org/project/webdriver-manager/
         if _grid_server_url:
             """Get instance of remote webdriver"""
             _driver = webdriver.Remote(_grid_server_url,
@@ -232,11 +207,6 @@ def driver(request):
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
-        # Chrome Flags for Tooling
-        # Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-        # Command line switches
-        # Doc: https://peter.sh/experiments/chromium-command-line-switches/
-        # Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/browsers/test_chrome.py
         options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
 
@@ -246,9 +216,6 @@ def driver(request):
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
-        # Replace with ChromeDriverManager
-        # service = webdriver.ChromeService(log_output=_driver_log_path)
-        # Doc for webdriver manager: https://pypi.org/project/webdriver-manager/
         if _grid_server_url:
             """Get instance of remote webdriver"""
             _driver = webdriver.Remote(_grid_server_url,
@@ -364,13 +331,8 @@ def driver(request):
 @pytest.fixture(scope='function')
 def logger(request):
     """
-    Fixer that instantiate logger instance for each test
-
-    Doc: https://github.com/SeleniumHQ/seleniumhq.github.io/blob/trunk/examples/python/tests/troubleshooting/test_logging.py
+    Instantiate logger instance for each test
     """
-    # Set driver log name
-    # current test function name
-    # Doc: https://docs.pytest.org/en/latest/reference/reference.html#request
     test_method_name = request.node.name
     from nrobo.cli.cli_constansts import NREPORT
     ensure_logs_dir_exists()
@@ -392,12 +354,7 @@ def logger(request):
 
 def pytest_report_header(config):
     """
-    Session-scoped fixture that returns the session’s pytest.Config object.
-
-    Doc: https://docs.pytest.org/en/7.1.x/reference/reference.html#pytestconfig
-
-    :param config:
-    :return:
+    Returns console header
     """
     from nrobo import EnvKeys
     return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
@@ -407,15 +364,7 @@ def pytest_report_header(config):
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """
-    Doc: https://stackoverflow.com/questions/70761764/pytest-html-not-displaying-image
-    Doc: https://github.com/pytest-dev/pytest/blob/main/doc/en/how-to/writing_hook_functions.rst#hookwrapper-executing-around-other-hooks
-
-    Doc: https://pytest-html.readthedocs.io/en/latest/
-    Doc: https://pytest-html.readthedocs.io/en/latest/deprecations.html
-
-    :param item:
-    :param call:
-    :return:
+    Make report with screenshot attached
     """
     outcome = yield
     report = outcome.get_result()

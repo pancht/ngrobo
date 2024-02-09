@@ -26,8 +26,6 @@ global __REQUIREMENTS__
 def parse_cli_args():
     """
     Parse command-line-arguments
-    Doc: https://docs.python.org/3/library/argparse.html#example
-    pytest cli: https://docs.pytest.org/en/6.2.x/reference.html#command-line-flags
 
     :return:
     """

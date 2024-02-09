@@ -64,8 +64,6 @@ class WebdriverWrapperNrobo(WebDriver):
     Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
 
     This class is not instantiable.
-
-    Doc: https://www.selenium.dev/selenium/docs/api/py/#
     """
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
@@ -1100,7 +1098,7 @@ class AlertNrobo(ActionChainsNrobo):
 
 class ByNrobo(AlertNrobo):
     """
-    Doc: https://www.selenium.dev/selenium/docs/api/py/webdriver/selenium.webdriver.common.by.html#module-selenium.webdriver.common.by
+    Wrapper class for selenium class: By
     """
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
@@ -1114,9 +1112,7 @@ class ByNrobo(AlertNrobo):
 
 
 class DesiredCapabilitiesNrobo(ByNrobo):
-    """
-        Doc: https://www.selenium.dev/selenium/docs/api/py/webdriver/selenium.webdriver.common.desired_capabilities.html#module-selenium.webdriver.common.desired_capabilities
-        """
+    """Wrapper class for selenium class: DesiredCapabilities"""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
         """
