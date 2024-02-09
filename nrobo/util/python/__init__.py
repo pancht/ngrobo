@@ -38,8 +38,8 @@ def verify_set_python_install_pip_command():
             global __PYTHON__
             __PYTHON__ = python3
 
-            if terminal([__PYTHON__, "--version"]) != 0:
+            if terminal([__PYTHON__, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT) != 0:
                 __PYTHON__ = "python"
 
     # Install pip now!
-    terminal([__PYTHON__, '-m', 'ensurepip', '--upgrade'])
+    terminal([__PYTHON__, '-m', 'ensurepip', '--upgrade'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)

@@ -20,7 +20,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.select import Select
 from nrobo import *
 from nrobo.cli.tools import nprint
-from nrobo.cli import STYLE
+
 
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common import TimeoutException

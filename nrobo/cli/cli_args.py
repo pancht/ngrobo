@@ -14,23 +14,6 @@ from nrobo.cli.tools import *
 global __REQUIREMENTS__
 
 
-def set_environment():
-    """set environment"""
-    # Find the directory we executed the script from:
-    os.environ[EnvKeys.EXEC_DIR] = os.getcwd()
-
-    # Find the directory in which the current script resides:
-    file_dir = os.path.dirname(os.path.realpath(__file__))
-
-    import re
-    os.environ[EnvKeys.NROBO_DIR] = re.findall(r"(.*nrobo)", str(file_dir))[0]
-
-    if os.path.exists(f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}nrobo"):
-        os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
-    else:
-        os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
-
-
 def parse_cli_args():
     """
     Parse command-line-arguments
@@ -40,12 +23,17 @@ def parse_cli_args():
     :return:
     """
 
+    # Need to import set_environment method here
+    # to handle circular import of partially initialized module
+    from nrobo import set_environment
     set_environment()
 
+    # Define nrobo command line argument parser
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='Run tests through nrobo framework')
-    parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system", action="store_true")
+    parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
+                        action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
                                               "and should only having alphanumeric values.")
     parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
@@ -54,8 +42,12 @@ def parse_cli_args():
     parser.add_argument("-n", f"--{nCLI.INSTANCES}",
                         help="Number of parallel tests to reduce test-run-time. Default value is 1. Meaning single test at a time in sequence.",
                         default=1)
-    parser.add_argument(f"--{nCLI.RERUNS}", help=f"Retries to rerun the failed tests n times specified by --{nCLI.RERUNS} switch.", default=0)
-    parser.add_argument(f"--{nCLI.RERUNS_DELAY}", help="Delay time in second(s) before a rerun for a failed test. Default is 1 second.", default=1)
+    parser.add_argument(f"--{nCLI.RERUNS}",
+                        help=f"Retries to rerun the failed tests n times specified by --{nCLI.RERUNS} switch.",
+                        default=0)
+    parser.add_argument(f"--{nCLI.RERUNS_DELAY}",
+                        help="Delay time in second(s) before a rerun for a failed test. Default is 1 second.",
+                        default=1)
     parser.add_argument(f"--{nCLI.REPORT}",
                         help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
@@ -419,41 +411,49 @@ def parse_cli_args():
                         module. Accepts true|on, false|off or an integer.
                     """)
 
-    # Get parsed args
+    # parse command line arguments
     args = parser.parse_args()
 
+    # process each nrobo cli arguments
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
             exit(1)
 
-    # build pytest command
-    command = ["pytest"]
-    command_builder_notes = []
+    # build pytest launcher command
+    command = ["pytest"]  # start with programme name
+    command_builder_notes = []  # list for storing notes during cli switch processing
 
-    # Rest of the options if present
+    # process other switches
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
         for key, value in args.__dict__.items():
-            # process pytest keys first
+            """break each arg into key, value pairs and process each key"""
 
-            # replace hyphen with dash if hyphen is present in key
+            # handle hyphens in key names since argparser replaces hyphes with underscore
+            # while parsing cli args
+            # this, replace hyphen with dash if present in key
             key = key.replace('_', '-')
 
             if value:
+                """if key has value, then only proceed with current key"""
                 if type(value) is bool:
+                    """if a bool key is found, only add key to the launcher command, not the value
+                        and proceed with next key"""
                     command.append(f"--{key}")
-                    continue  # proceed with next key
+                    continue
                 elif key not in nCLI.ARGS.keys():
-                    """Check for all no nrobo cli keys. All pytest keys"""
-                    # print(key)
+                    """process special short keys(single letter keys) that does not have corresponding long key"""
                     if key == "c":
+                        "process key==-c"
                         command.append(f"-{key}")
                         command.append(str(value))
                     else:
+                        """simply add long keys to launcher command"""
                         command.append(f"--{key}")
                         command.append(str(value))
                 elif key in nCLI.ARGS:
+                    """process nrobo specific keys"""
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
                             __APP_NAME__ = value
@@ -464,6 +464,7 @@ def parse_cli_args():
                         elif key == nCLI.PASSWORD:
                             __PASSWORD__ = value
 
+                        # add keys to launcher command
                         command.append(f"--{key}")
                         command.append(str(value))
 

@@ -24,13 +24,13 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     :return: None
     """
 
+    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
-    from nrobo.cli import STYLE
-    from nrobo.cli.tools import console
+    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+        print(f"Welcome to NROBO install")
+        print(f"Installing requirements")
 
-    print(f"Welcome to NROBO install")
-    print(f"Installing requirements")
     if requirements_file is None:
         requirements_file = f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
 
@@ -38,11 +38,13 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
                                stdout=subprocess.DEVNULL,
                                stderr=subprocess.STDOUT)
 
-        if return_code:
-            """non-zero return code means a success"""
-            print(f"Requirements are installed successfully.")
+        if return_code == NROBO_CONST.SUCCESS:
+            """return code zero means success"""
+            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+                print(f"Requirements are installed successfully.")
         else:
             print(f"Requirements are not installed successfully!")
+            exit()
 
     if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
         """Install framework on Production environment"""
@@ -51,19 +53,19 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         # create framework folders on host system
 
         # Copy framework to current directory
-        copy_dir(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}framework{os.sep}pages",
-                 f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}pages")
-        copy_dir(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}framework{os.sep}tests",
-                 f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}tests")
-        copy_dir(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}browserConfigs",
-                 f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}browserConfigs")
+        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
+                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
+        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
+                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
+        copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIS,
+                 Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIS)
 
         # Copy conftest.py and other files to current directory
-        copy_file(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}framework{os.sep}__init__.py",
-                  f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}__init__.py")
-        copy_file(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}conftest.py",
-                  f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}conftest.py")
-        copy_file(f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}framework{os.sep}nrobo-config.yaml",
-                  f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}nrobo-config.yaml")
+        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
+                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
+        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
+                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
+        copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.CONFTEST_PY,
+                  Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
 
         print(f"Installation complete")
