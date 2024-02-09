@@ -21,7 +21,6 @@ def main():
     from nrobo.util.python import verify_set_python_install_pip_command
 
     # refer to global defined in nrobo.util.process
-    global __PYTHON__
     __APP_NAME__ = CONST.EMPTY
 
     # install rich library

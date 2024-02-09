@@ -23,6 +23,10 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
             return subprocess.check_call(command)
     except subprocess.CalledProcessError as e:
         print(f"Command failed with return code {e.returncode}")
+    except FileNotFoundError as e:
+        print(f"Command failed with FileNotFoundError!")
+        print(e)
+        return 1
 
 
 

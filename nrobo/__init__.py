@@ -68,6 +68,7 @@ class EnvKeys:
     EXEC_DIR = "Execution Directory"
     NROBO_DIR = "nRoBo Installation Directory"
     ENVIRONMENT = "Environment"
+    PYTHON = "Python"
 
 
 # load environment keys with defaults
@@ -75,6 +76,7 @@ os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = CONST.EMPTY
 os.environ[EnvKeys.NROBO_DIR] = CONST.EMPTY
 os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
+os.environ[EnvKeys.PYTHON] = "python"
 
 
 def greet_the_guest():

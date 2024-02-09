@@ -3,6 +3,7 @@ from cli.check import check
 from cli.publish import publish
 import argparse
 from nrobo.util.commands.ncommands import clear_screen
+from nrobo.util.python import verify_set_python_install_pip_command
 
 
 def nrobo_cli():
@@ -12,6 +13,7 @@ def nrobo_cli():
     :return:
     """
     clear_screen()
+    verify_set_python_install_pip_command()
 
     parser = argparse.ArgumentParser(
         prog="nrobo",

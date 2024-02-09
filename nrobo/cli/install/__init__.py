@@ -24,6 +24,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     :return: None
     """
 
+    # Inline imports to handle circular import exception while importing partially initialized module
     from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
