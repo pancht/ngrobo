@@ -9,10 +9,10 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.3.14"
+version = "2024.4.1"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
-description = "Automated Testing Framework in Python loaded with powers of Selenium and PyTest and many other tools well integrated together. Yet, Easy to USE!"
+description = "Powerful! Yet, Easy to USE! Automated Testing Framework"
 readme = "README.rst"
 keywords = ["test automation", "test automation framework", "automated testing", "automation testing", "testing", "qa", "acceptance test", "automation"]
 classifiers = [

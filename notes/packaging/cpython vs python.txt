@@ -1,0 +1,6 @@
+Discussion link: https://stackoverflow.com/questions/17130975/python-vs-cpython
+
+
+official guid to cPython:
+https://devguide.python.org/internals/exploring/
+

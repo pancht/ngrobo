@@ -17,18 +17,18 @@ global __REQUIREMENTS__
 def set_environment():
     """set environment"""
     # Find the directory we executed the script from:
-    os.environ[EnvKeys.DirExecution] = os.getcwd()
+    os.environ[EnvKeys.EXEC_DIR] = os.getcwd()
 
     # Find the directory in which the current script resides:
     file_dir = os.path.dirname(os.path.realpath(__file__))
 
     import re
-    os.environ[EnvKeys.DirNrobo] = re.findall(r"(.*nrobo)", str(file_dir))[0]
+    os.environ[EnvKeys.NROBO_DIR] = re.findall(r"(.*nrobo)", str(file_dir))[0]
 
-    if os.path.exists(f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo"):
-        os.environ[EnvKeys.Environment] = Environment.DEVELOPMENT
+    if os.path.exists(f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}nrobo"):
+        os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
     else:
-        os.environ[EnvKeys.Environment] = Environment.PRODUCTION
+        os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
 
 
 def parse_cli_args():

@@ -1,7 +1,6 @@
 # Holds python command to run other commands.
 # Options: python | python3
 __PYTHON__ = "python"
-__PIP__ = "pip"
 
 import re
 import platform

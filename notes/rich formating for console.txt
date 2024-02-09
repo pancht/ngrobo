@@ -1,1 +1,0 @@
-Doc: https://rich.readthedocs.io/en/latest/

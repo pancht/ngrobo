@@ -1,6 +1,4 @@
 """
-Doc: https://github.com/GoogleChrome/chrome-launcher/blob/main/docs/chrome-flags-for-tools.md
-
 Development is still in progress...
 """
 chrome_switches = [
@@ -46,7 +44,6 @@ chrome_switches = [
     '--use-file-for-fake-video-capture=<path-to-file>',
     # Interactivity suppression
     # In-progess
-
 ]
 
 task_throttling_feature = [

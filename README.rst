@@ -28,18 +28,39 @@ Project Status
 Pre-requisites
 --------------
 
-Following pre-requisites needs to be installed in order to run `nRoBo` framework.
+Following pre-requisites needs to be installed in order to run ***nRoBo*** framework.
 
-    0. Install Python (3.11 or higher) `Check install guide <https://www.python.org/downloads/>`_
-        - `python --version` or `python3 --version`
-    1. Install Java (11  or higher) `Check install guide <https://www.java.com/en/download/manual.jsp>`_
+    0. Install Python (3.11 or higher)
+        - `Check install guide for Python <https://www.python.org/downloads/>`_
+
+        .. code-block:: bash
+
+            python --version
+            # or
+            python --version
+
+    1. Install Java (11  or higher)
+        - `Check install guide for Java <https://www.java.com/en/download/manual.jsp>`_
         - Run the following command to check if java is installed
-        - `java --version`
-    2. Install allure command line tool. Check `Install guide <https://docs.qameta.io/allure/#_installing_a_commandline>`_
+
+        .. code-block:: bash
+
+            java --version
+
+    2. Install allure command line tool.
+        - Check `Install guide <https://docs.qameta.io/allure/#_installing_a_commandline>`_
         - Run the following command to check if allure cli is installed
-        - `allure --version`
+
+        .. code-block:: bash
+
+            allure --version
+
     3. Install Target Browsers on testing systems
-        - `Chrome <https://www.google.com/chrome/>`_, `Edge <https://www.microsoft.com/en-us/edge/download>`_, `IE <https://www.selenium.dev/downloads/>`_, `Safari <https://support.apple.com/downloads/safari>`_, `Firefox <https://www.mozilla.org/en-US/firefox/new/>`_
+        - `Chrome <https://www.google.com/chrome/>`_
+        - `Edge <https://www.microsoft.com/en-us/edge/download>`_
+        - `IE <https://www.selenium.dev/downloads/>`_
+        - `Safari <https://support.apple.com/downloads/safari>`_
+        - `Firefox <https://www.mozilla.org/en-US/firefox/new/>`_
 
 .. Installation
 
@@ -52,7 +73,9 @@ Installation
 
     mkdir <project-name>
 
-- Example: If you want to develop autotests for the project, Dream, you can create directory and change directory to `dream` as following:
+- Example:
+    If you want to develop autotests for the project, *Dream*.
+    You can create directory and change directory to *dream* as following:
 
 .. code-block:: bash
 
@@ -85,7 +108,7 @@ Installation
 
         .\\venv\\Scripts\\activate
 
-4. Install `nrobo`
+4. Install *nrobo*
 
 .. code-block:: bash
 
@@ -102,7 +125,7 @@ Installation
 
     .. code-block:: bash
 
-        ``nrobo -browser chrome_headless --report allure``
+        nrobo -browser chrome_headless --report allure
 
     B. Typical usage
 
@@ -117,8 +140,9 @@ Installation
         nrobo -app Lotus --url https://www.google.com --username shiv --password tandav --instances 10 --reruns 2 --browser chrome_headless --report allure
 
 
-    "Above command instructs nrobo to do the following actions:
+    Above command instructs nrobo to do the following actions:
         - Launch the tests of Lotus application from the default test directory, <project-root-dir>, and its subdirectories and generate both, html (plain) and allure (rich) reports for displaying test results with following additional test parameters:
+
             #. Test url (--url switch)
             #. Credential: (username, password)=(shiv, tandav)
             #. Run bunch of 10 tests at once (--instances switch)
@@ -130,7 +154,9 @@ Installation
 
 Command Line Switches
 ---------------------
-This section enlists list of nRoBo-command-line-switches (nCLI) that it supports. nCLI shadows every PyTest-command-line-switches (PyTestCLI) for backward compatibility with pytest.
+This section enlists list of nRoBo-command-line-switches (nCLI) that it supports.
+nCLI shadows every PyTest-command-line-switches (PyTestCLI) for backward compatibility with pytest.
+
 Thus, nCLI switches are being categorized into three types:
     A. Pure-nCLI-switches
         - Only nCLI specific switches. Non-PyTest CLI switches.
@@ -144,16 +170,19 @@ Below is a list of switches including all the three types categorically.
 A. Pure nCLI Switches
 
     -i, --install           Install nRoBo requirements and framework on host system
-    --app                   Name of application under test. Name should not include special chars and it should only having alphanumeric values.
+    --app                   Name of application under test.
+                            Name should not include special chars and it should only having alphanumeric values.
     --url                   Application url under test.
     --username              Username for login.
     --password              Password for login.
-    -n, --instances         Number of parallel tests to reduce test-run-time. Default value is 1. Meaning single test at a time in sequence.
-    --report                Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>
+    -n, --instances         Number of parallel tests to reduce test-run-time.
+                            Default value is 1. Meaning single test at a time in sequence.
+    --report                Defines type of test report. Two types are supported, Simple HTML or Rich Allure report.
+                            Options are <html> or <allure>. Default is <html>
     -b, --browser           Target browser. Default is **chrome**.
                             Following is a list of browser options support in nRoBo.
-                                *chrome* | *chrome_headless* | *edge* | *edge_headless* |
-                                *safari* | *firefox* | *firefox_headless* | *ie*
+                            *chrome*, *chrome_headless*, *edge*, *edge_headless*,
+                            *safari*, *firefox*, *firefox_headless*, *ie*
     --browser-config        Path of browser-config-file containing additional options that is/are needed to be applied
                             before browser instantiation. Each line in file should contain one option only.
 
@@ -163,8 +192,10 @@ A. Pure nCLI Switches
 
                                 --start-maximized
 
-                            There will be no conversion taking place by nRoBo! The browser switches will be applied to the browser instance.
-    --grid                  Remote Grid server url. Tests will be running on the machine when Grid server is running pointed by Grid url.
+                            There will be no conversion taking place by nRoBo!
+                            The browser switches will be applied to the browser instance.
+    --grid                  Remote Grid server url.
+                            Tests will be running on the machine when Grid server is running pointed by Grid url.
 
 B. nCLI Shadowing Switches
 
@@ -174,12 +205,20 @@ B. nCLI Shadowing Switches
                             against test names and their parent classes.
 
                             Example:
-                                -k 'test_method or test_other' matches all test.yaml functions and classes whose name contains 'test_method' or 'test_other', while -k 'not test_method' matches those that don't contain 'test_method' in their names. -k 'not test_method and not test_other' will eliminate the matches. Additionally keywords are matched to classes and functions containing extra names in their 'extra_keyword_matches' set, as well as functions which have names assigned directly to them. The matching is case-insensitive.
+                                -k 'test_method or test_other' matches all test.yaml functions and
+                                classes whose name contains 'test_method' or 'test_other',
+                                while -k 'not test_method' matches those
+                                that don't contain 'test_method' in their names. -k 'not test_method
+                                and not test_other' will eliminate the matches.
+                                Additionally keywords are matched to classes
+                                and functions containing extra names in their 'extra_keyword_matches' set,
+                                as well as functions which have names assigned directly to them.
+                                The matching is case-insensitive.
 
                             Note: --key switch is shadowing -k switch of PyTest for the sake of readability.
     -m, --marker            Only run tests matching given mark expression.
                             For example:
-                                -m 'mark1 and not mark2'
+                            -m 'mark1 and not mark2'
 
 C. Pure PyTest CLI Switches
 
@@ -188,9 +227,7 @@ C. Pure PyTest CLI Switches
     --markers               Show markers (builtin, plugin and per-project ones).
     --junit-xml             --junit-xml=path. create junit-xml style report file at given path.
     --rootdir               --rootdir=ROOTDIR. Define root directory for tests.
-                            Can be relative path: 'root_dir', './root_dir','root_dir/another_dir/';
-                                absolute path:'/home/user/root_dir';
-                                path with variables: '$HOME/root_dir'.
+                            Can be relative path: 'root_dir', './root_dir','root_dir/another_dir/'; absolute path:'/home/user/root_dir'; path with variables: '$HOME/root_dir'.
     --co, --collect-only     only collect tests, don't execute them.
 
     Note:
@@ -216,16 +253,21 @@ Reports
 Support for two kinds of test reports:
 
 1. Lightweight HTML Report (*Best for sharing test results*)
-    - Go to `<results>` dir and Double click on <report.html> file to view the simple html report.
+    - Go to *<results>* dir and Double click on <report.html> file to view the simple html report.
 2. Rich Allure Pytest Report (*Best for visualization*)
-    - *Make sure `allure-pytest` command line tool is installed!*
-        - To check, run the command: `allure --version`
+    - *Make sure *allure-pytest* command line tool is installed!*
+        - To check, run the command:
+
+        .. code-block:: bash
+
+            allure --version
+
         - If not installed, please go through `Pre-requisites` section above.
     - Run the following command:
 
     .. code-block:: bash
 
-        `allure open allure-report`
+        allure open allure-report
 
 .. Video Tutorials
 
@@ -245,9 +287,9 @@ Features
 
 
     * Rich Browser Support (Chrome, Headless Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
-    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_ , `Selenium <https://www.selenium.dev/>`_ , `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `Selenium <https://www.selenium.dev/>`_ and `nRoBo <https://pypi.org/project/nrobo/>`_
     * Wrapper classes for Webdriver, WebElement, and other selenium webdriver classes for saving a lot of typing. Thus, great readability of code. - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Ready to use framework loaded with power of By `PyTest <https://docs.pytest.org/>`_, `Selenium <https://www.selenium.dev/>`_ and other tools - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Ready to use framework loaded with power of `PyTest <https://docs.pytest.org/>`_, `Selenium <https://www.selenium.dev/>`_ and other tools. By `nRoBo <https://pypi.org/project/nrobo/>`_
     * Well structured inbuilt setup and tear down processes. Just focus on testing! Not on maintaining framework. - By `nRoBo <https://pypi.org/project/nrobo/>`_
     * Inbuilt support for distributed testing over Grid infrastructure - Inherited from `PyTest <https://docs.pytest.org/>`_
     * Inbuilt support for test parameterization - Inherited from `PyTest <https://docs.pytest.org/>`_

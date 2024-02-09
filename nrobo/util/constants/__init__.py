@@ -1,6 +1,11 @@
+"""
+Definitions of CONSTANTS.
+"""
+
+
 class CONST(object):
     """
-    Holds several constants
+    Collection of CONSTANTS
     """
     NEWLINE = "\n"
 

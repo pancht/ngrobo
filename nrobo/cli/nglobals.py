@@ -43,15 +43,5 @@ def raise_exception_if_browser_not_supported(browser_name):
         raise BrowserNotSupported(browser_name)
 
 
-class Environment:
-    """Environments"""
-
-    PRODUCTION = "Production"
-    DEVELOPMENT = "DEVELOPMENT"
 
 
-class EnvKeys:
-    """Keys in the Environment Variables"""
-    Environment = "Environment"
-    DirExecution = "Execution directory"
-    DirNrobo = "Nrobo Framework Root Folder"

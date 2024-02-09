@@ -18,7 +18,7 @@ from selenium.webdriver.remote.file_detector import FileDetector
 from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.select import Select
-
+from nrobo import *
 from nrobo.cli.tools import nprint
 from nrobo.cli import STYLE
 
@@ -31,6 +31,7 @@ from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
 from nrobo.cli.nglobals import *
 
+
 class WAITS:
     """Supported wait types in nrobo.
     These names are used as key in nrobo-config.yaml."""
@@ -42,9 +43,9 @@ class WAITS:
 
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
-    if os.environ[EnvKeys.Environment] == Environment.PRODUCTION:
-        return Common.read_yaml(f"{os.environ[EnvKeys.DirExecution]}{os.sep}nrobo-config.yaml")
-    elif os.environ[EnvKeys.Environment] == Environment.DEVELOPMENT:
+    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+        return Common.read_yaml(f"{os.environ[EnvKeys.EXEC_DIR]}{os.sep}nrobo-config.yaml")
+    elif os.environ[EnvKeys.ENVIRONMENT] == Environment.DEVELOPMENT:
         return Common.read_yaml(f"nrobo{os.sep}framework{os.sep}nrobo-config.yaml")
 
 
@@ -69,6 +70,7 @@ class WebdriverWrapperNrobo(WebDriver):
         self.logger = logger
         self.nconfig = read_nrobo_configs()
         self.nprint = nprint
+
     """
     Following are selenium webdriver wrapper methods and properties
     """
@@ -1055,7 +1057,6 @@ class AlertNrobo(ActionChainsNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-
 
     def accept_alert(self) -> None:
         """accept alert"""
