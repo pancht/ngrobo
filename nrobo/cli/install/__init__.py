@@ -14,11 +14,14 @@ from nrobo.util.filesystem import *
 from nrobo.util.process import *
 
 
-def install_nrobo(requirements_file: Optional[str] = None):
+def install_nrobo(requirements_file: Optional[str] = None) -> None:
     """
-    Install nrobo
+    This will install nrobo framework and its dependencies on host system in the current directory
+    from where nrobo command was executed in the Production environment.
 
-    :return:
+    This will only install nrobo dependencies if it is executed in the Developer environment.
+
+    :return: None
     """
 
     set_environment()
