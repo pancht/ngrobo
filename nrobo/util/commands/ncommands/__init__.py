@@ -1,7 +1,10 @@
+import os
+
+from nrobo import *
 from nrobo.exceptions import *
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
-from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
+from nrobo.util.platform import PLATFORMS
 from nrobo.util.process import terminal
 
 
@@ -31,7 +34,7 @@ def get_command(command):
     :return:
     """
     try:
-        return N_COMMANDS.COMMAND[__HOST_PLATFORM__][N_COMMANDS.CLEAR_SCREEN]
+        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][N_COMMANDS.CLEAR_SCREEN]
     except KeyError as ke:
         raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
 

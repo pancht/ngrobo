@@ -1,15 +1,16 @@
 import sys
 
+from nrobo.exceptions import BrowserNotSupported
+
 from rich.console import *
 from nrobo.cli.formatting import *
 
 from nrobo.cli import *
 console = Console(theme=themes)
 
-from nrobo.exceptions import BrowserNotSupported
-
 
 class Browsers:
+    """browser names constants"""
     CHROME = 'chrome'
     CHROME_HEADLESS = "chrome_headless"
     EDGE = 'edge'
@@ -20,8 +21,10 @@ class Browsers:
     OPERA = 'opera'
 
 
+# list holding supported browser in nRoBo framework
 supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI,
                       Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE, Browsers.IE]
+# # list holding browsers not supported in nRoBo framework
 supported_browsers_in_future = [Browsers.OPERA]
 
 

@@ -1,4 +1,7 @@
+import os
 import platform
+
+from nrobo import EnvKeys
 
 
 class PLATFORMS:
@@ -12,4 +15,4 @@ class PLATFORMS:
     WINDOWS = "Windows"
 
 
-__HOST_PLATFORM__ = platform.system()
+os.environ[EnvKeys.HOST_PLATFORM] = platform.system()

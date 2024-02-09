@@ -2,6 +2,7 @@ import os
 
 
 class NREPORT:
+    """nRoBo report related constants"""
     HTML = "html"
     ALLURE = "allure"
     REPORT_DIR = "results"
@@ -66,5 +67,6 @@ class nCLI:
 
 
 class PACKAGES:
+    """nRoBo packages"""
     NROBO = "nrobo"
     CLI = "cli"

@@ -72,6 +72,7 @@ class EnvKeys:
     USERNAME = "Username"
     PASSWORD = "Password"
     BROWSER = "Browser"
+    HOST_PLATFORM = "Host Platform"
 
 
 # load environment keys with defaults
@@ -85,6 +86,7 @@ os.environ[EnvKeys.URL] = ""
 os.environ[EnvKeys.USERNAME] = ""
 os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
+os.environ[EnvKeys.HOST_PLATFORM] = ""
 
 
 def greet_the_guest():

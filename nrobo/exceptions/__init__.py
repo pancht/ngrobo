@@ -1,4 +1,7 @@
-from nrobo.util.platform import __HOST_PLATFORM__
+"""
+This class holds definition of nRoBo specific exceptions.
+"""
+from nrobo import *
 
 
 class MissingCommandImplementation(Exception):
@@ -8,7 +11,7 @@ class MissingCommandImplementation(Exception):
 
     # constructor
     def __init__(self, command):
-        self.value = f'Command <{command}> for host platform <{__HOST_PLATFORM__}>'
+        self.value = f'Command <{command}> for host platform <{os.environ[EnvKeys.HOST_PLATFORM]}>'
 
     def __str__(self):
         return repr(self.value)

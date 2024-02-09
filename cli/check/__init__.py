@@ -1,7 +1,7 @@
 import os
 
 from nrobo.util.process import terminal
-from nrobo.util.platform import __HOST_PLATFORM__, PLATFORMS
+from nrobo.util.platform import PLATFORMS
 from nrobo import *
 
 def check():
@@ -12,8 +12,8 @@ def check():
     """
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "twine"])
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "twine"])
-    if __HOST_PLATFORM__ in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
+    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
         terminal(["twine", "check", "dist"+os.sep+"*"])
-    elif __HOST_PLATFORM__ in [PLATFORMS.WINDOWS]:
+    elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
         terminal(["twine", "check", "."+os.sep+"dist"+os.sep+"*.*"])
 
