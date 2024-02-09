@@ -168,3 +168,6 @@ results/
 # otheres
 .DS_Store
 .idea/
+
+test*.py
+*.jar
