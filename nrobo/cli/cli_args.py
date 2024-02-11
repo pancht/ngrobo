@@ -16,7 +16,7 @@ import os
 
 from nrobo import *
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
@@ -61,6 +61,8 @@ def parse_cli_args():
     parser.add_argument(f"--{nCLI.REPORT}",
                         help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
+    parser.add_argument(f"--{nCLI.TARGET_DIR}",
+                        help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser. Default is chrome.
     Options could be:
@@ -429,7 +431,7 @@ def parse_cli_args():
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
-            exit(1)
+            exit(0)
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -447,6 +449,7 @@ def parse_cli_args():
 
             if value:
                 """if key has value, then only proceed with current key"""
+
                 if type(value) is bool:
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
@@ -460,6 +463,8 @@ def parse_cli_args():
                         command.append(str(value))
                     else:
                         """simply add long keys to launcher command"""
+                        if key == nCLI.TARGET_DIR:
+                            continue  # DO NOT ADD TO PYTEST LAUNCHER
                         command.append(f"--{key}")
                         command.append(str(value))
                 elif key in nCLI.ARGS:
@@ -498,16 +503,18 @@ def parse_cli_args():
                             exit(1)
                         if str(value).lower() in NREPORT.HTML:
                             command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
                         elif str(value).lower() in NREPORT.ALLURE:
                             command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
                             command.append(f"--alluredir")
                             command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
                             # command.append(f"--allure-no-capture")
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
                     else:
+                        if key == nCLI.TARGET_DIR:
+                            continue  # DO NOT ADD TO PYTEST LAUNCHER
                         command.append(f"--{key}")
                         command.append(value)
 

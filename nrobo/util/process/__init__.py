@@ -37,14 +37,24 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
 
     try:
         if debug:
-            return subprocess.check_call(command)
+            try:
+                return subprocess.check_call(command)
+            except subprocess.CalledProcessError as e:
+                print(e)
+                return 1
         if (stdout and stderr) or debug is False:
-            return subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            try:
+                return subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+            except subprocess.CalledProcessError as e:
+                print(e)
+                return 2
         else:
-            return subprocess.check_call(command)
-    except subprocess.CalledProcessError as e:
-        print(f"Command failed with return code {e.returncode}")
+            try:
+                return subprocess.check_call(command)
+            except subprocess.CalledProcessError as e:
+                print(e)
+                return 3
     except FileNotFoundError as e:
         print(f"Command failed with FileNotFoundError!")
         print(e)
-        return 1
+        return 4

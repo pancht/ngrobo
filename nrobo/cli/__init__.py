@@ -29,7 +29,7 @@ def main():
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
         from nrobo.util.constants import CONST
-        from nrobo.cli.cli_constansts import NREPORT
+        from nrobo.cli.cli_constants import NREPORT
         from nrobo.util.python import verify_set_python_install_pip_command
 
         # refer to global defined in nrobo.util.process

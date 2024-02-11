@@ -23,20 +23,109 @@ class NROBO_PATHS:
     """nRoBo framework directories and files"""
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
-    BROWSER_CONFIS = Path("browserConfigs")
+    BROWSER_CONFIGS = Path("browserConfigs")
+
+    # Browsers packages
     BROWSERS = Path("browsers")
+    CHROME = Path("chrome")
+    BROWSERS_CHROME_PKG = BROWSERS / CHROME
+    EDGE = Path("edge")
+    BROWSERS_EDGE_PKG = BROWSERS / EDGE
+    FIREFOX = Path("firefox")
+    BROWSERS_FIREFOX_PKG = BROWSERS / FIREFOX
+    SAFARI = Path("safari")
+    BROWSERS_SAFARI_PKG = BROWSERS / SAFARI
+
+    # cli packages
     CLI = Path("cli")
+    CLI_PKG = CLI / INIT_PY
+    FORMATTING = Path("formatting")
+    FORMATTING_PKG = CLI / FORMATTING / INIT_PY
+    INSTALL = Path("install")
+    INSTALL_PKG = CLI / INSTALL / INIT_PY
+    REQUIREMENTS_TXT_FILE = CLI / INSTALL / Path("requirements.txt")
+    CLI_TOOLS = Path("tools")
+    CLI_TOOLS_PKG = CLI / CLI_TOOLS / INIT_PY
+    UPGRADE = Path("upgrade")
+    UPGRADE_PKG = CLI / UPGRADE / INIT_PY
+    CLI_ARGS_PY_FILE = CLI / Path("cli_args.py")
+    CLI_CONSTANTS_PY_FILE = CLI / Path("cli_constants.py")
+    CLI_VERSION_YAML_FILE = CLI / Path("cli_version.yaml")
+    NGLOBALS_PY_FILE = CLI / Path("nglobals.py")
+
     EXCEPTIONS = Path("exceptions")
+
+    # framework packages
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
+    FRAMEWORK_PAGES_PAGE_DEMO_PY_FILE = FRAMEWORK_PAGES / Path("PageDemo.py")
     TESTS = Path("tests")
+    FRAMEWORK_TESTS = FRAMEWORK / TESTS
+    GUI = FRAMEWORK_TESTS / Path("gui")
+    GUI_PKG = GUI / INIT_PY
+    GUI_GOOGLE_HOME_PAGE_TEST_PY_FILE = GUI / Path("google_home_page_test.py")
+    NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
+
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
+
     SELENESE = Path("selenese")
+
+    # nrobo.util packages
     UTIL = Path("util")
-    CONFTEST_PY = Path("conftest.py")
+    COMMANDS = Path("commands")
+    NCOMMANDS = Path("ncommands")
+    POSIX = Path("posix")
+    WINDOWS = Path("windows")
+    UTIL_NCOMMANDS_PKG = NROBO / UTIL / COMMANDS / NCOMMANDS / INIT_PY
+    UTIL_POSIX_PKG = NROBO / UTIL / COMMANDS / POSIX / INIT_PY
+    UTIL_WINDOWS_PKG = NROBO / UTIL / COMMANDS / WINDOWS / INIT_PY
+    UTIL_COMMON = Path("common")
+    UTIL_COMMON_PKG = NROBO / UTIL / UTIL_COMMON / INIT_PY
+    UTIL_CONSTANT = Path("constants")
+    UTIL_CONSTANT_PKG = NROBO / UTIL / UTIL_CONSTANT / INIT_PY
+    UTIL_FILESYSTEM = Path("filesystem")
+    UTIL_FILESYSTEM_PKG = NROBO / UTIL / UTIL_FILESYSTEM / INIT_PY
+    UTIL_PLATFORM = Path("platform")
+    UTIL_PLATFORM_PKG = NROBO / UTIL / UTIL_PLATFORM / INIT_PY
+    UTIL_PROCESS = Path("process")
+    UTIL_PROCESS_PKG = NROBO / UTIL / UTIL_PROCESS / INIT_PY
+    UTIL_PYTHON = Path("python")
+    UTIL_PYTHON_PKG = NROBO / UTIL / UTIL_PYTHON / INIT_PY
+
+    CONFTEST_PY = Path("../conftest.py")
+
+    NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_tests")
+    TESTS = Path("tests")
+
+    VERSIONS = Path("versions")
+    PROD_YAML = VERSIONS / Path("prod.yaml")
+    TEST_YAML = VERSIONS / Path("test.yaml")
+
+    NROBO_PY_FILE = Path("nrobo.py")
+    PACKAGE_PY_FILE = Path("package.py")
+    LICENSE_FILE = Path("LICENSE")
+    PY_PROJECT_TOML_FILE = Path("pyproject.toml")
+    README_RST_FILE = Path("README.rst")
+    VALIDATE_NROBO_PY_FILE = Path("validate_nrobo.py")
+
+
+class NROBO_CLI_TOOL_PATH:
+    """nRoBo CLI tool paths"""
+    CLI = Path("cli")
+    BUILD = CLI / Path("build")
+    CHECK = CLI / Path("check")
+    COMPILE = CLI / Path("compile")
+    DEVELOPMENT = CLI / Path("development")
+    PUBLISH = CLI / Path("publish")
+
+
+class NROBO_FRAMEWORK_TESTS:
+    """nrobo_framework_tests package"""
+    NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / NROBO_PATHS.CONFTEST_PY
+    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_nrobo_framework.py")
 
 
 class NROBO_CONST:

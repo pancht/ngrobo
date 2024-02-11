@@ -18,7 +18,7 @@ import shutil
 import sys
 
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.nglobals import *
 from nrobo.cli.cli_args import *
 from nrobo import *
@@ -92,8 +92,8 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
             copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
-            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIS,
-                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIS)
+            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
+                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
 
             print(f"Installation complete")
 

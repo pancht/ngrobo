@@ -19,7 +19,8 @@ class NREPORT:
     HTML = "html"
     ALLURE = "allure"
     REPORT_DIR = "results"
-    HTML_REPORT_PATH = REPORT_DIR + os.sep + "report.html"
+    HTML_REPORT_NAME = "report.html"
+    HTML_REPORT_PATH = REPORT_DIR + os.sep + HTML_REPORT_NAME
     LOG_DIR_DRIVER = "driver-logs"
     LOG_EXTENTION = ".log"
     LOG_DIR_TEST = "test-logs"
@@ -48,6 +49,7 @@ class nCLI:
     RERUNS_DELAY = "reruns-delay"
     REPORT = "report"
     TESTDIR = "testsdir"
+    TARGET_DIR = "target"
     BROWSER = "browser"
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
@@ -63,6 +65,7 @@ class nCLI:
         INSTANCES: INSTANCES,
         RERUNS: RERUNS,
         REPORT: REPORT,
+        TESTDIR: TESTDIR,
         TESTDIR: TESTDIR,
         BROWSER: BROWSER,
         BROWSER_CONFIG: BROWSER_CONFIG,
