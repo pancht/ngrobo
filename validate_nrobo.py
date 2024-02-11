@@ -1,4 +1,3 @@
-import os
 import subprocess
 from nrobo import set_environment, Environment, EnvKeys
 set_environment()
