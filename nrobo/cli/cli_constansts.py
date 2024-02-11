@@ -25,6 +25,7 @@ class NREPORT:
     LOG_DIR_TEST = "test-logs"
     SCREENSHOTS_DIR = "screenshots"
     ALLURE_REPORT_PATH = REPORT_DIR + os.sep + ALLURE
+    NROBO_FRAMEWORK_TESTS_DIR = "nrobo_framework_tests"
 
 
 class nCLI:
