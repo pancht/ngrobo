@@ -15,19 +15,8 @@ This module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 # install rich library
-import subprocess
-from nrobo.util.process import terminal
-terminal(["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-
 import os
 from pathlib import Path
-import re
-from rich.console import Console
-from nrobo.cli.formatting import themes as th, STYLE
-from nrobo.util.constants import CONST
-
-# rich console
-console = Console(theme=th)
 
 
 class NROBO_PATHS:
@@ -91,12 +80,13 @@ class EnvKeys:
     PASSWORD = "Password"
     BROWSER = "Browser"
     HOST_PLATFORM = "Host Platform"
+    DEBUG = "debug mode"
 
 
 # load environment keys with defaults
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
-os.environ[EnvKeys.EXEC_DIR] = CONST.EMPTY
-os.environ[EnvKeys.NROBO_DIR] = CONST.EMPTY
+os.environ[EnvKeys.EXEC_DIR] = ""
+os.environ[EnvKeys.NROBO_DIR] = ""
 os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
 os.environ[EnvKeys.PYTHON] = "python"
 os.environ[EnvKeys.APP] = "nRoBo"
@@ -105,6 +95,21 @@ os.environ[EnvKeys.USERNAME] = ""
 os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
+os.environ[EnvKeys.DEBUG] = "False"
+
+import subprocess
+from nrobo.util.process import terminal
+
+terminal(["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+from pathlib import Path
+import re
+from rich.console import Console
+from nrobo.cli.formatting import themes as th, STYLE
+from nrobo.util.constants import CONST
+
+# rich console
+console = Console(theme=th)
 
 
 def greet_the_guest():
@@ -130,6 +135,3 @@ def set_environment() -> None:
     nrobo_loader_file_path = os.path.dirname(os.path.realpath(__file__))
     # grab nrobo installation path
     os.environ[EnvKeys.NROBO_DIR] = re.findall(f"(.*{NROBO_CONST.NROBO})", str(nrobo_loader_file_path))[0]
-
-
-

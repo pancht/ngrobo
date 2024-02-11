@@ -13,7 +13,10 @@ def check(debug=False):
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "twine"])
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "twine"])
     if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-        terminal(["twine", "check", "dist"+os.sep+"*"])
+        if debug:
+            terminal(["twine", "check", "dist" + os.sep + "*"])
+        else:
+            terminal(["twine", "check", "dist"+os.sep+"*"])
     elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
         terminal(["twine", "check", "."+os.sep+"dist"+os.sep+"*.*"])
 

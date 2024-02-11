@@ -1,3 +1,5 @@
+import os
+
 from cli.build import build
 from cli.check import check
 from cli.publish import publish
@@ -18,7 +20,7 @@ def nrobo_cli():
 
     parser = argparse.ArgumentParser(
         prog="nrobo",
-        description='norobo package and upload utility')
+        description='nRoBo package and upload utility')
     parser.add_argument("-b", "--build", help="Build package", action="store_true")
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
@@ -28,23 +30,26 @@ def nrobo_cli():
 
     args = parser.parse_args()
 
+    from nrobo import EnvKeys
+    os.environ[EnvKeys.DEBUG] = str(args.debug)
+
     if args.build:
         if args.target:
-            build(args.target, args.debug)
+            build(args.target)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
     elif args.check:
-        check(args.debug)
+        check()
     elif args.publish:
         if args.target:
-            publish(args.target, args.debug)
+            publish(args.target)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
     elif args.env:
 
-        set_switch_environment(args.env, args.debug)
+        set_switch_environment(args.env)
 
     else:
         print("Invalid argument or missing arguments!")
