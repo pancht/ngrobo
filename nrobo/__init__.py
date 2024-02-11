@@ -95,7 +95,7 @@ class NROBO_PATHS:
     UTIL_PYTHON = Path("python")
     UTIL_PYTHON_PKG = NROBO / UTIL / UTIL_PYTHON / INIT_PY
 
-    CONFTEST_PY = Path("../conftest.py")
+    CONFTEST_PY = Path("conftest.py")
 
     NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_tests")
     TESTS = Path("tests")
