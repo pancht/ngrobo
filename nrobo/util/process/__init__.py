@@ -36,6 +36,8 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
             debug = True
 
     try:
+        if debug:
+            return subprocess.check_call(command)
         if (stdout and stderr) or debug is False:
             return subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
         else:
