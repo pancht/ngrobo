@@ -4,7 +4,7 @@ from nrobo.util.common import Common
 from nrobo import *
 
 
-def set_switch_environment(env: str):
+def set_switch_environment(env: str, debug=False):
     """sets the environment"""
 
     # test environment

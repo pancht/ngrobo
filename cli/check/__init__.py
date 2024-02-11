@@ -4,7 +4,7 @@ from nrobo.util.process import terminal
 from nrobo.util.platform import PLATFORMS
 from nrobo import *
 
-def check():
+def check(debug=False):
     """
     Check package before upload
 
