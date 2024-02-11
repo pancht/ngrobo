@@ -531,20 +531,46 @@ def parse_cli_args():
     for k, v in nCLI.DEFAULT_ARGS.items():
         command = command + v
 
-    with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
+    with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
+
         if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
             console.print(f"[{STYLE.INFO}]{command}")
-        terminal(command)
 
-        if args.report and args.report == NREPORT.ALLURE:
-            terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
+        if args.report and args.report == NREPORT.ALLURE:  # test if needed allure report
+            create_allure_report(command)
+        else:
+            create_simple_html_report(command)
 
-    with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
-        if len(command_builder_notes) == 1:
-            console.print(f"[{STYLE.HLOrange}]Note:")
-        elif len(command_builder_notes) >= 2:
-            console.print(f"[{STYLE.HLOrange}]Notes:")
+        print_notes(command_builder_notes)
 
-        if command_builder_notes:
-            for note in command_builder_notes:
-                console.print(note)
+
+def create_allure_report(command: list) -> int:
+    """prepares allure report based on pytest launcher <command>"""
+    allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
+    terminal(command + ['--alluredir', allure_results])
+
+    allure_generated_report = allure_results.parent / "allure-report"
+    console.print(f"[{STYLE.HLGreen}]Preparing allure report")
+
+    terminal([NREPORT.ALLURE, f"generate", "--name", "nRoBo TEST REPORT", "-o", allure_generated_report, "--clean", allure_results], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+    terminal([NREPORT.ALLURE, f"serve", allure_results], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+
+
+def create_simple_html_report(command: list) -> int:
+    """prepares simple html report based on pytest launcher command"""
+    console.print(f"[{STYLE.HLGreen}]Preparing html report")
+    return terminal(command)
+
+
+def print_notes(notes: list):
+    """print notes"""
+
+    if len(notes) == 1:
+        console.print(f":warning:[{STYLE.HLOrange}] Note:")
+    elif len(notes) >= 2:
+        console.print(f":warning:[{STYLE.HLOrange}] Notes:")
+
+    if notes:
+        for note in notes:
+            console.print(note)

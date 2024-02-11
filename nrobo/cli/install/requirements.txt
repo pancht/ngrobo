@@ -54,3 +54,7 @@ pytest-rerunfailures==13.0
 # Allure reports
 # Doc: https://docs.qameta.io/allure-report/
 allure-pytest==2.13.2
+
+# (Beautiful) replacement for the 'http.server' Python3 module. Allows file upload, preview and much more.
+# https://pypi.org/project/beautify-http-server/
+# beautify-http-server==0.0.1

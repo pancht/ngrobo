@@ -38,33 +38,39 @@ from nrobo.util.constants import CONST
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constansts import NREPORT
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER):
+    from nrobo import EnvKeys
+    _log_driver_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
+
+    if not _log_driver_file.exists():
         """ensure driver logs dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER)
+            os.makedirs(_log_driver_file)
         except FileExistsError as e:
-            pass  # Do nothing
+            pass
 
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST):
+    _test_logs_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
+    if not _test_logs_dir.exists():
         """ensure test logs dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST)
+            os.makedirs(_test_logs_dir)
         except FileExistsError as e:
-            pass  # do nothing
+            pass
 
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR):
-        """ensure test logs dir"""
+    _screenshot_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
+    if not _screenshot_dir.exists():
+        """ensure screenshots dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR)
+            os.makedirs(_screenshot_dir)
         except FileExistsError as e:
-            pass  # do nothing
+            pass
 
-    if not os.path.exists(NREPORT.ALLURE_REPORT_PATH):
+    _allure_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.ALLURE_REPORT_PATH
+    if not _allure_dir.exists():
+        """ensure allure dir"""
         try:
-            os.makedirs(NREPORT.ALLURE_REPORT_PATH)
+            os.makedirs(_allure_dir)
         except FileExistsError as e:
-            pass  # do nothing
-
+            pass
 
 def read_browser_config_options(_config_path):
     """
@@ -416,6 +422,7 @@ def pytest_runtest_makereport(item, call):
         # update the report.extras
         report.extras = extras
 
+
 def pytest_configure(config):
     """
     Description
@@ -427,6 +434,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "ui: mark as ui test")
     config.addinivalue_line("markers", "api: mark as api tests")
     config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
+
 
 def pytest_metadata(metadata):
     """
