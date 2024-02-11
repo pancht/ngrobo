@@ -9,4 +9,4 @@ def pytest_runtest_makereport(item, call):
     test_fn = item.obj
     docstring = getattr(test_fn, '__doc__')
     if docstring:
-        report.nodeid = docstring
+        report.nodeid = docstring  # replace __doc__ string with nodeid
