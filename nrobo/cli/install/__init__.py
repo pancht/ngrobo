@@ -35,11 +35,9 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
     :return: None
     """
-    from nrobo.cli.upgrade import confirm_update
-    confirm_update()
+    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
     # Inline imports to handle circular import exception while importing partially initialized module
-    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
     # if conftest file found on production system, meaning nrobo is already installed there

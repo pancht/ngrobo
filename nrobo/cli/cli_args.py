@@ -65,6 +65,8 @@ def parse_cli_args():
                         help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
     parser.add_argument(f"--{nCLI.VERSION}",
                         help="Shows nRoBo version", action="store_true")
+    parser.add_argument(f"--{nCLI.SUPPRESS}",
+                        help="Suppresses upgrade prompt on each test run", action="store_true", default=False)
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser. Default is chrome.
     Options could be:
@@ -441,6 +443,9 @@ def parse_cli_args():
         from nrobo.cli.upgrade import confirm_update
         confirm_update()
         exit(0)
+    if args.suppress:
+        # suppress upgrade prompt
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -462,6 +467,9 @@ def parse_cli_args():
                 if type(value) is bool:
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
+                    if key == args.suppress:
+                        continue
+
                     command.append(f"--{key}")
                     continue
                 elif key not in nCLI.ARGS.keys():

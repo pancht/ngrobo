@@ -173,6 +173,7 @@ class EnvKeys:
     BROWSER = "Browser"
     HOST_PLATFORM = "Host Platform"
     DEBUG = "debug mode"
+    SUPPRESS_PROMPT = "suppress prompt"
 
 
 # load environment keys with defaults
@@ -188,6 +189,7 @@ os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
+os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
 
 import subprocess
 from nrobo.util.process import terminal

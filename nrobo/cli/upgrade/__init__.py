@@ -39,10 +39,7 @@ def get_pypi_index(package) -> None | str:
 def update_available() -> bool:
     """Returns version if package is available on pypi
         else returns None otherwise."""
-    try:
-        return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
-    except Exception as e:
-        return False
+    return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
 
 
 def confirm_update() -> None:
@@ -55,12 +52,13 @@ def confirm_update() -> None:
         from nrobo import console
         from rich.prompt import Prompt
         reply = Prompt.ask(f"An updated version ({_pypi_version}) is available for nrobo. Do you want to upgrade? "
-                           f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)")
+                           f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
+                           f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if reply.strip().lower() in ["yes", "y"]:
             from nrobo import terminal
             with console.status("Updating nRoBo"):
                 console.print("Update started")
-                return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'])
+                return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'],debug=True)
                 if return_code == 0:
                     console.print("Update completed successfully.")
                 else:
@@ -68,5 +66,3 @@ def confirm_update() -> None:
 
         else:
             pass
-
-
