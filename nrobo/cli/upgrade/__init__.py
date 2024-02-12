@@ -1,3 +1,16 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+
 from nrobo import NROBO_CONST
 
 
@@ -11,9 +24,6 @@ def get_pypi_index(package) -> None | str:
     """Get version of <package> from pypi and returns if package is found.
         return None otherwise."""
 
-    # search
-    # index
-    # --require-virtualenv
     import subprocess
     result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
 
@@ -40,7 +50,7 @@ def confirm_update() -> None:
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
     from nrobo import STYLE
-    if not update_available():
+    if update_available():
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console
         from rich.prompt import Prompt
@@ -60,5 +70,3 @@ def confirm_update() -> None:
             pass
 
 
-if __name__ == '__main__':
-    confirm_update()
