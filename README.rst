@@ -112,7 +112,7 @@ Installation
 
 .. code-block:: bash
 
-    pip install nrobo
+    pip install nrobo --require-virtualenv
 
 5. Install & run framework in single command
 

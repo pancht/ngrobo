@@ -50,6 +50,7 @@ class nCLI:
     REPORT = "report"
     TESTDIR = "testsdir"
     TARGET = "target"
+    VERSION = "VERSION"
     BROWSER = "browser"
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
@@ -67,6 +68,7 @@ class nCLI:
         REPORT: REPORT,
         TESTDIR: TESTDIR,
         TARGET: TARGET,
+        VERSION: VERSION,
         BROWSER: BROWSER,
         BROWSER_CONFIG: BROWSER_CONFIG,
         KEY: KEY,

@@ -14,6 +14,9 @@ This module loads nRoBo globals.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
+__version__ = '2024.5.1'
+
 # install rich library
 import os
 from pathlib import Path

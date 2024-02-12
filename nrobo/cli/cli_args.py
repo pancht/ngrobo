@@ -63,6 +63,8 @@ def parse_cli_args():
                         default="html")
     parser.add_argument(f"--{nCLI.TARGET}",
                         help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
+    parser.add_argument(f"--{nCLI.VERSION}",
+                        help="Shows nRoBo version", action="store_true")
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser. Default is chrome.
     Options could be:
@@ -432,6 +434,13 @@ def parse_cli_args():
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
             exit(0)
+    if args.VERSION:
+        # show version
+        from nrobo import __version__
+        console.print(f"nrobo {__version__}")
+        from nrobo.cli.upgrade import confirm_update
+        confirm_update()
+        exit(0)
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
