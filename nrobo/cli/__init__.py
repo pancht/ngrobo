@@ -32,9 +32,6 @@ def main():
         from nrobo.cli.cli_constants import NREPORT
         from nrobo.util.python import verify_set_python_install_pip_command
 
-        # refer to global defined in nrobo.util.process
-        __APP_NAME__ = CONST.EMPTY
-
         # clear screen
         clear_screen()
 
@@ -58,6 +55,5 @@ def main():
 
     except KeyboardInterrupt as e:
         print(e)
-        return 0
 
     return 0
