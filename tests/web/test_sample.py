@@ -10,6 +10,7 @@ class TestWebSamples():
     @pytest.mark.regression
     #@pytest.mark.skip
     def test_sample_1(self, driver, logger):
+        """Verify simple test - 1"""
         # driver = webdriver.Chrome()
 
         logger.info("Open url")
@@ -32,6 +33,7 @@ class TestWebSamples():
     @pytest.mark.sanity
     #@pytest.mark.skip
     def test_sample_2(self, driver, logger):
+        """Verify simple test - 2"""
         # driver = webdriver.Chrome()
 
         logger.info("Open url")
@@ -59,6 +61,7 @@ class TestWebSamples():
     @pytest.mark.sanity
     #@pytest.mark.skip
     def test_sample_3(self, driver, logger):
+        """Verify simple test - 3"""
         # driver = webdriver.Chrome()
 
         logger.info("Open url")
