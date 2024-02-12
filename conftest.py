@@ -6,6 +6,10 @@ OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
 TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 import logging
 import os
@@ -22,10 +26,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-import nrobo.cli.cli_constansts
+import nrobo.cli.cli_constants
 from nrobo.cli.nglobals import *
 from nrobo.util.common import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 import os.path as path
 
 from nrobo.util.constants import CONST
@@ -33,34 +37,40 @@ from nrobo.util.constants import CONST
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
-    from nrobo.cli.cli_constansts import NREPORT
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER):
+    from nrobo.cli.cli_constants import NREPORT
+    from nrobo import EnvKeys
+    _log_driver_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
+
+    if not _log_driver_file.exists():
         """ensure driver logs dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_DRIVER)
+            os.makedirs(_log_driver_file)
         except FileExistsError as e:
-            pass  # Do nothing
+            pass
 
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST):
+    _test_logs_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
+    if not _test_logs_dir.exists():
         """ensure test logs dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.LOG_DIR_TEST)
+            os.makedirs(_test_logs_dir)
         except FileExistsError as e:
-            pass  # do nothing
+            pass
 
-    if not os.path.exists(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR):
-        """ensure test logs dir"""
+    _screenshot_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
+    if not _screenshot_dir.exists():
+        """ensure screenshots dir"""
         try:
-            os.makedirs(NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR)
+            os.makedirs(_screenshot_dir)
         except FileExistsError as e:
-            pass  # do nothing
+            pass
 
-    if not os.path.exists(NREPORT.ALLURE_REPORT_PATH):
+    _allure_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.ALLURE_REPORT_PATH
+    if not _allure_dir.exists():
+        """ensure allure dir"""
         try:
-            os.makedirs(NREPORT.ALLURE_REPORT_PATH)
+            os.makedirs(_allure_dir)
         except FileExistsError as e:
-            pass  # do nothing
-
+            pass
 
 def read_browser_config_options(_config_path):
     """
@@ -177,7 +187,7 @@ def driver(request):
     # Set driver log name
     # current test function name
     test_method_name = request.node.name
-    from nrobo.cli.cli_constansts import NREPORT
+    from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
     _driver_log_path = NREPORT.REPORT_DIR + os.sep + \
                        NREPORT.LOG_DIR_DRIVER + os.sep + \
@@ -334,7 +344,7 @@ def logger(request):
     Instantiate logger instance for each test
     """
     test_method_name = request.node.name
-    from nrobo.cli.cli_constansts import NREPORT
+    from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
 
     # Setup logger for tests
@@ -368,6 +378,12 @@ def pytest_runtest_makereport(item, call):
     """
     outcome = yield
     report = outcome.get_result()
+
+    test_fn = item.obj
+    docstring = getattr(test_fn, '__doc__')
+    if docstring:
+        report.nodeid = docstring  # replace __doc__ string with nodeid
+
     extras = getattr(report, 'extras', [])
     if report.when == 'call':
         xfail = hasattr(report, 'wasxfail')
@@ -412,6 +428,7 @@ def pytest_runtest_makereport(item, call):
         # update the report.extras
         report.extras = extras
 
+
 def pytest_configure(config):
     """
     Description
@@ -423,6 +440,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "ui: mark as ui test")
     config.addinivalue_line("markers", "api: mark as api tests")
     config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
+
 
 def pytest_metadata(metadata):
     """

@@ -7,7 +7,10 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
+
 import functools
 import os
 import time
@@ -54,12 +57,8 @@ class WAITS:
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
     if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
-        # print(f"Production selected=>path=>{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE}")
-        # exit()
         return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
     elif os.environ[EnvKeys.ENVIRONMENT] == Environment.DEVELOPMENT:
-        # print(f"Development selected=>path=>{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE}")
-        # exit()
         return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE)
 
 

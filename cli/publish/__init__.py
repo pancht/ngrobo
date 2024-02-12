@@ -10,7 +10,7 @@ from nrobo.util.constants import CONST
 global __CUR_ENV__
 
 
-def publish(target):
+def publish(target, debug=False):
     """
     Check and publish package
 

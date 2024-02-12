@@ -7,6 +7,8 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 
 import os
@@ -16,7 +18,7 @@ from nrobo.exceptions import *
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
 from nrobo.util.platform import PLATFORMS
-from nrobo.util.process import terminal
+from nrobo.util.process import terminal, terminal_nogui
 
 
 class N_COMMANDS:

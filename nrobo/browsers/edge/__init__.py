@@ -10,4 +10,8 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 Edge cli
 
 Development: Not Started
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """

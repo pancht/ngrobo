@@ -1,3 +1,8 @@
+"""
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+
 import logging
 
 from selenium.webdriver.common.by import By

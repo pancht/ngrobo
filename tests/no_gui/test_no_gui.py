@@ -2,8 +2,8 @@ import pytest
 
 
 class TestNoGUI():
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def f2(self):
         raise ExceptionGroup(
             "Group message",
@@ -12,8 +12,8 @@ class TestNoGUI():
             ],
         )
 
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def test_exception_in_group(self):
         with pytest.raises(ExceptionGroup) as excinfo:
             self.f2()
@@ -23,8 +23,8 @@ class TestNoGUI():
     def f(self):
         raise SystemExit(1)
 
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def test_mytest(self):
         with pytest.raises(SystemExit):
             self.f()

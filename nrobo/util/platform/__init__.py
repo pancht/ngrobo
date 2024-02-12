@@ -7,6 +7,8 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 import os
 import platform

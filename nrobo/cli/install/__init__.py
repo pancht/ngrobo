@@ -8,13 +8,17 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
 Installer for installing nrobo framework at host system.
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 import os
 import shutil
 import sys
 
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.nglobals import *
 from nrobo.cli.cli_args import *
 from nrobo import *

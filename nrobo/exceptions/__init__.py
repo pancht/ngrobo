@@ -9,6 +9,9 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 
 This class holds definition of nRoBo specific exceptions.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 from nrobo import *
 

@@ -1,3 +1,5 @@
+import os
+
 from cli.build import build
 from cli.check import check
 from cli.publish import publish
@@ -18,14 +20,18 @@ def nrobo_cli():
 
     parser = argparse.ArgumentParser(
         prog="nrobo",
-        description='norobo package and upload utility')
+        description='nRoBo package and upload utility')
     parser.add_argument("-b", "--build", help="Build package", action="store_true")
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
     parser.add_argument("-e", "--env", help="Set/switch environment between production and development. Options: test | prod")
+    parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
 
     args = parser.parse_args()
+
+    from nrobo import EnvKeys
+    os.environ[EnvKeys.DEBUG] = str(args.debug)
 
     if args.build:
         if args.target:
