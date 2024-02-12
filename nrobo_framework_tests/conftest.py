@@ -9,3 +9,7 @@ def pytest_runtest_makereport(item, call):
     docstring = getattr(test_fn, '__doc__')
     if docstring:
         report.nodeid = docstring  # replace __doc__ string with nodeid
+
+
+
+
