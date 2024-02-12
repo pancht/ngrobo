@@ -10,7 +10,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-
+__version__ = '2024.5.1'
 from nrobo import NROBO_CONST
 
 

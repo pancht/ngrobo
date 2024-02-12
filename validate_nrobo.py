@@ -15,7 +15,7 @@ def run_unit_tests(debug=False) -> int:
     unit_tests_dir = 'nrobo_framework_tests'
     conftest_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / unit_tests_dir
     return terminal(
-        ['pytest', unit_tests_dir, '--confcutdir', str(conftest_dir), '--html', target, f"--{nCLI.SUPPRESS}"], debug=debug)
+        ['pytest', unit_tests_dir, '--confcutdir', str(conftest_dir), '--html', target], debug=debug)
 
 
 if __name__ == '__main__':
