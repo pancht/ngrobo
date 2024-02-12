@@ -18,7 +18,7 @@ import shutil
 import sys
 
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.nglobals import *
 from nrobo.cli.cli_args import *
 from nrobo import *

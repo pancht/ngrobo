@@ -26,10 +26,10 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from webdriver_manager.chrome import ChromeDriverManager
 
-import nrobo.cli.cli_constansts
+import nrobo.cli.cli_constants
 from nrobo.cli.nglobals import *
 from nrobo.util.common import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 import os.path as path
 
 from nrobo.util.constants import CONST
@@ -37,7 +37,7 @@ from nrobo.util.constants import CONST
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
-    from nrobo.cli.cli_constansts import NREPORT
+    from nrobo.cli.cli_constants import NREPORT
     from nrobo import EnvKeys
     _log_driver_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
 
@@ -187,7 +187,7 @@ def driver(request):
     # Set driver log name
     # current test function name
     test_method_name = request.node.name
-    from nrobo.cli.cli_constansts import NREPORT
+    from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
     _driver_log_path = NREPORT.REPORT_DIR + os.sep + \
                        NREPORT.LOG_DIR_DRIVER + os.sep + \
@@ -344,7 +344,7 @@ def logger(request):
     Instantiate logger instance for each test
     """
     test_method_name = request.node.name
-    from nrobo.cli.cli_constansts import NREPORT
+    from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
 
     # Setup logger for tests

@@ -16,7 +16,7 @@ import os
 
 from nrobo import *
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
