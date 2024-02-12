@@ -14,6 +14,9 @@ This module loads nRoBo globals.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
+__version__ = '2024.5.1'
+
 # install rich library
 import os
 from pathlib import Path
@@ -125,7 +128,7 @@ class NROBO_CLI_TOOL_PATH:
 class NROBO_FRAMEWORK_TESTS:
     """nrobo_framework_tests package"""
     NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / NROBO_PATHS.CONFTEST_PY
-    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_nrobo_framework.py")
+    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_package_presence.py")
 
 
 class NROBO_CONST:
@@ -170,6 +173,7 @@ class EnvKeys:
     BROWSER = "Browser"
     HOST_PLATFORM = "Host Platform"
     DEBUG = "debug mode"
+    SUPPRESS_PROMPT = "suppress prompt"
 
 
 # load environment keys with defaults
@@ -185,6 +189,7 @@ os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
+os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
 
 import subprocess
 from nrobo.util.process import terminal

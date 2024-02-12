@@ -10,7 +10,7 @@ from nrobo import set_environment, EnvKeys, NROBO_CONST, NROBO_PATHS, NROBO_CLI_
 from nrobo.cli.cli_constants import NREPORT
 
 
-class TestNRoboFramework():
+class TestNRoboFrameworkPaths():
     """nRobo tests"""
 
     def test_cli_package_is_present(self):
@@ -482,7 +482,7 @@ class TestNRoboFramework():
         assert nrobo_framework_tests_conftest_py_file_path.exists() == True
 
     def test_test_nrobo_framework_py_file_is_present(self):
-        """Validate that nrobo_framework_tests.test_nrobo_framework.py file is present"""
+        """Validate that nrobo_framework_tests.test_package_presence.py file is present"""
         set_environment()
 
         test_nrobo_framework_py_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.TEST_NROBO_FRAMEWORK_PY_FILE
