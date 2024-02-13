@@ -80,7 +80,27 @@ def write_new_version_to_pyproject_toml_file(new_version):
     Common.write_text_to_file(PYPROJECT_TOML_FILE, file_content)
 
 
-def update_toml_version(target) -> int:
+def write_new_version_to_nrobo_init_py_file(new_version):
+    nrobo_init_py_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.INIT_PY
+
+    # Read file content as string
+    file_content = str(Common.read_file_as_string(nrobo_init_py_file))
+
+    # pattern for finding version setting
+    PATTERN_PREFIX = "__version__ = "
+    PATTERN_REGULAR_EXPRESSION = PATTERN_PREFIX + r"('[\d.]+')"
+
+    # Replacement text
+    REPLACEMENT_TEXT = PATTERN_PREFIX + "\'" + new_version + "\'"
+
+    # Update version number in README file
+    file_content = re.sub(PATTERN_REGULAR_EXPRESSION, REPLACEMENT_TEXT, file_content, count=1)
+
+    # Write file_content
+    Common.write_text_to_file(nrobo_init_py_file, file_content)
+
+
+def update_version_pyproject_toml_nrobo_init_py_file(target) -> int:
     """
     Update version in pyproject.toml
 
@@ -101,8 +121,9 @@ def update_toml_version(target) -> int:
     # Increment version
     version = get_incremented_version(version)
 
-    # update version in versions file
+    # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
+    write_new_version_to_nrobo_init_py_file(version)
 
     # update version in pyproject.toml file
     write_new_version_to_pyproject_toml_file(version)
@@ -143,7 +164,7 @@ def build(target='test', debug=False) -> int:
 
     with console.status(f"[{STYLE.TASK}]Update version in pyproject.toml\n"):
         # update toml version
-        if update_toml_version(target) > 0: return 1  # some error
+        if update_version_pyproject_toml_nrobo_init_py_file(target) > 0: return 1  # some error
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Copy conftest.py file under nrobo directory for shipping\n"):
