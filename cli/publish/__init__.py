@@ -51,7 +51,6 @@ def publish(target, debug=False):
             console.print(f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully.")
 
 
-
 def errors_in_console(pattern: str, string: str) -> bool:
     """return True if pattern is found in string else false."""
     import re

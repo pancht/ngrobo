@@ -41,21 +41,20 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
                 return subprocess.run(command, text=text, capture_output=capture_output)
             except subprocess.CalledProcessError as e:
                 print(f"Command failed with return code {e.returncode}: \n{e}")
-                exit()
                 return e.returncode
 
         if debug:
             try:
                 subprocess.check_call(command)
             except subprocess.CalledProcessError as e:
-                if not e.returncode == 1:
+                if e.returncode == 1:
                     print(f"Command failed with return code {e.returncode}: \n{e}")
                 return e.returncode
         if (stdout and stderr) or debug is False:
             try:
                 subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
             except subprocess.CalledProcessError as e:
-                if not e.returncode == 1:
+                if e.returncode == 1:
                     print(f"Command failed with return code {e.returncode}: \n{e}")
                 return e.returncode
         else:
