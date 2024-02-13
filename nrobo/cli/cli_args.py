@@ -571,7 +571,7 @@ def parse_cli_args():
 def create_allure_report(command: list) -> int:
     """prepares allure report based on pytest launcher <command>"""
     allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
-    terminal(command + ['--alluredir', allure_results])
+    terminal(command + ['--alluredir', allure_results], debug=True)
 
     allure_generated_report = allure_results.parent / "allure-report"
     console.print(f"[{STYLE.HLGreen}]Preparing allure report")
@@ -585,7 +585,7 @@ def create_allure_report(command: list) -> int:
 def create_simple_html_report(command: list) -> int:
     """prepares simple html report based on pytest launcher command"""
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
-    return_code = terminal(command)
+    return_code = terminal(command, debug=True)
     console.rule(f"[{STYLE.HLOrange}]Report is ready at: {Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
     return return_code
 
