@@ -53,11 +53,34 @@ def get_incremented_version(version):
         return CONST.DOT.join(res)
 
 
+def get_decremented_version(version):
+    """
+    Decrement version by 1
+
+    :param version:
+    :return:
+    """
+    # regular expression to verify version
+    # major.minor.nightly-build
+    regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')
+
+    if regx.match(version) is None:
+        print("Version file corrupted! Correct it, please!")
+        exit(1)
+    else:
+        # increment version
+        res = re.findall(r'[\d]+', version)
+        res[2] = str(int(res[2]) - 1)
+
+        return CONST.DOT.join(res)
+
+
 def write_new_version_in_test_version_file(new_version: str):
-    version_file = __VERSIONS_DIR__ + __CUR_ENV__ + ".yaml"
-    content = Common.read_yaml(version_file)
-    content['version'] = '' + new_version + ''
-    Common.write_yaml(version_file, content)
+    for _env in ['test', 'prod']:
+        version_file = __VERSIONS_DIR__ + _env + ".yaml"
+        content = Common.read_yaml(version_file)
+        content['version'] = '' + new_version + ''
+        Common.write_yaml(version_file, content)
 
 
 def write_new_version_to_pyproject_toml_file(new_version):
@@ -100,7 +123,7 @@ def write_new_version_to_nrobo_init_py_file(new_version):
     Common.write_text_to_file(nrobo_init_py_file, file_content)
 
 
-def update_version_pyproject_toml_nrobo_init_py_file(target) -> int:
+def update_version_pyproject_toml_file(target) -> int:
     """
     Update version in pyproject.toml
 
@@ -130,6 +153,51 @@ def update_version_pyproject_toml_nrobo_init_py_file(target) -> int:
     return 0
 
 
+def execute_unittests(debug=False):
+    return_code = 1
+
+    return_code = validate_nrobo.run_unit_tests()
+    if not return_code == NROBO_CONST.SUCCESS:
+        from cli import set_switch_environment
+        console.print(
+            f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building packages.")
+        set_switch_environment('test', debug)
+        console.print(
+            f"[{STYLE.HLRed}]Build process failed!!!")
+        exit(1)
+
+
+def copy_conftest_file():
+    import shutil
+    try:
+        shutil.copyfile(
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE}",
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
+    except Exception as e:
+        raise e
+
+
+def delete_dist_folder():
+    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
+        try:
+            remove_files_recursively(__DIST_DIR__)
+        except Exception as e:
+            print(e)
+    elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+        terminal(["del", "/q", "/S", __DIST_DIR__ + os.sep + "*.*"])
+
+
+def run_build_command():
+    terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "build"])
+    terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "build"])
+    terminal([os.environ[EnvKeys.PYTHON], "-m", "build"])
+
+
+def delete_conftest_after_build():
+    conftest = f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}"
+    terminal(["rm", "-f", conftest])
+
+
 def build(target='test', debug=False) -> int:
     """
     Bundle package for <target> environment.
@@ -137,27 +205,21 @@ def build(target='test', debug=False) -> int:
     :param target: Either be 'test' | 'prod'
     :return: 0 if packing succeeds else 1
     """
+    # Always correct version in version yaml files first
+    from nrobo.cli.upgrade import get_pypi_index
+    write_new_version_in_test_version_file(get_pypi_index(NROBO_CONST.NROBO))
+    write_new_version_to_nrobo_init_py_file(get_pypi_index(NROBO_CONST.NROBO))
 
     # run_nrobo_validator_tests
     console.rule(f"[{STYLE.HLOrange}]Packaging nRoBo...")
     with console.status(f"[{STYLE.TASK}]Validating framework\n"):
-
         # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
         from cli import set_switch_environment
         set_switch_environment('prod', debug)
 
         console.rule(f"[{STYLE.HLOrange}]Running unit tests")
-
-        return_code = 1
-
-        return_code = validate_nrobo.run_unit_tests()
-        if not return_code == NROBO_CONST.SUCCESS:
-            console.print(
-                f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building packages.")
-            set_switch_environment('test', debug)
-            console.print(
-                f"[{STYLE.HLRed}]Build process failed!!!")
-            exit(1)
+        # run unit tests
+        execute_unittests(debug)
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
         # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
@@ -166,48 +228,40 @@ def build(target='test', debug=False) -> int:
 
     with console.status(f"[{STYLE.TASK}]Update version in pyproject.toml\n"):
         # update toml version
-        if update_version_pyproject_toml_nrobo_init_py_file(target) > 0: return 1  # some error
+        if update_version_pyproject_toml_file(target) > 0: return 1  # some error
+        console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
+
+    with console.status(f"[{STYLE.TASK}]Update version in nrobo/__init__.py\n"):
+        # update toml version
+        write_new_version_to_nrobo_init_py_file(get_version_from_yaml_version_files('prod'))
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Copy conftest.py file under nrobo directory for shipping\n"):
         # copy conftest.py to nrobo directory for shipping
         # Find the directory we executed the script from:
-        execution_dir = os.getcwd()
-        # Find the directory in which the current script resides:
-        file_dir = os.path.dirname(os.path.realpath(__file__))
-        import re
-        path_nrobo = re.findall(r"(.*nrobo)", str(file_dir))
-        import shutil
-        try:
-            shutil.copyfile(f"{execution_dir}{os.sep}conftest.py", f"{execution_dir}{os.sep}nrobo{os.sep}conftest.py")
-        except Exception as e:
-            raise e
+        copy_conftest_file()
         console.print(f"\t[{STYLE.HLOrange}]Conftest.py copied under nrobo directory for packing.")
 
     with console.status(f"[{STYLE.TASK}]Deleting {__DIST_DIR__}\n"):
-        if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-            try:
-                remove_files_recursively(__DIST_DIR__)
-            except Exception as e:
-                print(e)
-        elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-            terminal(["del", "/q", "/S", __DIST_DIR__ + os.sep + "*.*"])
+        delete_dist_folder()
 
     with console.status(f"[{STYLE.TASK}]Building packages\n"):
-        terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "build"])
-        terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "build"])
-        terminal([os.environ[EnvKeys.PYTHON], "-m", "build"])
+        run_build_command()
         console.print(f"\t[{STYLE.HLOrange}]Packaging completed.")
 
     with console.status(f"[{STYLE.TASK}]Deleting conftest.py from the nrobo directory after packaging is complete\n"):
-        conftest = f"{execution_dir}{os.sep}nrobo{os.sep}conftest.py"
-        terminal(["rm", "-f", conftest])
         console.print(f"\t[{STYLE.HLOrange}]conftest.py removed from nrobo directory.")
+        delete_conftest_after_build()
 
     with console.status(f"[{STYLE.TASK}]Reset environment back to DEVELOPMENT\n"):
         # Reset ENVIRONMENT=DEVELOPMENT in nrobo/__INIT__.py
         set_switch_environment('test', debug)
         console.print(f"\t[{STYLE.HLOrange}]Environment reset.")
+
+    with console.status(f"[{STYLE.TASK}]Correct version in nrobo/__init__.py file\n"):
+        from nrobo.cli.upgrade import get_pypi_index
+        write_new_version_to_nrobo_init_py_file(get_incremented_version(get_pypi_index(NROBO_CONST.NROBO)))
+        console.print(f"\t[{STYLE.HLOrange}]Corrected.")
 
     with console.status(f"[{STYLE.TASK}]Packages are ready. Please run check.\n"):
         # Reset ENVIRONMENT=DEVELOPMENT in nrobo/__INIT__.py

@@ -215,14 +215,14 @@ class TestNRoboFrameworkPaths():
 
         assert conftest_path.exists() == True
 
-    def test_conftest_py_present_in_project_root_package(self):
-        """Validate that conftest.py is present in the nrobo project root directory"""
+    def test_conftest_py_not_present_in_nrobo_package(self):
+        """Validate that conftest.py is not present in the nrobo package"""
 
         set_environment()
 
-        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY
+        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
 
-        assert conftest_path.exists() == True
+        assert not conftest_path.exists()
 
     def test_browser_config_package_is_present(self):
         """Validate that browserConfig package is present"""
@@ -346,6 +346,15 @@ class TestNRoboFrameworkPaths():
             os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_NROBO_CONFIG
 
         assert nrobo_framework_nrobo_config_yaml_file_path.exists() == True
+
+    def test_framework_conftest_host_py_file_is_present(self):
+        """Validate that nrobo.framework.conftest-host.py file is present"""
+        set_environment()
+
+        nrobo_framework_conftest_host_py_file_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE
+
+        assert nrobo_framework_conftest_host_py_file_path.exists() == True
 
     def test_selenes_pkg_is_present(self):
         """Validate that selenes pkg is present"""

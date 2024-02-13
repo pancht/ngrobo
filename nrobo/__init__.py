@@ -15,7 +15,7 @@ This module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.5.2'
+__version__ = '2024.5.4'
 
 # install rich library
 import os
@@ -73,6 +73,7 @@ class NROBO_PATHS:
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
+    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest-host.py"
 
     SELENESE = Path("selenese")
 
