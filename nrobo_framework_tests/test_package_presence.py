@@ -209,7 +209,8 @@ class TestNRoboFrameworkPaths():
     def test_nrobo_framework_simplest_way(self):
         """Validate that all nrobo framework tests passed"""
 
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS]
+        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
+                   '--rootdir', 'nrobo', '-n', '10']
         return_code = terminal(command)
 
         assert return_code == 0
