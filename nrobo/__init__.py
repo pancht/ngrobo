@@ -62,12 +62,12 @@ class NROBO_PATHS:
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
-    FRAMEWORK_PAGES_PAGE_DEMO_PY_FILE = FRAMEWORK_PAGES / Path("PageDemo.py")
+    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     GUI = FRAMEWORK_TESTS / Path("gui")
     GUI_PKG = GUI / INIT_PY
-    GUI_GOOGLE_HOME_PAGE_TEST_PY_FILE = GUI / Path("google_home_page_test.py")
+    GUI_PYPI_HOME_PAGE_TEST_PY_FILE = GUI / Path("PyPi_home_page_test.py")
     NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
 
     FRAMEWORK_TESTS = FRAMEWORK / TESTS

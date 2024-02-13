@@ -293,12 +293,12 @@ class TestNRoboFrameworkPaths():
 
         assert nrobo_framework_pages_pkg_path.exists() == True
 
-    def test_framework_pages_page_demo_py_file_is_present(self):
-        """Validate that nrobo.framework.pages.PageDemo.py file is present"""
+    def test_framework_pages_page_pypi_home_py_file_is_present(self):
+        """Validate that nrobo.framework.pages.PagePyPiHome.py file is present"""
         set_environment()
 
         nrobo_framework_pages_page_demo_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_PAGES_PAGE_DEMO_PY_FILE
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_PAGE_PYPI_HOME_PY_FILE
 
         assert nrobo_framework_pages_page_demo_py_file_path.exists() == True
 
@@ -325,7 +325,7 @@ class TestNRoboFrameworkPaths():
         set_environment()
 
         nrobo_framework_tests_gui_google_home_page_test_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_GOOGLE_HOME_PAGE_TEST_PY_FILE
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PYPI_HOME_PAGE_TEST_PY_FILE
 
         assert nrobo_framework_tests_gui_google_home_page_test_py_file_path.exists() == True
 

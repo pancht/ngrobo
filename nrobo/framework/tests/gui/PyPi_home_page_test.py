@@ -11,9 +11,9 @@ class TestPyPiHomePage():
     @pytest.mark.sanity
     def test_google_branding_displayed_on_home_page(self, driver, logger):
         # Instantiate page object
-        page_demo = PagePyPiHome(driver, logger)
+        page_pypi_home = PagePyPiHome(driver, logger)
         # call page method
-        page_demo.open_home_page()
+        page_pypi_home.open()
 
         # Asset test condition
-        assert page_demo.exist_branding_image() == True
+        assert page_pypi_home.search_button_present() == True
