@@ -36,6 +36,14 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
             debug = True
 
     try:
+        if text and capture_output:
+            try:
+                return subprocess.run(command, text=text, capture_output=capture_output)
+            except subprocess.CalledProcessError as e:
+                print(f"Command failed with return code {e.returncode}: \n{e}")
+                exit()
+                return e.returncode
+
         if debug:
             try:
                 subprocess.check_call(command)

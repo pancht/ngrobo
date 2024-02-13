@@ -123,7 +123,6 @@ def update_version_pyproject_toml_nrobo_init_py_file(target) -> int:
 
     # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
-    write_new_version_to_nrobo_init_py_file(version)
 
     # update version in pyproject.toml file
     write_new_version_to_pyproject_toml_file(version)
@@ -156,6 +155,9 @@ def build(target='test', debug=False) -> int:
             console.print(
                 f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building packages.")
             set_switch_environment('test', debug)
+            console.print(
+                f"[{STYLE.HLRed}]Build process failed!!!")
+            exit(1)
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
         # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
