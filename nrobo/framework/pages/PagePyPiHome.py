@@ -6,12 +6,11 @@
 import logging
 
 from selenium.webdriver.common.by import By
-
 from nrobo.framework.pages import Page
 
 
-class PageDemo(Page):
-    """Demo page for illustration"""
+class PagePyPiHome(Page):
+    """Page class for PyPi.org home page"""
 
     def __init__(self, driver, logger):
         """page constructor"""
@@ -24,9 +23,8 @@ class PageDemo(Page):
 
     # Page locators definition should go here
     # ----------------------------------------
-    imgGoogleBranding = (By.XPATH, "//img[@alt='Google']")
-    txtSearch = (By.XPATH, "//textarea[@title='Search']")
-    btnStaySignedOut = (By.XPATH, "//button[@aria-label='Stay signed out']")
+    url = "https://pypi.org/"
+    txt_search = (By.ID, 'search')
     # lnkLogin = (By.ID, 'login2')
     # btnSubmit = (By, Value)
     # txtName = (By, Value)
@@ -35,18 +33,9 @@ class PageDemo(Page):
     # Page method specification should go here
     # ----------------------------------------
 
-    def open_home_page(self):
-        """Open google home page"""
+    def open(self):
+        self.logger.info(f"Open url: {self.url}")
+        self.get(self.url)
 
-        self.nprint(f'Open Google Home page')
-        self.get("http:\\google.com")
-
-    def exist_branding_image(self) -> bool:
-        """
-        Check if Google branding image found on the page.
-
-        :return: True if found else return False
-        """
-        return self.find_element(*self.imgGoogleBranding).is_displayed()
-
-
+    def search_button_present(self):
+        return self.find_element(*self.txt_search).is_displayed()
