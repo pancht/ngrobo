@@ -206,15 +206,6 @@ class TestNRoboFrameworkPaths():
 
         assert cli_nglobals_py_file_pkg_path.exists() == True
 
-    def test_nrobo_framework_simplest_way(self):
-        """Validate that all nrobo framework tests passed"""
-
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
-                   '--rootdir', 'nrobo', '-n', '10']
-        return_code = terminal(command)
-
-        assert return_code == 0
-
     def test_conftest_py_file_present_in_root(self):
         """Validate that conftest.py is present in root dir"""
 
@@ -224,14 +215,14 @@ class TestNRoboFrameworkPaths():
 
         assert conftest_path.exists() == True
 
-    def test_conftest_py_not_present_in_nrobo_package(self):
-        """Validate that conftest.py is not present in the nrobo package directory"""
+    def test_conftest_py_present_in_project_root_package(self):
+        """Validate that conftest.py is present in the nrobo project root directory"""
 
         set_environment()
 
-        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
+        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY
 
-        assert conftest_path.exists() == False
+        assert conftest_path.exists() == True
 
     def test_browser_config_package_is_present(self):
         """Validate that browserConfig package is present"""

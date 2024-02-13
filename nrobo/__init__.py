@@ -100,7 +100,7 @@ class NROBO_PATHS:
 
     CONFTEST_PY = Path("conftest.py")
 
-    NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_tests")
+    NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_test")
     TESTS = Path("tests")
 
     VERSIONS = Path("versions")
