@@ -14,7 +14,7 @@ def run_unit_tests(debug=False) -> int:
 
     # pytest nrobo_framework_tests --noconftest --confcutdir nrobo_framework_tests
     target = "results-nrobo-tests/nrobo_unit_tests_run_report.html"
-    unit_tests_dir = 'nrobo_framework_test'
+    unit_tests_dir = 'framework_tests'
     conftest_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / unit_tests_dir
     return terminal(
         ['pytest', '--confcutdir', str(conftest_dir),

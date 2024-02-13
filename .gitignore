@@ -164,6 +164,7 @@ venv/
 
 # results folder
 results/
+results-nrobo-tests/
 
 # otheres
 .DS_Store

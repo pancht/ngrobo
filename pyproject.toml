@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.5.1"
+version = "2024.5.4"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "Powerful! Yet, Easy to USE! Automated Testing Framework"
@@ -67,7 +67,7 @@ markers = [
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["nrobo*"]
-exclude = ["tests*", "cli*", "notes*", "venv*"]
+exclude = ["tests*", "cli*", "notes*", "venv*", ".venv*", "framework*"]
 namespaces = false
 
 [tool.setuptools.package-data]
