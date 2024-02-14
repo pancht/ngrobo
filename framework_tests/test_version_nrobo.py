@@ -77,3 +77,4 @@ class TestNRoboFramework():
         from nrobo import __version__
 
         assert __version__ == get_pypi_index("nrobo")
+

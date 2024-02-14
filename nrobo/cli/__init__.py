@@ -13,6 +13,7 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
+import os
 import subprocess
 
 
@@ -23,7 +24,7 @@ def main():
     :return:
     """
     try:
-        from nrobo import greet_the_guest, NROBO_CONST
+        from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
         from nrobo.cli.cli_args import parse_cli_args
         from nrobo.cli.install import install_nrobo
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
@@ -37,6 +38,10 @@ def main():
 
         # greet the guest
         greet_the_guest()
+
+        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]) == 0:
+            from nrobo.cli.upgrade import confirm_update
+            confirm_update()
 
         # install dependencies
         install_nrobo(None)

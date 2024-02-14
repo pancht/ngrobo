@@ -64,6 +64,10 @@ def parse_cli_args():
                         default="html")
     parser.add_argument(f"--{nCLI.TARGET}",
                         help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
+    parser.add_argument(f"--{nCLI.VERSION}",
+                        help="Shows nRoBo version", action="store_true")
+    parser.add_argument(f"--{nCLI.SUPPRESS}",
+                        help="Suppresses upgrade prompt on each test run", action="store_true", default=False)
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser. Default is chrome.
     Options could be:
@@ -433,6 +437,16 @@ def parse_cli_args():
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
             exit(0)
+    if args.VERSION:
+        # show version
+        from nrobo import __version__
+        console.print(f"nrobo {__version__}")
+        from nrobo.cli.upgrade import confirm_update
+        confirm_update()
+        exit(0)
+    if args.suppress:
+        # suppress upgrade prompt
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -454,6 +468,9 @@ def parse_cli_args():
                 if type(value) is bool:
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
+                    if key == args.suppress:
+                        continue
+
                     command.append(f"--{key}")
                     continue
                 elif key not in nCLI.ARGS.keys():
@@ -555,7 +572,7 @@ def parse_cli_args():
 def create_allure_report(command: list) -> int:
     """prepares allure report based on pytest launcher <command>"""
     allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
-    terminal(command + ['--alluredir', allure_results])
+    terminal(command + ['--alluredir', allure_results], debug=True)
 
     allure_generated_report = allure_results.parent / "allure-report"
     console.print(f"[{STYLE.HLGreen}]Preparing allure report")
@@ -571,6 +588,7 @@ def create_simple_html_report(command: list) -> int:
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
     return_code = terminal(command)
     console.rule(f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+
     return return_code
 
 

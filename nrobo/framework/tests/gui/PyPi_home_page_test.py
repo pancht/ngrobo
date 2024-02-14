@@ -17,3 +17,4 @@ class TestPyPiHomePage():
 
         # Asset test condition
         assert page_pypi_home.search_button_present() == True
+

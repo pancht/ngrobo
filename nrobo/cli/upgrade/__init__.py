@@ -72,3 +72,4 @@ def confirm_update() -> None:
 
         else:
             pass
+

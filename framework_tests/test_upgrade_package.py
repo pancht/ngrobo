@@ -48,3 +48,4 @@ class TestUpgradePkg():
                 assert update_available() == False
             else:
                 assert update_available() == True
+
