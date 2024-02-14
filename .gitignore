@@ -164,6 +164,7 @@ venv/
 
 # results folder
 results/
+results-unittests/
 
 # otheres
 .DS_Store

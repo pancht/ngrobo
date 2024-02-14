@@ -13,6 +13,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 """
 import argparse
 import os
+import sys
 
 from nrobo import *
 from nrobo.cli import *
@@ -569,7 +570,7 @@ def create_simple_html_report(command: list) -> int:
     """prepares simple html report based on pytest launcher command"""
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
     return_code = terminal(command)
-    console.rule(f"[{STYLE.HLOrange}]Report is ready at: {Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+    console.rule(f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
     return return_code
 
 

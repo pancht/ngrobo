@@ -14,6 +14,9 @@ This module loads nRoBo globals.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
+__version__ = '2024.5.5'
+
 # install rich library
 import os
 from pathlib import Path
@@ -59,17 +62,18 @@ class NROBO_PATHS:
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
-    FRAMEWORK_PAGES_PAGE_DEMO_PY_FILE = FRAMEWORK_PAGES / Path("PageDemo.py")
+    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     GUI = FRAMEWORK_TESTS / Path("gui")
     GUI_PKG = GUI / INIT_PY
-    GUI_GOOGLE_HOME_PAGE_TEST_PY_FILE = GUI / Path("google_home_page_test.py")
+    GUI_PYPI_HOME_PAGE_TEST_PY_FILE = GUI / Path("PyPi_home_page_test.py")
     NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
 
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
+    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest-host.py"
 
     SELENESE = Path("selenese")
 
@@ -97,7 +101,7 @@ class NROBO_PATHS:
 
     CONFTEST_PY = Path("conftest.py")
 
-    NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_tests")
+    NROBO_FRAMEWORK_TESTS = Path("framework_tests")
     TESTS = Path("tests")
 
     VERSIONS = Path("versions")
@@ -125,7 +129,7 @@ class NROBO_CLI_TOOL_PATH:
 class NROBO_FRAMEWORK_TESTS:
     """nrobo_framework_tests package"""
     NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / NROBO_PATHS.CONFTEST_PY
-    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_nrobo_framework.py")
+    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_package_presence.py")
 
 
 class NROBO_CONST:
@@ -170,6 +174,7 @@ class EnvKeys:
     BROWSER = "Browser"
     HOST_PLATFORM = "Host Platform"
     DEBUG = "debug mode"
+    SUPPRESS_PROMPT = "suppress prompt"
 
 
 # load environment keys with defaults
@@ -185,6 +190,7 @@ os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
+os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
 
 import subprocess
 from nrobo.util.process import terminal
