@@ -6,7 +6,7 @@
 import logging
 
 from selenium.webdriver.common.by import By
-from nrobo.framework.pages import Page
+from pages import Page
 
 
 class PagePyPiHome(Page):

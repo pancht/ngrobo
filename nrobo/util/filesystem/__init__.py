@@ -118,6 +118,7 @@ def get_files_list(path: [str, Path], *, pattern: [str, None] = None, recursion:
 
         Return only list of files if a pattern is supplied.
         Return list of files from subdirectories too if recursion flag is True."""
+    import re
     if isinstance(path, str):
         # covert string to path
         path = Path(path)
@@ -129,8 +130,8 @@ def get_files_list(path: [str, Path], *, pattern: [str, None] = None, recursion:
     else:
         _files = [f for f in path.iterdir() if f.is_file()]
 
-        # we got files from the path, now get list of directories at path
-        sub_dirs = [f for f in path.iterdir() if f.is_dir()]
+    # we got files from the path, now get list of directories at path
+    sub_dirs = [f for f in path.iterdir() if f.is_dir()]
 
     # recursively iterate each directory
     if sub_dirs:
