@@ -10,6 +10,8 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import time
+
 from nrobo import NROBO_CONST
 
 
@@ -69,6 +71,7 @@ def confirm_update() -> None:
                     console.print("Update completed successfully.")
                 else:
                     console.print("Update did not complete.")
+            time.sleep(2)
 
         else:
             pass
