@@ -1,3 +1,15 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
 import logging
 from selenium.webdriver.remote.webdriver import WebDriver
 from typing import Union
@@ -7,14 +19,6 @@ AnyBrowser = Union[None, WebDriver]
 
 class Page(NRobo):
     """
-    =====================CAUTION=======================
-    DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
-    FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
-    OF NROBO FRAMEWORK. THUS TO BE ABLE TO SAFELY UPGRADE
-    TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
-    FILE OR ALTER ITS LOCATION!!!
-    ===================================================
-
     Page class is the base class for every page objects
     that one is going to be created for his/her project.
 

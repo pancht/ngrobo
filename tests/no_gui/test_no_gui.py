@@ -2,9 +2,10 @@ import pytest
 
 
 class TestNoGUI():
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def f2(self):
+        """Verify no gui test f2"""
         raise ExceptionGroup(
             "Group message",
             [
@@ -12,9 +13,10 @@ class TestNoGUI():
             ],
         )
 
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def test_exception_in_group(self):
+        """Verify no gui test execution in group"""
         with pytest.raises(ExceptionGroup) as excinfo:
             self.f2()
         assert excinfo.group_contains(RuntimeError)
@@ -23,8 +25,9 @@ class TestNoGUI():
     def f(self):
         raise SystemExit(1)
 
-    #@pytest.mark.nogui
-    @pytest.mark.skip
+    @pytest.mark.nogui
+    #@pytest.mark.skip
     def test_mytest(self):
+        """Verify no gui test mytest"""
         with pytest.raises(SystemExit):
             self.f()

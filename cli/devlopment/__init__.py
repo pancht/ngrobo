@@ -4,7 +4,7 @@ from nrobo.util.common import Common
 from nrobo import *
 
 
-def set_switch_environment(env: str):
+def set_switch_environment(env: str, debug=False):
     """sets the environment"""
 
     # test environment
@@ -23,9 +23,8 @@ def set_switch_environment(env: str):
 
     # update environment to production
     # pattern for finding version setting
-    # PATTERN_PREFIX = "os.environ[EnvKeys.ENVIRONMENT]"
-    PATTERN_PREFIX = "[^ ](os.environ[\[]EnvKeys.ENVIRONMENT[\][ ]*=[ ]*Environment.(DEVELOPMENT|PRODUCTION))"
-    PATTERN_REGULAR_EXPRESSION = PATTERN_PREFIX # + '([ ]*=[ ]*Environment[.]DEVELOPMENT)'
+    PATTERN = "[^ ](os.environ[\[]EnvKeys.ENVIRONMENT[\][ ]*=[ ]*Environment.(DEVELOPMENT|PRODUCTION))"
+    PATTERN_REGULAR_EXPRESSION = PATTERN
 
     # Replacement text
     if env == 'test':
@@ -44,7 +43,3 @@ def set_switch_environment(env: str):
         Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY),
         file_content
     )
-
-
-
-

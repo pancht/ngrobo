@@ -7,22 +7,12 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-# rich console
-from nrobo import console, STYLE
-import logging
+from nrobo.conftest import *
 
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), ''))
 
-def nprint(msg, style=STYLE.HLGreen, logger=None):
-    """Prints <msg> to console and logs it as well if logger is given"""
-
-    # print msg to console
-    console.print(f"[{style}]{msg}")
-
-    if logger is not None:
-        """if logger is given"""
-
-        # log the msg
-        logger.log(logging.INFO, f"{msg}")

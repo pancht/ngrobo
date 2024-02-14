@@ -5,47 +5,23 @@
 # TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 # FILE OR ALTER ITS LOCATION!!!
 #===================================================
+#
+#
+# @author: Panchdev Chauhan
+# @email: erpanchdev@gmail.com
+#####################################################
 
 # requirements for nrobo framework
 
-
-# Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal
 rich==13.7.0
-
-# Fundamental package for array computing in Python
-numpy==1.26.3
-
-# Virtual Python Environment builder
-# virtualenv==20.25.0
-
-# pytest: simple powerful testing with Python
 pytest==8.0.0
-
-# YAML parser and emitter for Python
 PyYAML==6.0.1
-
-# Python language bindings for Selenium WebDriver.
 selenium==4.17.2
-
-# Library provides the way to automatically manage drivers for different browsers
 webdriver-manager==4.0.1
-
-# Python library provides page factory approach to implement page object model in selenium
 selenium-page-factory==2.6
-
-# pytest plugin for generating HTML reports
 pytest-html==4.1.1
-
-# pytest xdist plugin for distributed testing, most importantly across multiple CPUs
-# Doc: https://pytest-xdist.readthedocs.io/en/stable/
-# Doc: https://psutil.readthedocs.io/en/latest/
 pytest-xdist==3.5.0
 psutil==5.9.8
-
-# pytest plugin to re-run tests to eliminate flaky failures
-# Doc: https://pypi.org/project/pytest-rerunfailures/
 pytest-rerunfailures==13.0
-
-# Allure reports
-# Doc: https://docs.qameta.io/allure-report/
 allure-pytest==2.13.2
+

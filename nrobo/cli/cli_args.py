@@ -7,13 +7,17 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 import argparse
 import os
+import sys
 
 from nrobo import *
 from nrobo.cli import *
-from nrobo.cli.cli_constansts import *
+from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
 from nrobo.cli.nglobals import *
 
@@ -58,6 +62,12 @@ def parse_cli_args():
     parser.add_argument(f"--{nCLI.REPORT}",
                         help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
+    parser.add_argument(f"--{nCLI.TARGET}",
+                        help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
+    parser.add_argument(f"--{nCLI.VERSION}",
+                        help="Shows nRoBo version", action="store_true")
+    parser.add_argument(f"--{nCLI.SUPPRESS}",
+                        help="Suppresses upgrade prompt on each test run", action="store_true", default=False)
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
     Target browser. Default is chrome.
     Options could be:
@@ -426,7 +436,17 @@ def parse_cli_args():
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
-            exit(1)
+            exit(0)
+    if args.VERSION:
+        # show version
+        from nrobo import __version__
+        console.print(f"nrobo {__version__}")
+        from nrobo.cli.upgrade import confirm_update
+        confirm_update()
+        exit(0)
+    if args.suppress:
+        # suppress upgrade prompt
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -444,9 +464,13 @@ def parse_cli_args():
 
             if value:
                 """if key has value, then only proceed with current key"""
+
                 if type(value) is bool:
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
+                    if key == args.suppress:
+                        continue
+
                     command.append(f"--{key}")
                     continue
                 elif key not in nCLI.ARGS.keys():
@@ -457,6 +481,8 @@ def parse_cli_args():
                         command.append(str(value))
                     else:
                         """simply add long keys to launcher command"""
+                        if key == nCLI.TARGET:
+                            continue  # DO NOT ADD TO PYTEST LAUNCHER
                         command.append(f"--{key}")
                         command.append(str(value))
                 elif key in nCLI.ARGS:
@@ -495,16 +521,18 @@ def parse_cli_args():
                             exit(1)
                         if str(value).lower() in NREPORT.HTML:
                             command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
                         elif str(value).lower() in NREPORT.ALLURE:
                             command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{NREPORT.HTML_REPORT_PATH}")
+                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
                             command.append(f"--alluredir")
                             command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
                             # command.append(f"--allure-no-capture")
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
                     else:
+                        if key == nCLI.TARGET:
+                            continue  # DO NOT ADD TO PYTEST LAUNCHER
                         command.append(f"--{key}")
                         command.append(value)
 
@@ -528,20 +556,50 @@ def parse_cli_args():
     for k, v in nCLI.DEFAULT_ARGS.items():
         command = command + v
 
-    with console.status(f"[{STYLE.TASK}]:smiley: Running tests...\n"):
+    with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
+
         if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
             console.print(f"[{STYLE.INFO}]{command}")
-        terminal(command)
 
-        if args.report and args.report == NREPORT.ALLURE:
-            terminal([NREPORT.ALLURE, f"serve", NREPORT.ALLURE_REPORT_PATH])
+        if args.report and args.report == NREPORT.ALLURE:  # test if needed allure report
+            create_allure_report(command)
+        else:
+            create_simple_html_report(command)
 
-    with console.status(f"[{STYLE.TASK}]Test report is ready! Please analyze results...\n"):
-        if len(command_builder_notes) == 1:
-            console.print(f"[{STYLE.HLOrange}]Note:")
-        elif len(command_builder_notes) >= 2:
-            console.print(f"[{STYLE.HLOrange}]Notes:")
+        print_notes(command_builder_notes)
 
-        if command_builder_notes:
-            for note in command_builder_notes:
-                console.print(note)
+
+def create_allure_report(command: list) -> int:
+    """prepares allure report based on pytest launcher <command>"""
+    allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
+    terminal(command + ['--alluredir', allure_results], debug=True)
+
+    allure_generated_report = allure_results.parent / "allure-report"
+    console.print(f"[{STYLE.HLGreen}]Preparing allure report")
+
+    terminal([NREPORT.ALLURE, "generate", "--name", "nRoBo TEST REPORT", "-o", allure_generated_report, "--clean",
+              allure_results])
+
+    terminal([NREPORT.ALLURE, "serve", allure_results])
+
+
+def create_simple_html_report(command: list) -> int:
+    """prepares simple html report based on pytest launcher command"""
+    console.print(f"[{STYLE.HLGreen}]Preparing html report")
+    return_code = terminal(command)
+    console.rule(f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+
+    return return_code
+
+
+def print_notes(notes: list):
+    """print notes"""
+
+    if len(notes) == 1:
+        console.print(f":warning:[{STYLE.HLOrange}] Note:")
+    elif len(notes) >= 2:
+        console.print(f":warning:[{STYLE.HLOrange}] Notes:")
+
+    if notes:
+        for note in notes:
+            console.print(note)

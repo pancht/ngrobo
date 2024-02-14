@@ -13,7 +13,9 @@ nRoBo file system utility.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmaill.com
 """
+import os
 import shutil
+from pathlib import Path
 
 
 def copy_dir(src, dst, symlinks=False, ignore=None, copy_function=shutil.copy2,
@@ -78,3 +80,63 @@ def copy_file(src, dst, *, follow_symlinks=True):
         shutil.copyfile(src, dst, follow_symlinks=follow_symlinks)
     except FileExistsError as e:
         print(e)
+
+
+def remove_filetree(path, ignore_errors=False, onerror=None, *, onexc=None, dir_fd=None):
+    """Recursively delete a directory tree.
+
+        If dir_fd is not None, it should be a file descriptor open to a directory;
+        path will then be relative to that directory.
+        dir_fd may not be implemented on your platform.
+        If it is unavailable, using it will raise a NotImplementedError.
+
+        If ignore_errors is set, errors are ignored; otherwise, if onexc or
+        onerror is set, it is called to handle the error with arguments (func,
+        path, exc_info) where func is platform and implementation dependent;
+        path is the argument to that function that caused it to fail; and
+        the value of exc_info describes the exception. For onexc it is the
+        exception instance, and for onerror it is a tuple as returned by
+        sys.exc_info().  If ignore_errors is false and both onexc and
+        onerror are None, the exception is reraised.
+
+        onerror is deprecated and only remains for backwards compatibility.
+        If both onerror and onexc are set, onerror is ignored and onexc is used.
+        """
+    shutil.rmtree(path, ignore_errors=ignore_errors, onerror=onerror, onexc=onexc, dir_fd=dir_fd)
+
+
+def remove_file(file_full_path: [str, Path]):
+    """remove file"""
+    if isinstance(file_full_path, Path):
+        os.remove(str(file_full_path))
+    else:
+        os.remove(file_full_path)
+
+
+def get_files_list(path: [str, Path], *, pattern: [str, None] = None, recursion: bool = False) -> [Path]:
+    """Returns list of files from the given <path>.
+
+        Return only list of files if a pattern is supplied.
+        Return list of files from subdirectories too if recursion flag is True."""
+    import re
+    if isinstance(path, str):
+        # covert string to path
+        path = Path(path)
+
+    _files = []  # start with empty list
+    if pattern:
+        # apply filter
+        _files = [f for f in path.iterdir() if f.is_file() and re.match(pattern, str(f))]
+    else:
+        _files = [f for f in path.iterdir() if f.is_file()]
+
+    # we got files from the path, now get list of directories at path
+    sub_dirs = [f for f in path.iterdir() if f.is_dir()]
+
+    # recursively iterate each directory
+    if sub_dirs:
+        for d in sub_dirs:
+            _files = _files + get_files_list(d, pattern=pattern)
+        return _files
+    else:
+        return _files

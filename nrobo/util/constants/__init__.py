@@ -9,6 +9,9 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 
 Definitions of CONSTANTS.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """
 
 
