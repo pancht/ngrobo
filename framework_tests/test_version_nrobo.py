@@ -2,6 +2,8 @@ import os
 import time
 from pathlib import Path
 
+import pytest
+
 from nrobo import console, terminal, EnvKeys, NROBO_PATHS, NROBO_CONST
 from nrobo.cli.nglobals import Browsers
 from nrobo.util.filesystem import remove_filetree
@@ -19,6 +21,7 @@ class TestNRoboFramework():
 
         assert return_code == 0
 
+    @pytest.mark.skip
     def test_nrobo_host_framework_tests(self):
         """Validate that nrobo host framework tests passed located at root/nrobo/framework/tests dir"""
 

@@ -31,13 +31,17 @@ def get_version_from_yaml_version_files(target):
     return Common.read_yaml(__VERSIONS_DIR__ + target + ".yaml")['version']
 
 
-def get_incremented_version(version):
+def get_incremented_version(version, *, override: bool = False):
     """
     Increment version by 1
 
+    :param override:
     :param version:
     :return:
     """
+    if override:
+        return version
+
     # regular expression to verify version
     # major.minor.nightly-build
     regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')
@@ -53,10 +57,11 @@ def get_incremented_version(version):
         return CONST.DOT.join(res)
 
 
-def get_decremented_version(version):
+def get_decremented_version(version, *, override: bool = False):
     """
     Decrement version by 1
 
+    :param override:
     :param version:
     :return:
     """
@@ -123,10 +128,11 @@ def write_new_version_to_nrobo_init_py_file(new_version):
     Common.write_text_to_file(nrobo_init_py_file, file_content)
 
 
-def update_version_pyproject_toml_file(target) -> int:
+def update_version_pyproject_toml_file(target, *, override: bool = False) -> int:
     """
     Update version in pyproject.toml
 
+    :param override:
     :param target:
     :return:
     """
@@ -142,7 +148,7 @@ def update_version_pyproject_toml_file(target) -> int:
     version = get_version_from_yaml_version_files(__CUR_ENV__)
 
     # Increment version
-    version = get_incremented_version(version)
+    version = get_incremented_version(version, override=override)
 
     # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
@@ -171,7 +177,7 @@ def copy_conftest_file():
     import shutil
     try:
         shutil.copyfile(
-            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE}",
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
             f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
     except Exception as e:
         raise e
@@ -198,10 +204,12 @@ def delete_conftest_after_build():
     terminal(["rm", "-f", conftest])
 
 
-def build(target='test', debug=False) -> int:
+def build(target='test', *, override: bool = False, debug: bool = False) -> int:
     """
     Bundle package for <target> environment.
 
+    :param debug:
+    :param override:
     :param target: Either be 'test' | 'prod'
     :return: 0 if packing succeeds else 1
     """
@@ -213,27 +221,22 @@ def build(target='test', debug=False) -> int:
     # run_nrobo_validator_tests
     console.rule(f"[{STYLE.HLOrange}]Packaging nRoBo...")
     with console.status(f"[{STYLE.TASK}]Validating framework\n"):
-        # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
         from cli import set_switch_environment
-        set_switch_environment('prod', debug)
+        set_switch_environment('prod', debug)  # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
 
         console.rule(f"[{STYLE.HLOrange}]Running unit tests")
-        # run unit tests
-        execute_unittests(debug)
+        execute_unittests(debug)  # run unit tests
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
-        # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
-        set_switch_environment('prod', debug)
+        set_switch_environment('prod', debug)  # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
         console.print(f"\t[{STYLE.HLOrange}]Environment set to PRODUCTION")
 
     with console.status(f"[{STYLE.TASK}]Update version in pyproject.toml\n"):
-        # update toml version
-        if update_version_pyproject_toml_file(target) > 0: return 1  # some error
+        if update_version_pyproject_toml_file(target, override=override) > 0: return 1  # # update toml version
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Update version in nrobo/__init__.py\n"):
-        # update toml version
-        write_new_version_to_nrobo_init_py_file(get_version_from_yaml_version_files('prod'))
+        write_new_version_to_nrobo_init_py_file(get_version_from_yaml_version_files('prod'))  # update toml version
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Copy conftest.py file under nrobo directory for shipping\n"):

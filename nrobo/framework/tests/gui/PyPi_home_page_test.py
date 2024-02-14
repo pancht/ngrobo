@@ -3,7 +3,7 @@
 @email: erpanchdev@gmail.com
 """
 import pytest
-from nrobo.framework.pages.PagePyPiHome import PagePyPiHome
+from pages.PagePyPiHome import PagePyPiHome
 
 
 class TestPyPiHomePage():
