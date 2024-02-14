@@ -10,7 +10,7 @@ from nrobo.util.constants import CONST
 global __CUR_ENV__
 
 
-def publish(target, debug=False):
+def publish(target, *, debug: bool = False, override: bool = False):
     """
     Check and publish package
 
@@ -36,6 +36,10 @@ def publish(target, debug=False):
         elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
             command = ["twine", "upload", "--repository", __CUR_ENV__,
                        CONST.DOT + os.sep + "dist" + os.sep + "*.*"]
+
+        # add --skip-existing switch
+        if override:
+            command.append("--skip-existing")
 
         # Run command
         console_output = terminal(command, text=True, capture_output=True)

@@ -111,3 +111,31 @@ def remove_file(file_full_path: [str, Path]):
         os.remove(str(file_full_path))
     else:
         os.remove(file_full_path)
+
+
+def get_files_list(path: [str, Path], *, pattern: [str, None] = None, recursion: bool = False) -> [Path]:
+    """Returns list of files from the given <path>.
+
+        Return only list of files if a pattern is supplied.
+        Return list of files from subdirectories too if recursion flag is True."""
+    if isinstance(path, str):
+        # covert string to path
+        path = Path(path)
+
+    _files = []  # start with empty list
+    if pattern:
+        # apply filter
+        _files = [f for f in path.iterdir() if f.is_file() and re.match(pattern, str(f))]
+    else:
+        _files = [f for f in path.iterdir() if f.is_file()]
+
+        # we got files from the path, now get list of directories at path
+        sub_dirs = [f for f in path.iterdir() if f.is_dir()]
+
+    # recursively iterate each directory
+    if sub_dirs:
+        for d in sub_dirs:
+            _files = _files + get_files_list(d, pattern=pattern)
+        return _files
+    else:
+        return _files

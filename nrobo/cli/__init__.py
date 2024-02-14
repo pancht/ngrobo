@@ -14,7 +14,9 @@ Trigger for nrobo framework!
 
 """
 import os
+import re
 import subprocess
+from pathlib import Path
 
 
 def main():
@@ -24,6 +26,7 @@ def main():
     :return:
     """
     try:
+        from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
         from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
         from nrobo.cli.cli_args import parse_cli_args
         from nrobo.cli.install import install_nrobo

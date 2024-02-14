@@ -43,7 +43,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     # if conftest file found on production system, meaning nrobo is already installed there
     nrobo_installed = Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists()
 
-    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION\
+    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION \
             and not nrobo_installed:
         print(f"Installing requirements")
 
@@ -56,7 +56,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         if return_code == NROBO_CONST.SUCCESS:
             """return code zero means success"""
-            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION\
+            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION \
                     and not nrobo_installed:
                 print(f"Requirements are installed successfully.")
         else:
@@ -80,7 +80,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
             # =============================================================
             # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
             # =============================================================
-            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.CONFTEST_PY,
+            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_CONST.NROBO / NP.NROBO_CONFTEST_HOST_FILE,
                       Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
             copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
                       Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
@@ -95,5 +95,29 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
             copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIS,
                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIS)
 
-            print(f"Installation complete")
+            # modify demo page object and demo test class in host directory
+            from nrobo.util.common import Common
+            from nrobo.util.regex import substitute
+            from nrobo.util.filesystem import get_files_list, remove_file
+            # iterate files in host pages dir
+            files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PAGES)
+            for f in files:
+                # iterate each file
+                pattern = r"(from[ ]+nrobo[.]framework[.])"
+                file_content = Common.read_file_as_string(f)
+                file_content = substitute(pattern, "", file_content)
+                Common.write_text_to_file(f, file_content)
 
+            # iterate files in host tests dir
+            files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.TESTS)
+            for f in files:
+                # iterate each file
+                pattern = r"(from[ ]+nrobo[.]framework[.])"
+                file_content = Common.read_file_as_string(f)
+                file_content = substitute(pattern, "", file_content)
+                Common.write_text_to_file(f, file_content)
+
+            # delete nrobo.framework package
+            remove_filetree(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK)
+
+            print(f"Installation complete")
