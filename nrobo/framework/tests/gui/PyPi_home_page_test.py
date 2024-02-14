@@ -3,7 +3,7 @@
 @email: erpanchdev@gmail.com
 """
 import pytest
-from pages.PagePyPiHome import PagePyPiHome
+from nrobo.framework.pages.PagePyPiHome import PagePyPiHome
 
 
 class TestPyPiHomePage():
@@ -17,3 +17,4 @@ class TestPyPiHomePage():
 
         # Asset test condition
         assert page_pypi_home.search_button_present() == True
+

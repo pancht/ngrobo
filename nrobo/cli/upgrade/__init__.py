@@ -31,7 +31,7 @@ def get_pypi_index(package) -> None | str:
         exit(1)
 
     import subprocess
-    result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
+    result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True, timeout=10)
 
     import re
     match = re.search(package + r" \(([\d]+4[.][\d]+[.][\d]+)\)", result.stdout)
@@ -72,3 +72,4 @@ def confirm_update() -> None:
 
         else:
             pass
+
