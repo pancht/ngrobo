@@ -24,4 +24,3 @@ pytest-xdist==3.5.0
 psutil==5.9.8
 pytest-rerunfailures==13.0
 allure-pytest==2.13.2
-pypi==2.1
