@@ -15,7 +15,7 @@ This module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.5.1'
+__version__ = '2024.5.5'
 
 # install rich library
 import os
@@ -62,17 +62,18 @@ class NROBO_PATHS:
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
-    FRAMEWORK_PAGES_PAGE_DEMO_PY_FILE = FRAMEWORK_PAGES / Path("PageDemo.py")
+    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     GUI = FRAMEWORK_TESTS / Path("gui")
     GUI_PKG = GUI / INIT_PY
-    GUI_GOOGLE_HOME_PAGE_TEST_PY_FILE = GUI / Path("google_home_page_test.py")
+    GUI_PYPI_HOME_PAGE_TEST_PY_FILE = GUI / Path("PyPi_home_page_test.py")
     NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
 
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
+    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest-host.py"
 
     SELENESE = Path("selenese")
 
@@ -100,7 +101,7 @@ class NROBO_PATHS:
 
     CONFTEST_PY = Path("conftest.py")
 
-    NROBO_FRAMEWORK_TESTS = Path("nrobo_framework_tests")
+    NROBO_FRAMEWORK_TESTS = Path("framework_tests")
     TESTS = Path("tests")
 
     VERSIONS = Path("versions")

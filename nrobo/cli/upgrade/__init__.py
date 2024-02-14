@@ -23,6 +23,13 @@ def get_pypi_index(package) -> None | str:
     """Get version of <package> from pypi and returns if package is found.
         return None otherwise."""
 
+    from nrobo.util.network import internet_connectivity
+    if not internet_connectivity():
+        """Exit programme."""
+        from nrobo import console, STYLE
+        console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
+        exit(1)
+
     import subprocess
     result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
 
@@ -50,7 +57,7 @@ def confirm_update() -> None:
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console
         from rich.prompt import Prompt
-        reply = Prompt.ask(f"An updated version ({_pypi_version}) is available for nrobo. Do you want to upgrade? "
+        reply = Prompt.ask(f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
                            f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
                            f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if reply.strip().lower() in ["yes", "y"]:

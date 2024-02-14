@@ -9,13 +9,19 @@ def run_unit_tests(debug=False) -> int:
     """run nrobo framework unit tests"""
 
     from pathlib import Path
+    # set environment path
     set_environment()
+
     # pytest nrobo_framework_tests --noconftest --confcutdir nrobo_framework_tests
-    target = "results/nrobo_unit_tests_run_report.html"
-    unit_tests_dir = 'nrobo_framework_tests'
+    target = "results-nrobo-tests/nrobo_unit_tests_run_report.html"
+    unit_tests_dir = 'framework_tests'
     conftest_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / unit_tests_dir
     return terminal(
-        ['pytest', '--confcutdir', str(conftest_dir), '--html', target, unit_tests_dir], debug=debug)
+        ['pytest', '--confcutdir', str(conftest_dir),
+         '--html', target, unit_tests_dir, '-n', '20',
+         '--rootdir', str(conftest_dir)],
+        debug=debug
+    )
 
 
 if __name__ == '__main__':
