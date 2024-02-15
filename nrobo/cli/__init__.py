@@ -13,7 +13,7 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
-from nrobo.cli.launcher import command_line_args
+from nrobo.cli.launcher import launch_nrobo
 
 
 def main():
@@ -52,7 +52,7 @@ def main():
         remove_files_recursively(NREPORT.REPORT_DIR)
 
         # parse nrobo cli arguments
-        command_line_args()
+        launch_nrobo()
 
     except KeyboardInterrupt as e:
         print(e)

@@ -24,8 +24,13 @@ from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
 global __REQUIREMENTS__
 
 
-def command_line_args():
-    """Parse command-line-arguments"""
+def launcher_command(exit_on_failure=True) -> [str]:
+    """Prepares nrobo launcher command
+       by parsing command line switches
+       in order to trigger test suite launch.
+
+       Returns [str], args: command list, actual args
+    """
 
     # Need to import set_environment method here
     # to handle circular import of partially initialized module
@@ -36,14 +41,14 @@ def command_line_args():
 
     # parse command line arguments
     from nrobo.cli.nrobo_args import nrobo_cli_parser
-    args = nrobo_cli_parser()
+    args = nrobo_cli_parser(exit_on_failure=exit_on_failure)
 
     # process each nrobo cli arguments
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             # install_nrobo(None)
-            exit(0)
+            return 0
     if args.VERSION:
         # show version
         from nrobo import __version__
@@ -162,6 +167,14 @@ def command_line_args():
     for k, v in nCLI.DEFAULT_ARGS.items():
         command = command + v
 
+    return command, args, command_builder_notes
+
+
+def launch_nrobo():
+    """Parse command-line-arguments"""
+
+    command, args,  command_builder_notes = launcher_command()
+
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
 
         if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
@@ -177,6 +190,7 @@ def command_line_args():
 
 def create_allure_report(command: list) -> int:
     """prepares allure report based on pytest launcher <command>"""
+
     allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
     terminal(command + ['--alluredir', allure_results], debug=True)
 

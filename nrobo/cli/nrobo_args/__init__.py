@@ -1,3 +1,19 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+Definitions of nRoBo command line arguments.
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+
 # Define nrobo command line argument parser
 import argparse
 
@@ -16,14 +32,14 @@ SHOW_ONLY_SWITCHES = [
 ]
 
 
-def nrobo_cli_parser():
+def nrobo_cli_parser(exit_on_failure=True):
     """Define nRoBo command line arguments
 
        and return args."""
 
     parser = argparse.ArgumentParser(
         prog="nrobo",
-        description='CLI Switches of nRoBo Test Automation framework')
+        description='CLI Switches of nRoBo Test Automation framework', exit_on_error=exit_on_failure)
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
