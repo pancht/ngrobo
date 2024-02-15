@@ -15,14 +15,14 @@ No definitions yet!
 
 from nrobo import *
 from nrobo.util.common import Common
+from cli.build import ENV_CLI_SWITCH
 
 
 def set_switch_environment(env: str, debug=False):
     """sets the environment"""
 
-    # test environment
-    if env not in ['test', 'prod']:
-        print(f"Wrong environment provided=> {env}. Valid options are prod | test")
+    if env not in [ENV_CLI_SWITCH.TEST, ENV_CLI_SWITCH.PROD]:
+        print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
         exit()
 
     # set the environment
@@ -40,12 +40,12 @@ def set_switch_environment(env: str, debug=False):
     PATTERN_REGULAR_EXPRESSION = PATTERN
 
     # Replacement text
-    if env == 'test':
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENV_CLI_SWITCH]" + " = Environment.DEVELOPMENT"
-    elif env == 'prod':
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENV_CLI_SWITCH]" + " = Environment.PRODUCTION"
+    if env == ENV_CLI_SWITCH.TEST:
+        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
+    elif env == ENV_CLI_SWITCH.PROD:
+        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
     else:
-        print(f"Wrong environment provided=> {env}. Valid options are prod | test")
+        print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
         exit()
 
     # Update version number in README file
