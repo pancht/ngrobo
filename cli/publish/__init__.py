@@ -25,11 +25,6 @@ from cli.build import ENV_CLI_SWITCH
 global __CUR_ENV__
 
 
-<<<<<<< HEAD
-def publish(target, *, debug: bool = False, override: bool = False):
-    """
-    Check and publish package
-=======
 class PUBLISH_TARGET:
     """Publishing target."""
 
@@ -37,9 +32,8 @@ class PUBLISH_TARGET:
     TESTPYPI = "testpypi"
 
 
-def publish(target, debug=False) -> None:
-    """Check and publish package."""
->>>>>>> 770e726 (added doc string and refactor code)
+def publish(target, *, debug: bool = False, override: bool = False):
+    """Check and publish package"""
 
     check()
 
