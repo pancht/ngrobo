@@ -61,7 +61,8 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         if nrobo_installed:
             """upgrade"""
             from nrobo.cli.upgrade import confirm_update
-            confirm_update()
+            if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
+                confirm_update()
         else:
             """fresh installation"""
 

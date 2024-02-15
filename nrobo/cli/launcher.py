@@ -12,6 +12,8 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import time
+
 from nrobo import *
 from nrobo.cli import *
 from nrobo.cli.cli_constants import *
@@ -24,7 +26,7 @@ from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
 global __REQUIREMENTS__
 
 
-def launcher_command(exit_on_failure=True) -> [str]:
+def launcher_command(exit_on_failure=True):
     """Prepares nrobo launcher command
        by parsing command line switches
        in order to trigger test suite launch.
@@ -47,18 +49,19 @@ def launcher_command(exit_on_failure=True) -> [str]:
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
-            # install_nrobo(None)
-            return 0
+            install_nrobo(None)
+            return None, None, None
     if args.VERSION:
         # show version
         from nrobo import __version__
         console.print(f"nrobo {__version__}")
-        from nrobo.cli.upgrade import confirm_update
-        confirm_update()
-        exit(0)
+        return None, None, None
     if args.suppress:
         # suppress upgrade prompt
         os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
+    if args.version:
+        terminal(['pytest', f"--version"], debug=True)
+        return None, None, None
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -77,17 +80,20 @@ def launcher_command(exit_on_failure=True) -> [str]:
             if value:
                 """if key has value, then only proceed with current key"""
 
-                if type(value) is bool:
+                if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
                     if key == args.suppress:
                         continue
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)
-                        return
-
-                    command.append(f"--{key}")
-                    continue
+                        return None, None, None
+                    elif key == args.version:
+                        terminal(['pytest', f"--{key}"], debug=True)
+                        exit()
+                    else:
+                        command.append(f"--{key}")
+                        continue
                 elif key not in nCLI.ARGS.keys():
                     """process special short keys(single letter keys) that does not have corresponding long key"""
                     if key == "c":
@@ -105,12 +111,16 @@ def launcher_command(exit_on_failure=True) -> [str]:
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
                             os.environ[EnvKeys.APP] = value
+                            continue
                         elif key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
+                            continue
                         elif key == nCLI.USERNAME:
                             os.environ[EnvKeys.USERNAME] = value
+                            continue
                         elif key == nCLI.PASSWORD:
                             os.environ[EnvKeys.PASSWORD] = value
+                            continue
 
                         # add keys to launcher command
                         command.append(f"--{key}")
@@ -173,7 +183,10 @@ def launcher_command(exit_on_failure=True) -> [str]:
 def launch_nrobo():
     """Parse command-line-arguments"""
 
-    command, args,  command_builder_notes = launcher_command()
+    command, args, command_builder_notes = launcher_command()
+
+    if command is None and args is None and command_builder_notes is None:
+        return
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
 
@@ -206,8 +219,9 @@ def create_allure_report(command: list) -> int:
 def create_simple_html_report(command: list) -> int:
     """prepares simple html report based on pytest launcher command"""
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
-    return_code = terminal(command)
-    console.rule(f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+    return_code = terminal(command, debug=True)
+    console.rule(
+        f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
 
     return return_code
 

@@ -1,19 +1,21 @@
 import argparse
 import sys
 from collections import OrderedDict
+from pathlib import Path
 
 import pytest
 
 from nrobo import terminal
+from nrobo.cli.cli_constants import NREPORT
 
 
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
 
     DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html', '--durations-min',
-                                       '0.005',
-                                       '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
-                                       '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
+                          '0.005',
+                          '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
+                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
         """Replace key-value if given <key> is found in default nRoBo args
@@ -23,9 +25,8 @@ class TestNroboArgsPackage():
         _copy = self.DEFAULT_NROBO_ARGS.copy()
 
         for idx in range(len(_copy)):
-            print(_copy[idx])
             if _copy[idx] == key:
-                _copy[idx+1] = value
+                _copy[idx + 1] = value
                 return _copy
 
     def test_show_only_pytest_switches(self):
@@ -54,7 +55,7 @@ class TestNroboArgsPackage():
 
         from nrobo.cli.launcher import launcher_command
         command = ['pytest']
-        sys.argv = command
+        sys.argv = command.copy()
 
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
@@ -67,13 +68,13 @@ class TestNroboArgsPackage():
         SWITCH = '-i'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
-        assert set(actual_command) == set(expected_command)
+        assert actual_command is None
 
     def test_nrobo_cli_arg_i_long_switch(self):
         """Validate nRoBo cli -i long switch: --install"""
@@ -81,13 +82,13 @@ class TestNroboArgsPackage():
         from nrobo.cli.launcher import launcher_command
         SWITCH = "--install"
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
-        assert (set(actual_command) == set(expected_command))
+        assert actual_command is None
 
     def test_nrobo_cli_arg_app_switch(self):
         """Validate nRoBo cli --app switch: --app APP"""
@@ -96,7 +97,7 @@ class TestNroboArgsPackage():
         SWITCH = '--app'
         APP = 'APPLE.COM'
         command = ['pytest', SWITCH, APP]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         command.remove(APP)
@@ -112,7 +113,7 @@ class TestNroboArgsPackage():
         SWITCH = '--url'
         URL = 'HTTPS://APPLE.COM'
         command = ['pytest', SWITCH, URL]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         command.remove(URL)
@@ -128,7 +129,7 @@ class TestNroboArgsPackage():
         SWITCH = '--username'
         USERNAME = 'USERNAME'
         command = ['pytest', SWITCH, USERNAME]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         command.remove(USERNAME)
@@ -144,7 +145,7 @@ class TestNroboArgsPackage():
         SWITCH = '--password'
         VALUE = 'PASSWORD'
         command = ['pytest', SWITCH, VALUE]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command.remove(SWITCH)
         command.remove(VALUE)
@@ -160,7 +161,7 @@ class TestNroboArgsPackage():
         VALUE = '-30'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
-        sys.argv = command
+        sys.argv = command.copy()
 
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
@@ -173,7 +174,7 @@ class TestNroboArgsPackage():
         from nrobo.cli.launcher import launcher_command
         SWITCH = '-n'
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         try:
             launcher_command(exit_on_failure=False)
@@ -189,7 +190,7 @@ class TestNroboArgsPackage():
         SWITCH = '--instances'
         VALUE = '-20'
         command = ['pytest', SWITCH, VALUE]
-        sys.argv = command
+        sys.argv = command.copy()
 
         command[1] = '-n'
         expected_command = command + self.DEFAULT_NROBO_ARGS
@@ -204,7 +205,7 @@ class TestNroboArgsPackage():
         REPLACE_SWITCH = '-n'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         try:
             launcher_command(exit_on_failure=False)
@@ -220,7 +221,7 @@ class TestNroboArgsPackage():
         VALUE = '3'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
-        sys.argv = command
+        sys.argv = command.copy()
 
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
@@ -233,7 +234,7 @@ class TestNroboArgsPackage():
         SWITCH = '--reruns'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         try:
             launcher_command(exit_on_failure=False)
@@ -249,7 +250,7 @@ class TestNroboArgsPackage():
         VALUE = '3'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
-        sys.argv = command
+        sys.argv = command.copy()
 
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
@@ -262,7 +263,7 @@ class TestNroboArgsPackage():
         SWITCH = '--reruns-delay'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
-        sys.argv = command
+        sys.argv = command.copy()
 
         try:
             launcher_command(exit_on_failure=False)
@@ -270,3 +271,83 @@ class TestNroboArgsPackage():
             return
 
         assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_report_switch_with_allure_option(self):
+        """Validate nRoBo cli --report switch: --report allure"""
+
+        SWITCH = '--report'
+        VALUE = 'allure'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        command.remove(SWITCH)
+        command.remove(VALUE)
+        command.append(f"--{NREPORT.HTML}")
+        command.append(f"{Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+        command.append('--alluredir')
+        command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert set(actual_command) == set(expected_command)
+
+    def test_nrobo_cli_arg_report_switch_without_value(self):
+        """Validate nRoBo cli --report switch without value: --report """
+
+        SWITCH = '--report'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_target_switch(self):
+        """Validate nRoBo cli --target switch: --target TARGET"""
+
+        SWITCH = '--target'
+        VALUE = 'test-report.html'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        command.remove(SWITCH)
+        command.remove(VALUE)
+
+        _copy_of_command = self._replace_and_get_default_key_value(f"--html", f"{Path(NREPORT.REPORT_DIR) / VALUE}")
+        expected_command = command + _copy_of_command
+        actual_command, args, notes = launcher_command()
+
+        assert set(actual_command) == set(expected_command)
+
+    def test_nrobo_cli_arg_target_switch_without_value(self):
+        """Validate nRoBo cli --target switch without value: --target TARGET """
+
+        SWITCH = '--target'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_VERSION_switch(self):
+        """Validate nRoBo cli --VERSION switch: --VERSION"""
+
+        SWITCH = '--VERSION'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        actual_command, args, notes = launcher_command()
+
+        assert actual_command is None
