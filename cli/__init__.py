@@ -27,6 +27,7 @@ def nrobo_cli():
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
     parser.add_argument("-e", "--env", help="Set/switch environment between production and development. Options: test | prod")
     parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
+    parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
 
     args = parser.parse_args()
 
@@ -35,7 +36,7 @@ def nrobo_cli():
 
     if args.build:
         if args.target:
-            build(args.target)
+            build(args.target, override=args.override)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
@@ -43,7 +44,7 @@ def nrobo_cli():
         check()
     elif args.publish:
         if args.target:
-            publish(args.target)
+            publish(args.target, override=args.override)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)

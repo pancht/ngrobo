@@ -183,7 +183,7 @@ def copy_conftest_file() -> None:
     import shutil
     try:
         shutil.copyfile(
-            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE}",
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
             f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
     except Exception as e:
         raise e
@@ -236,8 +236,7 @@ def build(target=ENV_CLI_SWITCH.TEST, debug=False) -> int:
         set_switch_environment(ENV_CLI_SWITCH.PROD, debug)
 
         console.rule(f"[{STYLE.HLOrange}]Running unit tests")
-        # run unit tests
-        execute_unittests(debug)
+        execute_unittests(debug)  # run unit tests
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
         # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py
@@ -245,8 +244,7 @@ def build(target=ENV_CLI_SWITCH.TEST, debug=False) -> int:
         console.print(f"\t[{STYLE.HLOrange}]Environment set to PRODUCTION")
 
     with console.status(f"[{STYLE.TASK}]Update version in pyproject.toml\n"):
-        # update toml version
-        if update_version_pyproject_toml_file(target) > 0: return 1  # some error
+        if update_version_pyproject_toml_file(target, override=override) > 0: return 1  # # update toml version
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Update version in nrobo/__init__.py\n"):
