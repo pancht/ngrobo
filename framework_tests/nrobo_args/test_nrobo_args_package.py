@@ -10,9 +10,6 @@ from nrobo import terminal
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
 
-    DEFAULT_NROBO_ARGS_FOR_N_SWITCH = ['--reruns-delay', '1', '--html', 'results/report.html', '--durations-min', '0.005',
-                          '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
-                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
     DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html', '--durations-min',
                                        '0.005',
                                        '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
@@ -59,7 +56,7 @@ class TestNroboArgsPackage():
         command = ['pytest']
         sys.argv = command
 
-        expected_command = command + self.DEFAULT_NROBO_ARGS_FOR_N_SWITCH
+        expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
         assert set(actual_command) == set(expected_command)
@@ -73,10 +70,10 @@ class TestNroboArgsPackage():
         sys.argv = command
 
         command.remove(SWITCH)
-        expected_command = command + self.DEFAULT_NROBO_ARGS_FOR_N_SWITCH
+        expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
-        assert not (set(actual_command) == set(expected_command))
+        assert set(actual_command) == set(expected_command)
 
     def test_nrobo_cli_arg_i_long_switch(self):
         """Validate nRoBo cli -i long switch: --install"""
@@ -87,10 +84,10 @@ class TestNroboArgsPackage():
         sys.argv = command
 
         command.remove(SWITCH)
-        expected_command = command + self.DEFAULT_NROBO_ARGS_FOR_N_SWITCH
+        expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
-        assert not (set(actual_command) == set(expected_command))
+        assert (set(actual_command) == set(expected_command))
 
     def test_nrobo_cli_arg_app_switch(self):
         """Validate nRoBo cli --app switch: --app APP"""
@@ -165,7 +162,7 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command
 
-        expected_command = command + self.DEFAULT_NROBO_ARGS_FOR_N_SWITCH
+        expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
         assert set(actual_command) == set(expected_command)
@@ -195,7 +192,7 @@ class TestNroboArgsPackage():
         sys.argv = command
 
         command[1] = '-n'
-        expected_command = command + self.DEFAULT_NROBO_ARGS_FOR_N_SWITCH
+        expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
         assert set(actual_command) == set(expected_command)
