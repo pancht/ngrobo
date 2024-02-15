@@ -1,13 +1,21 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+Unit tests for validating framework directories.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
 import os
-import subprocess
 from pathlib import Path
 
-import pytest
-
-from nrobo.cli.nglobals import Browsers
-from nrobo.util.process import terminal
 from nrobo import set_environment, EnvKeys, NROBO_CONST, NROBO_PATHS, NROBO_CLI_TOOL_PATH, NROBO_FRAMEWORK_TESTS
-from nrobo.cli.cli_constants import NREPORT
 
 
 class TestNRoboFrameworkPaths():
