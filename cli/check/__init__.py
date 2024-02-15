@@ -12,11 +12,9 @@ This module has actions pertaining to nRoBo verifying packages.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import os
 
-from nrobo.util.process import terminal
-from nrobo.util.platform import PLATFORMS
 from nrobo import *
+from nrobo.util.platform import PLATFORMS
 
 
 def check(debug=False) -> None:

@@ -1,10 +1,10 @@
+import argparse
 import os
 
 from cli.build import build
 from cli.check import check
+from cli.development import set_switch_environment
 from cli.publish import publish
-from cli.devlopment import set_switch_environment
-import argparse
 from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
 

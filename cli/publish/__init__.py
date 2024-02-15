@@ -1,11 +1,9 @@
-import os
-
-from nrobo import *
-from nrobo.util.process import terminal
-from nrobo.util.platform import PLATFORMS
+from cli.build import ENV_CLI_SWITCH
 from cli.check import check
-from cli.build import build, __CUR_ENV__, ENV_CLI_SWITCH
+from nrobo import *
 from nrobo.util.constants import CONST
+from nrobo.util.platform import PLATFORMS
+from nrobo.util.process import terminal
 
 global __CUR_ENV__
 

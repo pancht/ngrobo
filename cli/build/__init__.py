@@ -13,23 +13,14 @@ process.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import os
-import platform
-import re
-import time
-import subprocess
 
 import validate_nrobo
-from nrobo.util.commands.ncommands import clear_screen
-from nrobo.util.commands.ncommands import remove_files_recursively, terminal, terminal_nogui
-from nrobo.util.common import Common
-from nrobo.util.constants import CONST, EXT
-from nrobo import Python
-from nrobo.util.platform import PLATFORMS
 from nrobo import *
-from cli.development import *
 from nrobo import console, STYLE
-from nrobo.cli.cli_constants import NREPORT
+from nrobo.util.commands.ncommands import remove_files_recursively
+from nrobo.util.common import Common
+from nrobo.util.constants import EXT
+from nrobo.util.platform import PLATFORMS
 
 __DIST_DIR__ = "dist"
 __VERSIONS_DIR__ = "versions" + os.sep
@@ -45,7 +36,7 @@ def get_version_from_yaml_version_files(target) -> str:
     """Get and return version form respective target environment yaml file."""
 
     # Grab version number from version yaml files in version/ directory
-    return Common.read_yaml(__VERSIONS_DIR__ + target + ".yaml")['version']
+    return Common.read_yaml(__VERSIONS_DIR__ + target + EXT.YAML)['version']
 
 
 def increment_version(version) -> str:
@@ -180,7 +171,7 @@ def execute_unittests(debug=False) -> None:
         from cli import set_switch_environment
         console.print(
             f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building packages.")
-        set_switch_environment('test', debug)
+        set_switch_environment(ENV_CLI_SWITCH.TEST, debug)
         console.print(
             f"[{STYLE.HLRed}]Build process failed!!!")
         exit(1)
@@ -225,7 +216,7 @@ def delete_conftest_after_build() -> None:
     terminal(["rm", "-f", conftest])
 
 
-def build(target='test', debug=False) -> int:
+def build(target=ENV_CLI_SWITCH.TEST, debug=False) -> int:
     """Bundle package for <target> environment.
 
     :param debug: enable/disable debug mode.
@@ -242,7 +233,7 @@ def build(target='test', debug=False) -> int:
     with console.status(f"[{STYLE.TASK}]Validating framework\n"):
         # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py
         from cli import set_switch_environment
-        set_switch_environment('prod', debug)
+        set_switch_environment(ENV_CLI_SWITCH.PROD, debug)
 
         console.rule(f"[{STYLE.HLOrange}]Running unit tests")
         # run unit tests
@@ -250,7 +241,7 @@ def build(target='test', debug=False) -> int:
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
         # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py
-        set_switch_environment('prod', debug)
+        set_switch_environment(ENV_CLI_SWITCH.PROD, debug)
         console.print(f"\t[{STYLE.HLOrange}]Environment set to PRODUCTION")
 
     with console.status(f"[{STYLE.TASK}]Update version in pyproject.toml\n"):
@@ -260,7 +251,7 @@ def build(target='test', debug=False) -> int:
 
     with console.status(f"[{STYLE.TASK}]Update version in nrobo/__init__.py\n"):
         # update toml version
-        write_new_version_to_nrobo_init_py_file(get_version_from_yaml_version_files('prod'))
+        write_new_version_to_nrobo_init_py_file(get_version_from_yaml_version_files(ENV_CLI_SWITCH.PROD))
         console.print(f"\t[{STYLE.HLOrange}]version updated in toml")
 
     with console.status(f"[{STYLE.TASK}]Copy conftest.py file under nrobo directory for shipping\n"):
@@ -282,7 +273,7 @@ def build(target='test', debug=False) -> int:
 
     with console.status(f"[{STYLE.TASK}]Reset environment back to DEVELOPMENT\n"):
         # Reset ENV_CLI_SWITCH=DEVELOPMENT in nrobo/__INIT__.py
-        set_switch_environment('test', debug)
+        set_switch_environment(ENV_CLI_SWITCH.TEST, debug)
         console.print(f"\t[{STYLE.HLOrange}]Environment reset.")
 
     with console.status(f"[{STYLE.TASK}]Correct version in nrobo/__init__.py file\n"):
