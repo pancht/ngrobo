@@ -17,6 +17,7 @@ Installer for installing nrobo framework at host system.
 from nrobo.cli.cli_args import *
 from nrobo.util.filesystem import *
 from nrobo.util.process import *
+from typing import Optional
 
 
 def install_nrobo(requirements_file: Optional[str] = None) -> None:

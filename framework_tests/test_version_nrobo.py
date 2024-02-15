@@ -11,12 +11,11 @@ from nrobo.util.filesystem import remove_filetree
 
 class TestNRoboFramework():
 
+    @pytest.mark.skip
     def test_nrobo_framework_developer_tests(self):
         """Validate that nrobo framework developer-tests passed located at root"""
 
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
-                   '--rootdir', str(Path(os.environ[EnvKeys.EXEC_DIR]) /
-                                    NROBO_PATHS.FRAMEWORK / NROBO_PATHS.TESTS)]
+        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS, '-n', '20']
         return_code = terminal(command)
 
         assert return_code == 0

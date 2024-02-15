@@ -300,7 +300,7 @@ def parse_cli_args():
             """)
     parser.add_argument("--noconftest", help="""
             Don't load any conftest.py files.
-            """)
+            """, action="store_true")
     parser.add_argument("--keep-duplicates", help="""
             Keep duplicate tests.
             """)
