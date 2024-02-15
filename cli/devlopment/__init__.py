@@ -23,14 +23,14 @@ def set_switch_environment(env: str, debug=False):
 
     # update environment to production
     # pattern for finding version setting
-    PATTERN = "[^ ](os.environ[\[]EnvKeys.ENVIRONMENT[\][ ]*=[ ]*Environment.(DEVELOPMENT|PRODUCTION))"
+    PATTERN = "[^ ](os.environ[\[]EnvKeys.ENV_CLI_SWITCH[\][ ]*=[ ]*Environment.(DEVELOPMENT|PRODUCTION))"
     PATTERN_REGULAR_EXPRESSION = PATTERN
 
     # Replacement text
     if env == 'test':
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
+        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENV_CLI_SWITCH]" + " = Environment.DEVELOPMENT"
     elif env == 'prod':
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
+        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENV_CLI_SWITCH]" + " = Environment.PRODUCTION"
     else:
         print(f"Wrong environment provided=> {env}. Valid options are prod | test")
         exit()

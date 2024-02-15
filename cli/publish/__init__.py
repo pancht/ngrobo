@@ -4,7 +4,7 @@ from nrobo import *
 from nrobo.util.process import terminal
 from nrobo.util.platform import PLATFORMS
 from cli.check import check
-from cli.build import build, __CUR_ENV__, ENVIRONMENT
+from cli.build import build, __CUR_ENV__, ENV_CLI_SWITCH
 from nrobo.util.constants import CONST
 
 global __CUR_ENV__
@@ -20,9 +20,9 @@ def publish(target, debug=False):
 
     global __CUR_ENV__
 
-    if str(target).lower() == ENVIRONMENT.TEST:
+    if str(target).lower() == ENV_CLI_SWITCH.TEST:
         __CUR_ENV__ = "testpypi"
-    elif str(target).lower() == ENVIRONMENT.PROD:
+    elif str(target).lower() == ENV_CLI_SWITCH.PROD:
         __CUR_ENV__ = "pypi"
     else:
         print("Invalid target environment <{}>. Options: test | prod".format(target))

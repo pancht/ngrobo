@@ -72,3 +72,10 @@ class CONST(object):
     # Path seperators
     SLASH = FORWARD_SLASH
     BACKSLASH = u'\u005C'
+
+
+class EXT:
+    """Constants for various extensions."""
+    YAML = ".yaml"
+    PY = ".py"
+    PYC = ".pyc"

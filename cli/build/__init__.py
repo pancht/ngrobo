@@ -1,3 +1,18 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+This module has actions pertaining to nRoBo build
+process.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
 import os
 import platform
 import re
@@ -8,7 +23,7 @@ import validate_nrobo
 from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.commands.ncommands import remove_files_recursively, terminal, terminal_nogui
 from nrobo.util.common import Common
-from nrobo.util.constants import CONST
+from nrobo.util.constants import CONST, EXT
 from nrobo import Python
 from nrobo.util.platform import PLATFORMS
 from nrobo import *
@@ -21,23 +36,22 @@ __VERSIONS_DIR__ = "versions" + os.sep
 __CUR_ENV__ = ""
 
 
-class ENVIRONMENT:
+class ENV_CLI_SWITCH:
     TEST = "test"
     PROD = "prod"
 
 
-def get_version_from_yaml_version_files(target):
+def get_version_from_yaml_version_files(target) -> str:
+    """Get and return version form respective target environment yaml file."""
+
     # Grab version number from version yaml files in version/ directory
     return Common.read_yaml(__VERSIONS_DIR__ + target + ".yaml")['version']
 
 
-def get_incremented_version(version):
+def increment_version(version) -> str:
     """
-    Increment version by 1
+    Increment <version> by 1 and return it."""
 
-    :param version:
-    :return:
-    """
     # regular expression to verify version
     # major.minor.nightly-build
     regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')
@@ -53,13 +67,10 @@ def get_incremented_version(version):
         return CONST.DOT.join(res)
 
 
-def get_decremented_version(version):
+def decrement_version(version) -> str:
     """
-    Decrement version by 1
+    Decrement version by 1 and return it."""
 
-    :param version:
-    :return:
-    """
     # regular expression to verify version
     # major.minor.nightly-build
     regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')
@@ -75,15 +86,19 @@ def get_decremented_version(version):
         return CONST.DOT.join(res)
 
 
-def write_new_version_in_test_version_file(new_version: str):
-    for _env in ['test', 'prod']:
-        version_file = __VERSIONS_DIR__ + _env + ".yaml"
+def write_new_version_in_test_version_file(new_version: str) -> None:
+    """Update version in version files with given <new_version>"""
+
+    for _env in [ENV_CLI_SWITCH.TEST, ENV_CLI_SWITCH.PROD]:
+        version_file = __VERSIONS_DIR__ + _env + EXT.YAML
         content = Common.read_yaml(version_file)
         content['version'] = '' + new_version + ''
         Common.write_yaml(version_file, content)
 
 
-def write_new_version_to_pyproject_toml_file(new_version):
+def write_new_version_to_pyproject_toml_file(new_version) -> None:
+    """Update pyproject.toml file with given <new_version>"""
+
     PYPROJECT_TOML_FILE = "pyproject.toml"
 
     # Read file content as string
@@ -103,7 +118,9 @@ def write_new_version_to_pyproject_toml_file(new_version):
     Common.write_text_to_file(PYPROJECT_TOML_FILE, file_content)
 
 
-def write_new_version_to_nrobo_init_py_file(new_version):
+def write_new_version_to_nrobo_init_py_file(new_version) -> None:
+    """Update nrobo.__init__.py with give <new_version>"""
+
     nrobo_init_py_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.INIT_PY
 
     # Read file content as string
@@ -124,25 +141,23 @@ def write_new_version_to_nrobo_init_py_file(new_version):
 
 
 def update_version_pyproject_toml_file(target) -> int:
-    """
-    Update version in pyproject.toml
+    """Update version in pyproject.toml
 
-    :param target:
-    :return:
-    """
+        Returns 0 if success."""
+
     global __CUR_ENV__
 
-    if target == ENVIRONMENT.TEST:
-        __CUR_ENV__ = ENVIRONMENT.TEST.lower()
+    if target == ENV_CLI_SWITCH.TEST:
+        __CUR_ENV__ = ENV_CLI_SWITCH.TEST.lower()
 
-    elif target == ENVIRONMENT.PROD:
-        __CUR_ENV__ = ENVIRONMENT.PROD.lower()
+    elif target == ENV_CLI_SWITCH.PROD:
+        __CUR_ENV__ = ENV_CLI_SWITCH.PROD.lower()
 
     # get version
     version = get_version_from_yaml_version_files(__CUR_ENV__)
 
     # Increment version
-    version = get_incremented_version(version)
+    version = increment_version(version)
 
     # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
@@ -153,7 +168,11 @@ def update_version_pyproject_toml_file(target) -> int:
     return 0
 
 
-def execute_unittests(debug=False):
+def execute_unittests(debug=False) -> None:
+    """Executes unit tests for nRoBo framework validation.
+
+        If any errors during execution, exit nRoBo."""
+
     return_code = 1
 
     return_code = validate_nrobo.run_unit_tests()
@@ -167,7 +186,9 @@ def execute_unittests(debug=False):
         exit(1)
 
 
-def copy_conftest_file():
+def copy_conftest_file() -> None:
+    """Copies conftest-host.py file from nrobo.framework package to nrobo package."""
+
     import shutil
     try:
         shutil.copyfile(
@@ -177,7 +198,9 @@ def copy_conftest_file():
         raise e
 
 
-def delete_dist_folder():
+def delete_dist_folder() -> None:
+    """Deletes dist folder for vacating space for fresh packages."""
+
     if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
         try:
             remove_files_recursively(__DIST_DIR__)
@@ -187,24 +210,28 @@ def delete_dist_folder():
         terminal(["del", "/q", "/S", __DIST_DIR__ + os.sep + "*.*"])
 
 
-def run_build_command():
+def run_build_command() -> None:
+    """Run build utility."""
+
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "build"])
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "build"])
     terminal([os.environ[EnvKeys.PYTHON], "-m", "build"])
 
 
-def delete_conftest_after_build():
+def delete_conftest_after_build() -> None:
+    """Delete conftest.py file from nrobo package after build process finishes."""
+
     conftest = f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}"
     terminal(["rm", "-f", conftest])
 
 
 def build(target='test', debug=False) -> int:
-    """
-    Bundle package for <target> environment.
+    """Bundle package for <target> environment.
 
+    :param debug: enable/disable debug mode.
     :param target: Either be 'test' | 'prod'
-    :return: 0 if packing succeeds else 1
-    """
+    :return: 0 if packing succeeds else 1"""
+
     # Always correct version in version yaml files first
     from nrobo.cli.upgrade import get_pypi_index
     write_new_version_in_test_version_file(get_pypi_index(NROBO_CONST.NROBO))
@@ -213,7 +240,7 @@ def build(target='test', debug=False) -> int:
     # run_nrobo_validator_tests
     console.rule(f"[{STYLE.HLOrange}]Packaging nRoBo...")
     with console.status(f"[{STYLE.TASK}]Validating framework\n"):
-        # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
+        # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py
         from cli import set_switch_environment
         set_switch_environment('prod', debug)
 
@@ -222,7 +249,7 @@ def build(target='test', debug=False) -> int:
         execute_unittests(debug)
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
-        # update ENVIRONMENT=PRODUCTION in nrobo/__INIT__.py
+        # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py
         set_switch_environment('prod', debug)
         console.print(f"\t[{STYLE.HLOrange}]Environment set to PRODUCTION")
 
@@ -254,15 +281,15 @@ def build(target='test', debug=False) -> int:
         delete_conftest_after_build()
 
     with console.status(f"[{STYLE.TASK}]Reset environment back to DEVELOPMENT\n"):
-        # Reset ENVIRONMENT=DEVELOPMENT in nrobo/__INIT__.py
+        # Reset ENV_CLI_SWITCH=DEVELOPMENT in nrobo/__INIT__.py
         set_switch_environment('test', debug)
         console.print(f"\t[{STYLE.HLOrange}]Environment reset.")
 
     with console.status(f"[{STYLE.TASK}]Correct version in nrobo/__init__.py file\n"):
         from nrobo.cli.upgrade import get_pypi_index
-        write_new_version_to_nrobo_init_py_file(get_incremented_version(get_pypi_index(NROBO_CONST.NROBO)))
+        write_new_version_to_nrobo_init_py_file(increment_version(get_pypi_index(NROBO_CONST.NROBO)))
         console.print(f"\t[{STYLE.HLOrange}]Corrected.")
 
     with console.status(f"[{STYLE.TASK}]Packages are ready. Please run check.\n"):
-        # Reset ENVIRONMENT=DEVELOPMENT in nrobo/__INIT__.py
+        # Reset ENV_CLI_SWITCH=DEVELOPMENT in nrobo/__INIT__.py
         console.rule(f"[{STYLE.WARNING}]Now run check on packages.")
