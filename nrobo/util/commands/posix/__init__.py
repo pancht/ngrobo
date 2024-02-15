@@ -13,7 +13,6 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 
 class POSIX_COMMAND:
-    """
-    This class holds posix command names.
-    """
+    """POSIX_COMMAND class holds posix command names."""
+
     CLEAR = "clear"

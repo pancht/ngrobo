@@ -7,6 +7,9 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+Wrapper classes and methods for Selenium Classes and
+Definition of nRoBo framework base class, NRobo
+
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
@@ -48,6 +51,7 @@ from nrobo.cli.nglobals import *
 class WAITS:
     """Supported wait types in nrobo.
     These names are used as key in nrobo-config.yaml."""
+
     SLEEP = "sleep"
     WAIT = "wait"
     TIMEOUT = "timeout"
@@ -56,6 +60,8 @@ class WAITS:
 
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
+    """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
+
     if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
         return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
     elif os.environ[EnvKeys.ENVIRONMENT] == Environment.DEVELOPMENT:
@@ -63,20 +69,14 @@ def read_nrobo_configs():
 
 
 class WebdriverWrapperNrobo(WebDriver):
-    """
-    Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
-
-    This class is not instantiable.
-    """
+    """Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
+    This class is not instantiable."""
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
-        """
-        Constructor - NroboSeleniumWrapper
+        """Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
-        :param logger: reference to logger instance
-        """
-        # super().__init__()
+        :param logger: reference to logger instance"""
         self.driver = driver
         self.logger = logger
         self.nconfig = read_nrobo_configs()
@@ -93,18 +93,20 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                name = <obj>.name
-        """
+                name = <obj>.name"""
+
         return self.driver.name
 
     def get(self, url: str):
         """selenium webdriver wrapper method: get"""
+
         url = str(url).replace('\\', "\\\\")  # perform replacements
         nprint(f"Go to url <{url}>", logger=self.logger)
         self.driver.get(url)
 
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """selenium webdriver wrapper method: execute"""
+
         nprint(f"Executing script...")
         return self.driver.execute(driver_command, dict)
 
@@ -115,8 +117,8 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                title = <obj>.title
-        """
+                title = <obj>.title"""
+
         return self.driver.title
 
     @property
@@ -126,8 +128,7 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                <obj>.current_url
-        """
+                <obj>.current_url"""
         return self.driver.current_url
 
     @property
@@ -137,8 +138,7 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-               <obj>.page_source
-        """
+               <obj>.page_source"""
         return self.driver.page_source
 
     def close(self) -> None:
@@ -149,9 +149,8 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                driver.close()
+                driver.close()"""
         return self.driver.close()
-        """
 
     def quit(self) -> None:
         """Quits the driver and closes every associated window.
@@ -159,8 +158,7 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                driver.quit()
-        """
+                driver.quit()"""
         self.driver.quit()
 
     @property
@@ -170,8 +168,7 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                <obj>.current_window_handle
-        """
+                <obj>.current_window_handle"""
         return self.driver.current_window_handle
 
     @property
@@ -181,40 +178,44 @@ class WebdriverWrapperNrobo(WebDriver):
         :Usage:
             ::
 
-                <obj>.window_handles
-        """
+                <obj>.window_handles"""
         return self.driver.window_handles
 
     def maximize_window(self) -> None:
         """Maximizes the current window that webdriver is using."""
+
         self.driver.maximize_window()
 
     def fullscreen_window(self) -> None:
         """Invokes the window manager-specific 'full screen' operation."""
+
         self.driver.fullscreen_window()
 
     def minimize_window(self) -> None:
         """Invokes the window manager-specific 'minimize' operation."""
+
         self.driver.minimize_window()
 
     def print_page(self, print_options: Optional[PrintOptions] = None) -> str:
         """Takes PDF of the current page.
 
         The driver makes a best effort to return a PDF based on the
-        provided parameters.
-        """
+        provided parameters."""
         return self.driver.print_page(print_options)
 
     def switch_to_active_element(self) -> WebElement:
         """Returns the element with focus, or BODY if nothing has focus."""
+
         return self.driver.switch_to.active_element
 
     def switch_to_alert(self) -> Alert:
         """Switches focus to an alert on the page."""
+
         return self.driver.switch_to.alert
 
     def switch_to_default_content(self) -> None:
         """Switch focus to the default frame."""
+
         return self.driver.switch_to.default_content()
 
     def frame(self, frame_reference: Union[str, int, WebElement]) -> None:
@@ -229,8 +230,8 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 switch_to_frame('frame_name')
                 switch_to_frame(1)
-                switch_to_frame(driver.find_elements(By.TAG_NAME, "iframe")[0])
-        """
+                switch_to_frame(driver.find_elements(By.TAG_NAME, "iframe")[0])"""
+
         return self.driver.switch_to.frame(frame_reference)
 
     def switch_to_new_window(self, type_hint: Optional[str] = None) -> None:
@@ -1149,7 +1150,46 @@ class SelectNrobo(DesiredCapabilitiesNrobo):
 
 
 class NRobo(SelectNrobo):
-    """NRobo class"""
+    """Base NRobo class for each of the Page Classes in nRoBo framework.
+
+       Each Page class must inherit NRobo class in order to leverage the nRoBo framework.
+
+       This class takes care of handling browsers, user sessions, actions, logs and many more
+
+       pertaining to browser interactions.
+
+       However, this class is visible to the world by Page class defined in pages.__init__py.
+
+       Thus, end users of nRoBo must inherit Page class while defining their Page definitions.
+
+
+       Below is the detail how Page class leverages NRobo class:
+
+
+            File: <Project-root-dir>/pages/__init__.py
+            ===========================================
+
+            class Page(NRobo):
+
+                def __init__(self, driver, logger):
+                    # constructor calling its parent NRobo constructor
+                    super().__init__(driver, logger)
+
+                ...
+                ...
+
+
+        This is how Page classes can be defined then,
+
+            class PageOne(Page):
+                def __init__(self, driver, logger):
+                    # constructor calling its parent Page constructor
+                    super().__init__(driver, logger)
+
+            ...
+            ...
+
+        """
 
     def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
         """

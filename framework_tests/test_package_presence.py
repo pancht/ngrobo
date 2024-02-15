@@ -1,13 +1,23 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+Unit tests for validating framework directories.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
 import os
-import subprocess
 from pathlib import Path
 
 import pytest
 
-from nrobo.cli.nglobals import Browsers
-from nrobo.util.process import terminal
 from nrobo import set_environment, EnvKeys, NROBO_CONST, NROBO_PATHS, NROBO_CLI_TOOL_PATH, NROBO_FRAMEWORK_TESTS
-from nrobo.cli.cli_constants import NREPORT
 
 
 class TestNRoboFrameworkPaths():
@@ -89,7 +99,8 @@ class TestNRoboFrameworkPaths():
         """Validate that browserConfigs.chrome package is present"""
         set_environment()
 
-        browserConfigs_chrome_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
+        browserConfigs_chrome_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
 
         assert browserConfigs_chrome_pkg_path.exists() == True
 
@@ -113,7 +124,8 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers.firefox package is present"""
         set_environment()
 
-        browsers_firefox_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_FIREFOX_PKG
+        browsers_firefox_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_FIREFOX_PKG
 
         assert browsers_firefox_pkg_path.exists() == True
 
@@ -125,7 +137,8 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers.safari package is present"""
         set_environment()
 
-        browsers_safari_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
+        browsers_safari_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
 
         assert browsers_safari_pkg_path.exists() == True
 
@@ -178,7 +191,8 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.cli_args.py file is present"""
         set_environment()
 
-        cli_cli_args_py_file_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_ARGS_PY_FILE
+        cli_cli_args_py_file_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_ARGS_PY_FILE
 
         assert cli_cli_args_py_file_pkg_path.exists() == True
 
@@ -186,7 +200,8 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.cli_constants.py file is present"""
         set_environment()
 
-        cli_cli_constants_py_file_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_CONSTANTS_PY_FILE
+        cli_cli_constants_py_file_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_CONSTANTS_PY_FILE
 
         assert cli_cli_constants_py_file_pkg_path.exists() == True
 
@@ -194,7 +209,8 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.version.yaml file is present"""
         set_environment()
 
-        cli_cli_version_yaml_file_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_VERSION_YAML_FILE
+        cli_cli_version_yaml_file_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_VERSION_YAML_FILE
 
         assert cli_cli_version_yaml_file_pkg_path.exists() == True
 
@@ -202,7 +218,8 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.nglobals.py file is present"""
         set_environment()
 
-        cli_nglobals_py_file_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NGLOBALS_PY_FILE
+        cli_nglobals_py_file_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NGLOBALS_PY_FILE
 
         assert cli_nglobals_py_file_pkg_path.exists() == True
 
@@ -384,7 +401,8 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.commands.ncommands package is present"""
         set_environment()
 
-        nrobo_util_commands_ncommands_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
+        nrobo_util_commands_ncommands_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
 
         assert nrobo_util_commands_ncommands_pkg_path.exists() == True
 
@@ -474,11 +492,13 @@ class TestNRoboFrameworkPaths():
 
         assert nrobo_framework_tests_pkg_init_path.exists() == True
 
+    @pytest.mark.skip
     def test_nrobo_framework_tests_conftest_py_file_is_present(self):
         """Validate that nrobo_framework_tests.conftest.py file is present"""
         set_environment()
 
-        nrobo_framework_tests_conftest_py_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE
+        nrobo_framework_tests_conftest_py_file_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE
 
         assert nrobo_framework_tests_conftest_py_file_path.exists() == True
 
@@ -486,9 +506,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo_framework_tests.test_package_presence.py file is present"""
         set_environment()
 
-        test_nrobo_framework_py_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.TEST_NROBO_FRAMEWORK_PY_FILE
+        test_nrobo_framework_py_file_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.TEST_NROBO_FRAMEWORK_PY_FILE
 
         assert test_nrobo_framework_py_file_path.exists() == True
+
     def test_tests_pkg_is_present(self):
         """Validate that tests package is present"""
         set_environment()

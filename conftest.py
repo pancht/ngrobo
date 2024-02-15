@@ -443,6 +443,7 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "ui: mark as ui test")
     config.addinivalue_line("markers", "api: mark as api tests")
     config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
+    config.addinivalue_line("markers", "unit: mark as unit test")
 
 
 def pytest_metadata(metadata):

@@ -11,10 +11,6 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import argparse
-import os
-import sys
-
 from nrobo import *
 from nrobo.cli import *
 from nrobo.cli.cli_constants import *
@@ -28,21 +24,19 @@ global __REQUIREMENTS__
 
 
 def parse_cli_args():
-    """
-    Parse command-line-arguments
-
-    :return:
-    """
+    """Parse command-line-arguments"""
 
     # Need to import set_environment method here
     # to handle circular import of partially initialized module
     from nrobo import set_environment
+    import argparse
+
     set_environment()
 
     # Define nrobo command line argument parser
     parser = argparse.ArgumentParser(
         prog="nrobo",
-        description='Run tests through nrobo framework')
+        description='CLI Switches of nRoBo Test Automation framework')
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
@@ -306,7 +300,7 @@ def parse_cli_args():
             """)
     parser.add_argument("--noconftest", help="""
             Don't load any conftest.py files.
-            """)
+            """, action="store_true")
     parser.add_argument("--keep-duplicates", help="""
             Keep duplicate tests.
             """)
@@ -535,10 +529,6 @@ def parse_cli_args():
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
                         command.append(f"--{key}")
                         command.append(value)
-
-    # Debug code line
-    # print(command)
-    # exit(1)
 
     if not args.browser:
         """browser not provided"""

@@ -7,6 +7,7 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+Constants module.
 
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
@@ -16,6 +17,7 @@ import os
 
 class NREPORT:
     """nRoBo report related constants"""
+
     HTML = "html"
     ALLURE = "allure"
     REPORT_DIR = "results"
@@ -30,15 +32,13 @@ class NREPORT:
 
 
 class nCLI:
-    """
-    List of nrobo defined cli options.
+    """List of nrobo defined cli options.
 
     NOTE:
         when you add/remove an option from nCLI class,
         Make sure that the same option is also removed from the
-        nCLI.ARGS dictionary too!!!
+        nCLI.ARGS dictionary too!!!"""
 
-    """
     INSTALL = "install"
     APP = "app"
     URL = "url"
@@ -89,5 +89,6 @@ class nCLI:
 
 class PACKAGES:
     """nRoBo packages"""
+
     NROBO = "nrobo"
     CLI = "cli"

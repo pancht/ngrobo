@@ -7,7 +7,10 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
-Safari Driver CLI
+Safari Driver CLI.
 
 Development: Not started
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
 """

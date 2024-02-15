@@ -8,7 +8,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
 
-This module loads nRoBo globals.
+nrobo module loads nRoBo globals.
 
 
 @author: Panchdev Singh Chauhan

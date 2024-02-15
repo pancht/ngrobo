@@ -10,9 +10,10 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import logging
+
 # rich console
 from nrobo import console, STYLE
-import logging
 
 
 def nprint(msg, style=STYLE.HLGreen, logger=None):
