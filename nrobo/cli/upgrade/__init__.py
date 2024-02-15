@@ -7,6 +7,8 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+Definition of nRoBo update utility.
+
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
@@ -15,8 +17,9 @@ import time
 from nrobo import NROBO_CONST
 
 
-def get_host_version():
+def get_host_version() -> None:
     """get host version of nrobo installation"""
+
     from nrobo import __version__
     return __version__
 
@@ -47,6 +50,7 @@ def get_pypi_index(package) -> None | str:
 def update_available() -> bool:
     """Returns version if package is available on pypi
         else returns None otherwise."""
+
     return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
 
 
@@ -54,6 +58,7 @@ def confirm_update() -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
+
     from nrobo import STYLE
     if update_available():
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
