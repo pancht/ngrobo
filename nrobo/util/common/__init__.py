@@ -24,13 +24,11 @@ import yaml
 
 
 class Common:
-    """
-    Customized Selenium WebDriver class which contains all the useful methods that can be re used.
+    """Customized Selenium WebDriver class which contains all the useful methods that can be re used.
     These methods _help to in the following cases:
     To reduce the time required to write automation script.
     To take the screenshot in case of test case failure.
-    To log to provide waits
-    """
+    To log to provide waits"""
 
     @staticmethod
     def read_file_as_string(file_path: Union[str, Path], encoding=None):

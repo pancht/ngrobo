@@ -17,9 +17,7 @@ from nrobo import *
 
 
 class MissingCommandImplementation(Exception):
-    """
-    This exception raise when <command> implementation missing for <host-platform>
-    """
+    """This exception raise when <command> implementation missing for <host-platform>"""
 
     # constructor
     def __init__(self, command):
@@ -30,10 +28,8 @@ class MissingCommandImplementation(Exception):
 
 
 class BrowserNotSupported(Exception):
-    """
-    This exception raise when <browser> is not supported or
-    implementation to mimic <browser> is not yet implemented
-    """
+    """This exception raise when <browser> is not supported or
+    implementation to mimic <browser> is not yet implemented"""
 
     # constructor
     def __init__(self, browser):
