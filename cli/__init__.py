@@ -1,20 +1,31 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+Defines nRoBo command line switches.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+import argparse
 import os
 
 from cli.build import build
 from cli.check import check
+from cli.development import set_switch_environment
 from cli.publish import publish
-from cli.devlopment import set_switch_environment
-import argparse
 from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
 
 
-def nrobo_cli():
-    """
-    Parses nrobo cli and executes the command.
+def nrobo_cli() -> None:
+    """Parses nrobo cli and executes the command."""
 
-    :return:
-    """
     clear_screen()
     verify_set_python_install_pip_command()
 
@@ -29,6 +40,7 @@ def nrobo_cli():
     parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
     parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
 
+    # parse cli args
     args = parser.parse_args()
 
     from nrobo import EnvKeys

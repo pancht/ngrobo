@@ -1,8 +1,19 @@
-import os
-import re
-from pathlib import Path
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
 
-from nrobo import console
+Unit tests for validating upgrade process.
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+
+from nrobo import console, NROBO_CONST
 
 
 class TestUpgradePkg():
@@ -19,7 +30,7 @@ class TestUpgradePkg():
         """Validate nrobo.cli.upgrade.get_pypi_index() method"""
 
         from nrobo.cli.upgrade import get_pypi_index
-        package = "nrobo"
+        package = NROBO_CONST.NROBO
         import subprocess
         result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
 
@@ -37,15 +48,14 @@ class TestUpgradePkg():
     def test_update_available_method(self):
         """Validate nrobo.cli.upgrade.update_available() method"""
 
-        from nrobo.cli.upgrade import update_available, get_pypi_index, get_host_version
+        from nrobo.cli.upgrade import update_available, get_pypi_index
 
         with console.status("Test if update not available"):
 
             # scenario-1: Update not available
-            package = "nrobo"
+            package = NROBO_CONST.NROBO
             from nrobo import __version__
             if __version__ == get_pypi_index(package):
                 assert update_available() == False
             else:
                 assert update_available() == True
-

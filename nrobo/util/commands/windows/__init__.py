@@ -13,7 +13,6 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 
 class WINDOWS_COMMAND:
-    """
-    This class holds windows command names.
-    """
+    """WINDOWS_COMMAND class holds windows command names."""
+
     CLS = "cls"

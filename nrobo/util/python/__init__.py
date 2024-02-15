@@ -19,17 +19,14 @@ import platform
 from nrobo.util.process import *
 
 
-def verify_set_python_install_pip_command():
-    """
-    Verifies if python is installed on the host system.
+def verify_set_python_install_pip_command() -> None:
+    """Verifies if python is installed on the host system.
 
     If found, sets the appropriate python command
     Else exit the nrobo framework with message.
 
-    If found and sets python command, install pip as well.
+    If found and sets python command, install pip as well."""
 
-    :return:
-    """
     from nrobo import EnvKeys, Environment, NROBO_CONST, Python
     # regular expression to verify python version
     # major.minor.nightly-build

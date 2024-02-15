@@ -13,22 +13,16 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
-import os
-import re
-import subprocess
-from pathlib import Path
+from nrobo.cli.launcher import command_line_args
 
 
 def main():
-    """
-    Entry point of nrobo command-line-utility.
+    """Entry point of nrobo command-line-utility."""
 
-    :return:
-    """
     try:
         from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
         from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
-        from nrobo.cli.cli_args import parse_cli_args
+        from nrobo.cli.nrobo_args import nrobo_cli_parser
         from nrobo.cli.install import install_nrobo
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
@@ -58,7 +52,7 @@ def main():
         remove_files_recursively(NREPORT.REPORT_DIR)
 
         # parse nrobo cli arguments
-        parse_cli_args()
+        command_line_args()
 
     except KeyboardInterrupt as e:
         print(e)

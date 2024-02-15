@@ -7,12 +7,11 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+nRoBo Constants.
 
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import sys
-
 from nrobo.exceptions import BrowserNotSupported
 
 from rich.console import *
@@ -24,6 +23,7 @@ console = Console(theme=themes)
 
 class Browsers:
     """browser names constants"""
+
     CHROME = 'chrome'
     CHROME_HEADLESS = "chrome_headless"
     EDGE = 'edge'
@@ -43,6 +43,7 @@ supported_browsers_in_future = [Browsers.OPERA]
 
 def raise_exception_if_browser_not_supported(browser_name):
     """raise exception if <browser_name> is not supported in nrobo framework"""
+
     if str(browser_name).lower() in supported_browsers_in_future:
         console.print(
             f"[{STYLE.HLOrange}]Support for {browser_name} browser will be coming in upcoming releases. Sorry for the "

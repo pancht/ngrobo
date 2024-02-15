@@ -16,19 +16,34 @@ import subprocess
 
 def terminal_nogui(command) -> int:
     """run command without any terminal output"""
+
     return terminal(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
 def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False,
              cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None,
              universal_newlines=None, debug=False):
-    """
-    Execute given command, command
+    """Execute given command, command
 
+    :param debug:
+    :param universal_newlines:
+    :param env:
+    :param text:
+    :param errors:
+    :param encoding:
+    :param check:
+    :param timeout:
+    :param cwd:
+    :param shell:
+    :param stderr:
+    :param stdout:
+    :param input:
+    :param stdin:
     :param capture_output:
     :param command: command
     :return: status code
     """
+
     if debug is False:
         """check environment debug flag"""
         from nrobo import EnvKeys

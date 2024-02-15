@@ -13,28 +13,19 @@ Installer for installing nrobo framework at host system.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import os
-import shutil
-import sys
 
-from nrobo.cli import *
-from nrobo.cli.cli_constants import *
-from nrobo.cli.nglobals import *
-from nrobo.cli.cli_args import *
-from nrobo import *
+from nrobo.cli.launcher import *
 from nrobo.util.filesystem import *
 from nrobo.util.process import *
+from typing import Optional
 
 
 def install_nrobo(requirements_file: Optional[str] = None) -> None:
-    """
-    This will install nrobo framework and its dependencies on host system in the current directory
+    """This will install nrobo framework and its dependencies on host system in the current directory
     from where nrobo command was executed in the Production environment.
 
-    This will only install nrobo dependencies if it is executed in the Developer environment.
+    This will only install nrobo dependencies if it is executed in the Developer environment."""
 
-    :return: None
-    """
     from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
     # Inline imports to handle circular import exception while importing partially initialized module
@@ -69,8 +60,8 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         # create framework folders on host system
         if nrobo_installed:
             """upgrade"""
-            # Automatic upgrade logic will be developed later
-            pass
+            from nrobo.cli.upgrade import confirm_update
+            confirm_update()
         else:
             """fresh installation"""
 

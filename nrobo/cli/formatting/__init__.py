@@ -29,6 +29,8 @@ class STYLE:
     INFO = "info",
     DANGER = "danger"
     PURPLE4 = "purple4"
+    BOLD = "bold"
+    ITALIC = "italic"
 
 
 themes = Theme({  # Defined rich themes
@@ -40,4 +42,5 @@ themes = Theme({  # Defined rich themes
     STYLE.INFO: "dim cyan",
     STYLE.WARNING: "magenta",
     STYLE.DANGER: "bold red",
+    STYLE.BOLD: "bold"
 })

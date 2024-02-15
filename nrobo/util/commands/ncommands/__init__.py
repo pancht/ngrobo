@@ -22,12 +22,11 @@ from nrobo.util.process import terminal, terminal_nogui
 
 
 class N_COMMANDS:
-    """
-    This class hold nrobo command mappings for host platform.
+    """N_COMMANDS class hold nrobo command mappings for host platform.
 
     Raises <MissingCommandImplementation> exception
-    If there is no implementation for host platform.
-    """
+    If there is no implementation for host platform."""
+
     CLEAR_SCREEN = "clear screen"
     COMMAND = {
         PLATFORMS.WINDOWS: {
@@ -39,13 +38,9 @@ class N_COMMANDS:
     }
 
 
-def get_command(command):
-    """
-    Return the appropriate posix or windows <command> to caller.
+def get_command(command) -> None:
+    """Return the appropriate posix or windows <command> to caller."""
 
-    :param command:
-    :return:
-    """
     try:
         return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][N_COMMANDS.CLEAR_SCREEN]
     except KeyError as ke:
@@ -53,20 +48,15 @@ def get_command(command):
 
 
 def clear_screen():
-    """
-    Run the clear screen command.
-
-    :return:
-    """
+    """Run the clear screen command."""
     terminal([get_command(N_COMMANDS.CLEAR_SCREEN)])
 
 
 def remove_files_recursively(directory):
-    """
-    Remove <directory>
+    """Remove <directory>
 
     :param directory:
-    :return:
-    """
+    :return:"""
+
     run_status = terminal(["rm", "-rf", directory])
     return run_status

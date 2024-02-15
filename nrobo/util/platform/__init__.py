@@ -7,6 +7,8 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
+Platform functions.
+
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
@@ -17,9 +19,8 @@ from nrobo import EnvKeys
 
 
 class PLATFORMS:
-    """
-    This class holds possible platform names.
-    """
+    """PLATFORMS class holds possible platform names."""
+
     LINUX = "Linux"
     DARWIN = "Darwin"
     MACOS = DARWIN
