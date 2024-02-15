@@ -47,11 +47,13 @@ class NROBO_PATHS:
     INSTALL = Path("install")
     INSTALL_PKG = CLI / INSTALL / INIT_PY
     REQUIREMENTS_TXT_FILE = CLI / INSTALL / Path("requirements.txt")
+    CLI_NROBO_ARGS = Path("nrobo_args")
+    CLI_NROBO_ARGS_PKG = CLI / CLI_NROBO_ARGS / INIT_PY
     CLI_TOOLS = Path("tools")
     CLI_TOOLS_PKG = CLI / CLI_TOOLS / INIT_PY
     UPGRADE = Path("upgrade")
     UPGRADE_PKG = CLI / UPGRADE / INIT_PY
-    CLI_ARGS_PY_FILE = CLI / Path("cli_args.py")
+    CLI_LAUNCHER_PY_FILE = CLI / Path("launcher.py")
     CLI_CONSTANTS_PY_FILE = CLI / Path("cli_constants.py")
     CLI_VERSION_YAML_FILE = CLI / Path("cli_version.yaml")
     NGLOBALS_PY_FILE = CLI / Path("nglobals.py")

@@ -14,7 +14,7 @@ Installer for installing nrobo framework at host system.
 @email: erpanchdev@gmail.com
 """
 
-from nrobo.cli.cli_args import *
+from nrobo.cli.launcher import *
 from nrobo.util.filesystem import *
 from nrobo.util.process import *
 from typing import Optional
