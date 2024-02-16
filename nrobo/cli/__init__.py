@@ -13,7 +13,10 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
-from nrobo.cli.launcher import command_line_args
+import os
+
+from nrobo.cli.launcher import launch_nrobo, launcher_command
+from nrobo.cli.upgrade import confirm_update
 
 
 def main():
@@ -33,11 +36,15 @@ def main():
         # clear screen
         clear_screen()
 
+        # called to set EnvKeys dependent on args
+        launcher_command()
+
         # greet the guest
         greet_the_guest()
 
-        from nrobo.cli.upgrade import confirm_update
-        confirm_update()
+        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
+            # from nrobo.cli.upgrade import confirm_update
+            confirm_update()
 
         # install dependencies
         install_nrobo(None)
@@ -52,7 +59,7 @@ def main():
         remove_files_recursively(NREPORT.REPORT_DIR)
 
         # parse nrobo cli arguments
-        command_line_args()
+        launch_nrobo()
 
     except KeyboardInterrupt as e:
         print(e)

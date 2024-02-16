@@ -12,10 +12,13 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import time
+
 from nrobo import *
 from nrobo.cli import *
 from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
+from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import *
 
 from nrobo.util.process import *
@@ -24,8 +27,13 @@ from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
 global __REQUIREMENTS__
 
 
-def command_line_args():
-    """Parse command-line-arguments"""
+def launcher_command(exit_on_failure=True):
+    """Prepares nrobo launcher command
+       by parsing command line switches
+       in order to trigger test suite launch.
+
+       Returns [str], args: command list, actual args
+    """
 
     # Need to import set_environment method here
     # to handle circular import of partially initialized module
@@ -36,28 +44,30 @@ def command_line_args():
 
     # parse command line arguments
     from nrobo.cli.nrobo_args import nrobo_cli_parser
-    args = nrobo_cli_parser()
+    args = nrobo_cli_parser(exit_on_failure=exit_on_failure)
 
     # process each nrobo cli arguments
     if args.install:
         # Install dependencies
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
-            # install_nrobo(None)
-            exit(0)
+            install_nrobo(None)
+            return None, None, None
     if args.VERSION:
         # show version
         from nrobo import __version__
         console.print(f"nrobo {__version__}")
-        from nrobo.cli.upgrade import confirm_update
-        confirm_update()
-        exit(0)
+        return None, None, None
     if args.suppress:
         # suppress upgrade prompt
-        os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
+    if args.version:
+        terminal(['pytest', f"--version"], debug=True)
+        return None, None, None
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
     command_builder_notes = []  # list for storing notes during cli switch processing
+    override_defaults = []
 
     # process other switches
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
@@ -72,17 +82,26 @@ def command_line_args():
             if value:
                 """if key has value, then only proceed with current key"""
 
-                if type(value) is bool:
+                if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
-                    if key == args.suppress:
+                    if key == nCLI.SUPPRESS:
                         continue
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)
-                        return
-
-                    command.append(f"--{key}")
-                    continue
+                        return None, None, None
+                    elif key == args.version:
+                        terminal(['pytest', f"--{key}"], debug=True)
+                        exit()
+                    elif key == 'capture-no':
+                        command.append('-s')
+                        continue
+                    elif key == 'extra-summary':
+                        command.append('-r')
+                        continue
+                    else:
+                        command.append(f"--{key}")
+                        continue
                 elif key not in nCLI.ARGS.keys():
                     """process special short keys(single letter keys) that does not have corresponding long key"""
                     if key == "c":
@@ -93,6 +112,9 @@ def command_line_args():
                         """simply add long keys to launcher command"""
                         if key == nCLI.TARGET:
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
+                        if f"--{key}" in nCLI.DEFAULT_ARGS:
+                            override_defaults.append(f"--{key}")
+
                         command.append(f"--{key}")
                         command.append(str(value))
                 elif key in nCLI.ARGS:
@@ -100,16 +122,21 @@ def command_line_args():
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
                             os.environ[EnvKeys.APP] = value
+                            continue
                         elif key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
+                            continue
                         elif key == nCLI.USERNAME:
                             os.environ[EnvKeys.USERNAME] = value
+                            continue
                         elif key == nCLI.PASSWORD:
                             os.environ[EnvKeys.PASSWORD] = value
+                            continue
 
                         # add keys to launcher command
                         command.append(f"--{key}")
                         command.append(str(value))
+                        continue
 
                     if key == nCLI.BROWSER:
                         os.environ[EnvKeys.BROWSER] = value
@@ -159,8 +186,22 @@ def command_line_args():
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
+
     for k, v in nCLI.DEFAULT_ARGS.items():
+        if k in override_defaults:
+            continue  # skip adding k,v pair if it is already added by arg parse
         command = command + v
+
+    return command, args, command_builder_notes
+
+
+def launch_nrobo():
+    """Parse command-line-arguments"""
+
+    command, args, command_builder_notes = launcher_command()
+
+    if command is None and args is None and command_builder_notes is None:
+        return
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
 
@@ -177,6 +218,7 @@ def command_line_args():
 
 def create_allure_report(command: list) -> int:
     """prepares allure report based on pytest launcher <command>"""
+
     allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
     terminal(command + ['--alluredir', allure_results], debug=True)
 
@@ -192,8 +234,9 @@ def create_allure_report(command: list) -> int:
 def create_simple_html_report(command: list) -> int:
     """prepares simple html report based on pytest launcher command"""
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
-    return_code = terminal(command)
-    console.rule(f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+    return_code = terminal(command, debug=True)
+    console.rule(
+        f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
 
     return return_code
 

@@ -53,9 +53,9 @@ def run_unit_tests(debug=False) -> int:
     return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS, '-n', '20'],
                                         debug=debug)
     if return_code_unit_test_run == 0:
-        console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].",  style=f"{STYLE.HLRed}")
+        console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
     else:
-        console.rule(f"[{STYLE.HLRed}]Exit. [Reason] One or more web tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.")
+        console.rule(f"[{STYLE.HLRed}]Exit. [Reason] One or more web tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.",  style=f"{STYLE.HLRed}")
         return_code_web_test_run
 
     console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/] and [{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
