@@ -7,6 +7,7 @@ import pytest
 
 from nrobo import terminal
 from nrobo.cli.cli_constants import NREPORT
+from nrobo.cli.nrobo_args import BOOL_SWITCHES
 
 
 class TestNroboArgsPackage():
@@ -27,7 +28,48 @@ class TestNroboArgsPackage():
         for idx in range(len(_copy)):
             if _copy[idx] == key:
                 _copy[idx + 1] = value
-                return _copy
+                return ['pytest'] + _copy
+
+    def _match_key_value_pairs(self, src: [str], dest: [str]):
+        """Match key-value pairs with src in dest list.
+
+           If found match, True else return false.
+
+           If any wrong outcome, please check if there is any pair key that is stored in BOOL_SWITCHES as bool key?"""
+
+        len_src = len(src)
+        len_dest = len(dest)
+        if not len_src == len_dest:
+            return False
+
+        pair_key_match = False
+
+        _idx_src = 0
+        while _idx_src < len_src:
+            for _idx_dest in range(len_dest):
+                # search key from src in dest
+                if src[_idx_src] == dest[_idx_dest]:
+                    # key matches
+                    if src[_idx_src] == "pytest":
+                        break
+                    elif src[_idx_src] in BOOL_SWITCHES:
+                        break
+                    else:
+                        if src[_idx_src + 1] == dest[_idx_dest + 1]:
+                            # matching value found
+                            # thus, update index in src
+                            pair_key_match = True
+                            break
+                        else:
+                            return False  # value did not match
+
+            if pair_key_match:
+                _idx_src += 2
+                pair_key_match = not pair_key_match
+            else:
+                _idx_src +=1
+
+        return True  # All switches matched
 
     def test_show_only_pytest_switches(self):
         """Validate that all show only pytest switches are present in the list"""
@@ -351,3 +393,52 @@ class TestNroboArgsPackage():
         actual_command, args, notes = launcher_command()
 
         assert actual_command is None
+
+    def test_nrobo_cli_arg_suppress_switch(self):
+        """Validate nRoBo cli --suppress switch: --suppress"""
+
+        SWITCH = '--suppress'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        command.remove(SWITCH)
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert set(actual_command) == set(expected_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_chrome(self):
+        """Validate nRoBo cli --browser switch: --browser chrome"""
+
+        SWITCH = '--browser'
+        VALUE = 'chrome'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        command.remove(SWITCH)
+        command.remove(VALUE)
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert set(actual_command) == set(expected_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_chrome_headless(self):
+        """Validate nRoBo cli --browser switch: --browser chrome_headless"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'chrome_headless'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)

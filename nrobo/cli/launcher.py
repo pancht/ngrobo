@@ -18,6 +18,7 @@ from nrobo import *
 from nrobo.cli import *
 from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
+from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import *
 
 from nrobo.util.process import *
@@ -58,7 +59,7 @@ def launcher_command(exit_on_failure=True):
         return None, None, None
     if args.suppress:
         # suppress upgrade prompt
-        os.environ[EnvKeys.SUPPRESS_PROMPT] = '1'
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
     if args.version:
         terminal(['pytest', f"--version"], debug=True)
         return None, None, None
@@ -83,7 +84,7 @@ def launcher_command(exit_on_failure=True):
                 if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
-                    if key == args.suppress:
+                    if key == nCLI.SUPPRESS:
                         continue
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)

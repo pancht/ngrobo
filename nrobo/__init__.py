@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.6.1'
+__version__ = '2024.6.0'
 
 # install rich library
 import os
@@ -192,7 +192,7 @@ os.environ[EnvKeys.PASSWORD] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
-os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
+os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
 
 import subprocess
 from nrobo.util.process import terminal

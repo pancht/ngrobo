@@ -20,6 +20,60 @@ import argparse
 from nrobo.cli.cli_constants import nCLI, NREPORT
 from nrobo.cli.nglobals import Browsers
 
+
+BOOL_SWITCHES = [
+    f"--{nCLI.INSTALL}",
+    f"--{nCLI.VERSION}",
+    f"--{nCLI.SUPPRESS}",
+    "--markers",
+    "--exitfirst",
+    "--fixtures",
+    "--funcargs",
+    "--fixtures-per-test",
+    "--pdb",
+    "--trace",
+    "-s",
+    "--runxfail",
+    "--last-failed",
+    "--failed-first",
+    "--ff",
+    "--nf",
+    "--new-first",
+    "--cache-clear",
+    "--sw",
+    "--stepwise",
+    "--sw-skip",
+    "--stepwise-skip",
+    "--verbose",
+    "--no-header",
+    "--no-summary",
+    "--quiet",
+    "--disable-warnings",
+    "--disable-pytest-warnings",
+    "--showlocals",
+    "--full-trace",
+    "--strict-config",
+    "--strict-markers",
+    "--strict",
+    "--continue-on-collection-errors",
+    "--co",
+    "--collect-only",
+    "--pyargs",
+    "--noconftest",
+    "--keep-duplicates",
+    "--collect-in-virtualenv",
+    "--doctest-modules",
+    "--doctest-ignore-import-errors",
+    "--doctest-continue-on-failure",
+    "--version",
+    "--trace-config",
+    "--debug",
+    "--override-ini",
+    "--setup-only",
+    "--setup-show",
+    "--setup-plan",
+]
+
 SHOW_ONLY_SWITCHES = [
     "markers",
     "fixtures",
@@ -30,6 +84,7 @@ SHOW_ONLY_SWITCHES = [
     "setup-plan",
     "co"
 ]
+
 
 
 def nrobo_cli_parser(exit_on_failure=True):
@@ -257,7 +312,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("--strict-config", help="""
                 any warnings encountered while parsing the `pytest`
                             section of the configuration file raise errors.
-                """)
+                """, action="store_true")
     parser.add_argument("--strict-markers", help="""
                 markers not registered in the `markers` section of
                             the configuration file raise errors.
