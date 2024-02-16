@@ -320,7 +320,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("--strict", help="""
                 (deprecated) alias to --strict-markers.
                 """, action="store_true")
-    parser.add_argument("-c", help="""
+    parser.add_argument("-c", "--configuration", help="""
                 -c file. load configuration from `file` instead of trying to
                             locate one of the implicit configuration files.
                 """)

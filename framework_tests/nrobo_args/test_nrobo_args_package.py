@@ -1147,5 +1147,148 @@ class TestNroboArgsPackage():
 
         self._assert_exception()
 
+    def test_nrobo_cli_arg_junit_xml_switch(self):
+        """Validate nRoBo cli --junit-xm switch: --junit-xm filepath"""
+
+        SWITCH = '--junit-xm'
+        VALUE = 'filepath'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_junit_xml_switch_without_value(self):
+        """Validate nRoBo cli --junit-xml switch without value: --junit-xml filepath"""
+
+        SWITCH = '--junit-xml'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_junit_prefix_switch(self):
+        """Validate nRoBo cli --junit-prefix switch: --junit-prefix prefix"""
+
+        SWITCH = '--junit-prefix'
+        VALUE = 'prefix'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_junit_prefix_switch_without_value(self):
+        """Validate nRoBo cli --junit-prefix switch: --junit-prefix prefix"""
+
+        SWITCH = '--jjunit-prefix'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_pythonwarnings_switch(self):
+        """Validate nRoBo cli --pythonwarnings switch: --pythonwarnings [pythonwarnings]]"""
+
+        SWITCH = '--pythonwarnings'
+        VALUE = 'pythonwarnings'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_pythonwarnings_switch_without_value(self):
+        """Validate nRoBo cli --pythonwarnings switch without value: --pythonwarnings [pythonwarnings]]"""
+
+        SWITCH = '--pythonwarnings'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_maxfail_switch(self):
+        """Validate nRoBo cli --maxfail switch: --maxfail [num]]"""
+
+        SWITCH = '--maxfail'
+        VALUE = 'num'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_maxfail_switch_without_value(self):
+        """Validate nRoBo cli --maxfail switch without value: --maxfail [num]]"""
+
+        SWITCH = '--maxfail'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_strict_config_switch(self):
+        """Validate nRoBo cli --strict-config switch without value: --strict-config """
+
+        SWITCH = '--strict-config'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_strict_markers_switch(self):
+        """Validate nRoBo cli --strict-markers switch without value: --strict-markers """
+
+        SWITCH = '--strict-markers'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_strict_switch(self):
+        """Validate nRoBo cli --strict switch: --strict """
+
+        SWITCH = '--strict'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_configuration_switch(self):
+        """Validate nRoBo cli --configuration switch: --configuration file"""
+
+        SWITCH = '--configuration'
+        VALUE = 'file'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_configuration_switch_without_value(self):
+        """Validate nRoBo cli --configuration switch without value: --configuration file"""
+
+        SWITCH = '--configuration'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
 
 
