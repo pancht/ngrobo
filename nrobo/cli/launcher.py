@@ -92,6 +92,9 @@ def launcher_command(exit_on_failure=True):
                     elif key == args.version:
                         terminal(['pytest', f"--{key}"], debug=True)
                         exit()
+                    elif key == 'capture-no':
+                        command.append('-s')
+                        continue
                     else:
                         command.append(f"--{key}")
                         continue

@@ -8,6 +8,7 @@ import pytest
 from nrobo import terminal
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES
+from nrobo.exceptions import BrowserNotSupported
 
 
 class TestNroboArgsPackage():
@@ -442,3 +443,400 @@ class TestNroboArgsPackage():
         actual_command, args, notes = launcher_command()
 
         assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_firefox(self):
+        """Validate nRoBo cli --browser switch: --browser firefox"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'firefox'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_firefox_headless(self):
+        """Validate nRoBo cli --browser switch: --browser firefox_headless"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'firefox_headless'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_safari(self):
+        """Validate nRoBo cli --browser switch: --browser safari"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'safari'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_edge(self):
+        """Validate nRoBo cli --browser switch: --browser edge"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'edge'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_browsers_switch_with_value_of_not_supported_browser(self):
+        """Validate nRoBo cli --browser switch: --browser xxx"""
+
+        PYTEST = "PYTEST"
+        SWITCH = '--browser'
+        VALUE = 'xxx'
+
+        from nrobo.cli.launcher import launcher_command
+        command = [PYTEST, SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        _copy_of_default_args = self._replace_and_get_default_key_value(SWITCH, VALUE)
+        expected_command = _copy_of_default_args
+        try:
+            actual_command, args, notes = launcher_command()
+        except BrowserNotSupported as e:
+            return True
+
+        return False
+
+    def test_nrobo_cli_arg_browser_switch_without_value(self):
+        """Validate nRoBo cli --browser switch without value: --browser """
+
+        SWITCH = '--browser'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_browser_config_switch(self):
+        """Validate nRoBo cli --browser-config switch: --browser BROWSER-CONFIG"""
+
+        SWITCH = '--browser-config'
+        VALUE = 'xyz'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert set(actual_command) == set(expected_command)
+
+    def test_nrobo_cli_arg_browser_config_switch_without_value(self):
+        """Validate nRoBo cli --browser-config switch without value: --browser """
+
+        SWITCH = '--browser-config'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_key_switch(self):
+        """Validate nRoBo cli --key switch: --key KEY"""
+
+        SWITCH = '--key'
+        VALUE = '1'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        command[1] = '-k'
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_key_switch_without_value(self):
+        """Validate nRoBo cli --key switch without value: --key """
+
+        SWITCH = '--key'
+        VALUE = '1'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_grid_switch(self):
+        """Validate nRoBo cli --grid switch: --grid GRID"""
+
+        SWITCH = '--grid'
+        VALUE = 'https://apple.com'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_grid_switch_without_value(self):
+        """Validate nRoBo cli --grid switch without value: --grid """
+
+        SWITCH = '--grid'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_marker_switch(self):
+        """Validate nRoBo cli --marker switch: --marker MARKER"""
+
+        SWITCH = '--marker'
+        VALUE = 'test'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_marker_switch_without_value(self):
+        """Validate nRoBo cli --marker switch: --marker """
+
+        SWITCH = '--marker'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_markers_switch(self):
+        """Validate nRoBo cli --markers switch: --markers MARKERS"""
+
+        SWITCH = '--markers'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert actual_command is None
+
+    def test_nrobo_cli_arg_exitfirst_switch(self):
+        """Validate nRoBo cli --exitfirst switch: --exitfirst """
+
+        SWITCH = '--exitfirst'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_fixtures_switch(self):
+        """Validate nRoBo cli --fixtures switch: --fixtures """
+
+        SWITCH = '--fixtures'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert actual_command is None
+
+    def test_nrobo_cli_arg_funcargs_switch(self):
+        """Validate nRoBo cli --funcargs switch: --funcargs """
+
+        SWITCH = '--funcargs'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert actual_command is None
+
+    def test_nrobo_cli_arg_fixtures_per_test_switch(self):
+        """Validate nRoBo cli --fixtures-per-test switch: --fixtures-per-test """
+
+        SWITCH = '--fixtures-per-test'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert actual_command is None
+
+    def test_nrobo_cli_arg_pdb_switch(self):
+        """Validate nRoBo cli --pdb switch: --pdb """
+
+        SWITCH = '--pdb'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_pdbcls_switch(self):
+        """Validate nRoBo cli --pdbcls switch: --pdbcls modulename:classname"""
+
+        SWITCH = '--pdbcls'
+        VALUE = 'modulename:classname'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_pdbcls_switch_without_value(self):
+        """Validate nRoBo cli --pdbcls switch without value: --pdbcls """
+
+        SWITCH = '--pdbcls'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_trace_switch(self):
+        """Validate nRoBo cli --trace switch: --trace """
+
+        SWITCH = '--trace'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_capture_switch(self):
+        """Validate nRoBo cli --capture switch: --capture method"""
+
+        SWITCH = '--capture'
+        VALUE = 'method'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_capture_switch_without_value(self):
+        """Validate nRoBo cli --capture switch without value: --capture method"""
+
+        SWITCH = '--capture'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        try:
+            launcher_command(exit_on_failure=False)
+        except argparse.ArgumentError as e:
+            return
+
+        assert False  # If expected exception did not raise
+
+    def test_nrobo_cli_arg_capture_no_switch(self):
+        """Validate nRoBo cli --capture-no switch: --capture-no """
+
+        SWITCH = '--capture-no'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        command[1] = '-s'
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+

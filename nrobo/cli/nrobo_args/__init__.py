@@ -196,7 +196,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("--capture", help="""
         --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys.
         """)
-    parser.add_argument("-s", help="shortcut for --capture=no.", action="store_true")
+    parser.add_argument("-s", f"--capture-no", help="shortcut for --capture=no.", action="store_true")
     parser.add_argument("--runxfail", help="""
         report the results of xfail tests as if they were
                             not marked
