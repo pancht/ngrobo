@@ -398,7 +398,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     # parser.add_argument("-h", "--help", help="""
     #                 show help message and configuration info
     #                 """)
-    parser.add_argument("-p", help="""
+    parser.add_argument("-p", "--plugin-module", help="""
                         -p name               early-load given plugin module name or entry point
                             (multi-allowed).
                             To avoid loading of plugins, use the `no:` prefix,

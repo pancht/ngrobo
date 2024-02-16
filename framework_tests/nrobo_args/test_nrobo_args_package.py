@@ -108,7 +108,7 @@ class TestNroboArgsPackage():
         _copy_of_default_args = self._replace_and_get_default_key_value(switch, new_value)
         expected_command = _copy_of_default_args
         actual_command, args, notes = launcher_command()
-
+        print(f"{expected_command} \n\n{actual_command}")
         assert self._match_key_value_pairs(expected_command, actual_command)
 
     def _assert_command_is_None(self):
@@ -1148,15 +1148,15 @@ class TestNroboArgsPackage():
         self._assert_exception()
 
     def test_nrobo_cli_arg_junit_xml_switch(self):
-        """Validate nRoBo cli --junit-xm switch: --junit-xm filepath"""
+        """Validate nRoBo cli --junit-xml switch: --junit-xml filepath"""
 
-        SWITCH = '--junit-xm'
+        SWITCH = '--junit-xml'
         VALUE = 'filepath'
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
-        self._assert_command(command)
+        self._assert_command_replace_default_values(SWITCH, VALUE)
 
     def test_nrobo_cli_arg_junit_xml_switch_without_value(self):
         """Validate nRoBo cli --junit-xml switch without value: --junit-xml filepath"""
@@ -1183,7 +1183,7 @@ class TestNroboArgsPackage():
     def test_nrobo_cli_arg_junit_prefix_switch_without_value(self):
         """Validate nRoBo cli --junit-prefix switch: --junit-prefix prefix"""
 
-        SWITCH = '--jjunit-prefix'
+        SWITCH = '--junit-prefix'
 
         from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
@@ -1289,6 +1289,692 @@ class TestNroboArgsPackage():
         sys.argv = command.copy()
 
         self._assert_exception()
+
+    def test_nrobo_cli_arg_continue_on_collection_errors_switch(self):
+        """Validate nRoBo cli --continue-on-collection-errors switch: --continue-on-collection-errors"""
+
+        SWITCH = '--continue-on-collection-errors'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_rootdir_switch(self):
+        """Validate nRoBo cli --rootdir switch: --rootdir file"""
+
+        SWITCH = '--rootdir'
+        VALUE = 'file'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_rootdir_switch_without_value(self):
+        """Validate nRoBo cli --rootdir switch without value: --rootdir file"""
+
+        SWITCH = '--rootdir'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+    def test_nrobo_cli_arg_co_switch(self):
+        """Validate nRoBo cli --co switch: --co """
+
+        SWITCH = '--co'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command_is_None()
+
+    def test_nrobo_cli_arg_collect_only_switch(self):
+        """Validate nRoBo cli --collect-only switch: --co """
+
+        SWITCH = '--collect-only'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command_is_None()
+
+    def test_nrobo_cli_arg_pyargs_switch(self):
+        """Validate nRoBo cli --pyargs switch: --co """
+
+        SWITCH = '--pyargs'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_ignore_switch(self):
+        """Validate nRoBo cli --ignore switch: --ignore path"""
+
+        SWITCH = '--ignore'
+        VALUE = 'path'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_ignore_switch_without_value(self):
+        """Validate nRoBo cli --ignore switch without value: --ignore path"""
+
+        SWITCH = '--ignore'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_ignore_glob_switch(self):
+        """Validate nRoBo cli --ignore-glob switch: --ignore-glob path"""
+
+        SWITCH = '--ignore-glob'
+        VALUE = 'path'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_ignore_glob_switch_without_value(self):
+        """Validate nRoBo cli --ignore-glob switch: --ignore-glob path"""
+
+        SWITCH = '--ignore-glob'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_deselect_switch(self):
+        """Validate nRoBo cli --deselect switch: --deselect nodeid"""
+
+        SWITCH = '--deselect'
+        VALUE = 'nodeid'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_deselect_switch_without_value(self):
+        """Validate nRoBo cli --deselect switch without value: --deselect nodeid"""
+
+        SWITCH = '--deselect'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_confcutdir_switch(self):
+        """Validate nRoBo cli --confcutdir switch: --confcutdir path"""
+
+        SWITCH = '--confcutdir'
+        VALUE = 'path'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_confcutdir_switch_without_value(self):
+        """Validate nRoBo cli --confcutdir switch: --confcutdir path"""
+
+        SWITCH = '--confcutdir'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_noconftest_switch(self):
+        """Validate nRoBo cli --noconftest switch: --noconftest """
+
+        SWITCH = '--noconftest'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_keep_duplicates_switch(self):
+        """Validate nRoBo cli --keep-duplicates switch: --keep-duplicates """
+
+        SWITCH = '--keep-duplicates'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_collect_in_virtualenv_switch(self):
+        """Validate nRoBo cli --collect-in-virtualenv switch: --collect-in-virtualenv """
+
+        SWITCH = '--collect-in-virtualenv'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_import_mode_switch(self):
+        """Validate nRoBo cli --import-mode switch: --import-mode mode"""
+
+        SWITCH = '--import-mode'
+        VALUE = '{prepend,append,importlib}'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_import_mode_switch_without_value(self):
+        """Validate nRoBo cli --import-mode switch: --import-mode mode"""
+
+        SWITCH = '--import-mode'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_doctest_modules_switch(self):
+        """Validate nRoBo cli --doctest-modules switch: --doctest-modules """
+
+        SWITCH = '--doctest-modules'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_doctest_report_switch(self):
+        """Validate nRoBo cli --doctest-report switch: --doctest-report ['{none,cdiff,ndiff,udiff,only_first_failure}']"""
+
+        SWITCH = '--doctest-report'
+        VALUE = '{none,cdiff,ndiff,udiff,only_first_failure}'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_doctest_report_switch_without_value(self):
+        """Validate nRoBo cli --doctest-report switch without value: --doctest-report ['{none,cdiff,ndiff,udiff,only_first_failure}']"""
+
+        SWITCH = '--doctest-report'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_doctest_glob_switch(self):
+        """Validate nRoBo cli --doctest-glob switch: --doctest-glob pat"""
+
+        SWITCH = '--doctest-glob'
+        VALUE = 'pat'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_doctest_glob_switch_without_value(self):
+        """Validate nRoBo cli --doctest-glob switch without value: --doctest-glob pat"""
+
+        SWITCH = '--doctest-glob'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_doctest_ignore_import_errors_switch(self):
+        """Validate nRoBo cli --doctest-ignore-import-errors switch: --doctest-ignore-import-errors """
+
+        SWITCH = '--doctest-ignore-import-errors'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_doctest_continue_on_failure_switch(self):
+        """Validate nRoBo cli --doctest-continue-on-failure switch: --doctest-continue-on-failure """
+
+        SWITCH = '--doctest-continue-on-failure'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_doctest_continue_on_failure_switch(self):
+        """Validate nRoBo cli --doctest-continue-on-failure switch: --doctest-continue-on-failure """
+
+        SWITCH = '--doctest-continue-on-failure'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_basetemp_switch(self):
+        """Validate nRoBo cli --basetemp switch: --basetemp dir"""
+
+        SWITCH = '--basetemp'
+        VALUE = 'dir'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_basetemp_switch_without_value(self):
+        """Validate nRoBo cli --basetemp switch without value: --basetemp dir"""
+
+        SWITCH = '--basetemp'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_version_switch(self):
+        """Validate nRoBo cli --version switch: --version """
+
+        SWITCH = '--version'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command_is_None()
+
+    def test_nrobo_cli_arg_plugin_module_switch(self):
+        """Validate nRoBo cli --plugin-module switch: --plugin-module name"""
+
+        SWITCH = '--plugin-module'
+        VALUE = 'name'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_plugin_module_switch_without_value(self):
+        """Validate nRoBo cli --plugin-module switch: --plugin-module name"""
+
+        SWITCH = '--plugin-module'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_trace_config_switch(self):
+        """Validate nRoBo cli --trace-config switch: --trace-config """
+
+        SWITCH = '--trace-config'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_debug_switch(self):
+        """Validate nRoBo cli --debug switch: --debug """
+
+        SWITCH = '--debug'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_override_ini_switch(self):
+        """Validate nRoBo cli --override-ini switch: --override-ini """
+
+        SWITCH = '--override-ini'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_assert_switch(self):
+        """Validate nRoBo cli --assert switch: --assert mode"""
+
+        SWITCH = '--assert'
+        VALUE = 'plain | rewrite'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_assert_switch_without_value(self):
+        """Validate nRoBo cli --assert switch without value: --assert mode"""
+
+        SWITCH = '--assert'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_setup_only_switch(self):
+        """Validate nRoBo cli --setup-only switch: --setup-only """
+
+        SWITCH = '--setup-only'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_setup_show_switch(self):
+        """Validate nRoBo cli --setup-show switch: --setup-show """
+
+        SWITCH = '--setup-show'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_setup_plan_switch(self):
+        """Validate nRoBo cli --setup-plan switch: --setup-plan """
+
+        SWITCH = '--setup-plan'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_command_is_None()
+
+    def test_nrobo_cli_arg_log_level_switch(self):
+        """Validate nRoBo cli --log-level switch: --log-level mode"""
+
+        SWITCH = '--log-level'
+        VALUE = 'LEVEL'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_level_switch_without_value(self):
+        """Validate nRoBo cli --log-level switch: --log-level mode"""
+
+        SWITCH = '--log-level'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_format_switch(self):
+        """Validate nRoBo cli --log-format switch: --log-format LOG_FORMAT"""
+
+        SWITCH = '--log-format'
+        VALUE = 'LOG_FORMAT'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_format_switch_without_value(self):
+        """Validate nRoBo cli --log-format switch: --log-format LOG_FORMAT"""
+
+        SWITCH = '--log-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_date_format_switch(self):
+        """Validate nRoBo cli --log-date-format switch: --log-date-format LOG_DATE_FORMAT"""
+
+        SWITCH = '--log-date-format'
+        VALUE = 'LOG_DATE_FORMAT'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_date_format_switch_without_value(self):
+        """Validate nRoBo cli --log-date-format switch: --log-date-format LOG_DATE_FORMAT"""
+
+        SWITCH = '--log-date-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_cli_level_switch(self):
+        """Validate nRoBo cli --log-cli-level switch: --log-cli-level LOG_CLI_LEVEL"""
+
+        SWITCH = '--log-cli-level'
+        VALUE = 'LOG_CLI_LEVEL'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_cli_level_switch_without_value(self):
+        """Validate nRoBo cli --log-cli-level switch: --log-cli-level LOG_CLI_LEVEL"""
+
+        SWITCH = '--log-cli-level'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_cli_format_switch(self):
+        """Validate nRoBo cli --log-cli-format switch: --log-cli-format LOG_CLI_FORMAT"""
+
+        SWITCH = '--log-cli-format'
+        VALUE = 'LOG_CLI_FORMAT'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_cli_format_switch_without_value(self):
+        """Validate nRoBo cli --log-cli-format switch: --log-cli-format LOG_CLI_FORMAT"""
+
+        SWITCH = '--log-cli-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_cli_date_format_switch(self):
+        """Validate nRoBo cli --log-cli-date-format switch: --log-cli-date-format LOG_CLI_DATE_FORMAT"""
+
+        SWITCH = '--log-cli-date-format'
+        VALUE = 'LOG_CLI_DATE_FORMAT'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_cli_date_format_switch_without_value(self):
+        """Validate nRoBo cli --log-cli-date-format switch: --log-cli-date-format LOG_CLI_DATE_FORMAT"""
+
+        SWITCH = '--log-cli-date-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_file_switch(self):
+        """Validate nRoBo cli --log-file switch: --log-file LOG_FILE"""
+
+        SWITCH = '--log-file'
+        VALUE = 'LOG_FILE'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_file_switch_without_value(self):
+        """Validate nRoBo cli --log-file switch: --log-file LOG_FILE"""
+
+        SWITCH = '--log-file'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_file_level_switch(self):
+        """Validate nRoBo cli --log-file-level switch: --log-file-level LOG_FILE_LEVEL"""
+
+        SWITCH = '--log-file-level'
+        VALUE = 'LOG_FILE_LEVEL'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_file_level_switch_without_value(self):
+        """Validate nRoBo cli --log-file-level switch: --log-file-level LOG_FILE_LEVEL"""
+
+        SWITCH = '--log-file-level'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_file_format_switch(self):
+        """Validate nRoBo cli --log-file-format switch: --log-file-format LOG_FILE_FORMATE"""
+
+        SWITCH = '--log-file-format'
+        VALUE = 'LOG_FILE_FORMATE'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_file_format_switch_without_value(self):
+        """Validate nRoBo cli --log-file-format switch: --log-file-format LOG_FILE_FORMATE"""
+
+        SWITCH = '--log-file-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_file_date_format_switch(self):
+        """Validate nRoBo cli --log-file-date-format switch: --log-file-date-format LOG_FILE_DATE_FORMAT"""
+
+        SWITCH = '--log-file-date-format'
+        VALUE = 'LOG_FILE_FORMATE'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_file_date_format_switch_without_value(self):
+        """Validate nRoBo cli --log-file-date-format switch without value: --log-file-date-format LOG_FILE_DATE_FORMAT"""
+
+        SWITCH = '--log-file-date-format'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+    def test_nrobo_cli_arg_log_auto_indent_switch(self):
+        """Validate nRoBo cli --log-auto-indent switch: --log-auto-indent LOG-AUTO-INDENT"""
+
+        SWITCH = '--log-auto-indent'
+        VALUE = 'LOG-AUTO-INDENT'
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH, VALUE]
+        sys.argv = command.copy()
+
+        self._assert_command(command)
+
+    def test_nrobo_cli_arg_log_auto_indent_switch_without_value(self):
+        """Validate nRoBo cli --log-auto-indent switch without value: --log-auto-indent LOG-AUTO-INDENT"""
+
+        SWITCH = '--log-auto-indent'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        self._assert_exception()
+
+
+
+
+
+
 
 
 
