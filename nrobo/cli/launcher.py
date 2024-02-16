@@ -67,6 +67,7 @@ def launcher_command(exit_on_failure=True):
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
     command_builder_notes = []  # list for storing notes during cli switch processing
+    override_defaults = []
 
     # process other switches
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
@@ -95,6 +96,9 @@ def launcher_command(exit_on_failure=True):
                     elif key == 'capture-no':
                         command.append('-s')
                         continue
+                    elif key == 'extra-summary':
+                        command.append('-r')
+                        continue
                     else:
                         command.append(f"--{key}")
                         continue
@@ -108,6 +112,9 @@ def launcher_command(exit_on_failure=True):
                         """simply add long keys to launcher command"""
                         if key == nCLI.TARGET:
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
+                        if f"--{key}" in nCLI.DEFAULT_ARGS:
+                            override_defaults.append(f"--{key}")
+
                         command.append(f"--{key}")
                         command.append(str(value))
                 elif key in nCLI.ARGS:
@@ -129,6 +136,7 @@ def launcher_command(exit_on_failure=True):
                         # add keys to launcher command
                         command.append(f"--{key}")
                         command.append(str(value))
+                        continue
 
                     if key == nCLI.BROWSER:
                         os.environ[EnvKeys.BROWSER] = value
@@ -178,7 +186,10 @@ def launcher_command(exit_on_failure=True):
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
+
     for k, v in nCLI.DEFAULT_ARGS.items():
+        if k in override_defaults:
+            continue  # skip adding k,v pair if it is already added by arg parse
         command = command + v
 
     return command, args, command_builder_notes

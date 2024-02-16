@@ -1,5 +1,8 @@
 from framework_tests.nrobo_args.test_nrobo_args_package import TestNroboArgsPackage
 
 t = TestNroboArgsPackage()
-t.test_nrobo_cli_arg_capture_no_switch()
-t.test_nrobo_cli_arg_capture_switch_without_value()
+t.test_nrobo_cli_arg_n_switch()
+t.test_nrobo_cli_args_with_no_arg()
+t.test_nrobo_cli_arg_code_highlight_switch_with_value_no()
+t.test_nrobo_cli_arg_code_highlight_switch_with_value_yes()
+t.test_nrobo_cli_arg_color_switch_without_value()

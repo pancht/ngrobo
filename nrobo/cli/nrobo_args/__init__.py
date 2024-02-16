@@ -258,7 +258,7 @@ def nrobo_cli_parser(exit_on_failure=True):
             --verbosity=VERBOSE   
             set verbosity. Default is 0.
                                 """, default='0')
-    parser.add_argument("-r", help="""
+    parser.add_argument("-r", "--extra-summary", help="""
             -r chars              show extra test summary info as specified by chars:
                             (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed,
                             (p)assed, (P)assed with output, (a)ll except passed
