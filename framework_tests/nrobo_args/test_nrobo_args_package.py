@@ -840,3 +840,59 @@ class TestNroboArgsPackage():
 
         assert self._match_key_value_pairs(expected_command, actual_command)
 
+    def test_nrobo_cli_arg_runxfail_switch(self):
+        """Validate nRoBo cli --runxfail switch: --runxfail """
+
+        SWITCH = '--runxfail'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_last_failed_switch(self):
+        """Validate nRoBo cli --last-failed switch: --last-failed """
+
+        SWITCH = '--last-failed'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_failed_first_switch(self):
+        """Validate nRoBo cli --failed-first switch: --failed-first """
+
+        SWITCH = '--failed-first'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
+    def test_nrobo_cli_arg_new_first_switch(self):
+        """Validate nRoBo cli --new-first switch: --new-first """
+
+        SWITCH = '--new-first'
+
+        from nrobo.cli.launcher import launcher_command
+        command = ['pytest', SWITCH]
+        sys.argv = command.copy()
+
+        expected_command = command + self.DEFAULT_NROBO_ARGS
+        actual_command, args, notes = launcher_command()
+
+        assert self._match_key_value_pairs(expected_command, actual_command)
+
