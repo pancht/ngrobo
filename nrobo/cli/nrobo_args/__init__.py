@@ -1,8 +1,78 @@
+"""
+=====================CAUTION=======================
+DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
+FRAMEWORK AND IT MAY CHANGE IN THE FUTURE UPGRADES
+OF NROBO FRAMEWORK. THUS, TO BE ABLE TO SAFELY UPGRADE
+TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
+FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
+===================================================
+
+Definitions of nRoBo command line arguments.
+
+
+@author: Panchdev Singh Chauhan
+@email: erpanchdev@gmail.com
+"""
+
 # Define nrobo command line argument parser
 import argparse
 
 from nrobo.cli.cli_constants import nCLI, NREPORT
 from nrobo.cli.nglobals import Browsers
+
+
+BOOL_SWITCHES = [
+    f"--{nCLI.INSTALL}",
+    f"--{nCLI.VERSION}",
+    f"--{nCLI.SUPPRESS}",
+    "--markers",
+    "--exitfirst",
+    "--fixtures",
+    "--funcargs",
+    "--fixtures-per-test",
+    "--pdb",
+    "--trace",
+    "-s",
+    "--runxfail",
+    "--last-failed",
+    "--failed-first",
+    "--ff",
+    "--nf",
+    "--new-first",
+    "--cache-clear",
+    "--sw",
+    "--stepwise",
+    "--sw-skip",
+    "--stepwise-skip",
+    "--verbose",
+    "--no-header",
+    "--no-summary",
+    "--quiet",
+    "--disable-warnings",
+    "--disable-pytest-warnings",
+    "--showlocals",
+    "--full-trace",
+    "--strict-config",
+    "--strict-markers",
+    "--strict",
+    "--continue-on-collection-errors",
+    "--co",
+    "--collect-only",
+    "--pyargs",
+    "--noconftest",
+    "--keep-duplicates",
+    "--collect-in-virtualenv",
+    "--doctest-modules",
+    "--doctest-ignore-import-errors",
+    "--doctest-continue-on-failure",
+    "--version",
+    "--trace-config",
+    "--debug",
+    "--override-ini",
+    "--setup-only",
+    "--setup-show",
+    "--setup-plan",
+]
 
 SHOW_ONLY_SWITCHES = [
     "markers",
@@ -16,14 +86,15 @@ SHOW_ONLY_SWITCHES = [
 ]
 
 
-def nrobo_cli_parser():
+
+def nrobo_cli_parser(exit_on_failure=True):
     """Define nRoBo command line arguments
 
        and return args."""
 
     parser = argparse.ArgumentParser(
         prog="nrobo",
-        description='CLI Switches of nRoBo Test Automation framework')
+        description='CLI Switches of nRoBo Test Automation framework', exit_on_error=exit_on_failure)
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
@@ -125,7 +196,7 @@ def nrobo_cli_parser():
     parser.add_argument("--capture", help="""
         --capture=method      per-test.yaml capturing method: one of fd|sys|no|tee-sys.
         """)
-    parser.add_argument("-s", help="shortcut for --capture=no.", action="store_true")
+    parser.add_argument("-s", f"--capture-no", help="shortcut for --capture=no.", action="store_true")
     parser.add_argument("--runxfail", help="""
         report the results of xfail tests as if they were
                             not marked
@@ -187,7 +258,7 @@ def nrobo_cli_parser():
             --verbosity=VERBOSE   
             set verbosity. Default is 0.
                                 """, default='0')
-    parser.add_argument("-r", help="""
+    parser.add_argument("-r", "--extra-summary", help="""
             -r chars              show extra test summary info as specified by chars:
                             (f)ailed, (E)rror, (s)kipped, (x)failed, (X)passed,
                             (p)assed, (P)assed with output, (a)ll except passed
@@ -241,7 +312,7 @@ def nrobo_cli_parser():
     parser.add_argument("--strict-config", help="""
                 any warnings encountered while parsing the `pytest`
                             section of the configuration file raise errors.
-                """)
+                """, action="store_true")
     parser.add_argument("--strict-markers", help="""
                 markers not registered in the `markers` section of
                             the configuration file raise errors.
@@ -249,7 +320,7 @@ def nrobo_cli_parser():
     parser.add_argument("--strict", help="""
                 (deprecated) alias to --strict-markers.
                 """, action="store_true")
-    parser.add_argument("-c", help="""
+    parser.add_argument("-c", "--configuration", help="""
                 -c file. load configuration from `file` instead of trying to
                             locate one of the implicit configuration files.
                 """)
@@ -327,7 +398,7 @@ def nrobo_cli_parser():
     # parser.add_argument("-h", "--help", help="""
     #                 show help message and configuration info
     #                 """)
-    parser.add_argument("-p", help="""
+    parser.add_argument("-p", "--plugin-module", help="""
                         -p name               early-load given plugin module name or entry point
                             (multi-allowed).
                             To avoid loading of plugins, use the `no:` prefix,
