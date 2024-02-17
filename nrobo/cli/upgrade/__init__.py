@@ -15,9 +15,11 @@ Definition of nRoBo update utility.
 import time
 
 from nrobo import NROBO_CONST
+from nrobo.util.version import Version
+from nrobo import NROBO_CONST
 
 
-def get_host_version() -> None:
+def get_host_version() -> str:
     """get host version of nrobo installation"""
 
     from nrobo import __version__
@@ -54,17 +56,23 @@ def update_available() -> bool:
     return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
 
 
-def confirm_update(forced=False) -> None:
+def confirm_update() -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
-    if forced:
+
+    host_version = get_host_version()
+    pypi_version = get_pypi_index(NROBO_CONST.NROBO)
+
+    if host_version <= Version('2024.6.6'):
+        # forced update and apply patch delivered in give version
         from nrobo import terminal
-        terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=False)
+        terminal(['pip', 'install', '--upgrade', f'nrobo==2024.6.6'], debug=False)
+
         return
 
     from nrobo import STYLE
-    if update_available():
+    if host_version < pypi_version:
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console
         from rich.prompt import Prompt
@@ -72,16 +80,18 @@ def confirm_update(forced=False) -> None:
             f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
             f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
-        if reply.strip().lower() in ["yes", "y"]:
-            from nrobo import terminal
-            with console.status("Updating nRoBo"):
-                console.print("Update started")
-                return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
-                if return_code == 0:
-                    console.print("Update completed successfully.")
-                else:
-                    console.print("Update did not complete.")
+        if not reply.strip().lower() in ["yes", "y"]:
+            # Host don't want update
+            return
+
+        from nrobo import terminal
+        with console.status("Updating nRoBo"):
+            console.print("Update started")
+            return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
+            if return_code == 0:
+                console.print("Update completed successfully.")
+            else:
+                console.print("Update did not complete.")
+
             time.sleep(2)
 
-        else:
-            pass

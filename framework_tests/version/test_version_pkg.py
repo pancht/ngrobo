@@ -73,3 +73,5 @@ class TestVersionPkg:
         assert version_1 + 1 == version_2
         assert version_3 - 1 == version_2
 
+        assert version_2 + 1 <= version_3
+        assert version_3 >= version_2 + 1

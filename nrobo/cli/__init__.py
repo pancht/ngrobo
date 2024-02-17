@@ -42,16 +42,6 @@ def main():
         # greet the guest
         greet_the_guest()
 
-        from nrobo.cli.upgrade import get_host_version, get_pypi_index
-
-        if get_pypi_index() not in ["2024.6.2", "2024.6.3", "2024.6.4", "2024.6.5"]:
-            # if PyPi has latest version over these, force update
-            confirm_update(forced=True)
-
-        elif int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
-            # from nrobo.cli.upgrade import confirm_update
-            confirm_update()
-
         # install dependencies
         install_nrobo(None)
 

@@ -201,7 +201,7 @@ class Version:
         if isinstance(other, float):
             other = int(float)
 
-        return Version(f"{self.major}.{self.minor}.{self.patch+other}")
+        return Version(f"{self.major}.{self.minor}.{self.patch + other}")
 
     def __sub__(self, other):
         if not isinstance(other, int) \
@@ -211,5 +211,28 @@ class Version:
         if isinstance(other, float):
             other = int(float)
 
-        return Version(f"{self.major}.{self.minor}.{self.patch-other}")
+        return Version(f"{self.major}.{self.minor}.{self.patch - other}")
 
+    def __le__(self, other):
+        if not isinstance(other, Version):
+            raise InvalidOperation("<=", type(other))
+
+        if self.__lt__(other):
+            return True
+
+        if self.__eq__(other):
+            return True
+
+        return False
+
+    def __ge__(self, other):
+        if not isinstance(other, Version):
+            raise InvalidOperation(">=", type(other))
+
+        if self.__gt__(other):
+            return True
+
+        if self.__eq__(other):
+            return True
+
+        return False
