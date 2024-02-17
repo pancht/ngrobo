@@ -64,10 +64,10 @@ def confirm_update() -> None:
     host_version = get_host_version()
     pypi_version = get_pypi_index(NROBO_CONST.NROBO)
 
-    if host_version <= Version('2024.6.6').version:
+    if host_version <= Version('2024.6.7').version:
         # forced update and apply patch delivered in give version
         from nrobo import terminal
-        terminal(['pip', 'install', '--upgrade', f'nrobo==2024.6.6'], debug=False)
+        terminal(['pip', 'install', '--upgrade', f'nrobo==2024.6.7'], debug=False)
 
         return
 
