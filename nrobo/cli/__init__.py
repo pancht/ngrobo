@@ -32,6 +32,7 @@ def main():
         from nrobo.util.constants import CONST
         from nrobo.cli.cli_constants import NREPORT
         from nrobo.util.python import verify_set_python_install_pip_command
+        from nrobo.cli.upgrade import get_host_version
 
         # clear screen
         clear_screen()
@@ -42,7 +43,10 @@ def main():
         # greet the guest
         greet_the_guest()
 
-        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
+        if get_host_version() in ["2024.6.1", "2024.6.2", "2024.6.3"]:
+            confirm_update(forced=True)
+
+        elif int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
             # from nrobo.cli.upgrade import confirm_update
             confirm_update()
 

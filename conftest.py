@@ -169,7 +169,7 @@ def password(request):
     return request.config.getoption(f"--{nCLI.PASSWORD}")
 
 
-@pytest.fixture(autouse=True, scope='function')
+@pytest.fixture(scope='function')
 def driver(request):
     """
     Instantiating driver for given browser.

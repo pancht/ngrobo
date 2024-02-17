@@ -12,6 +12,7 @@ Definition of nRoBo update utility.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import os
 import time
 
 from nrobo import NROBO_CONST
@@ -54,24 +55,32 @@ def update_available() -> bool:
     return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
 
 
-def confirm_update() -> None:
+def confirm_update(forced: bool = False) -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
+
+    if forced:
+        from nrobo import terminal, EnvKeys, Environment
+        terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
+        if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+            from nrobo.cli.install import transfer_framework_files_folders
+            transfer_framework_files_folders()
 
     from nrobo import STYLE
     if update_available():
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console
         from rich.prompt import Prompt
-        reply = Prompt.ask(f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
-                           f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
-                           f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
+        reply = Prompt.ask(
+            f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
+            f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
+            f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if reply.strip().lower() in ["yes", "y"]:
             from nrobo import terminal
             with console.status("Updating nRoBo"):
                 console.print("Update started")
-                return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'],debug=True)
+                return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
                 if return_code == 0:
                     console.print("Update completed successfully.")
                 else:
@@ -80,4 +89,3 @@ def confirm_update() -> None:
 
         else:
             pass
-

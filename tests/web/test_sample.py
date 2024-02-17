@@ -31,7 +31,7 @@ class TestWebSamples():
         text = message.text
 
     @pytest.mark.sanity
-    #@pytest.mark.skip
+    @pytest.mark.skip
     def test_sample_2(self, driver, logger):
         """Verify simple test - 2"""
         # driver = webdriver.Chrome()

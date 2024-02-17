@@ -19,6 +19,50 @@ from nrobo.util.filesystem import *
 from nrobo.util.process import *
 from typing import Optional
 
+def transfer_framework_files_folders():
+    # Copy conftest.py and other files to current directory
+    # =============================================================
+    # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
+    # =============================================================
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
+
+    # Copy framework to current directory
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
+
+    # # modify demo page object and demo test class in host directory
+    # from nrobo.util.common import Common
+    # from nrobo.util.regex import substitute
+    # from nrobo.util.filesystem import get_files_list, remove_file
+    # # iterate files in host pages dir
+    # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PAGES)
+    # for f in files:
+    #     # iterate each file
+    #     pattern = r"(from[ ]+nrobo[.]framework[.])"
+    #     file_content = Common.read_file_as_string(f)
+    #     file_content = substitute(pattern, "", file_content)
+    #     Common.write_text_to_file(f, file_content, encoding='utf-8')
+    #
+    # # iterate files in host tests dir
+    # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.TESTS)
+    # for f in files:
+    #     # iterate each file
+    #     pattern = r"(from[ ]+nrobo[.]framework[.])"
+    #     file_content = Common.read_file_as_string(f, encoding='utf-8')
+    #     file_content = substitute(pattern, "", file_content)
+    #     Common.write_text_to_file(f, file_content, encoding='utf-8')
+    #
+    # # delete nrobo.framework package
+    # remove_filetree(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK)
 
 def install_nrobo(requirements_file: Optional[str] = None) -> None:
     """This will install nrobo framework and its dependencies on host system in the current directory
@@ -68,48 +112,6 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
             print(f"Installing framework")
 
-            # Copy conftest.py and other files to current directory
-            # =============================================================
-            # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
-            # =============================================================
-            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
-                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
-            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
-                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
-            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
-                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
-
-            # Copy framework to current directory
-            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
-                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
-            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
-                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
-            copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
-                     Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
-
-            # # modify demo page object and demo test class in host directory
-            # from nrobo.util.common import Common
-            # from nrobo.util.regex import substitute
-            # from nrobo.util.filesystem import get_files_list, remove_file
-            # # iterate files in host pages dir
-            # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PAGES)
-            # for f in files:
-            #     # iterate each file
-            #     pattern = r"(from[ ]+nrobo[.]framework[.])"
-            #     file_content = Common.read_file_as_string(f)
-            #     file_content = substitute(pattern, "", file_content)
-            #     Common.write_text_to_file(f, file_content, encoding='utf-8')
-            #
-            # # iterate files in host tests dir
-            # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.TESTS)
-            # for f in files:
-            #     # iterate each file
-            #     pattern = r"(from[ ]+nrobo[.]framework[.])"
-            #     file_content = Common.read_file_as_string(f, encoding='utf-8')
-            #     file_content = substitute(pattern, "", file_content)
-            #     Common.write_text_to_file(f, file_content, encoding='utf-8')
-            #
-            # # delete nrobo.framework package
-            # remove_filetree(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK)
+            transfer_framework_files_folders()
 
             print(f"Installation complete")
