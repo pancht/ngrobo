@@ -54,10 +54,14 @@ def update_available() -> bool:
     return not get_host_version() == get_pypi_index(NROBO_CONST.NROBO)
 
 
-def confirm_update() -> None:
+def confirm_update(forced=False) -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
+    if forced:
+        from nrobo import terminal
+        terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=False)
+        return
 
     from nrobo import STYLE
     if update_available():
