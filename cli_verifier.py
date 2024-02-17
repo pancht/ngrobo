@@ -2,7 +2,8 @@ from framework_tests.nrobo_args.test_nrobo_args_package import TestNroboArgsPack
 
 t = TestNroboArgsPackage()
 t.test_nrobo_cli_arg_junit_xml_switch()
-t.test_nrobo_cli_arg_junit_prefix_switch_without_value ()
-t.test_nrobo_cli_arg_setup_plan_switch()
-t.test_nrobo_cli_arg_version_switch()
-t.test_nrobo_cli_arg_color_switch_without_value()
+
+from framework_tests.version.test_version_pkg import TestVersionPkg
+t = TestVersionPkg()
+
+t.test_version_class_properties()
