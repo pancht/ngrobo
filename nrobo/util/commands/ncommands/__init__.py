@@ -13,7 +13,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 import os
 
-from nrobo import *
+from nrobo.main import *
 from nrobo.exceptions import *
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND

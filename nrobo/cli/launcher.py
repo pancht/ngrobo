@@ -14,7 +14,7 @@ Launcher for nRoBo framework.
 """
 import time
 
-from nrobo import *
+from nrobo.main import *
 from nrobo.cli import *
 from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
@@ -37,7 +37,7 @@ def launcher_command(exit_on_failure=True):
 
     # Need to import set_environment method here
     # to handle circular import of partially initialized module
-    from nrobo import set_environment
+    from nrobo.main import set_environment
     import argparse
 
     set_environment()
@@ -54,7 +54,7 @@ def launcher_command(exit_on_failure=True):
             return None, None, None
     if args.VERSION:
         # show version
-        from nrobo import __version__
+        from nrobo.main import __version__
         console.print(f"nrobo {__version__}")
         return None, None, None
     if args.suppress:
@@ -119,7 +119,7 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                 elif key in nCLI.ARGS:
                     """process nrobo specific keys"""
-                    if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
+                    if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG, nCLI.TESTDIR]:
                         if key == nCLI.APP:
                             os.environ[EnvKeys.APP] = value
                             continue
@@ -131,6 +131,8 @@ def launcher_command(exit_on_failure=True):
                             continue
                         elif key == nCLI.PASSWORD:
                             os.environ[EnvKeys.PASSWORD] = value
+                            continue
+                        elif key == nCLI.TESTDIR:
                             continue
 
                         # add keys to launcher command
@@ -192,6 +194,10 @@ def launcher_command(exit_on_failure=True):
             continue  # skip adding k,v pair if it is already added by arg parse
         command = command + v
 
+    if args.testsdir:
+        command.append(args.testsdir)
+    else:
+        command.append('tests')
     return command, args, command_builder_notes
 
 
@@ -199,6 +205,10 @@ def launch_nrobo():
     """Parse command-line-arguments"""
 
     command, args, command_builder_notes = launcher_command()
+
+    print(command)
+    print("\n\n\n")
+    #exit()
 
     if command is None and args is None and command_builder_notes is None:
         return

@@ -15,7 +15,7 @@ Platform functions.
 import os
 import platform
 
-from nrobo import EnvKeys
+from nrobo.main import EnvKeys
 
 
 class PLATFORMS:

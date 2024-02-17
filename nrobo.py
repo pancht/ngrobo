@@ -14,7 +14,7 @@ on developer machine.
 @email: erpanchdev@gmail.com
 """
 
-from nrobo.cli import main
+from nrobo.cli.main import main
 
 if __name__ == '__main__':
     main()

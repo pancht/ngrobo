@@ -14,34 +14,18 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 import os
 import sys
 
+import pytest
+
 # Add host's project path to sys path for module searching...
 sys.path.append(os.path.join(os.path.dirname(__file__), ''))
-
-import logging
-import os
-import sys
-from datetime import datetime
-
-import allure
-import pytest
-import pytest_html
-from nrobo.cli import *
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from webdriver_manager.chrome import ChromeDriverManager
-
-from nrobo.cli.nglobals import *
-from nrobo.util.common import *
-from nrobo.cli.cli_constants import *
-import os.path as path
-
-from nrobo.util.constants import CONST
 
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constants import NREPORT
-    from nrobo import EnvKeys
+    from nrobo.main import EnvKeys
+    from pathlib import Path
+
     _log_driver_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
 
     if not _log_driver_file.exists():
@@ -75,6 +59,7 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass
 
+
 def read_browser_config_options(_config_path):
     """
     process browser config options from the <_config_path>
@@ -83,6 +68,8 @@ def read_browser_config_options(_config_path):
     If file not found, then raise exception.
 
     """
+    import os.path as path
+
     if not _config_path:
         return []
 
@@ -106,6 +93,8 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
+    from nrobo.cli.cli_constants import nCLI
+
     group = parser.getgroup("nrobo header options")
     group.addoption(
         f"--{nCLI.BROWSER}", help="""
@@ -145,11 +134,16 @@ def pytest_addoption(parser):
 def url(request):
     # Global fixture returning app url
     # Access pytest command line options
+
+    from nrobo.cli.cli_constants import nCLI
+
     return request.config.getoption(f"--{nCLI.URL}")
 
 
 @pytest.fixture()
 def app(request):
+
+    from nrobo.cli.cli_constants import nCLI
     # Global fixture returning app name
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.APP}")
@@ -157,6 +151,8 @@ def app(request):
 
 @pytest.fixture()
 def username(request):
+
+    from nrobo.cli.cli_constants import nCLI
     # Global fixture returning admin username
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.USERNAME}")
@@ -164,6 +160,8 @@ def username(request):
 
 @pytest.fixture()
 def password(request):
+
+    from nrobo.cli.cli_constants import nCLI
     # Global fixture returning admin password
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.PASSWORD}")
@@ -174,8 +172,16 @@ def driver(request):
     """
     Instantiating driver for given browser.
     """
+    from selenium import webdriver
+    from selenium.webdriver.chrome.service import Service as ChromeService
+    from webdriver_manager.chrome import ChromeDriverManager
+    from nrobo.main import EnvKeys
+    from nrobo.cli.cli_constants import nCLI
+    from nrobo.util.constants import CONST
+    from nrobo.cli.nglobals import Browsers
+    from nrobo.cli.formatting import STYLE
+
     # Access pytest command line options
-    from nrobo import EnvKeys
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
 
     # get and set url
@@ -346,6 +352,8 @@ def logger(request):
     """
     Instantiate logger instance for each test
     """
+    import logging
+
     test_method_name = request.node.name
     from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
@@ -369,7 +377,8 @@ def pytest_report_header(config):
     """
     Returns console header
     """
-    from nrobo import EnvKeys
+    from nrobo.main import EnvKeys
+
     return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
 
 
@@ -381,6 +390,13 @@ def pytest_runtest_makereport(item, call):
     """
     outcome = yield
     report = outcome.get_result()
+
+    from datetime import datetime
+    from nrobo.util.constants import CONST
+    from nrobo.cli.cli_constants import NREPORT
+    import pytest_html
+    import allure
+    from nrobo.util.common import Common
 
     # test_fn = item.obj
     # docstring = getattr(test_fn, '__doc__')

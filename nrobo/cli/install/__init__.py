@@ -70,7 +70,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
     This will only install nrobo dependencies if it is executed in the Developer environment."""
 
-    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
+    from nrobo.main import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
     # Inline imports to handle circular import exception while importing partially initialized module
     set_environment()

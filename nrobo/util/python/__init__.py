@@ -27,7 +27,7 @@ def verify_set_python_install_pip_command() -> None:
 
     If found and sets python command, install pip as well."""
 
-    from nrobo import EnvKeys, Environment, NROBO_CONST, Python
+    from nrobo.main import EnvKeys, Environment, NROBO_CONST, Python
     # regular expression to verify python version
     # major.minor.nightly-build
     regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')

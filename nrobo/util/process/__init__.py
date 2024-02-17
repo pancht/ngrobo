@@ -46,7 +46,7 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
 
     if debug is False:
         """check environment debug flag"""
-        from nrobo import EnvKeys
+        from nrobo.main import EnvKeys
         if str(os.environ[EnvKeys.DEBUG]) == "True":
             debug = True
 

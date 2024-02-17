@@ -120,6 +120,13 @@ def nrobo_cli_parser(exit_on_failure=True):
                         help="Shows nRoBo version", action="store_true")
     parser.add_argument(f"--{nCLI.SUPPRESS}",
                         help="Suppresses upgrade prompt on each test run", action="store_true", default=False)
+    parser.add_argument(f"--{nCLI.TESTDIR}", help="""
+                    --testdir=TESTDIR. Define test directory where tests are laid. Can be relative
+                                path: 'test_dir', './test_dir',
+                                'test_dir/another_dir/'; absolute path:
+                                '/home/user/test_dir'; path with variables:
+                                '$HOME/test_dir'.
+                    """)
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
         Target browser. Default is chrome.
         Options could be:

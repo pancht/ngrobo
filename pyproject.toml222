@@ -49,9 +49,10 @@ nrobo = "nrobo.cli:main"
 # Tools configurations
 [tool.pytest.ini_options]
 testpaths = [
-    "tests",
-    #"tests_api",
-    #"tests_performance"
+    "tests"
+#    "tests",
+#    #"tests_api",
+#    #"tests_performance"
 ]
 # Register new markers
 markers = [

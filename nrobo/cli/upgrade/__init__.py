@@ -15,13 +15,13 @@ Definition of nRoBo update utility.
 import os
 import time
 
-from nrobo import NROBO_CONST
+from nrobo.main import NROBO_CONST
 
 
 def get_host_version() -> None:
     """get host version of nrobo installation"""
 
-    from nrobo import __version__
+    from nrobo.main import __version__
     return __version__
 
 
@@ -32,7 +32,7 @@ def get_pypi_index(package) -> None | str:
     from nrobo.util.network import internet_connectivity
     if not internet_connectivity():
         """Exit programme."""
-        from nrobo import console, STYLE
+        from nrobo.main import console, STYLE
         console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
         exit(1)
 
@@ -61,23 +61,23 @@ def confirm_update(forced: bool = False) -> None:
         else returns with no action"""
 
     if forced:
-        from nrobo import terminal, EnvKeys, Environment
+        from nrobo.main import terminal, EnvKeys, Environment
         terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
         if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
             from nrobo.cli.install import transfer_framework_files_folders
             transfer_framework_files_folders()
 
-    from nrobo import STYLE
+    from nrobo.main import STYLE
     if update_available():
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
-        from nrobo import console
+        from nrobo.main import console
         from rich.prompt import Prompt
         reply = Prompt.ask(
             f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
             f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if reply.strip().lower() in ["yes", "y"]:
-            from nrobo import terminal
+            from nrobo.main import terminal
             with console.status("Updating nRoBo"):
                 console.print("Update started")
                 return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
