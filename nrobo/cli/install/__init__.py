@@ -24,20 +24,20 @@ def transfer_framework_files_folders():
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY)
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.INIT_PY,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.INIT_PY)
+    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE,
+              Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
 
     # Copy framework to current directory
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.FRAMEWORK_PAGES,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PAGES)
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.FRAMEWORK_TESTS,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.TESTS)
+    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NROBO_PATHS.BROWSER_CONFIGS,
+             Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.BROWSER_CONFIGS)
 
     # # modify demo page object and demo test class in host directory
     # from nrobo.util.common import Common
