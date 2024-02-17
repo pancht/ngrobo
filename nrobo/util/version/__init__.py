@@ -1,4 +1,4 @@
-from nrobo.exceptions import IncorrectVersion, InvalidOperation
+from nrobo.exceptions import NRoBoIncorrectVersion, NRoBoInvalidOperation
 
 
 class Version:
@@ -143,7 +143,7 @@ class Version:
 
         if not m:
             # incorrect version
-            raise IncorrectVersion(self._version)
+            raise NRoBoIncorrectVersion(self._version)
 
         _version = m.group(1)
         _major = m.group(2)
@@ -154,7 +154,7 @@ class Version:
 
     def __lt__(self, other):
         if not isinstance(other, Version):
-            raise InvalidOperation("<", type(other))
+            raise NRoBoInvalidOperation("<", type(other))
 
         if self.major < other.major:
             return True
@@ -169,7 +169,7 @@ class Version:
 
     def __eq__(self, other):
         if not isinstance(other, Version):
-            raise InvalidOperation("=", type(other))
+            raise NRoBoInvalidOperation("=", type(other))
 
         if self.major == other.major \
                 and self.minor == other.minor \
@@ -180,7 +180,7 @@ class Version:
 
     def __gt__(self, other):
         if not isinstance(other, Version):
-            raise InvalidOperation(">", type(other))
+            raise NRoBoInvalidOperation(">", type(other))
 
         if self.major > other.major:
             return True
@@ -196,7 +196,7 @@ class Version:
     def __add__(self, other):
         if not isinstance(other, int) \
                 and not isinstance(other, float):
-            raise InvalidOperation("+", type(other))
+            raise NRoBoInvalidOperation("+", type(other))
 
         if isinstance(other, float):
             other = int(float)
@@ -206,7 +206,7 @@ class Version:
     def __sub__(self, other):
         if not isinstance(other, int) \
                 and not isinstance(other, float):
-            raise InvalidOperation("-", type(other))
+            raise NRoBoInvalidOperation("-", type(other))
 
         if isinstance(other, float):
             other = int(float)
@@ -215,7 +215,7 @@ class Version:
 
     def __le__(self, other):
         if not isinstance(other, Version):
-            raise InvalidOperation("<=", type(other))
+            raise NRoBoInvalidOperation("<=", type(other))
 
         if self.__lt__(other):
             return True
@@ -227,7 +227,7 @@ class Version:
 
     def __ge__(self, other):
         if not isinstance(other, Version):
-            raise InvalidOperation(">=", type(other))
+            raise NRoBoInvalidOperation(">=", type(other))
 
         if self.__gt__(other):
             return True

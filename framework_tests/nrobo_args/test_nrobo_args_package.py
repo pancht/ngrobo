@@ -9,7 +9,7 @@ from nrobo import terminal
 from nrobo.cli import launcher_command
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES
-from nrobo.exceptions import BrowserNotSupported
+from nrobo.exceptions import NRoBoBrowserNotSupported
 
 
 class TestNroboArgsPackage():
@@ -471,7 +471,7 @@ class TestNroboArgsPackage():
 
         try:
             launcher_command()
-        except BrowserNotSupported as e:
+        except NRoBoBrowserNotSupported as e:
             assert True
             return
 

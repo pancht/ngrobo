@@ -14,7 +14,7 @@ process.
 @email: erpanchdev@gmail.com
 """
 
-import validate_nrobo
+import validatenrobo
 from nrobo import *
 from nrobo import console, STYLE
 from nrobo.util.commands.ncommands import remove_files_recursively
@@ -167,6 +167,7 @@ def execute_unittests(debug=False) -> None:
     return_code = 1
 
     return_code = validate_nrobo.run_unit_tests()
+
     if not return_code == NROBO_CONST.SUCCESS:
         from cli import set_switch_environment
         console.print(

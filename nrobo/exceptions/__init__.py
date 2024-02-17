@@ -27,7 +27,7 @@ class MissingCommandImplementation(Exception):
         return repr(self.value)
 
 
-class BrowserNotSupported(Exception):
+class NRoBoBrowserNotSupported(Exception):
     """This exception raise when <browser> is not supported or
     implementation to mimic <browser> is not yet implemented"""
 
@@ -39,7 +39,7 @@ class BrowserNotSupported(Exception):
         return repr(self.value)
 
 
-class IncorrectVersion(Exception):
+class NRoBoIncorrectVersion(Exception):
     """Raises when an incorrect version is supplied to
 
        nrobo.util.version.Version class."""
@@ -52,7 +52,7 @@ class IncorrectVersion(Exception):
         return repr(self.value)
 
 
-class InvalidOperation(Exception):
+class NRoBoInvalidOperation(Exception):
     """Raises when an arithmetic operation is performed
 
        over incompatible type.

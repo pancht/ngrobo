@@ -1,4 +1,4 @@
-from nrobo.exceptions import IncorrectVersion, InvalidOperation
+from nrobo.exceptions import NRoBoIncorrectVersion, NRoBoInvalidOperation
 from nrobo.util.version import Version
 
 
@@ -35,7 +35,7 @@ class TestVersionPkg:
         try:
             Version("2010.d.45")
             assert False
-        except IncorrectVersion as e:
+        except NRoBoIncorrectVersion as e:
             assert True
 
     def test_arithmetic_operations_on_Version_class(self):
@@ -57,13 +57,13 @@ class TestVersionPkg:
         try:
             assert version_1 > 2
             assert False
-        except InvalidOperation as e:
+        except NRoBoInvalidOperation as e:
             assert True
 
         try:
             assert version_1 < 2
             assert False
-        except InvalidOperation as e:
+        except NRoBoInvalidOperation as e:
             assert True
 
         version_1 = Version(f"{major}.{minor}.{patch}")

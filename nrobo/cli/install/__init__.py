@@ -18,9 +18,11 @@ from nrobo.cli.launcher import *
 from nrobo.util.filesystem import *
 from nrobo.util.process import *
 from typing import Optional
+from nrobo import EnvKeys, NROBO_PATHS as NP, Environment
 
 
 def transfer_files_to_host_project():
+
     # Copy conftest.py and other files to current directory
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
@@ -109,8 +111,14 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         # create framework folders on host system
         if nrobo_installed:
-            """fresh installation"""
 
-            print(f"Installing framework")
-            transfer_files_to_host_project()
-            print(f"Installation complete")
+            # Heck logic to check if this is a developer machine in production
+            if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PY_PROJECT_TOML_FILE).exists()\
+                    or Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
+                # Developer machine in production detected! I'm not going to install framework BRO!!! :)
+                pass
+            else:
+                """fresh installation"""
+                print(f"Installing framework")
+                transfer_files_to_host_project()
+                print(f"Installation complete")
