@@ -22,7 +22,10 @@ def internet_connectivity() -> bool:
         else return False"""
     try:
         from nrobo import terminal
-        return terminal(["ping", "-c", "1", "google.com"], use_os_system_call=True)
+        if terminal(["ping", "-c", "1", "google.com"], use_os_system_call=True) == 0:
+            return True
+        else:
+            return False
     except subprocess.CalledProcessError as e:
         return False
 

@@ -472,9 +472,9 @@ class TestNroboArgsPackage():
         try:
             launcher_command()
         except BrowserNotSupported as e:
-            return True
+            assert True
 
-        return False
+        assert False
 
     def test_nrobo_cli_arg_browser_switch_without_value(self):
         """Validate nRoBo cli --browser switch without value: --browser """
