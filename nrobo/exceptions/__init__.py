@@ -50,3 +50,18 @@ class IncorrectVersion(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+
+class InvalidOperation(Exception):
+    """Raises when an arithmetic operation is performed
+
+       over incompatible type.
+
+       Anything other than type Version is an Invalid Type."""
+
+    # constructor
+    def __init__(self, operator: str, _type: type):
+        self.value = f"TypeError: unsupported operand type(s) for {operator}: 'Version' and '{_type}'"
+
+    def __str__(self):
+        return repr(self.value)

@@ -6,4 +6,4 @@ t.test_nrobo_cli_arg_junit_xml_switch()
 from framework_tests.version.test_version_pkg import TestVersionPkg
 t = TestVersionPkg()
 
-t.test_version_class_properties()
+t.test_arithmetic_operations_on_Version_class()

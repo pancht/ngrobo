@@ -1,4 +1,4 @@
-from nrobo.exceptions import IncorrectVersion
+from nrobo.exceptions import IncorrectVersion, InvalidOperation
 
 
 class Version:
@@ -151,3 +151,65 @@ class Version:
         _patch = m.group(4)
 
         return [_major, _minor, _patch]
+
+    def __lt__(self, other):
+        if not isinstance(other, Version):
+            raise InvalidOperation("<", type(other))
+
+        if self.major < other.major:
+            return True
+
+        if self.minor < other.minor:
+            return True
+
+        if self.patch < other.patch:
+            return True
+
+        return False
+
+    def __eq__(self, other):
+        if not isinstance(other, Version):
+            raise InvalidOperation("=", type(other))
+
+        if self.major == other.major \
+                and self.minor == other.minor \
+                and self.patch == other.patch:
+            return True
+
+        return False
+
+    def __gt__(self, other):
+        if not isinstance(other, Version):
+            raise InvalidOperation(">", type(other))
+
+        if self.major > other.major:
+            return True
+
+        if self.minor > other.minor:
+            return True
+
+        if self.patch > other.patch:
+            return True
+
+        return False
+
+    def __add__(self, other):
+        if not isinstance(other, int) \
+                and not isinstance(other, float):
+            raise InvalidOperation("+", type(other))
+
+        if isinstance(other, float):
+            other = int(float)
+
+        return Version(f"{self.major}.{self.minor}.{self.patch+other}")
+
+    def __sub__(self, other):
+        if not isinstance(other, int) \
+                and not isinstance(other, float):
+            raise InvalidOperation("-", type(other))
+
+        if isinstance(other, float):
+            other = int(float)
+
+        return Version(f"{self.major}.{self.minor}.{self.patch-other}")
+
