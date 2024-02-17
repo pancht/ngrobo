@@ -473,6 +473,7 @@ class TestNroboArgsPackage():
             launcher_command()
         except BrowserNotSupported as e:
             assert True
+            return
 
         assert False
 

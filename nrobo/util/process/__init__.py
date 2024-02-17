@@ -33,7 +33,7 @@ def get_os_system_command(command: [str]) -> str:
 
 def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False,
              cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None,
-             universal_newlines=None, debug=False, use_os_system_call=False):
+             universal_newlines=None, debug=False, use_os_system_call=False) -> int:
     """Execute given command, command
 
     :param debug:

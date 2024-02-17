@@ -35,7 +35,7 @@ def run_unit_tests(debug=False) -> int:
     target = "results-unittests/nrobo_unit_tests_run_report.html"
     unit_tests_dir = 'framework_tests'
     conftest_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / unit_tests_dir
-    print(sys.path)
+
     return_code_unit_test_run = terminal(
         ['pytest', '--confcutdir', str(conftest_dir),
          '--html', target, unit_tests_dir, '-n', '20',
