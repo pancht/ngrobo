@@ -200,9 +200,6 @@ def launch_nrobo():
 
     command, args, command_builder_notes = launcher_command()
 
-    print(command)
-    #exit()
-
     if command is None and args is None and command_builder_notes is None:
         return
 
