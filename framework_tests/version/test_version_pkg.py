@@ -1,3 +1,4 @@
+from nrobo.exceptions import IncorrectVersion
 from nrobo.util.version import Version
 
 
@@ -30,3 +31,10 @@ class TestVersionPkg():
         assert version.patch_decremented() == f"{major}.{minor}.{patch-1}"
         assert version.version_incremented() == f"{major}.{minor}.{patch+1}"
         assert version.version_decremented() == f"{major}.{minor}.{patch-1}"
+
+        try:
+            Version("2010.d.45")
+            assert False
+        except IncorrectVersion as e:
+            assert True
+

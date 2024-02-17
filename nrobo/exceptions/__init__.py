@@ -37,3 +37,16 @@ class BrowserNotSupported(Exception):
 
     def __str__(self):
         return repr(self.value)
+
+
+class IncorrectVersion(Exception):
+    """Raises when an incorrect version is supplied to
+
+       nrobo.util.version.Version class."""
+
+    # constructor
+    def __init__(self, version):
+        self.value = f'Incorrect version <{version}>'
+
+    def __str__(self):
+        return repr(self.value)

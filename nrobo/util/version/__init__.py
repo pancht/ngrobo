@@ -1,3 +1,5 @@
+from nrobo.exceptions import IncorrectVersion
+
 
 class Version:
     def __init__(self, version):
@@ -138,6 +140,11 @@ class Version:
         patten = r"(([\d]*)[.]([\d]*)[.]([\d]*))"
         import re
         m = re.match(patten, self._version)
+
+        if not m:
+            # incorrect version
+            raise IncorrectVersion(self._version)
+
         _version = m.group(1)
         _major = m.group(2)
         _minor = m.group(3)
