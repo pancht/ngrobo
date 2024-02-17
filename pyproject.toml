@@ -39,7 +39,7 @@ test = ["pytest", "cowsay"]
 
 [project.urls]
 "Homepage" = "https://pypi.org/project/nrobo/"
-"Github Repository" = "https://github.com/pancht/ngrobo"
+#"Github Repository" = "https://github.com/pancht/ngrobo"
 "Bug Tracker" = "https://github.com/pancht/nrobodocs/issues"
 "changelog" = "https://github.com/pancht/nrobodocs/blob/master/CHANGELOG.md"
 

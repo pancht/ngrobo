@@ -36,17 +36,21 @@ def set_switch_environment(env: str, debug=False):
 
     # update environment to production
     # pattern for finding version setting
-    PATTERN = "[^ ](os.environ[\[]EnvKeys.ENV_CLI_SWITCH[\][ ]*=[ ]*Environment.(DEVELOPMENT|PRODUCTION))"
-    PATTERN_REGULAR_EXPRESSION = PATTERN
+    PATTERN = ""
+
 
     # Replacement text
     if env == ENV_CLI_SWITCH.TEST:
+        PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.PRODUCTION)"
         REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
     elif env == ENV_CLI_SWITCH.PROD:
+        PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.DEVELOPMENT)"
         REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
     else:
         print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
         exit()
+
+    PATTERN_REGULAR_EXPRESSION = PATTERN
 
     # Update version number in README file
     file_content = re.sub(PATTERN_REGULAR_EXPRESSION, REPLACEMENT_TEXT, file_content, count=1)
