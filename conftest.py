@@ -86,6 +86,22 @@ def read_browser_config_options(_config_path):
         raise Exception(f"Chrome config file does not exist at path <{_config_path}>!!!")
 
 
+def _log(msg: str):
+    from nrobo.util.common import Common as logger
+
+    file = "conftest.md"
+    content = None
+    try:
+        content = logger.read_file_as_string(file)
+    except FileNotFoundError as e:
+        logger.write_text_to_file(file, "")
+        content = ""
+
+    content = content + "\n" + msg
+
+    logger.write_text_to_file(file, content)
+
+
 def pytest_addoption(parser):
     """
     Pass different values to a test function, depending on command line options
@@ -94,6 +110,8 @@ def pytest_addoption(parser):
     :return:
     """
     from nrobo.cli.cli_constants import nCLI
+
+    _log("Call from ADDOPTION")
 
     group = parser.getgroup("nrobo header options")
     group.addoption(
@@ -142,7 +160,6 @@ def url(request):
 
 @pytest.fixture()
 def app(request):
-
     from nrobo.cli.cli_constants import nCLI
     # Global fixture returning app name
     # Access pytest command line options
@@ -151,7 +168,6 @@ def app(request):
 
 @pytest.fixture()
 def username(request):
-
     from nrobo.cli.cli_constants import nCLI
     # Global fixture returning admin username
     # Access pytest command line options
@@ -160,7 +176,6 @@ def username(request):
 
 @pytest.fixture()
 def password(request):
-
     from nrobo.cli.cli_constants import nCLI
     # Global fixture returning admin password
     # Access pytest command line options
@@ -180,6 +195,8 @@ def driver(request):
     from nrobo.util.constants import CONST
     from nrobo.cli.nglobals import Browsers
     from nrobo.cli.formatting import STYLE
+
+    _log("Call from DRIVER")
 
     # Access pytest command line options
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
@@ -352,6 +369,8 @@ def logger(request):
     """
     Instantiate logger instance for each test
     """
+    _log("Call from LOGGER")
+
     import logging
 
     test_method_name = request.node.name
@@ -377,6 +396,8 @@ def pytest_report_header(config):
     """
     Returns console header
     """
+    _log("Call from REPORT HEADER")
+
     from nrobo.main import EnvKeys
 
     return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
@@ -388,8 +409,12 @@ def pytest_runtest_makereport(item, call):
     """
     Make report with screenshot attached
     """
+    _log("Call from RUNTEST BEFORE")
+
     outcome = yield
     report = outcome.get_result()
+
+    _log("Call from RUNTEST AFTER")
 
     from datetime import datetime
     from nrobo.util.constants import CONST
@@ -453,6 +478,9 @@ def pytest_configure(config):
     Description
         configure pytest.
     """
+
+    _log("Call from CONFIGURE")
+
     # add custom markers
     config.addinivalue_line("markers", "sanity: marks as sanity test")
     config.addinivalue_line("markers", "regression: mark as regression test")
@@ -467,7 +495,7 @@ def pytest_metadata(metadata):
     Description
         pytest metadata
     """
-
+    _log("Call from METADATA")
     # pop all the python environment table data
     # metadata.pop("Packages", None)
     # metadata.pop("Platform", None)
