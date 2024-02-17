@@ -19,14 +19,42 @@ from nrobo.util.filesystem import *
 from nrobo.util.process import *
 from typing import Optional
 from nrobo import EnvKeys, NROBO_PATHS as NP, Environment
+from nrobo.util.version import Version
 
 
 def transfer_files_to_host_project():
-
     # Copy conftest.py and other files to current directory
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
+    if (Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
+
+        from nrobo.util.common import Common
+        patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
+        if patch_2024_6_10.exists():
+            return
+
+        # Apply patches
+        from nrobo.cli.upgrade import get_host_version
+        if Version(get_host_version()) == Version("2024.6.10"):
+            Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10", "")
+
+            # create a copy of host conftest.py
+            copy_file(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY,
+                      Path(os.environ[EnvKeys.EXEC_DIR]) / "copy-conftest.py")
+            # copy nrobo conftest-host.py
+            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
+                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+            from nrobo import console, STYLE
+            print("\n")
+            console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
+                         f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
+                         f"Please take note of it.")
+            print("\n")
+        return
+
+    print(f"Installing framework")
+
     copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
               Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
     copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
@@ -42,6 +70,7 @@ def transfer_files_to_host_project():
     copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
 
+    print(f"Installation complete")
     # # modify demo page object and demo test class in host directory
     # from nrobo.util.common import Common
     # from nrobo.util.regex import substitute
@@ -110,15 +139,11 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         confirm_update()
 
         # create framework folders on host system
-        if nrobo_installed:
 
-            # Heck logic to check if this is a developer machine in production
-            if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PY_PROJECT_TOML_FILE).exists()\
-                    or Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
-                # Developer machine in production detected! I'm not going to install framework BRO!!! :)
-                pass
-            else:
-                """fresh installation"""
-                print(f"Installing framework")
-                transfer_files_to_host_project()
-                print(f"Installation complete")
+        # Heck logic to check if this is a developer machine in production
+        if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PY_PROJECT_TOML_FILE).exists():
+            # Developer machine in production detected! I'm not going to install framework BRO!!! :)
+            pass
+        else:
+            """fresh installation"""
+            transfer_files_to_host_project()

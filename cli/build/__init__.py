@@ -166,7 +166,7 @@ def execute_unittests(debug=False) -> None:
 
     return_code = 1
 
-    return_code = validate_nrobo.run_unit_tests()
+    return_code = validatenrobo.run_unit_tests()
 
     if not return_code == NROBO_CONST.SUCCESS:
         from cli import set_switch_environment
