@@ -23,6 +23,13 @@ Project Status
 --------------
 **Active**
 
+.. Online Tutorials
+
+----------------
+Online Tutorials
+----------------
+`YouTube Channel <https://t.ly/FhJzy>`_
+
 .. Pre-requisites
 
 Pre-requisites
