@@ -20,9 +20,20 @@ def terminal_nogui(command) -> int:
     return terminal(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
+def get_os_system_command(command: [str]) -> str:
+    """Returns os.system command from given <command>"""
+
+    _command = ""
+
+    for _cmd in command:
+        _command += _cmd + " "
+
+    return _command
+
+
 def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False,
              cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None,
-             universal_newlines=None, debug=False):
+             universal_newlines=None, debug=False, use_os_system_call=False) -> int:
     """Execute given command, command
 
     :param debug:
@@ -43,6 +54,8 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
     :param command: command
     :return: status code
     """
+    if use_os_system_call:
+        return os.system(get_os_system_command(command))
 
     if debug is False:
         """check environment debug flag"""

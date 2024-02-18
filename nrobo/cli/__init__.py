@@ -42,10 +42,6 @@ def main():
         # greet the guest
         greet_the_guest()
 
-        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
-            # from nrobo.cli.upgrade import confirm_update
-            confirm_update()
-
         # install dependencies
         install_nrobo(None)
 

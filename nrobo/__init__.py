@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.6.1'
+__version__ = '2024.6.10'
 
 # install rich library
 import os
@@ -115,7 +115,7 @@ class NROBO_PATHS:
     LICENSE_FILE = Path("LICENSE")
     PY_PROJECT_TOML_FILE = Path("pyproject.toml")
     README_RST_FILE = Path("README.rst")
-    VALIDATE_NROBO_PY_FILE = Path("validate_nrobo.py")
+    VALIDATE_NROBO_PY_FILE = Path("validatenrobo.py")
 
 
 class NROBO_CLI_TOOL_PATH:
@@ -183,6 +183,30 @@ class EnvKeys:
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
 os.environ[EnvKeys.PYTHON] = "python"
 os.environ[EnvKeys.APP] = "nRoBo"

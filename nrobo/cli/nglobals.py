@@ -12,7 +12,7 @@ nRoBo Constants.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-from nrobo.exceptions import BrowserNotSupported
+from nrobo.exceptions import NRoBoBrowserNotSupported
 
 from rich.console import *
 from nrobo.cli.formatting import *
@@ -50,7 +50,7 @@ def raise_exception_if_browser_not_supported(browser_name):
             f"convenience.")
         exit(1)
     if browser_name not in supported_browsers:
-        raise BrowserNotSupported(browser_name)
+        raise NRoBoBrowserNotSupported(browser_name)
 
 
 

@@ -14,7 +14,7 @@ process.
 @email: erpanchdev@gmail.com
 """
 
-import validate_nrobo
+import validatenrobo
 from nrobo import *
 from nrobo import console, STYLE
 from nrobo.util.commands.ncommands import remove_files_recursively
@@ -131,7 +131,7 @@ def write_new_version_to_nrobo_init_py_file(new_version) -> None:
     Common.write_text_to_file(nrobo_init_py_file, file_content)
 
 
-def update_version_pyproject_toml_file(target) -> int:
+def update_version_pyproject_toml_file(target, override=False) -> int:
     """Update version in pyproject.toml
 
         Returns 0 if success."""
@@ -166,7 +166,8 @@ def execute_unittests(debug=False) -> None:
 
     return_code = 1
 
-    return_code = validate_nrobo.run_unit_tests()
+    return_code = validatenrobo.run_unit_tests()
+
     if not return_code == NROBO_CONST.SUCCESS:
         from cli import set_switch_environment
         console.print(
@@ -216,7 +217,7 @@ def delete_conftest_after_build() -> None:
     terminal(["rm", "-f", conftest])
 
 
-def build(target=ENV_CLI_SWITCH.TEST, debug=False) -> int:
+def build(target=ENV_CLI_SWITCH.TEST, debug=False, override=False) -> int:
     """Bundle package for <target> environment.
 
     :param debug: enable/disable debug mode.
