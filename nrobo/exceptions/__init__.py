@@ -27,13 +27,41 @@ class MissingCommandImplementation(Exception):
         return repr(self.value)
 
 
-class BrowserNotSupported(Exception):
+class NRoBoBrowserNotSupported(Exception):
     """This exception raise when <browser> is not supported or
     implementation to mimic <browser> is not yet implemented"""
 
     # constructor
     def __init__(self, browser):
         self.value = f'browser <{browser}> is not supported in nrobo.'
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class NRoBoIncorrectVersion(Exception):
+    """Raises when an incorrect version is supplied to
+
+       nrobo.util.version.Version class."""
+
+    # constructor
+    def __init__(self, version):
+        self.value = f'Incorrect version <{version}>'
+
+    def __str__(self):
+        return repr(self.value)
+
+
+class NRoBoInvalidOperation(Exception):
+    """Raises when an arithmetic operation is performed
+
+       over incompatible type.
+
+       Anything other than type Version is an Invalid Type."""
+
+    # constructor
+    def __init__(self, operator: str, _type: type):
+        self.value = f"TypeError: unsupported operand type(s) for {operator}: 'Version' and '{_type}'"
 
     def __str__(self):
         return repr(self.value)

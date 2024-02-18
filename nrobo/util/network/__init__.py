@@ -13,7 +13,7 @@ networking functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmaill.com
 """
-
+import os
 import subprocess
 
 
@@ -22,7 +22,10 @@ def internet_connectivity() -> bool:
         else return False"""
     try:
         from nrobo import terminal
-        # subprocess.check_output(["ping", "-c", "1", "8.8.8.8"])
-        return terminal(["ping", "-c", "1", "8.8.8.8"]) == 0
-    except subprocess.CalledProcessError:
+        if terminal(["ping", "-c", "1", "google.com"]) == 0:
+            return True
+        else:
+            return False
+    except subprocess.CalledProcessError as e:
         return False
+

@@ -1,8 +1,0 @@
-from framework_tests.nrobo_args.test_nrobo_args_package import TestNroboArgsPackage
-
-t = TestNroboArgsPackage()
-t.test_nrobo_cli_arg_junit_xml_switch()
-t.test_nrobo_cli_arg_junit_prefix_switch_without_value ()
-t.test_nrobo_cli_arg_setup_plan_switch()
-t.test_nrobo_cli_arg_version_switch()
-t.test_nrobo_cli_arg_color_switch_without_value()

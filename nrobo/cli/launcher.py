@@ -220,21 +220,22 @@ def create_allure_report(command: list) -> int:
     """prepares allure report based on pytest launcher <command>"""
 
     allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
-    terminal(command + ['--alluredir', allure_results], debug=True)
+    terminal(command + ['--alluredir', allure_results], debug=True, use_os_system_call=True)
 
     allure_generated_report = allure_results.parent / "allure-report"
     console.print(f"[{STYLE.HLGreen}]Preparing allure report")
 
     terminal([NREPORT.ALLURE, "generate", "--name", "nRoBo TEST REPORT", "-o", allure_generated_report, "--clean",
-              allure_results])
+              allure_results], use_os_system_call=True)
 
-    terminal([NREPORT.ALLURE, "serve", allure_results])
+    terminal([NREPORT.ALLURE, "serve", allure_results], use_os_system_call=True)
 
 
 def create_simple_html_report(command: list) -> int:
     """prepares simple html report based on pytest launcher command"""
     console.print(f"[{STYLE.HLGreen}]Preparing html report")
-    return_code = terminal(command, debug=True)
+
+    return_code = terminal(command, debug=True, use_os_system_call=True)
     console.rule(
         f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
 
