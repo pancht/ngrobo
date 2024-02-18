@@ -23,6 +23,15 @@ from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
 
 
+class BUILD_VERSION:
+    """Build Version.
+
+       Could be major | minor | patch"""
+    MAJOR = "major"
+    MINOR = "minor"
+    PATCH = "patch"
+
+
 def nrobo_cli() -> None:
     """Parses nrobo cli and executes the command."""
 
@@ -36,9 +45,12 @@ def nrobo_cli() -> None:
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
-    parser.add_argument("-e", "--env", help="Set/switch environment between production_machine and development. Options: test | prod")
+    parser.add_argument("-e", "--env",
+                        help="Set/switch environment between production_machine and development. Options: test | prod")
     parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
     parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
+    parser.add_argument("--major", help="Increment major version", action="store_true", default=False)
+    parser.add_argument("--minor", help="Increment minor version", action="store_true", default=False)
 
     # parse cli args
     args = parser.parse_args()
@@ -48,7 +60,12 @@ def nrobo_cli() -> None:
 
     if args.build:
         if args.target:
-            build(args.target, override=args.override)
+            if args.major:
+                build(args.target, override=args.override, build_version=BUILD_VERSION.MAJOR)
+            elif args.minor:
+                build(args.target, override=args.override, build_version=BUILD_VERSION.MINOR)
+            else:
+                build(args.target, override=args.override, build_version=BUILD_VERSION.PATCH)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)

@@ -43,19 +43,21 @@ class TestUpgradePkg():
         package = "xyzabc"
         result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
         match = re.search(package + r" \(([\d]+4[.][\d]+[.][\d]+)\)", result.stdout)
+
         assert None == get_pypi_index(package)
 
     def test_update_available_method(self):
         """Validate nrobo.cli.upgrade.update_available() method"""
 
         from nrobo.cli.upgrade import update_available, get_pypi_index
+        from nrobo.util.version import Version
 
         with console.status("Test if update not available"):
 
             # scenario-1: Update not available
             package = NROBO_CONST.NROBO
             from nrobo import __version__
-            if __version__ == get_pypi_index(package):
-                assert update_available() == False
-            else:
+            if Version(__version__) < Version(get_pypi_index(package)):
                 assert update_available() == True
+            else:
+                assert update_available() == False

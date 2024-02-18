@@ -19,6 +19,7 @@ from pathlib import Path
 
 from nrobo import EnvKeys, Environment
 from nrobo import NROBO_PATHS as NP
+from nrobo.util.constants import EXT
 
 
 def developer_machine() -> bool:
@@ -60,3 +61,12 @@ def host_machine_has_nRoBo() -> bool:
         return True
 
     return False
+
+
+def build_version_from_version_files() -> str:
+    """Return build version from version files."""
+    from nrobo.util.common import Common
+    from nrobo import NROBO_PATHS
+    from cli.build import ENV_CLI_SWITCH
+    # Grab version number from version yaml files in version/ directory
+    return Common.read_yaml(NROBO_PATHS.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}")['version']

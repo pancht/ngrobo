@@ -71,15 +71,16 @@ def confirm_update() -> None:
     host_version = Version(get_host_version())
     pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-    version_forced_update = '2024.6.13'
-    if host_version <= Version(version_forced_update):
+    version_forced_update = Version('2024.6.13')
+    if host_version <= version_forced_update:
         # forced update and apply patch delivered in give version
-        from nrobo import console, terminal, EnvKeys, Environment
+        from nrobo import console, terminal, STYLE
         from nrobo.cli.ncodes import EXIT_CODES
-        terminal(['pip', 'install', '--upgrade', f'nrobo=={version_forced_update}'], debug=False)
+        terminal(['pip', 'install', '--upgrade', f'nrobo=={(version_forced_update+1).version}', '--require-virtualenv'],
+                 debug=False)
 
         if detect.production_machine() and not detect.developer_machine():
-            console.print(f"{EXIT_CODES['10001'][0]}")
+            console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
             exit(EXIT_CODES['10001'][0])
 
         return  # Silent patch applied for version 2024.6.10, thus, just return!
@@ -92,7 +93,9 @@ def confirm_update() -> None:
         from nrobo import console, terminal, STYLE
         from rich.prompt import Prompt
         reply = Prompt.ask(
-            f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
+            f"An updated version ({_pypi_version}) is available for nrobo. "
+            f"\n Your nRoBo version is {get_host_version()}. "
+            f"\n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
             f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if not reply.strip().lower() in ["yes", "y"]:
@@ -107,7 +110,7 @@ def confirm_update() -> None:
 
             console.print("Update started")
 
-            return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
+            return_code = terminal(['pip', 'install', '--upgrade', 'nrobo', '--require-virtualenv'], debug=True)
 
             if return_code == 0:
                 console.print("Update completed successfully.")
