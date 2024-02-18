@@ -12,16 +12,17 @@ Definition of nRoBo update utility.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import os
 import time
-from nrobo import NROBO_CONST, Prompt, __version__, EXIT_CODES,  Version
 from nrobo.util.network import internet_connectivity
 import subprocess
 import re
+import nrobo.cli.detection as detect
 
 
 def get_host_version() -> str:
     """get host version of nrobo installation"""
-
+    from nrobo import __version__
     return __version__
 
 
@@ -56,7 +57,8 @@ def get_pypi_index(package) -> None | str:
 def update_available() -> bool:
     """Returns version if package is available on pypi
         else returns None otherwise."""
-
+    from nrobo.util.version import Version
+    from nrobo import NROBO_CONST
     return Version(get_host_version()) < Version(get_pypi_index(NROBO_CONST.NROBO))
 
 
@@ -64,17 +66,21 @@ def confirm_update() -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
-
+    from nrobo.util.version import Version
+    from nrobo import NROBO_CONST
     host_version = Version(get_host_version())
     pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
     version_forced_update = '2024.6.13'
     if host_version <= Version(version_forced_update):
         # forced update and apply patch delivered in give version
-        from nrobo import console, terminal
+        from nrobo import console, terminal, EnvKeys, Environment
+        from nrobo.cli.ncodes import EXIT_CODES
         terminal(['pip', 'install', '--upgrade', f'nrobo=={version_forced_update}'], debug=False)
-        console.print(f"{EXIT_CODES['10001'][0]}")
-        exit(EXIT_CODES['10001'][0])
+
+        if detect.production_machine() and not detect.developer_machine():
+            console.print(f"{EXIT_CODES['10001'][0]}")
+            exit(EXIT_CODES['10001'][0])
 
         return  # Silent patch applied for version 2024.6.10, thus, just return!
 
@@ -84,6 +90,7 @@ def confirm_update() -> None:
 
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console, terminal, STYLE
+        from rich.prompt import Prompt
         reply = Prompt.ask(
             f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"

@@ -17,12 +17,12 @@ import os
 import subprocess
 from pathlib import Path
 from typing import Optional
-from nrobo import EnvKeys, NROBO_PATHS as NP, Environment, terminal, NROBO_CONST
 from nrobo.cli.cli_constants import nCLI
 from nrobo.util.common import Common
 from nrobo.util.filesystem import copy_file, copy_dir
 from nrobo.util.version import Version
 from nrobo.cli.upgrade import get_host_version
+import nrobo.cli.detection as detect
 
 
 def transfer_files_to_host_project() -> None:
@@ -33,7 +33,7 @@ def transfer_files_to_host_project() -> None:
     # =============================================================
     from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
-    if (Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
+    if detect.host_machine_has_nRoBo():
 
         patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
         patch_2024_6_12 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12"
@@ -72,6 +72,9 @@ def transfer_files_to_host_project() -> None:
 
         return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
 
+    # nRoBo was not found on HOST machine.
+    # Lets' make it found then!!!
+    # Lets' make an ADDRESS on the HOST machine. :)
     print(f"Installing framework")
 
     copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
@@ -102,30 +105,25 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
-    # if conftest file found on production system, meaning nrobo is already installed there
-    nrobo_installed = Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists()
-
-    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION \
-            and not nrobo_installed:
+    if detect.production_machine() and not detect.host_machine_has_nRoBo():
         print(f"Installing requirements")
 
     if requirements_file is None:
         requirements_file = f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
-
+        from nrobo import terminal, NROBO_CONST
         return_code = terminal(command=[os.environ[EnvKeys.PIP_COMMAND], nCLI.INSTALL, '-r', requirements_file],
                                stdout=subprocess.DEVNULL,
                                stderr=subprocess.STDOUT)
 
         if return_code == NROBO_CONST.SUCCESS:
             """return code zero means success"""
-            if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION \
-                    and not nrobo_installed:
+            if detect.production_machine() and not detect.host_machine_has_nRoBo():
                 print(f"Requirements are installed successfully.")
         else:
             print(f"Requirements are not installed successfully!")
             exit()
 
-    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+    if detect.production_machine():
         """Install or upgrading framework on Production environment"""
 
         # triggers forced update or normal update by comparing host version and pypi version
@@ -134,9 +132,9 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         # create framework folders on host system
 
-        # Heck logic to check if this is a developer machine in production
-        if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PY_PROJECT_TOML_FILE).exists():
-            # Developer machine in production detected! I'm not going to install framework BRO!!! :)
+        # Heck logic to check if this is a developer machine in production_machine
+        if detect.developer_machine():
+            # Developer machine in production_machine detected! I'm not going to install framework BRO!!! :)
             pass
         else:
             """fresh installation"""

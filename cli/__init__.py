@@ -36,7 +36,7 @@ def nrobo_cli() -> None:
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
-    parser.add_argument("-e", "--env", help="Set/switch environment between production and development. Options: test | prod")
+    parser.add_argument("-e", "--env", help="Set/switch environment between production_machine and development. Options: test | prod")
     parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
     parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
 
