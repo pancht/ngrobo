@@ -70,7 +70,7 @@ def transfer_files_to_host_project() -> None:
                              f"Please take note of it.")
                 print("\n")
 
-        return
+        return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
 
     print(f"Installing framework")
 

@@ -68,7 +68,7 @@ def confirm_update() -> None:
     host_version = Version(get_host_version())
     pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-    version_forced_update = '2024.6.12'
+    version_forced_update = '2024.6.13'
     if host_version <= Version(version_forced_update):
         # forced update and apply patch delivered in give version
         from nrobo import console, terminal
