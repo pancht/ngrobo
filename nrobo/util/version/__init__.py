@@ -128,16 +128,16 @@ class Version:
         self._patch_prev = patch_prev
 
     def major_incremented(self) -> str:
-        return f"{self._major_next}.{self._minor}.{self._patch}"
+        return f"{self._major_next}.0.0"
 
     def major_decremented(self) -> str:
-        return f"{self._major_prev}.{self._minor}.{self._patch}"
+        return f"{self._major_prev}.0.0"
 
     def minor_incremented(self) -> str:
-        return f"{self._major}.{self._minor_next}.{self._patch}"
+        return f"{self._major}.{self._minor_next}.0"
 
     def minor_decremented(self) -> str:
-        return f"{self._major}.{self._minor_prev}.{self._patch}"
+        return f"{self._major}.{self._minor_prev}.0"
 
     def patch_incremented(self) -> str:
         return f"{self._major}.{self._minor}.{self._patch_next}"

@@ -23,6 +23,7 @@ from nrobo.cli.nglobals import *
 
 from nrobo.util.process import *
 from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
+import nrobo.cli.detection as detect
 
 global __REQUIREMENTS__
 
@@ -205,7 +206,7 @@ def launch_nrobo():
 
     with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
 
-        if os.environ[EnvKeys.ENVIRONMENT] in [Environment.DEVELOPMENT]:
+        if detect.developer_machine():
             console.print(f"[{STYLE.INFO}]{command}")
 
         if args.report and args.report == NREPORT.ALLURE:  # test if needed allure report

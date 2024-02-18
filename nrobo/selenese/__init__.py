@@ -61,10 +61,10 @@ class WAITS:
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
     """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
-
-    if os.environ[EnvKeys.ENVIRONMENT] == Environment.PRODUCTION:
+    import nrobo.cli.detection as detect
+    if detect.production_machine():
         return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
-    elif os.environ[EnvKeys.ENVIRONMENT] == Environment.DEVELOPMENT:
+    elif detect.developer_machine():
         return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE)
 
 

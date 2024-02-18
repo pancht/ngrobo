@@ -20,7 +20,6 @@ import argparse
 from nrobo.cli.cli_constants import nCLI, NREPORT
 from nrobo.cli.nglobals import Browsers
 
-
 BOOL_SWITCHES = [
     f"--{nCLI.INSTALL}",
     f"--{nCLI.VERSION}",
@@ -84,7 +83,6 @@ SHOW_ONLY_SWITCHES = [
     "setup-plan",
     "co"
 ]
-
 
 
 def nrobo_cli_parser(exit_on_failure=True):

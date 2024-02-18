@@ -35,7 +35,20 @@ class PUBLISH_TARGET:
 def publish(target, *, debug: bool = False, override: bool = False):
     """Check and publish package"""
 
-    check()
+    check(debug=debug)
+
+    from rich.prompt import Prompt
+    import nrobo.cli.detection as detect
+    reply = Prompt.ask(
+        f"Do You really want to publish version: [{STYLE.HLOrange}]{detect.build_version_from_version_files()}[/]"
+        f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)")
+    if not reply.strip().lower() in ["yes", "y"]:
+        # Hmm! Host don't want an update.
+        # I don't know why he/she doesn't!!!
+        # Anyway, I've had to obey her/his command,
+        # Thus, I'm not going to update.
+        console.print(f"[{STYLE.HLOrange}]Alright! You chose not to publish.\nPublish aborted by choice![/]")
+        return  # Bye, Host!
 
     global __CUR_ENV__
 

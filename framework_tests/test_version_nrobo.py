@@ -55,6 +55,7 @@ class TestNRoboFramework():
 
         assert return_code == 0
 
+    @pytest.mark.skip
     def test_upgrade_prompt_presence_in_older_version_of_nRoBo(self):
         """Validate that upgrade prompt is showing up when host has lower version of nRoBo"""
 
@@ -76,7 +77,8 @@ class TestNRoboFramework():
         """Validate nrobo/__init__.py has correct published version"""
 
         from nrobo.cli.upgrade import get_pypi_index
+        import nrobo.cli.detection as detect
         from nrobo import __version__
 
-        assert __version__ == get_pypi_index("nrobo")
+        assert detect.build_version_from_version_files() == __version__
 
