@@ -5,14 +5,15 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
-###
-###
-### [2024.6.11 - 2024.6.11] -  On 2024.02.18, First fully tested version.
+
+### [2024.7.0] -  On 2024.02.18, Fully tested release.
+#### Added
+- Few more unit tests
+
+### [2024.6.10 - 2024.6.15] -  On 2024.02.18
 #### Fixes
 - Issue of repeated test run fixed
 
-###
-###
 ### [2024.6.1] -  On 2024.02.14
 #### Fixes
 - Issue with upgrade.
