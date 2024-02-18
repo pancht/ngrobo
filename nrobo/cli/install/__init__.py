@@ -13,29 +13,35 @@ Installer for installing nrobo framework at host system.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-
-from nrobo.cli.launcher import *
-from nrobo.util.filesystem import *
-from nrobo.util.process import *
+import os
+import subprocess
+from pathlib import Path
 from typing import Optional
-from nrobo import EnvKeys, NROBO_PATHS as NP, Environment
+from nrobo.cli import confirm_update
+from nrobo import EnvKeys, NROBO_PATHS as NP, Environment, terminal, NROBO_CONST
+from nrobo.cli.cli_constants import nCLI
+from nrobo.util.common import Common
+from nrobo.util.filesystem import copy_file, copy_dir
 from nrobo.util.version import Version
+from nrobo.cli.upgrade import get_host_version
+from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
 
-def transfer_files_to_host_project():
+def transfer_files_to_host_project() -> None:
+    """Transfer nrobo project files to HOST project dir"""
     # Copy conftest.py and other files to current directory
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
+
     if (Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
 
-        from nrobo.util.common import Common
         patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
         if patch_2024_6_10.exists():
             return
 
         # Apply patches
-        from nrobo.cli.upgrade import get_host_version
+
         if Version(get_host_version()) == Version("2024.6.10"):
             Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10", "")
 
@@ -45,7 +51,7 @@ def transfer_files_to_host_project():
             # copy nrobo conftest-host.py
             copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
                       Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
-            from nrobo import console, STYLE
+
             print("\n")
             console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
                          f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
@@ -71,30 +77,6 @@ def transfer_files_to_host_project():
              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
 
     print(f"Installation complete")
-    # # modify demo page object and demo test class in host directory
-    # from nrobo.util.common import Common
-    # from nrobo.util.regex import substitute
-    # from nrobo.util.filesystem import get_files_list, remove_file
-    # # iterate files in host pages dir
-    # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PAGES)
-    # for f in files:
-    #     # iterate each file
-    #     pattern = r"(from[ ]+nrobo[.]framework[.])"
-    #     file_content = Common.read_file_as_string(f)
-    #     file_content = substitute(pattern, "", file_content)
-    #     Common.write_text_to_file(f, file_content, encoding='utf-8')
-    #
-    # # iterate files in host tests dir
-    # files = get_files_list(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.TESTS)
-    # for f in files:
-    #     # iterate each file
-    #     pattern = r"(from[ ]+nrobo[.]framework[.])"
-    #     file_content = Common.read_file_as_string(f, encoding='utf-8')
-    #     file_content = substitute(pattern, "", file_content)
-    #     Common.write_text_to_file(f, file_content, encoding='utf-8')
-    #
-    # # delete nrobo.framework package
-    # remove_filetree(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK)
 
 
 def install_nrobo(requirements_file: Optional[str] = None) -> None:
@@ -102,8 +84,6 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     from where nrobo command was executed in the Production environment.
 
     This will only install nrobo dependencies if it is executed in the Developer environment."""
-
-    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
     # Inline imports to handle circular import exception while importing partially initialized module
     set_environment()
@@ -135,7 +115,6 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         """Install or upgrading framework on Production environment"""
 
         # triggers forced update or normal update by comparing host version and pypi version
-        from nrobo.cli.upgrade import confirm_update
         confirm_update()
 
         # create framework folders on host system
