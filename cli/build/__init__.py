@@ -22,6 +22,7 @@ from nrobo.util.common import Common
 from nrobo.util.constants import EXT
 from nrobo.util.platform import PLATFORMS
 
+
 __DIST_DIR__ = "dist"
 __VERSIONS_DIR__ = "versions" + os.sep
 __CUR_ENV__ = ""
@@ -148,7 +149,7 @@ def update_version_pyproject_toml_file(target, override=False) -> int:
     version = get_version_from_yaml_version_files(__CUR_ENV__)
 
     # Increment version
-    version = increment_version(version)
+    # version = increment_version(version)
 
     # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
@@ -217,7 +218,7 @@ def delete_conftest_after_build() -> None:
     terminal(["rm", "-f", conftest])
 
 
-def build(target=ENV_CLI_SWITCH.TEST, debug=False, override=False) -> int:
+def build(target=ENV_CLI_SWITCH.TEST, *, debug=False, override=False, build_version=None) -> int:
     """Bundle package for <target> environment.
 
     :param debug: enable/disable debug mode.
@@ -226,8 +227,22 @@ def build(target=ENV_CLI_SWITCH.TEST, debug=False, override=False) -> int:
 
     # Always correct version in version yaml files first
     from nrobo.cli.upgrade import get_pypi_index
-    write_new_version_in_test_version_file(get_pypi_index(NROBO_CONST.NROBO))
-    write_new_version_to_nrobo_init_py_file(get_pypi_index(NROBO_CONST.NROBO))
+    from nrobo.util.version import Version
+    from cli import BUILD_VERSION
+
+    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
+
+    if build_version == BUILD_VERSION.MAJOR:
+        new_version = pypi_version.major_incremented()
+    elif build_version == BUILD_VERSION.MINOR:
+        new_version = pypi_version.minor_incremented()
+    elif build_version is None:
+        new_version = pypi_version.patch_incremented()
+    else:
+        new_version = pypi_version.patch_incremented()
+
+    write_new_version_in_test_version_file(new_version)
+    write_new_version_to_nrobo_init_py_file(new_version)
 
     # run_nrobo_validator_tests
     console.rule(f"[{STYLE.HLOrange}]Packaging nRoBo...")
@@ -276,10 +291,12 @@ def build(target=ENV_CLI_SWITCH.TEST, debug=False, override=False) -> int:
         console.print(f"\t[{STYLE.HLOrange}]Environment reset.")
 
     with console.status(f"[{STYLE.TASK}]Correct version in nrobo/__init__.py file\n"):
-        from nrobo.cli.upgrade import get_pypi_index
-        write_new_version_to_nrobo_init_py_file(increment_version(get_pypi_index(NROBO_CONST.NROBO)))
+        import nrobo.cli.detection as detect
+        write_new_version_to_nrobo_init_py_file(detect.build_version_from_version_files())
         console.print(f"\t[{STYLE.HLOrange}]Corrected.")
 
     with console.status(f"[{STYLE.TASK}]Packages are ready. Please run check.\n"):
         # Reset ENV_CLI_SWITCH=DEVELOPMENT in nrobo/__INIT__.py
         console.rule(f"[{STYLE.WARNING}]Now run check on packages.")
+        import nrobo.cli.detection as detect
+        console.rule(f"Package version: {detect.build_version_from_version_files()} created.")

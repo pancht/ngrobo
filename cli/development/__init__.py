@@ -34,17 +34,17 @@ def set_switch_environment(env: str, debug=False):
         Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY)
     )
 
-    # update environment to production
+    # update environment to production_machine
     # pattern for finding version setting
     PATTERN = ""
 
     # Replacement text
     if env == ENV_CLI_SWITCH.TEST:
         PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.PRODUCTION)"
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
+        REPLACEMENT_TEXT = "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
     elif env == ENV_CLI_SWITCH.PROD:
         PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.DEVELOPMENT)"
-        REPLACEMENT_TEXT = "\nos.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
+        REPLACEMENT_TEXT = "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
     else:
         print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
         exit()

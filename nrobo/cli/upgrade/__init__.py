@@ -12,21 +12,17 @@ Definition of nRoBo update utility.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import os
 import time
-
-from nrobo.util.version import Version
-from nrobo import NROBO_CONST
-from nrobo import console, terminal, STYLE
-from rich.prompt import Prompt
-from nrobo import __version__
 from nrobo.util.network import internet_connectivity
 import subprocess
 import re
+import nrobo.cli.detection as detect
 
 
 def get_host_version() -> str:
     """get host version of nrobo installation"""
-
+    from nrobo import __version__
     return __version__
 
 
@@ -36,7 +32,7 @@ def get_pypi_index(package) -> None | str:
 
     if not internet_connectivity():
         """Exit programme."""
-
+        from nrobo import console, STYLE
         console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
 
         # HOW can I proceed without internet connectivity!
@@ -61,7 +57,8 @@ def get_pypi_index(package) -> None | str:
 def update_available() -> bool:
     """Returns version if package is available on pypi
         else returns None otherwise."""
-
+    from nrobo.util.version import Version
+    from nrobo import NROBO_CONST
     return Version(get_host_version()) < Version(get_pypi_index(NROBO_CONST.NROBO))
 
 
@@ -69,14 +66,22 @@ def confirm_update() -> None:
     """Asks host to upgrade.
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
+    from nrobo.util.version import Version
+    from nrobo import NROBO_CONST
+    host_version = Version(get_host_version())
+    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-    host_version = get_host_version()
-    pypi_version = get_pypi_index(NROBO_CONST.NROBO)
-
-    if host_version <= Version('2024.6.10').version:
+    version_forced_update = Version('2024.6.13')
+    if host_version <= version_forced_update:
         # forced update and apply patch delivered in give version
+        from nrobo import console, terminal, STYLE
+        from nrobo.cli.ncodes import EXIT_CODES
+        terminal(['pip', 'install', '--upgrade', f'nrobo=={(version_forced_update+1).version}', '--require-virtualenv'],
+                 debug=False)
 
-        terminal(['pip', 'install', '--upgrade', f'nrobo==2024.6.10'], debug=False)
+        if detect.production_machine() and not detect.developer_machine():
+            console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
+            exit(EXIT_CODES['10001'][0])
 
         return  # Silent patch applied for version 2024.6.10, thus, just return!
 
@@ -85,9 +90,12 @@ def confirm_update() -> None:
         # Lets' ask host user if he/she wants to upgrade.
 
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
-
+        from nrobo import console, terminal, STYLE
+        from rich.prompt import Prompt
         reply = Prompt.ask(
-            f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
+            f"An updated version ({_pypi_version}) is available for nrobo. "
+            f"\n Your nRoBo version is {get_host_version()}. "
+            f"\n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
             f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command.")
         if not reply.strip().lower() in ["yes", "y"]:
@@ -102,7 +110,7 @@ def confirm_update() -> None:
 
             console.print("Update started")
 
-            return_code = terminal(['pip', 'install', '--upgrade', 'nrobo'], debug=True)
+            return_code = terminal(['pip', 'install', '--upgrade', 'nrobo', '--require-virtualenv'], debug=True)
 
             if return_code == 0:
                 console.print("Update completed successfully.")

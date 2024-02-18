@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.6.10'
+__version__ = '2024.7.1'
 
 # install rich library
 import os
@@ -42,10 +42,14 @@ class NROBO_PATHS:
     # cli packages
     CLI = Path("cli")
     CLI_PKG = CLI / INIT_PY
+    DETECTION = Path("detection")
+    DETECTION_PKG = CLI / DETECTION / INIT_PY
     FORMATTING = Path("formatting")
     FORMATTING_PKG = CLI / FORMATTING / INIT_PY
     INSTALL = Path("install")
     INSTALL_PKG = CLI / INSTALL / INIT_PY
+    NCODES = Path("ncodes")
+    NCODES_PKG = CLI / NCODES / INIT_PY
     REQUIREMENTS_TXT_FILE = CLI / INSTALL / Path("requirements.txt")
     CLI_NROBO_ARGS = Path("nrobo_args")
     CLI_NROBO_ARGS_PKG = CLI / CLI_NROBO_ARGS / INIT_PY
@@ -95,12 +99,17 @@ class NROBO_PATHS:
     UTIL_FILESYSTEM = Path("filesystem")
     UTIL_FILESYSTEM_PKG = NROBO / UTIL / UTIL_FILESYSTEM / INIT_PY
     UTIL_PLATFORM = Path("platform")
+    UTIL_NETWORK = Path("network")
+    UTIL_NETWORK_PKG = NROBO / UTIL / UTIL_NETWORK / INIT_PY
     UTIL_PLATFORM_PKG = NROBO / UTIL / UTIL_PLATFORM / INIT_PY
     UTIL_PROCESS = Path("process")
     UTIL_PROCESS_PKG = NROBO / UTIL / UTIL_PROCESS / INIT_PY
     UTIL_PYTHON = Path("python")
     UTIL_PYTHON_PKG = NROBO / UTIL / UTIL_PYTHON / INIT_PY
-
+    UTIL_REGEX = Path("regex")
+    UTIL_REGEX_PKG = NROBO / UTIL / UTIL_REGEX / INIT_PY
+    UTIL_VERSION = Path("version")
+    UTIL_VERSION_PKG = NROBO / UTIL / UTIL_VERSION / INIT_PY
     CONFTEST_PY = Path("conftest.py")
 
     NROBO_FRAMEWORK_TESTS = Path("framework_tests")
@@ -183,30 +192,6 @@ class EnvKeys:
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
 os.environ[EnvKeys.PYTHON] = "python"
 os.environ[EnvKeys.APP] = "nRoBo"

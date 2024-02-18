@@ -146,6 +146,14 @@ class TestNRoboFrameworkPaths():
 
         assert browsers_safari_pkg_init_path.exists() == True
 
+    def test_cli_detection_pkg_is_present(self):
+        """Validate that cli.detection package is present"""
+        set_environment()
+
+        cli_detection_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.DETECTION_PKG
+
+        assert cli_detection_pkg_path.exists() == True
+
     def test_cli_formatting_pkg_is_present(self):
         """Validate that cli.formatting package is present"""
         set_environment()
@@ -170,6 +178,14 @@ class TestNRoboFrameworkPaths():
             os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.REQUIREMENTS_TXT_FILE
 
         assert cli_install_requirements_txt_file_pkg_path.exists()
+
+    def test_cli_ncodes_pkg_is_present(self):
+        """Validate that cli.ncodes package is present"""
+        set_environment()
+
+        cli_ncodes_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NCODES_PKG
+
+        assert cli_ncodes_pkg_path.exists()
 
     def test_cli_nrobo_args_pkg_is_present(self):
         """Validate that cli.nrobo_args package is present"""
@@ -463,6 +479,14 @@ class TestNRoboFrameworkPaths():
 
         assert nrobo_util_filesystem_pkg_path.exists()
 
+    def test_util_network_pkg_is_present(self):
+        """Validate that nrobo.util.network package is present"""
+        set_environment()
+
+        nrobo_util_network_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_NETWORK_PKG
+
+        assert nrobo_util_network_pkg_path.exists()
+
     def test_util_platform_pkg_is_present(self):
         """Validate that nrobo.util.platform package is present"""
         set_environment()
@@ -486,6 +510,22 @@ class TestNRoboFrameworkPaths():
         nrobo_util_python_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PYTHON_PKG
 
         assert nrobo_util_python_pkg_path.exists()
+
+    def test_util_regex_pkg_is_present(self):
+        """Validate that nrobo.util.regex package is present"""
+        set_environment()
+
+        nrobo_util_regex_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_REGEX_PKG
+
+        assert nrobo_util_regex_pkg_path.exists()
+
+    def test_util_version_pkg_is_present(self):
+        """Validate that nrobo.util.version package is present"""
+        set_environment()
+
+        nrobo_util_version_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_VERSION_PKG
+
+        assert nrobo_util_version_pkg_path.exists()
 
     def test_nrobo_framework_tests_pkg_is_present(self):
         """Validate that nrobo_framework_tests package is present"""
