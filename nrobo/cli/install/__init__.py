@@ -17,14 +17,12 @@ import os
 import subprocess
 from pathlib import Path
 from typing import Optional
-from nrobo.cli import confirm_update
 from nrobo import EnvKeys, NROBO_PATHS as NP, Environment, terminal, NROBO_CONST
 from nrobo.cli.cli_constants import nCLI
 from nrobo.util.common import Common
 from nrobo.util.filesystem import copy_file, copy_dir
 from nrobo.util.version import Version
 from nrobo.cli.upgrade import get_host_version
-from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
 
 def transfer_files_to_host_project() -> None:
@@ -33,30 +31,45 @@ def transfer_files_to_host_project() -> None:
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
+    from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP
 
     if (Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
 
         patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
+        patch_2024_6_12 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12"
+
+        if patch_2024_6_12.exists():
+            return
+        else:
+            if Version(get_host_version()) == Version("2024.6.12"):
+                from nrobo.util.filesystem import remove_file
+                if patch_2024_6_10.exists():
+                    remove_file(patch_2024_6_10)
+                # Create new patch file
+                Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12", "")
+
         if patch_2024_6_10.exists():
             return
+        else:
+            # Apply patches
 
-        # Apply patches
+            if Version(get_host_version()) == Version("2024.6.10"):
+                Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10", "")
 
-        if Version(get_host_version()) == Version("2024.6.10"):
-            Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10", "")
+                # create a copy of host conftest.py
+                copy_file(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY,
+                          Path(os.environ[EnvKeys.EXEC_DIR]) / "copy-conftest.py")
+                # copy nrobo conftest-host.py
+                copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
+                          Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
 
-            # create a copy of host conftest.py
-            copy_file(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY,
-                      Path(os.environ[EnvKeys.EXEC_DIR]) / "copy-conftest.py")
-            # copy nrobo conftest-host.py
-            copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
-                      Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+                print("\n")
 
-            print("\n")
-            console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
-                         f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
-                         f"Please take note of it.")
-            print("\n")
+                console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
+                             f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
+                             f"Please take note of it.")
+                print("\n")
+
         return
 
     print(f"Installing framework")
@@ -86,6 +99,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
     This will only install nrobo dependencies if it is executed in the Developer environment."""
 
     # Inline imports to handle circular import exception while importing partially initialized module
+    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
     set_environment()
 
     # if conftest file found on production system, meaning nrobo is already installed there
@@ -115,6 +129,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         """Install or upgrading framework on Production environment"""
 
         # triggers forced update or normal update by comparing host version and pypi version
+        from nrobo.cli import confirm_update
         confirm_update()
 
         # create framework folders on host system

@@ -13,12 +13,7 @@ Definition of nRoBo update utility.
 @email: erpanchdev@gmail.com
 """
 import time
-
-from nrobo.util.version import Version
-from nrobo import NROBO_CONST
-from nrobo import console, terminal, STYLE
-from rich.prompt import Prompt
-from nrobo import __version__
+from nrobo import NROBO_CONST, Prompt, __version__, EXIT_CODES,  Version
 from nrobo.util.network import internet_connectivity
 import subprocess
 import re
@@ -36,7 +31,7 @@ def get_pypi_index(package) -> None | str:
 
     if not internet_connectivity():
         """Exit programme."""
-
+        from nrobo import console, STYLE
         console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
 
         # HOW can I proceed without internet connectivity!
@@ -70,13 +65,16 @@ def confirm_update() -> None:
         Upgrades nrobo if host's reply is affirmative
         else returns with no action"""
 
-    host_version = get_host_version()
-    pypi_version = get_pypi_index(NROBO_CONST.NROBO)
+    host_version = Version(get_host_version())
+    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-    if host_version <= Version('2024.6.10').version:
+    version_forced_update = '2024.6.12'
+    if host_version <= Version(version_forced_update):
         # forced update and apply patch delivered in give version
-
-        terminal(['pip', 'install', '--upgrade', f'nrobo==2024.6.10'], debug=False)
+        from nrobo import console, terminal
+        terminal(['pip', 'install', '--upgrade', f'nrobo=={version_forced_update}'], debug=False)
+        console.print(f"{EXIT_CODES['10001'][0]}")
+        exit(EXIT_CODES['10001'][0])
 
         return  # Silent patch applied for version 2024.6.10, thus, just return!
 
@@ -85,7 +83,7 @@ def confirm_update() -> None:
         # Lets' ask host user if he/she wants to upgrade.
 
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
-
+        from nrobo import console, terminal, STYLE
         reply = Prompt.ask(
             f"An updated version ({_pypi_version}) is available for nrobo. \n Your nRoBo version is {get_host_version()}. \n Do you want to upgrade? "
             f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
