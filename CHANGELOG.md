@@ -5,6 +5,9 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.7.1] -  On 2024.02.18
+#### Added
+- Added YouTube channel link to PyPi project page
 
 ### [2024.7.0] -  On 2024.02.18, Fully tested release.
 #### Added
