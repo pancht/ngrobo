@@ -26,7 +26,7 @@ def get_os_system_command(command: [str]) -> str:
     _command = ""
 
     for _cmd in command:
-        _command += _cmd + " "
+        _command += str(_cmd) + " "
 
     return _command
 

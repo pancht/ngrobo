@@ -117,7 +117,7 @@ class Common:
         return path.exists(file_path)
 
     @staticmethod
-    def read_yaml(file_path: Union[str, Path], / , *, fail_on_failure=True) -> Union[str, None]:
+    def read_yaml(file_path: Union[str, Path], /, *, fail_on_failure=True) -> Union[str, None]:
         """
         Read yaml file at given path
 
