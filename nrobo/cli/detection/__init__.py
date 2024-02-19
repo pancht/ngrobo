@@ -69,4 +69,4 @@ def build_version_from_version_files() -> str:
     from nrobo import NROBO_PATHS
     from cli.build import ENV_CLI_SWITCH
     # Grab version number from version yaml files in version/ directory
-    return Common.read_yaml(NROBO_PATHS.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}")['version']
+    return Common.read_yaml(NROBO_PATHS.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}", fail_on_failure=False)['version']

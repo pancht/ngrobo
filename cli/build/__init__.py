@@ -22,7 +22,6 @@ from nrobo.util.common import Common
 from nrobo.util.constants import EXT
 from nrobo.util.platform import PLATFORMS
 
-
 __DIST_DIR__ = "dist"
 __VERSIONS_DIR__ = "versions" + os.sep
 __CUR_ENV__ = ""
@@ -37,7 +36,7 @@ def get_version_from_yaml_version_files(target) -> str:
     """Get and return version form respective target environment yaml file."""
 
     # Grab version number from version yaml files in version/ directory
-    return Common.read_yaml(__VERSIONS_DIR__ + target + EXT.YAML)['version']
+    return Common.read_yaml(__VERSIONS_DIR__ + target + EXT.YAML, fail_on_failure=False)['version']
 
 
 def increment_version(version) -> str:
@@ -83,7 +82,7 @@ def write_new_version_in_test_version_file(new_version: str) -> None:
 
     for _env in [ENV_CLI_SWITCH.TEST, ENV_CLI_SWITCH.PROD]:
         version_file = __VERSIONS_DIR__ + _env + EXT.YAML
-        content = Common.read_yaml(version_file)
+        content = Common.read_yaml(version_file, fail_on_failure=False)
         content['version'] = '' + new_version + ''
         Common.write_yaml(version_file, content)
 

@@ -121,7 +121,7 @@ class Common:
         """
         Read yaml file at given path
 
-        :param fail_on_failure: create file if TRUE though file is not present to read.
+        :param fail_on_failure: create file if TRUE though file is not present_release to read.
         :param file_path: Path of file
         :return: Content of yaml file -> dict()
         """
@@ -135,11 +135,12 @@ class Common:
                 # initialize file with empty dictionary
                 yaml.dump({}, file)
 
-        if not path.exists(file_path) and fail_on_failure:
+        if not path.exists(str(file_path)) and fail_on_failure:
             """file does not exist"""
             raise Exception(f"File {file_path} does not exist!")
         else:
             """Do Nothing as file exists"""
+            pass
 
         # Read the file
         with open(r'{0}'.format(file_path)) as file:

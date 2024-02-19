@@ -112,7 +112,7 @@ def pytest_addoption(parser):
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
-        (Only chrome is supported at present.)
+        (Only chrome is supported at present_release.)
     """
     )
     group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")

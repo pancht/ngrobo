@@ -119,7 +119,7 @@ class TestNroboArgsPackage():
         assert actual_command is None
 
     def test_show_only_pytest_switches(self):
-        """Validate that all show only pytest switches are present in the list"""
+        """Validate that all show only pytest switches are present_release in the list"""
 
         expected_show_only_switches = [
             "markers",
@@ -135,7 +135,7 @@ class TestNroboArgsPackage():
         from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
         actual_show_only_switches = SHOW_ONLY_SWITCHES
 
-        # test if all expected switches are present
+        # test if all expected switches are present_release
         for switch in expected_show_only_switches:
             assert switch in actual_show_only_switches
 

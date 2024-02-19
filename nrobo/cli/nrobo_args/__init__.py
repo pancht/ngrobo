@@ -163,7 +163,22 @@ def nrobo_cli_parser(exit_on_failure=True):
                 """)
     parser.add_argument("-m", "--marker", help="""
         Only run tests matching given mark expression.
-                            For example: -m 'mark1 and not mark2'
+        For example: -m 'mark1 and not mark2'
+        Following ready to use markers are registered by nRoBo framework: sanity, regression, ui, api, nogui, and unit.
+        
+        Usage:
+        @pytest.mark.regression
+        def test_method1(self, driver, logger):
+            ...
+            
+        @pytest.mark.ui
+        def test_method1(self, driver, logger):
+            ...
+                       
+        Then,
+        
+        To only run regression tests, following switch can be used: 
+        nrobo --marker regression OR nrobo -m regression     
         """)
     parser.add_argument("--markers", help="""
         Show markers (builtin, plugin and per-project ones).

@@ -77,7 +77,7 @@ def launcher_command(exit_on_failure=True):
 
             # handle hyphens in key names since argparser replaces hyphes with underscore
             # while parsing cli args
-            # this, replace hyphen with dash if present in key
+            # this, replace hyphen with dash if present_release in key
             key = key.replace('_', '-')
 
             if value:
