@@ -95,11 +95,11 @@ Installation
 
     pip install virtualenv
 
-2. Create virtual environment - venv
+2. Create virtual environment - .venv
 
 .. code-block:: bash
 
-    virtualenv venv
+    virtualenv .venv
 
 3. Activate virtual environment
 
