@@ -178,9 +178,6 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, APP]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(APP)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_url_switch(self):
@@ -191,9 +188,6 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, URL]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(URL)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_username_switch(self):
@@ -203,9 +197,6 @@ class TestNroboArgsPackage():
         USERNAME = 'USERNAME'
         command = ['pytest', SWITCH, USERNAME]
         sys.argv = command.copy()
-
-        command.remove(SWITCH)
-        command.remove(USERNAME)
 
         self._assert_command(command)
 
@@ -218,16 +209,13 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(VALUE)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_n_switch(self):
         """Validate nRoBo cli -n switch"""
 
         SWITCH = '-n'
-        VALUE = '-30'
+        VALUE = '30'
 
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
