@@ -13,16 +13,18 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
-import os
-
-from nrobo.cli.launcher import launch_nrobo, launcher_command
-from nrobo.cli.upgrade import confirm_update
 
 
 def main():
     """Entry point of nrobo command-line-utility."""
 
     try:
+        import os
+        from nrobo.util.process import terminal
+        import subprocess
+        terminal(["pip", "install", "PyYAML"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+        from nrobo.cli.launcher import launch_nrobo, launcher_command
+        from nrobo.cli.upgrade import confirm_update
         from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
         from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
         from nrobo.cli.nrobo_args import nrobo_cli_parser

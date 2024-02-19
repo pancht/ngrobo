@@ -127,7 +127,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         """Install or upgrading framework on Production environment"""
 
         # triggers forced update or normal update by comparing host version and pypi version
-        from nrobo.cli import confirm_update
+        from nrobo.cli.upgrade import confirm_update
         confirm_update()
 
         # create framework folders on host system
