@@ -115,6 +115,7 @@ def launcher_command(exit_on_failure=True):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
                         if f"--{key}" in nCLI.DEFAULT_ARGS:
                             override_defaults.append(f"--{key}")
+                            continue
 
                         command.append(f"--{key}")
                         command.append(str(value))
@@ -144,15 +145,22 @@ def launcher_command(exit_on_failure=True):
                         raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
                         command.append(f"--{key}")
                         command.append(str(value))
+                        continue
+                    elif key == nCLI.MARKER:
+                        command.append(f"-m")
+                        command.append(str(value))
+                        continue
                     elif key == nCLI.KEY:
                         command.append(f"-k")
                         command.append(value)
+                        continue
                     elif key == nCLI.INSTANCES:
                         command.append(f"-n")
                         command.append(str(value))
                     elif key == nCLI.RERUNS:
                         command.append(f"--{key}")
                         command.append(value)
+                        continue
                     elif key == nCLI.REPORT:
                         if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")
