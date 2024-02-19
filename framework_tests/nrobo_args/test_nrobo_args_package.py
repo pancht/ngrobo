@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 from nrobo import terminal
-from nrobo.cli import launcher_command
+from nrobo.cli.launcher import launcher_command
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES
 from nrobo.exceptions import NRoBoBrowserNotSupported
