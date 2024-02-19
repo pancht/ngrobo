@@ -15,9 +15,9 @@ from nrobo.exceptions import NRoBoBrowserNotSupported
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
 
-    DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html', '--durations-min',
-                          '0.005',
-                          '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
+    DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html',
+                          '--durations-min', '0.005', '--verbosity', '0', '--browser',
+                          'chrome', '--cache-clear', '--color', 'yes',
                           '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
@@ -561,6 +561,7 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
+        command[1] = '-m'
         self._assert_command(command)
 
     def test_nrobo_cli_arg_marker_switch_without_value(self):

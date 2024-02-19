@@ -115,7 +115,6 @@ def launcher_command(exit_on_failure=True):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
                         if f"--{key}" in nCLI.DEFAULT_ARGS:
                             override_defaults.append(f"--{key}")
-                            continue
 
                         command.append(f"--{key}")
                         command.append(str(value))
@@ -124,16 +123,12 @@ def launcher_command(exit_on_failure=True):
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
                             os.environ[EnvKeys.APP] = value
-                            continue
                         elif key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
-                            continue
                         elif key == nCLI.USERNAME:
                             os.environ[EnvKeys.USERNAME] = value
-                            continue
                         elif key == nCLI.PASSWORD:
                             os.environ[EnvKeys.PASSWORD] = value
-                            continue
 
                         # add keys to launcher command
                         command.append(f"--{key}")
