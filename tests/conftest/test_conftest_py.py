@@ -1,7 +1,7 @@
 import pytest
 
 
-class TestConftestPy():
+class TestConftestPy:
 
     @pytest.mark.unit
     def test_marker_unit(self, logger):
