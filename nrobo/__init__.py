@@ -192,7 +192,7 @@ class EnvKeys:
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
-os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
+os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
 os.environ[EnvKeys.PYTHON] = "python"
 os.environ[EnvKeys.APP] = "nRoBo"
 os.environ[EnvKeys.URL] = ""
@@ -220,16 +220,13 @@ console = Console(theme=th)
 
 def greet_the_guest():
     """greet the guest with Indian way of greeting!"""
-    import cowsay
 
     greet_msg = 'Namastey Wolrd!. Thank you for choosing, nRoBo.'
     formatted_heart_string = CONST.HEART_RED * len(greet_msg)
 
-    console.print(f'\n[{STYLE.HLRed}]{formatted_heart_string}')
-    cs = cowsay.cow(greet_msg)
-    console.print(f"[{STYLE.HLOrange}]{cs}[/]")
-    console.print(f'\n[{STYLE.HLRed}]{formatted_heart_string}')
-
+    console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')
+    console.print(f"[{STYLE.HLOrange}]{greet_msg}[/]")
+    console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')
 
 
 def set_environment() -> None:
