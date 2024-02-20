@@ -84,10 +84,30 @@ class WebdriverWrapperNrobo(WebDriver):
         self.logger = logger
         self.nconfig = read_nrobo_configs()
         self.nprint = nprint
+        self._windows = {}
 
     """
     Following are selenium webdriver wrapper methods and properties
     """
+
+    @property
+    def windows(self):
+        return self._windows
+
+    @windows.setter
+    def windows(self, _windows: {str: str}):
+        self._windows = _windows
+
+    def update_windows(self, _window_handles: list[str] = None):
+        for _wh in _window_handles:
+            # switch to current window
+            self.switch_to_window(_wh)
+            # add title and handle to windows
+            self.windows[self.title] = _wh
+            # get back to default content
+            self.switch_to_default_content()
+
+        return self.windows
 
     @property
     def name(self) -> str:
@@ -106,6 +126,8 @@ class WebdriverWrapperNrobo(WebDriver):
         url = str(url).replace('\\', "\\\\")  # perform replacements
         nprint(f"Go to url <{url}>", logger=self.logger)
         self.driver.get(url)
+
+        self.update_windows(self.window_handles)
 
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """selenium webdriver wrapper method: execute"""
@@ -144,7 +166,7 @@ class WebdriverWrapperNrobo(WebDriver):
                <obj>.page_source"""
         return self.driver.page_source
 
-    def close(self) -> None:
+    def close(self, title: str) -> None:
         """selenium webdriver wrapper method: close
 
         Closes the current window.
@@ -153,7 +175,9 @@ class WebdriverWrapperNrobo(WebDriver):
             ::
 
                 driver.close()"""
-        return self.driver.close()
+        self.switch_to_window(self.windows[title])
+        self.driver.close()
+        self.update_windows(self.window_handles)
 
     def quit(self) -> None:
         """Quits the driver and closes every associated window.
@@ -272,7 +296,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 switch_to_window('main')
         """
-        self.switch_to.window(window_name)
+        self.driver.switch_to.window(window_name)
 
     # Navigation
     def back(self) -> None:
@@ -764,6 +788,8 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     def click(self, by=By.ID, value: Optional[str] = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
+
+        self.update_windows(self.window_handles)
 
     def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
         """
