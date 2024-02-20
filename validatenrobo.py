@@ -55,9 +55,12 @@ def run_unit_tests(debug=False) -> int:
         return return_code_unit_test_run
 
     return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
-                                         '-n', '20',
-                                         '--url', 'http://google.com', '--username', 'shiva', '--password', 'tandava'],
-                                        debug=debug)
+                                         '--instances', '20',
+                                         '--app', 'NdiTestLabs',
+                                         '--url', 'http://google.com',
+                                         '--username', 'shiva',
+                                         '--password', 'tandava'],
+                                        debug=debug, use_os_system_call=True)
     if return_code_unit_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
     else:
