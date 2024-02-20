@@ -33,7 +33,7 @@ def get_pypi_index(package) -> None | str:
     if not internet_connectivity():
         """Exit programme."""
         from nrobo import console, STYLE
-        console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
+        console.print(f"[{STYLE.HLRed}]No internet connectivity!")
 
         # HOW can I proceed without internet connectivity!
         # I need that for performing a few operations.
