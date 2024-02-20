@@ -112,11 +112,11 @@ def pytest_addoption(parser):
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
-        (Only chrome is supported at present.)
+        (Only chrome is supported at present_release.)
     """
     )
     group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")
-    group.addoption(f"--{nCLI.URL}", help="Link of application under test.yaml")
+    group.addoption(f"--{nCLI.URL}", help="Link of application under test")
     group.addoption(f"--{nCLI.USERNAME}", help="Username for login", default="")
     group.addoption(f"--{nCLI.PASSWORD}", help="Password for login", default="")
     group.addoption(f"--{nCLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
@@ -127,7 +127,7 @@ def pytest_addoption(parser):
     parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
     parser.addini(f"{nCLI.URL}", type='string',
-                  help="Link of application under test.yaml")
+                  help="Link of application under test")
     parser.addini(f"{nCLI.USERNAME}", type="string",
                   help="Username for login")
     parser.addini(f"{nCLI.PASSWORD}", type='string',
@@ -141,28 +141,28 @@ def pytest_addoption(parser):
     parser.addini(f"--{nCLI.GRID}", type='string', help="Url of remote selenium grid server")
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def url(request):
     # Global fixture returning app url
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.URL}")
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def app(request):
     # Global fixture returning app name
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.APP}")
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def username(request):
     # Global fixture returning admin username
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.USERNAME}")
 
 
-@pytest.fixture()
+@pytest.fixture(scope='function')
 def password(request):
     # Global fixture returning admin password
     # Access pytest command line options

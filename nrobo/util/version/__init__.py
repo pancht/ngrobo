@@ -151,6 +151,61 @@ class Version:
     def version_decremented(self) -> str:
         return f"{self._major}.{self._minor}.{self._patch_prev}"
 
+    @staticmethod
+    def first_major_release(release_version):
+        _release_version = Version(release_version)
+        return f"{_release_version._major}.0.0"
+
+    @staticmethod
+    def first_minor_release(release_version):
+        _release_version = Version(release_version)
+        return f"{_release_version._major}.{_release_version._minor}.{0}"
+
+    @staticmethod
+    def present_is_a_major_release(present_release: str, previous_release: str) -> bool:
+        """Returns True if present release is a major release.
+
+        :param present_release:
+        :param previous_release:
+        :return: """
+        _present_release = Version(present_release)
+        _previous_release = Version(previous_release)
+
+        if _present_release.major > _previous_release.major:
+            return True
+
+        return False
+
+    @staticmethod
+    def present_is_a_minor_release(present_release: str, previous_release: str) -> bool:
+        """Returns True if present release is a minor release.
+
+        :param present_release:
+        :param previous_release:
+        :return: """
+        _present_release = Version(present_release)
+        _previous_release = Version(previous_release)
+
+        if _present_release.minor > _previous_release.minor:
+            return True
+
+        return False
+
+    @staticmethod
+    def present_is_a_patch_release(present_release: str, previous_release: str) -> bool:
+        """Returns True if present release is a patch release.
+
+        :param present_release:
+        :param previous_release:
+        :return: """
+        _present_release = Version(present_release)
+        _previous_release = Version(previous_release)
+
+        if _present_release.patch > _previous_release.patch:
+            return True
+
+        return False
+
     def _version_parts(self):
         patten = r"(([\d]*)[.]([\d]*)[.]([\d]*))"
         import re

@@ -6,9 +6,14 @@ import allure
 
 class TestWebSamples():
 
+    @pytest.mark.regression
+    def test_pass_url_username_password_from_commandline(self, driver, logger, url, username, password):
+        driver.get(url)
+        logger.info(f"URL={url}, Username={username} and Password={password}")
+
     @pytest.mark.sanity
     @pytest.mark.regression
-    #@pytest.mark.skip
+    # @pytest.mark.skip
     def test_sample_1(self, driver, logger):
         """Verify simple test - 1"""
         # driver = webdriver.Chrome()
@@ -31,7 +36,7 @@ class TestWebSamples():
         text = message.text
 
     @pytest.mark.sanity
-    #@pytest.mark.skip
+    # @pytest.mark.skip
     def test_sample_2(self, driver, logger):
         """Verify simple test - 2"""
         # driver = webdriver.Chrome()
@@ -59,7 +64,7 @@ class TestWebSamples():
         raise Exception("Forcefully failed test for demonstration of screencapture feature!")
 
     @pytest.mark.sanity
-    #@pytest.mark.skip
+    # @pytest.mark.skip
     def test_sample_3(self, driver, logger):
         """Verify simple test - 3"""
         # driver = webdriver.Chrome()

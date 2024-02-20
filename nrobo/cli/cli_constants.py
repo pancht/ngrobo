@@ -57,6 +57,7 @@ class nCLI:
     KEY = "key"
     PACKAGES = "packages"
     GRID = "grid"
+    MARKER = "marker"
 
     ARGS = {
         INSTALL: INSTALL,
@@ -75,7 +76,8 @@ class nCLI:
         BROWSER_CONFIG: BROWSER_CONFIG,
         KEY: KEY,
         PACKAGES: PACKAGES,
-        GRID: GRID
+        GRID: GRID,
+        MARKER: MARKER
     }
 
     DEFAULT_ARGS = {

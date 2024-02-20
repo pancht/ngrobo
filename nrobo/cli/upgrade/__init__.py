@@ -71,13 +71,26 @@ def confirm_update() -> None:
     host_version = Version(get_host_version())
     pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-    version_forced_update = Version('2024.7.2')
-    if host_version <= version_forced_update:
-        # forced update and apply patch delivered in give version
+    # Apply patches silently
+    if Version.present_is_a_patch_release(pypi_version.version, host_version.version) \
+            or Version.present_is_a_minor_release(pypi_version.version, host_version.version):
+
         from nrobo import console, terminal, STYLE
         from nrobo.cli.ncodes import EXIT_CODES
-        terminal(['pip', 'install', '--upgrade', f'nrobo=={(version_forced_update+1).version}', '--require-virtualenv'],
-                 debug=False)
+
+        version_forced_update = Version(host_version.version)
+
+        if Version.present_is_a_minor_release(pypi_version.version, host_version.version):
+
+            request_version = Version.first_minor_release(pypi_version.version)
+            terminal(['pip', 'install', '--upgrade', f'nrobo=={request_version}', '--require-virtualenv'],
+                     debug=False)
+
+        if host_version <= version_forced_update:
+            # forced update and apply patch delivered in give version
+
+            terminal(['pip', 'install', '--upgrade', f'nrobo=={(host_version + 1).version}', '--require-virtualenv'],
+                     debug=False)
 
         if detect.production_machine() and not detect.developer_machine():
             console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
@@ -85,6 +98,7 @@ def confirm_update() -> None:
 
         return  # Silent patch applied for version 2024.6.10, thus, just return!
 
+    # Ask for major and minor version update
     if host_version < pypi_version:
         # Ok. Since the host version is lower than the latest version,
         # Lets' ask host user if he/she wants to upgrade.
