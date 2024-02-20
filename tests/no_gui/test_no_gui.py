@@ -2,8 +2,6 @@ import pytest
 
 
 class TestNoGUI():
-    @pytest.mark.nogui
-    # @pytest.mark.skip
     def f2(self):
         """Verify no gui test f2"""
         raise ExceptionGroup(
@@ -27,7 +25,9 @@ class TestNoGUI():
 
     @pytest.mark.nogui
     # @pytest.mark.skip
-    def test_mytest(self):
+    def test_raise_exception_system_exit(self):
         """Verify no gui test mytest"""
         with pytest.raises(SystemExit):
             self.f()
+
+

@@ -7,8 +7,9 @@ import allure
 class TestWebSamples():
 
     @pytest.mark.regression
-    def test_open_google_url(self, driver, url):
+    def test_pass_url_username_password_from_commandline(self, driver, logger, url, username, password):
         driver.get(url)
+        logger.info(f"URL={url}, Username={username} and Password={password}")
 
     @pytest.mark.sanity
     @pytest.mark.regression
