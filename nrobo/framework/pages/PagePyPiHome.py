@@ -7,7 +7,7 @@ import logging
 
 from selenium.webdriver.common.by import By
 from pages import Page
-
+from pages.PageSearch import PageSearch
 
 class PagePyPiHome(Page):
     """Page class for PyPi.org home page"""
@@ -25,6 +25,7 @@ class PagePyPiHome(Page):
     # ----------------------------------------
     url = "https://pypi.org/"
     txt_search = (By.ID, 'search')
+    btn_search = (By.CSS_SELECTOR, ".search-form__button")
     # lnkLogin = (By.ID, 'login2')
     # btnSubmit = (By, Value)
     # txtName = (By, Value)
@@ -39,3 +40,13 @@ class PagePyPiHome(Page):
 
     def search_button_present(self):
         return self.find_element(*self.txt_search).is_displayed()
+
+    def type_search_keyword(self, keyword):
+        self.logger.info(f"Type search keyword: {keyword}")
+        self.send_keys(*self.txt_search, keyword)
+
+    def search(self) -> PageSearch:
+        self.logger.info(f"Click on Search button.")
+        self.click(*self.btn_search)
+
+        return PageSearch(self.driver, self.logger)
