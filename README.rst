@@ -95,11 +95,11 @@ Installation
 
     pip install virtualenv
 
-2. Create virtual environment - venv
+2. Create virtual environment - .venv
 
 .. code-block:: bash
 
-    virtualenv venv
+    virtualenv .venv
 
 3. Activate virtual environment
 
@@ -107,13 +107,13 @@ Installation
 
     .. code-block:: bash
 
-        source venv/bin/activate
+        source .venv/bin/activate
 
     - Windows
 
     .. code-block:: bash
 
-        .\\venv\\Scripts\\activate
+        .\\.venv\\Scripts\\activate
 
 4. Install *nrobo*
 
@@ -134,19 +134,19 @@ Installation
 
     .. code-block:: bash
 
-        nrobo -browser chrome_headless --report allure
+        nrobo --browser chrome_headless --report allure
 
     B. Typical usage
 
     .. code-block:: bash
 
-        nrobo -app <app-name> --url <test-url> --username <username> --password <password> --instances <number-of-parallel-tests> --reruns <number-of-retries-to-rerun-failed-tests> --browser chrome_headless --report allure
+        nrobo --app <app-name> --url <test-url> --username <username> --password <password> --instances <number-of-parallel-tests> --reruns <number-of-retries-to-rerun-failed-tests> --browser chrome_headless --report allure
 
     - Example:
 
     .. code-block:: bash
 
-        nrobo -app Lotus --url https://www.google.com --username shiv --password tandav --instances 10 --reruns 2 --browser chrome_headless --report allure
+        nrobo --app Lotus --url https://www.google.com --username shiv --password tandav --instances 10 --reruns 2 --browser chrome_headless --report allure
 
 
     Above command instructs nrobo to do the following actions:

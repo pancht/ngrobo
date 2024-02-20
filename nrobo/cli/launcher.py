@@ -56,13 +56,14 @@ def launcher_command(exit_on_failure=True):
     if args.VERSION:
         # show version
         from nrobo import __version__
-        console.print(f"nrobo {__version__}")
+        console.print(f"nrobo {__version__}\n")
         return None, None, None
     if args.suppress:
         # suppress upgrade prompt
         os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
     if args.version:
-        terminal(['pytest', f"--version"], debug=True)
+        result = terminal(['pytest', f"--version"], debug=True, text=True, capture_output=True)
+        console.print(f"{result.stdout}")
         return None, None, None
 
     # build pytest launcher command
@@ -77,7 +78,7 @@ def launcher_command(exit_on_failure=True):
 
             # handle hyphens in key names since argparser replaces hyphes with underscore
             # while parsing cli args
-            # this, replace hyphen with dash if present in key
+            # this, replace hyphen with dash if present_release in key
             key = key.replace('_', '-')
 
             if value:
@@ -123,16 +124,12 @@ def launcher_command(exit_on_failure=True):
                     if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
                         if key == nCLI.APP:
                             os.environ[EnvKeys.APP] = value
-                            continue
                         elif key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
-                            continue
                         elif key == nCLI.USERNAME:
                             os.environ[EnvKeys.USERNAME] = value
-                            continue
                         elif key == nCLI.PASSWORD:
                             os.environ[EnvKeys.PASSWORD] = value
-                            continue
 
                         # add keys to launcher command
                         command.append(f"--{key}")
@@ -144,15 +141,22 @@ def launcher_command(exit_on_failure=True):
                         raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
                         command.append(f"--{key}")
                         command.append(str(value))
+                        continue
+                    elif key == nCLI.MARKER:
+                        command.append(f"-m")
+                        command.append(str(value))
+                        continue
                     elif key == nCLI.KEY:
                         command.append(f"-k")
                         command.append(value)
+                        continue
                     elif key == nCLI.INSTANCES:
                         command.append(f"-n")
                         command.append(str(value))
                     elif key == nCLI.RERUNS:
                         command.append(f"--{key}")
                         command.append(value)
+                        continue
                     elif key == nCLI.REPORT:
                         if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
                             console.print(f"Incorrect report type! Valid report types are html | allure.")

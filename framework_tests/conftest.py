@@ -12,6 +12,10 @@ conftest.py for running unit tests.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+# import sys, os
+# sys.path.append(os.path.join(os.path.dirname(__file__), os.path.join(os.path.dirname(__file__), '')))
+# print(sys.path)
+
 
 # @pytest.hookimpl(hookwrapper=True)
 # def pytest_runtest_makereport(item, call):
@@ -21,7 +25,3 @@ conftest.py for running unit tests.
 #     docstring = getattr(test_fn, '__doc__')
 #     if docstring:
 #         report.nodeid = docstring  # replace __doc__ string with nodeid
-
-
-
-

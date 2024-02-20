@@ -15,9 +15,9 @@ from nrobo.exceptions import NRoBoBrowserNotSupported
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
 
-    DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html', '--durations-min',
-                          '0.005',
-                          '--verbosity', '0', '--browser', 'chrome', '--cache-clear', '--color', 'yes',
+    DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html',
+                          '--durations-min', '0.005', '--verbosity', '0', '--browser',
+                          'chrome', '--cache-clear', '--color', 'yes',
                           '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
@@ -119,7 +119,7 @@ class TestNroboArgsPackage():
         assert actual_command is None
 
     def test_show_only_pytest_switches(self):
-        """Validate that all show only pytest switches are present in the list"""
+        """Validate that all show only pytest switches are present_release in the list"""
 
         expected_show_only_switches = [
             "markers",
@@ -135,7 +135,7 @@ class TestNroboArgsPackage():
         from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
         actual_show_only_switches = SHOW_ONLY_SWITCHES
 
-        # test if all expected switches are present
+        # test if all expected switches are present_release
         for switch in expected_show_only_switches:
             assert switch in actual_show_only_switches
 
@@ -178,9 +178,6 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, APP]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(APP)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_url_switch(self):
@@ -191,9 +188,6 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, URL]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(URL)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_username_switch(self):
@@ -203,9 +197,6 @@ class TestNroboArgsPackage():
         USERNAME = 'USERNAME'
         command = ['pytest', SWITCH, USERNAME]
         sys.argv = command.copy()
-
-        command.remove(SWITCH)
-        command.remove(USERNAME)
 
         self._assert_command(command)
 
@@ -218,16 +209,13 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
-        command.remove(SWITCH)
-        command.remove(VALUE)
-
         self._assert_command(command)
 
     def test_nrobo_cli_arg_n_switch(self):
         """Validate nRoBo cli -n switch"""
 
         SWITCH = '-n'
-        VALUE = '-30'
+        VALUE = '30'
 
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
@@ -561,6 +549,7 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
+        command[1] = '-m'
         self._assert_command(command)
 
     def test_nrobo_cli_arg_marker_switch_without_value(self):

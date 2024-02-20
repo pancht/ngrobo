@@ -37,7 +37,6 @@ from selenium.webdriver.support.select import Select
 from nrobo import *
 from nrobo.cli.tools import nprint
 
-
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
@@ -63,9 +62,13 @@ def read_nrobo_configs():
     """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
     import nrobo.cli.detection as detect
     if detect.production_machine():
-        return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE)
+        return Common.read_yaml(
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE, fail_on_failure=False)
     elif detect.developer_machine():
-        return Common.read_yaml(Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE)
+        return Common.read_yaml(
+            Path(os.environ[EnvKeys.EXEC_DIR]) / Path(
+                NROBO_CONST.NROBO) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NROBO_CONFIG_FILE
+            , fail_on_failure=False)
 
 
 class WebdriverWrapperNrobo(WebDriver):
