@@ -39,7 +39,9 @@ def main():
         clear_screen()
 
         # called to set EnvKeys dependent on args
-        launcher_command()
+        command, args, command_builder_notes = launcher_command()
+        if command is None:
+            exit(0)
 
         # greet the guest
         greet_the_guest()

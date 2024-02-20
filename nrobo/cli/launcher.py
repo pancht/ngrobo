@@ -56,13 +56,14 @@ def launcher_command(exit_on_failure=True):
     if args.VERSION:
         # show version
         from nrobo import __version__
-        console.print(f"nrobo {__version__}")
+        console.print(f"nrobo {__version__}\n")
         return None, None, None
     if args.suppress:
         # suppress upgrade prompt
         os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
     if args.version:
-        terminal(['pytest', f"--version"], debug=True)
+        result = terminal(['pytest', f"--version"], debug=True, text=True, capture_output=True)
+        console.print(f"{result.stdout}")
         return None, None, None
 
     # build pytest launcher command
