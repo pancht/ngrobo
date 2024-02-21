@@ -27,7 +27,8 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
-from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions, required_virtual_authenticator, \
+from selenium.webdriver.common.virtual_authenticator \
+    import VirtualAuthenticatorOptions, required_virtual_authenticator, \
     Credential
 from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
@@ -45,7 +46,7 @@ from selenium.webdriver.support import expected_conditions
 from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
 from nrobo.cli.nglobals import *
-
+from selenium.common.exceptions import UnexpectedAlertPresentException
 
 class WAITS:
     """Supported wait types in nrobo.
@@ -103,8 +104,10 @@ class WebdriverWrapperNrobo(WebDriver):
             # switch to current window
             self.switch_to_window(_wh)
             # add title and handle to windows
-            self.windows[self.title] = _wh
-            # get back to default content
+            try:
+                self.windows[self.title] = _wh
+            except UnexpectedAlertPresentException as e:
+                pass
             self.switch_to_default_content()
 
         return self.windows
@@ -791,6 +794,16 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         self.update_windows(self.window_handles)
 
+    def click_and_wait(self, by=By.ID, value: Optional[str] = None, wait: int = 0) -> None:
+        """Clicks the element."""
+        self.find_element(by, value).click()
+
+        if wait:
+            time.sleep(wait)
+
+        self.update_windows(self.window_handles)
+
+
     def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
         """
         wait for <wait> seconds mentioned in nrobo-config.yaml till the element is clickble.
@@ -1099,7 +1112,7 @@ class AlertNrobo(ActionChainsNrobo):
         """
         super().__init__(driver, logger)
 
-    def accept_alert(self) -> None:
+    def accept_alert(self) -> int:
         """accept alert"""
         self.switch_to_alert().accept()
 
