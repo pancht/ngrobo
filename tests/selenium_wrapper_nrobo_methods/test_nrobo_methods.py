@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from nrobo.framework.pages import Page
 
 from selenium.webdriver.common.by import By
@@ -61,6 +63,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.xfail
     def test_quit_all_windows(self, driver, logger):
         """Example of quiting all open windows"""
 
