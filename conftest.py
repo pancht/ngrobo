@@ -34,6 +34,7 @@ from nrobo.cli.nglobals import *
 from nrobo.util.common import *
 from nrobo.cli.cli_constants import *
 import os.path as path
+import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
 
@@ -98,6 +99,25 @@ def read_browser_config_options(_config_path):
     else:
         raise Exception(f"Chrome config file does not exist at path <{_config_path}>!!!")
 
+def add_capabilities_from_file(options):
+    """Read capabilities from capability.yaml file
+
+       and add them to the browser options <options>
+
+       and return updated options"""
+    from nrobo.util.common import Common
+    from nrobo import NROBO_PATHS, Environment, EnvKeys
+    if detect.production_machine():
+        capabilities = Common.read_yaml(os.environ[EnvKeys.EXEC_DIR] /
+                                        NROBO_PATHS.BROWSER_CONFIGS / "capability.yaml")
+    else:
+        capabilities = Common.read_yaml(
+            os.environ[EnvKeys.NROBO_DIR] / NROBO_PATHS.NROBO /
+            NROBO_PATHS.BROWSER_CONFIGS / "capability.yaml")
+    for k, v in capabilities.items():
+        options.set_capability(k, v)
+
+    return options
 
 def pytest_addoption(parser):
     """
@@ -201,6 +221,7 @@ def driver(request):
 
         options = webdriver.ChromeOptions()
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
@@ -222,6 +243,7 @@ def driver(request):
 
         options = webdriver.ChromeOptions()
         options.add_argument('--headless=new')
+        options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
@@ -244,6 +266,7 @@ def driver(request):
 
         options = webdriver.SafariOptions()
         options.add_argument("ShowOverlayStatusBar=YES")
+        options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
@@ -264,6 +287,7 @@ def driver(request):
         """if browser requested is firefox"""
 
         options = webdriver.FirefoxOptions()
+        options = add_capabilities_from_file(options)
 
         if browser == Browsers.FIREFOX_HEADLESS:
             options.add_argument("-headless")
@@ -286,6 +310,7 @@ def driver(request):
         """if browser requested is microsoft edge"""
 
         options = webdriver.EdgeOptions()
+        options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
