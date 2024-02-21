@@ -169,7 +169,7 @@ class WebdriverWrapperNrobo(WebDriver):
                <obj>.page_source"""
         return self.driver.page_source
 
-    def close(self, title: str) -> None:
+    def close(self, title: str = None) -> None:
         """selenium webdriver wrapper method: close
 
         Closes the current window.
@@ -178,6 +178,11 @@ class WebdriverWrapperNrobo(WebDriver):
             ::
 
                 driver.close()"""
+
+        if title is None:
+            self.driver.close()
+            return
+
         self.switch_to_window(self.windows[title])
         self.driver.close()
         self.update_windows(self.window_handles)
@@ -286,7 +291,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 switch_to_parent_frame()
         """
-        self.switch_to.parent_frame()
+        self.driver.switch_to.parent_frame()
 
     def switch_to_window(self, window_name: str) -> None:
         """Switches focus to the specified window.

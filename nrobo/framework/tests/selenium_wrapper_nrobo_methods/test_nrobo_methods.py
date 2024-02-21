@@ -126,12 +126,167 @@ class TestNRoBoSeleniumWrapperMethods:
         page.minimize_window()
         page.wait_for_a_while(3)
 
-    def test_print_a_page_as_pdf(self, driver, logger):
-        """Example of print a page as pdf"""
+    def test_print_page_and_save_as_pdf(self, driver, logger):
+        """Print and save page as pdf"""
 
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
-        pdf = page.print_page()
+        result = page.print_page()
 
-        logger.info(f"{type(pdf)}")
-        logger.info(f"{pdf}")
+        from nrobo.util.common import Common
+        Common.save_as_pdf(result)
+
+    def test_switch_to_active_element(self, driver, logger):
+        """Example of switch to element"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+        result = page.switch_to_active_element()
+
+        logger.info(f"Result={result}")
+
+    def test_accept_alert(self, driver, logger):
+        """accept alerts"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnkJavaScriptAlert)
+
+        btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
+        page.click(*btnJSAlert)
+
+        page.wait_for_a_while(3)
+
+    def test_working_with_frames(self, driver, logger):
+        """Example of working with frames"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnkFrames)
+
+        lnkNestedFrames = (By.CSS_SELECTOR, "[href='/nested_frames']")
+        page.click(*lnkNestedFrames)
+        logger.info(f"Title of the landing page={page.title}")
+
+        frmTop = "frame-top"
+        page.frame(frmTop)  # Switch to Top level frame
+
+        frmLeft = "frame-left"
+        page.frame("frame-left")  # Switch to Left frame now
+        content = page.page_source
+        logger.info(f"Left Frame Content\n{content}")
+
+        # Switch back to default content that is to main body
+        page.switch_to_default_content()
+        logger.info(f"default content title={page.title}")
+
+        frmTop = "frame-top"
+        page.frame(frmTop)  # Switch again to Top level frame
+
+        frmRight = "frame-right"
+        page.frame(frmRight) # Switch to Right frame now
+        content = page.page_source
+        logger.info(f"Right Frame Content\n{content}")
+
+        # Switch back to default content using parent method
+        page.switch_to_default_content()
+
+    def test_switch_to_parent_frame(self, driver, logger):
+        """Example of switch to parent frame"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnkFrames)
+
+        lnkNestedFrames = (By.CSS_SELECTOR, "[href='/nested_frames']")
+        page.click(*lnkNestedFrames)
+        logger.info(f"Title of the landing page={page.title}")
+
+        frmTop = "frame-top"
+        page.frame(frmTop)  # Switch to Top level frame
+
+        frmLeft = "frame-left"
+        page.frame("frame-left")  # Switch to Left frame now
+        content = page.page_source
+        logger.info(f"Left Frame Content\n{content}")
+
+        # Switch back to default content that is to main body
+        page.switch_to_parent_frame()
+        logger.info(f"default content title={page.title}")
+
+        frmRight = "frame-right"
+        page.frame(frmRight) # Switch to Right frame now
+        content = page.page_source
+        logger.info(f"Right Frame Content\n{content}")
+
+    def test_switch_to_new_window(self, driver, logger):
+        """Example of switch to new window"""
+
+        page = Page(driver, logger)
+
+        page.get("https://the-internet.herokuapp.com/")
+
+        # open a new window as Tab
+        page.switch_to_new_window("tab")
+        page.get("http://google.com")
+        page.wait_for_a_while(4)
+        page.close("Google")
+
+        # open a new window as New Window
+        page.switch_to_new_window("window")
+        page.get("http://google.com")
+        page.wait_for_a_while(4)
+        page.close("Google")
+
+        logger.info(f"title={page.title}")
+        page.wait_for_a_while(3)
+
+    def test_browser_back_action(self, driver, logger):
+        """Example of browser back action"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnkFrames)
+        page.wait_for_a_while(2)
+
+        # Perform browser back action
+        page.back()
+        page.wait_for_a_while(3)
+
+    def test_browser_forward_action(self, driver, logger):
+        """Example of browser forward action"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.get("http://google.com")
+
+        # Perform browser back action
+        page.back()
+        page.wait_for_a_while(1)
+
+        # Perform browser back action
+        page.forward()
+        page.wait_for_a_while(2)
+
+    def test_browser_refresh_action(self, driver, logger):
+        """Example of browser refresh action"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        # perform browser refresh action
+        page.refresh()
+        page.wait_for_a_while(2)
+
+        # once again
+        page.refresh()
+        page.wait_for_a_while(2)
