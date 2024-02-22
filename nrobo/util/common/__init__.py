@@ -189,10 +189,40 @@ class Common:
         import base64
 
         if path is None:
-            path = "temp.pdf"
+            path = "downloads/temp.pdf"
 
         if isinstance(path, Path):
             path = str(path)
 
         with open(path, 'wb') as theFile:
             theFile.write(base64.b64decode(file_content_as_string))
+
+    @staticmethod
+    def save_base64string(file_content_as_string, path: [str, Path] = None):
+        """Save base64string as given path"""
+
+        import base64
+
+        if path is None:
+            path = "downloads/temp.pdf"
+
+        if isinstance(path, Path):
+            path = str(path)
+
+        with open(path, 'wb') as theFile:
+            theFile.write(base64.b64decode(file_content_as_string))
+
+    @staticmethod
+    def save_bytes_to_file(bytes, path: [str, Path] = None):
+        """Save bytes to given path"""
+
+        import base64
+
+        if path is None:
+            path = "temp.jpg"
+
+        if isinstance(path, Path):
+            path = str(path)
+
+        with open(path, 'wb') as theFile:
+            theFile.write(bytes)

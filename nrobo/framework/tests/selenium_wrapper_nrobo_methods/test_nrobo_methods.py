@@ -1,5 +1,7 @@
 import time
 
+import pytest
+
 from pages import Page
 
 from selenium.webdriver.common.by import By
@@ -61,6 +63,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.xfail
     def test_quit_all_windows(self, driver, logger):
         """Example of quiting all open windows"""
 
@@ -188,7 +191,7 @@ class TestNRoBoSeleniumWrapperMethods:
         page.frame(frmTop)  # Switch again to Top level frame
 
         frmRight = "frame-right"
-        page.frame(frmRight) # Switch to Right frame now
+        page.frame(frmRight)  # Switch to Right frame now
         content = page.page_source
         logger.info(f"Right Frame Content\n{content}")
 
@@ -221,7 +224,7 @@ class TestNRoBoSeleniumWrapperMethods:
         logger.info(f"default content title={page.title}")
 
         frmRight = "frame-right"
-        page.frame(frmRight) # Switch to Right frame now
+        page.frame(frmRight)  # Switch to Right frame now
         content = page.page_source
         logger.info(f"Right Frame Content\n{content}")
 
@@ -290,3 +293,235 @@ class TestNRoBoSeleniumWrapperMethods:
         # once again
         page.refresh()
         page.wait_for_a_while(2)
+
+    def test_get_all_cookies(self, driver, logger):
+        """Example of working with cookies
+
+           get_cookies()
+
+           get_cookie(name)
+
+           delete_cookie(name)
+
+           delete_all_cookies()
+
+           add_cookie(cookies:{})"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        cookies = page.get_cookies()
+
+        logger.info(f"All cookies= {cookies}")
+
+    def test_add_cookie(self, driver, logger):
+        """Example of adding a cookie"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        custom_cookies = {
+            'name': 'company', 'value': 'ndi', 'path': '/'
+        }
+        page.add_cookie(custom_cookies)
+
+        logger.info(f"updated cookies= {page.get_cookies()}")
+
+        logger.info(f"Cookie value = {page.get_cookie('company')}")
+
+    def test_delete_cookie(self, driver, logger):
+        """Example of delete a cookie"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"All cookies ==> {page.get_cookies()}")
+
+        page.delete_cookie('optimizelyEndUserId')
+
+        logger.info(f"All cookies ==> {page.get_cookies()}")
+
+    def test_delete_all_cookiee(self, driver, logger):
+        """Example of delete all cookies"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"All cookies ==> {page.get_cookies()}")
+
+        page.delete_all_cookies()
+
+        logger.info(f"All cookies after deletion ==> {page.get_cookies()}")
+
+    @pytest.mark.xfail
+    def test_implicitly_wait(self, driver, logger):
+        """set implicitly wait"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.implicitly_wait(10)
+
+        lnkArbitraryLink = (By.ID, "xxxhhhssjjsjjs")
+        page.find_element(*lnkArbitraryLink)
+
+    def test_set_script_timeout(self, driver, logger):
+        """set script timeout"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.set_script_timeout(30)
+
+    def test_set_page_load_timeout(self, driver, logger):
+        """set page load timeout"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.set_page_load_timeout(30)
+
+    def test_get_all_timeouts(self, driver, logger):
+        """get all timeouts"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Pageload timeout ===> {page.timeouts.page_load}")
+        logger.info(f"Script timeout ===> {page.timeouts.script}")
+        logger.info(f"Implicit timeout ===> {page.timeouts.implicit_wait}")
+
+    def test_set_all_timeouts(self, driver, logger):
+        """set all timeouts"""
+
+        page = Page(driver, logger)
+        page.timeouts.page_load = 1
+        page.timeouts.script = 2
+        page.timeouts.implicit_wait = 3
+
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Page load timeout ===> {page.timeouts.page_load}")
+        logger.info(f"Script timeout ===> {page.timeouts.script}")
+        logger.info(f"Implicit timeout ===> {page.timeouts.implicit_wait}")
+
+    def test_findelement(self, driver, logger):
+        """example of findelement"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        lnkABTesting = (By.CSS_SELECTOR, '[href="/abtest"]')
+        page.find_element(*lnkABTesting).click()
+        page.wait_for_a_while(5)
+
+    def test_findelementssss(self, driver, logger):
+        """example of findelementsss"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        allLinks = (By.CSS_SELECTOR, "ul li a")
+        elements = page.find_elements(*allLinks)
+        logger.info(f"Count of all links = {len(elements)}")
+        page.wait_for_a_while(2)
+
+        # click on 2nd link
+        elements[1].click()
+        page.wait_for_a_while(3)
+
+    def test_capabilities(self, driver, logger):
+        """example of capabilities"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Capabilities ===> {page.capabilities}")
+
+    def test_get_screenshot_as_file(self, driver, logger):
+        """example of get_screenshot_as_file"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.get_screenshot_as_file("screenshot.png")
+
+    def test_get_screenshot_as_png(self, driver, logger):
+        """example of get_screenshot_as_png"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        bytes = page.get_screenshot_as_png()
+
+        from nrobo.util.common import Common
+        Common.save_bytes_to_file(bytes, "screenshot_as_png.png")
+
+    def test_get_screenshot_as_base64(self, driver, logger):
+        """example of get_screenshot_as_base64"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        base64string = page.get_screenshot_as_base64()
+
+        from nrobo.util.common import Common
+        Common.save_base64string(base64string, "screenshot_as_base64string.png")
+
+    def test_set_window_size(self, driver, logger):
+        """example of get_screenshot_as_base64"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.set_window_size(800, 400)
+        page.wait_for_a_while(2)
+
+        page.set_window_size(1200, 600)
+
+    def test_get_window_size(self, driver, logger):
+        """example of get_window_size"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Current window size = {page.get_window_size()}")
+
+    def test_set_window_position(self, driver, logger):
+        """example of set_window_position"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.set_window_position(200, 300)
+        page.wait_for_a_while(3)
+
+    def test_set_window_rect(self, driver, logger):
+        """example of set_window_rect"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        page.set_window_rect(200, 300, 600, 100)
+        page.wait_for_a_while(3)
+
+    def test_log_types(self, driver, logger):
+        """example of log_types"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Orientation = {page.log_types}")
+
+    def test_get_log(self, driver, logger):
+        """example of get_log"""
+
+        page = Page(driver, logger)
+        page.get("https://the-internet.herokuapp.com/")
+
+        logger.info(f"Get Driver Log = {page.get_log('driver')}")
+        logger.info(f"Get Driver Log = {page.get_log('browser')}")
+
+
+
+

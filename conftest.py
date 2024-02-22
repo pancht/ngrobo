@@ -107,7 +107,7 @@ def add_capabilities_from_file(options):
        and return updated options"""
     from nrobo.util.common import Common
     from nrobo import NROBO_PATHS, Environment, EnvKeys
-    if detect.production_machine():
+    if detect.production_machine() and not detect.developer_machine():
         capabilities = Common.read_yaml(os.environ[EnvKeys.EXEC_DIR] /
                                         NROBO_PATHS.BROWSER_CONFIGS / "capability.yaml")
     else:
