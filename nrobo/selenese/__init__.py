@@ -1122,26 +1122,21 @@ class AlertNrobo(ActionChainsNrobo):
         """
         super().__init__(driver, logger, duration=duration, devices=devices)
 
-    def accept_alert(self) -> int:
+    def accept_alert(self) -> None:
         """accept alert"""
-        try:
-            self.switch_to_alert().accept()
-        except NoAlertPresentException as e:
-            return 1
-
-        return 0
+        self.driver.switch_to.alert.accept()
 
     def dismiss_alert(self) -> None:
         """dismiss alert"""
-        self.switch_to_alert().dismiss()
+        self.driver.switch_to.alert.dismiss()
 
-    def send_keys_to_alert(self, keysToSend: str) -> None:
-        """Send Keys to the Alert.
-
-        :Args:
-         - keysToSend: The text to be sent to Alert.
-        """
-        self.switch_to_alert().send_keys(keysToSend)
+    # def send_keys_to_alert(self, keysToSend: str) -> None:
+    #     """Send Keys to the Alert.
+    #
+    #     :Args:
+    #      - keysToSend: The text to be sent to Alert.
+    #     """
+    #     self.driver.switch_to.alert.send_keys(keysToSend)
 
     def send_keys_and_accept_alert(self, keysToSend: str) -> None:
         """Send Keys to the Alert and accept it.
@@ -1149,12 +1144,12 @@ class AlertNrobo(ActionChainsNrobo):
         :Args:
          - keysToSend: The text to be sent to Alert.
         """
-        self.send_keys_to_alert(keysToSend)
-        self.accept_alert()
+        self.driver.switch_to.alert.send_keys(keysToSend)
+        self.driver.switch_to.alert.accept()
 
     def get_alert_text(self) -> None:
         """Get alert text"""
-        return self.switch_to_alert().text
+        return self.driver.switch_to.alert.text
 
 
 class ByNrobo(AlertNrobo):
