@@ -159,6 +159,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
         page.click(*btnJSAlert)
+        page.accept_alert()
 
         page.wait_for_a_while(3)
 

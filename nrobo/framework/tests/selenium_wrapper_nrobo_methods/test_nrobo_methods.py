@@ -63,7 +63,6 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.wait_for_a_while(3)
 
-    @pytest.mark.xfail
     def test_quit_all_windows(self, driver, logger):
         """Example of quiting all open windows"""
 
@@ -159,6 +158,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
         page.click(*btnJSAlert)
+        page.accept_alert()
 
         page.wait_for_a_while(3)
 
