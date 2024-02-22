@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.common.by import By
 
 from nrobo.framework.pages import Page
@@ -5,6 +6,7 @@ from nrobo.framework.pages import Page
 
 class TestAlertMethods:
 
+    @pytest.mark.skip(reason="This test fails in Headless mode")
     def test_example_accept_alert(self, driver, logger):
         """Example of accepting alerts"""
 
@@ -20,6 +22,7 @@ class TestAlertMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.skip(reason="This test fails in Headless mode")
     def test_example_dismiss_alert(self, driver, logger):
         """Example of dismiss alert"""
 
@@ -35,6 +38,7 @@ class TestAlertMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.skip(reason="This test fails in Headless mode")
     def test_send_keys_to_prompt(self, driver, logger):
         """Example of sending keys to the prompt"""
 
@@ -51,6 +55,7 @@ class TestAlertMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.skip(reason="This test fails in Headless mode")
     def test_example_get_alert_text(self, driver, logger):
         """Example of get alert text"""
 

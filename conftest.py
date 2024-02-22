@@ -431,27 +431,31 @@ def pytest_runtest_makereport(item, call):
                 .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
 
             # Attach screenshot to allure report
-            allure.attach(
-                # Not working. Still work in progress...
-                driver.get_screenshot_as_png(),
-                name='screenshot',
-                attachment_type=allure.attachment_type.PNG
-            )
+            try:
+                allure.attach(
+                    # Not working. Still work in progress...
+                    driver.get_screenshot_as_png(),
+                    name='screenshot',
+                    attachment_type=allure.attachment_type.PNG
+                )
 
-            # Attach screenshot to html report
-            screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
-            screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+                # Attach screenshot to html report
+                screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+                screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
 
-            # Create and save screenshot at <screenshot_filepath>
-            driver.save_screenshot(screenshot_filepath)
+                # Create and save screenshot at <screenshot_filepath>
+                driver.save_screenshot(screenshot_filepath)
 
-            # get base64 screenshot
-            # failure_screen_shot = driver.get_screenshot_as_base64()
+                # get base64 screenshot
+                # failure_screen_shot = driver.get_screenshot_as_base64()
 
-            # attach screenshot with html report. Use relative path to report directory
-            extras.append(pytest_html.extras.image(screenshot_relative_path))
-            # add relative path to screenshot in the html report
-            extras.append(pytest_html.extras.url(screenshot_relative_path))
+                # attach screenshot with html report. Use relative path to report directory
+                extras.append(pytest_html.extras.image(screenshot_relative_path))
+                # add relative path to screenshot in the html report
+                extras.append(pytest_html.extras.url(screenshot_relative_path))
+
+            except Exception as e:
+                extras = []
 
         # update the report.extras
         report.extras = extras

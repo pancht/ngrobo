@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.common.by import By
 
 from pages import Page
@@ -5,6 +6,7 @@ from pages import Page
 
 class TestActionChainMethods:
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_action_chain_reference(self, driver, logger):
         """Example of action chain reference"""
 

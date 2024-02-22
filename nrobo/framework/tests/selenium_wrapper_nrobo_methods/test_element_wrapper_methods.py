@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.common.by import By
 
 from pages import Page
@@ -5,6 +6,7 @@ from pages import Page
 
 class TestWebElementWrapperMethods:
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_get_tag_name_of_element(self, driver, logger):
         """example of get tag name of element"""
 
@@ -15,6 +17,7 @@ class TestWebElementWrapperMethods:
         logger.info(f"Tag name => {page.find_element(*lnkABTest).tag_name}")
         logger.info(f"Tag name => {page.tag_name(*lnkABTest)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_get_text_of_element(self, driver, logger):
         """example of text of element"""
 
@@ -25,6 +28,7 @@ class TestWebElementWrapperMethods:
         logger.info(f"Link Text => {page.find_element(*lnkABTest).text}")
         logger.info(f"Link Text => {page.text(*lnkABTest)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_click_method(self, driver, logger):
         """example of click method"""
 
@@ -40,6 +44,7 @@ class TestWebElementWrapperMethods:
         page.click(*lnkABTest)
         page.wait_for_a_while(2)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_click_and_wait_method(self, driver, logger):
         """example of click and wait method"""
 
@@ -49,6 +54,7 @@ class TestWebElementWrapperMethods:
         lnkABTest = (By.CSS_SELECTOR, "[href='/abtest']")
         page.click_and_wait(*lnkABTest, 5)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_element_to_be_clickable(self, driver, logger):
         """example of element_to_be_clickable method"""
 
@@ -58,6 +64,7 @@ class TestWebElementWrapperMethods:
         lnkABTest = (By.CSS_SELECTOR, "[href='/abtest']")
         page.element_to_be_clickable(*lnkABTest)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_submit(self, driver, logger):
         """example of submit form method"""
 
@@ -78,6 +85,7 @@ class TestWebElementWrapperMethods:
 
         page.wait_for_a_while(4)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_is_displayed(self, driver, logger):
         """example of is_displayed method"""
 
@@ -87,6 +95,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"Is login link displayed? A. {page.is_displayed(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_location_once_scrolled_into_view(self, driver, logger):
         """example of location_once_scrolled_into_view method"""
 
@@ -99,6 +108,7 @@ class TestWebElementWrapperMethods:
 
         page.wait_for_a_while(2)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_size(self, driver, logger):
         """example of size method"""
 
@@ -108,6 +118,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"Size of element = {page.size(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_value_of_css_property(self, driver, logger):
         """example of value_of_css_property method"""
 
@@ -117,6 +128,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"Size of element = {page.value_of_css_property('color', *lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_location_(self, driver, logger):
         """example of location method"""
 
@@ -126,6 +138,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"location of element = {page.location(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_rect_(self, driver, logger):
         """example of rect method"""
 
@@ -135,6 +148,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"rect of element = {page.rect(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_aria_role(self, driver, logger):
         """example of aria_role method"""
 
@@ -144,6 +158,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"aria_role of element = {page.aria_role(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_accessible_name(self, driver, logger):
         """example of accessible_name method"""
 
@@ -153,6 +168,7 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         logger.info(f"accessible_name of element = {page.accessible_name(*lnkLogin)}")
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_screenshot_as_base64(self, driver, logger):
         """example of screenshot_as_base64 method"""
 
@@ -165,6 +181,7 @@ class TestWebElementWrapperMethods:
         from nrobo.util.common import Common
         Common.save_base64string(screenshot, 'element_screenshot.png')
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_screenshot_as_png(self, driver, logger):
         """example of screenshot_as_png method"""
 
@@ -177,6 +194,7 @@ class TestWebElementWrapperMethods:
         from nrobo.util.common import Common
         Common.save_bytes_to_file(screenshot_as_binary_data, 'element_screenshot_as_binary.png')
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_screenshot_as_file(self, driver, logger):
         """example of screenshot method"""
 

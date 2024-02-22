@@ -1,3 +1,4 @@
+import pytest
 from selenium.webdriver.common.by import By
 
 from pages import Page
@@ -5,6 +6,7 @@ from pages import Page
 
 class TestNroboWaitMethods:
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_wait_for_page_to_be_loaded(self, driver, logger):
         """Example of wait for page to be loaded"""
 
@@ -13,6 +15,7 @@ class TestNroboWaitMethods:
 
         page.wait_for_page_to_be_loaded()
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_wait_for_a_while(self, driver, logger):
         """Example of wait_for_a_while method"""
 
@@ -21,6 +24,7 @@ class TestNroboWaitMethods:
 
         page.wait_for_a_while(3)
 
+    @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_wait_for_element_to_be_invisible(self, driver, logger):
         """Example of wait_for_element_to_be_invisible method"""
 

@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.10.7'
+__version__ = '2024.12.0'
 
 # install rich library
 import os
@@ -192,7 +192,7 @@ class EnvKeys:
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
-os.environ[EnvKeys.ENVIRONMENT] = Environment.PRODUCTION
+os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
 os.environ[EnvKeys.PYTHON] = "python"
 os.environ[EnvKeys.APP] = "nRoBo"
 os.environ[EnvKeys.URL] = ""

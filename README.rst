@@ -125,7 +125,7 @@ Installation
 
 .. code-block:: bash
 
-    nrobo
+    nrobo --instances 10
 
 .. note:: If there are any errors, run the upgrade command, pip install --upgrade nrobo
 
