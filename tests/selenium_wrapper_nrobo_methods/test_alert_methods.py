@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 
-from pages import Page
+from nrobo.framework.pages import Page
 
 
 class TestAlertMethods:
