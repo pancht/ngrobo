@@ -63,6 +63,8 @@ class Common:
         :param encoding:
         :return:
         """
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
 
         try:
             if encoding is None:
@@ -73,7 +75,7 @@ class Common:
                     f.write(content)
 
         except FileNotFoundError as file_not_found_error:
-            print("No such file or directory found: " + file_path)
+            print("No such file or directory found: " + str(file_path))
 
     @staticmethod
     def read_json(file_path: Union[str, Path]):

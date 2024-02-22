@@ -36,6 +36,7 @@ def transfer_files_to_host_project() -> None:
 
     if detect.host_machine_has_nRoBo():
 
+        stop_auto_silent_update_version = Version("2024.13.0")
         host_version = Version(get_host_version())
         pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
@@ -74,7 +75,7 @@ def transfer_files_to_host_project() -> None:
                              f"Please take note of it.")
                 print("\n")
 
-        if host_version <= Version("2024.12.0"):
+        if host_version <= stop_auto_silent_update_version:
             # Re-install
             pass
         else:
@@ -89,13 +90,18 @@ def transfer_files_to_host_project() -> None:
 
     force_reinstall = False
 
-    if host_version <= Version("2024.12.0"):
+    patch_file = str(stop_auto_silent_update_version.version).replace('.', "_") + ".txt"
+    if host_version <= stop_auto_silent_update_version\
+            and not (nrobo_dir / patch_file).exists():
         """force re-install"""
         force_reinstall = True
 
     if force_reinstall:
         print(f"Re-installing framework")
+    elif (exec_dir / NP.CONFTEST_PY).exists():
+        return # Framework already installed, thus, just do nothing and return.
     else:
+        # Fresh install
         print(f"Installing framework")
 
     if (exec_dir / NP.CONFTEST_PY).exists():
@@ -112,29 +118,29 @@ def transfer_files_to_host_project() -> None:
                   exec_dir / f"copy-__init__-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                              f"_{Common.generate_random_numbers(1000, 9999)}.py")
 
-    copy_file(nrobo_dir / NP.INIT_PY), exec_dir / NP.INIT_PY
+    copy_file(nrobo_dir / NP.INIT_PY, exec_dir / NP.INIT_PY)
 
     if (exec_dir / NP.NROBO_CONFIG_FILE).exists():
-        copy_file(exec_dir / NP.NROBO_CONFIG_FILE), \
+        copy_file(exec_dir / NP.NROBO_CONFIG_FILE, \
         exec_dir / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
-                   f"_{Common.generate_random_numbers(1000, 9999)}.yaml"
+                   f"_{Common.generate_random_numbers(1000, 9999)}.yaml")
 
     copy_file(nrobo_dir / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
               exec_dir / NP.NROBO_CONFIG_FILE)
 
     # Copy framework to current directory
-    if (exec_dir / NP.FRAMEWORK_PAGES).exists():
+    if (exec_dir / NP.PAGES).exists():
         # move directory
-        move(exec_dir / NP.FRAMEWORK_PAGES,
-             exec_dir / NP.FRAMEWORK / f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        move(exec_dir / NP.PAGES,
+             exec_dir /  f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(nrobo_dir / NP.FRAMEWORK_PAGES, exec_dir / NP.PAGES)
 
-    if (exec_dir / NP.FRAMEWORK_TESTS).exists():
+    if (exec_dir / NP.TESTS).exists():
         # move directory
-        move(exec_dir / NP.FRAMEWORK_TESTS,
-             exec_dir / NP.FRAMEWORK / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        move(exec_dir / NP.TESTS,
+             exec_dir / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(nrobo_dir / NP.FRAMEWORK_TESTS, exec_dir / NP.TESTS)
@@ -142,17 +148,19 @@ def transfer_files_to_host_project() -> None:
     if (exec_dir / NP.BROWSER_CONFIGS).exists():
         # move directory
         move(exec_dir / NP.BROWSER_CONFIGS,
-             exec_dir / NP.FRAMEWORK / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+             exec_dir / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(nrobo_dir / NP.BROWSER_CONFIGS, exec_dir / NP.BROWSER_CONFIGS)
 
     if force_reinstall:
-        print(print(f"Re-install complete"))
+        print(f"Re-install complete")
 
         console.rule(f"[{STYLE.HLRed}]A silent re-install has been made to nrobo framework. "
                      f"We have kept a copy of each of your directory and files under project root. "
                      f"Please take an action on them and clean unwanted directory and files.")
+        Common.write_text_to_file(nrobo_dir / patch_file, "")
+        exit()
     else:
         print(f"Installation complete")
 
