@@ -295,39 +295,22 @@ Features
 .. topic:: @ @
 
 
+    * Easy and standard install - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Easy to learn and use - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Simple and Well Defined Automation Directory Structure - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Report Customization - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Rich Command Line Support that helps integration with CI/CD pipeline or any DevOps tech. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Shipped with rich set of examples along with install. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Dedicated YouTube channel with a collection of video tutorials. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Rich Browser Support (Chrome, Headless Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
-    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `Selenium <https://www.selenium.dev/>`_ and `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Wrapper classes for Webdriver, WebElement, and other selenium webdriver classes for saving a lot of typing. Thus, great readability of code. - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Ready to use framework loaded with power of `PyTest <https://docs.pytest.org/>`_, `Selenium <https://www.selenium.dev/>`_ and other tools. By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Well structured inbuilt setup and tear down processes. Just focus on testing! Not on maintaining framework. - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Inbuilt support for distributed testing over Grid infrastructure - Inherited from `PyTest <https://docs.pytest.org/>`_
-    * Inbuilt support for test parameterization - Inherited from `PyTest <https://docs.pytest.org/>`_
-    * Screenshot capture at the end of test - Inherited from `Selenium <https://www.selenium.dev/>`_
-    * Support for capturing test logs in reports - Inherited from `PyTest <https://docs.pytest.org/>`_
-    * Next Generation Test Reports (Backed by `Allure <https://allurereport.org/docs/pytest/>`_ Reports and `pytest-html-reports <https://pytest-html.readthedocs.io/en/latest/user_guide.html>`_)
-    * Support for cool tweaks in the standard reports - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Command line Support to trigger tests that can be integrate with CI/CD pipeline or any DevOps tech. - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Easy to use framework - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Well Defined Directory Structure - By `nRoBo <https://pypi.org/project/nrobo/>`_
-    * Support grouping of tests. Supported groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_, `nRoBo <https://pypi.org/project/nrobo/>`_
-
-
-.. Tools and Libraries
-
------------------
-Tools & Libraries
------------------
-
-1. `Next Generation Test Automation Framework for Python <https://docs.pytest.org/en/7.2.x/contents.html>`_
-    2. pytest plugins
-        1. `pytest-metadata <https://pypi.org/project/pytest-metadata/>`_ - pytest plugin that provides access to test session metadata
-        2. `pytest-xdist <https://pypi.org/project/pytest-xdist/>`_ - The pytest-xdist plugin extends pytest with new test execution modes, the most used being distributing tests across multiple CPUs to speed up test execution.
-        3. `pytest-forked <https://pypi.org/project/pytest-forked/>`_ - Run tests in isolated forked subprocesses
-        4. `pytest-rerunfailures <https://pypi.org/project/pytest-rerunfailures/>`_ - pytest plugin to re-run tests to eliminate flaky failures
-        5. `virtualenv <https://pypi.org/project/virtualenv/>`_ - Virtual Python Environment builder
-        6. `PyYAML <https://pypi.org/project/PyYAML/>`_ - YAML parser and emitter for Python
-        7. `py <https://pypi.org/project/py/>`_ - library with cross-python path, ini-parsing, io, code, log facilities
-2. `Selenium Webdriver 4 <https://www.selenium.dev/documentation/webdriver/getting_started/upgrade_to_selenium_4/>`_ - Browser Automation Tool (Open Source)
-3. `Webdriver Manager <https://pypi.org/project/webdriver-manager/>`_ - Selenium Webdriver Manager
-4. `Allure Framework <https://docs.qameta.io/allure/>`_ - Next Generation Test Report Framework
-5. `pytest-html <https://pypi.org/project/pytest-html/>`_ - Simple HTML Test Report Plugin
+    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * nRoBo selenium wrapper classes and methods that saves lot of key presses. Thus, leveraging benefits of compact, readable and manageable of code. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Well-structured thread-safe inbuilt setup and tear down processes. Thus, You can keep focus on testing! Not on maintaining framework. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Test Parallelization - Inherited from `PyTest <https://docs.pytest.org/>`_
+    * Distributed testing over Grid infrastructure - Inherited from `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
+    * Test parameterization - Inherited from `PyTest <https://docs.pytest.org/>`_
+    * Screenshot-capture at the end of each test - Inherited from `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
+    * Capture webdriver logs, console logs and screenshots in reports - Inherited from `PyTest <https://docs.pytest.org/>`_
+    * Inbuilt integration with NxGen Rich Allure Report (Backed by `Allure <https://allurereport.org/docs/pytest/>`_ Reports and `pytest-html-reports <https://pytest-html.readthedocs.io/en/latest/user_guide.html>`_)
