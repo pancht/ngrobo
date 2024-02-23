@@ -301,8 +301,8 @@ Features
     * Report Customization - By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Rich Command Line Support that helps integration with CI/CD pipeline or any DevOps tech. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Shipped with rich set of examples along with install. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Dedicated YouTube channel with a collection of video tutorials. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Dedicated `YouTube channel <https://t.ly/FhJzy>`_ with a collection of video tutorials. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Rich Browser Support (Chrome, Headless Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
     * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
