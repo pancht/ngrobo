@@ -59,7 +59,9 @@ def run_unit_tests(debug=False) -> int:
                                          '--app', 'NdiTestLabs',
                                          '--url', 'http://google.com',
                                          '--username', 'shiva',
-                                         '--password', 'tandava'],
+                                         '--password', 'tandava',
+                                         '--target', "report.html",
+                                         '--reruns', '2'],
                                         debug=debug, use_os_system_call=True)
     if return_code_unit_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
@@ -68,6 +70,14 @@ def run_unit_tests(debug=False) -> int:
         return_code_web_test_run
 
     console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/] and [{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
+    # file:///Users/einsteinpanchdev/webdev/nrobo/results-unittests/nrobo_unit_tests_run_report.html
+
+    from nrobo.cli.cli_constants import NREPORT
+    exec_dir = Path(os.environ[EnvKeys.EXEC_DIR])
+    console.rule(
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Unit tests report at: [/] file://{exec_dir / target}")
+    console.rule(
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]UI/Functional tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / 'report.html'}")
     return 0  # A SUCCESS
 
 

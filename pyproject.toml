@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.10.5"
+version = "2024.19.0"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "Powerful! Yet, Easy to USE! Automated Testing Framework"
@@ -34,14 +34,13 @@ requires-python = ">=3.8"
 dependencies = ["pytest", "cowsay"]
 
 [project.optional-dependencies]
-dev = ["pytest", "cowsay"]
-test = ["pytest", "cowsay"]
+dev = ["pytest"]
+test = ["pytest"]
 
 [project.urls]
 "Homepage" = "https://pypi.org/project/nrobo/"
-"Github Repository" = "https://github.com/pancht/ngrobo"
-"Bug Tracker" = "https://github.com/pancht/ngrobo/issues"
-"changelog" = "https://github.com/pancht/ngrobo/blob/master/CHANGELOG.md"
+"Bug Tracker" = "https://github.com/pancht/nrobodocs/issues"
+"changelog" = "https://github.com/pancht/nrobodocs/blob/master/CHANGELOG.md"
 
 [project.scripts]
 nrobo = "nrobo.cli:main"

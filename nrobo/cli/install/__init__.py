@@ -19,10 +19,11 @@ from pathlib import Path
 from typing import Optional
 from nrobo.cli.cli_constants import nCLI
 from nrobo.util.common import Common
-from nrobo.util.filesystem import copy_file, copy_dir
+from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree
 from nrobo.util.version import Version
-from nrobo.cli.upgrade import get_host_version
+from nrobo.cli.upgrade import get_host_version, get_pypi_index
 import nrobo.cli.detection as detect
+from datetime import datetime
 
 
 def transfer_files_to_host_project() -> None:
@@ -31,7 +32,11 @@ def transfer_files_to_host_project() -> None:
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
-    from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP
+    from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP, NROBO_CONST
+
+    stop_auto_silent_update_version = Version("2024.14.0")
+    host_version = Version(get_host_version())
+    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
     if detect.host_machine_has_nRoBo():
 
@@ -70,29 +75,94 @@ def transfer_files_to_host_project() -> None:
                              f"Please take note of it.")
                 print("\n")
 
-        return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
+        if host_version <= stop_auto_silent_update_version:
+            # Re-install
+            pass
+        else:
+            return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
 
     # nRoBo was not found on HOST machine.
     # Lets' make it found then!!!
     # Lets' make an ADDRESS on the HOST machine. :)
-    print(f"Installing framework")
 
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.INIT_PY,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.INIT_PY)
-    copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
-              Path(os.environ[EnvKeys.EXEC_DIR]) / NP.NROBO_CONFIG_FILE)
+    exec_dir = Path(os.environ[EnvKeys.EXEC_DIR])
+    nrobo_dir = Path(os.environ[EnvKeys.NROBO_DIR])
+
+    force_reinstall = False
+
+    patch_file = str(stop_auto_silent_update_version.version).replace('.', "_") + ".txt"
+    if host_version <= stop_auto_silent_update_version\
+            and not (nrobo_dir / patch_file).exists():
+        """force re-install"""
+        force_reinstall = True
+
+    if force_reinstall:
+        print(f"Re-installing framework")
+    elif (exec_dir / NP.CONFTEST_PY).exists():
+        return # Framework already installed, thus, just do nothing and return.
+    else:
+        # Fresh install
+        print(f"Installing framework")
+
+    if (exec_dir / NP.CONFTEST_PY).exists():
+        # create a copy of host conftest.py
+        copy_file(exec_dir / NP.CONFTEST_PY,
+                  exec_dir / f"copy-conftest-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                             f"_{Common.generate_random_numbers(1000, 9999)}.py")
+
+    # copy nrobo conftest-host.py
+    copy_file(nrobo_dir / NP.NROBO_CONFTEST_HOST_FILE, exec_dir / NP.CONFTEST_PY)
+
+    if (exec_dir / NP.INIT_PY).exists():
+        copy_file(exec_dir / NP.INIT_PY,
+                  exec_dir / f"copy-__init__-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                             f"_{Common.generate_random_numbers(1000, 9999)}.py")
+
+    copy_file(nrobo_dir / NP.INIT_PY, exec_dir / NP.INIT_PY)
+
+    if (exec_dir / NP.NROBO_CONFIG_FILE).exists():
+        copy_file(exec_dir / NP.NROBO_CONFIG_FILE, \
+        exec_dir / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
+                   f"_{Common.generate_random_numbers(1000, 9999)}.yaml")
+
+    copy_file(nrobo_dir / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
+              exec_dir / NP.NROBO_CONFIG_FILE)
 
     # Copy framework to current directory
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_PAGES,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PAGES)
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.FRAMEWORK_TESTS,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.TESTS)
-    copy_dir(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.BROWSER_CONFIGS,
-             Path(os.environ[EnvKeys.EXEC_DIR]) / NP.BROWSER_CONFIGS)
+    if (exec_dir / NP.PAGES).exists():
+        # move directory
+        move(exec_dir / NP.PAGES,
+             exec_dir /  f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                                       f"_{Common.generate_random_numbers(1000, 9999)}")
 
-    print(f"Installation complete")
+    copy_dir(nrobo_dir / NP.FRAMEWORK_PAGES, exec_dir / NP.PAGES)
+
+    if (exec_dir / NP.TESTS).exists():
+        # move directory
+        move(exec_dir / NP.TESTS,
+             exec_dir / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                                       f"_{Common.generate_random_numbers(1000, 9999)}")
+
+    copy_dir(nrobo_dir / NP.FRAMEWORK_TESTS, exec_dir / NP.TESTS)
+
+    if (exec_dir / NP.BROWSER_CONFIGS).exists():
+        # move directory
+        move(exec_dir / NP.BROWSER_CONFIGS,
+             exec_dir / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                                       f"_{Common.generate_random_numbers(1000, 9999)}")
+
+    copy_dir(nrobo_dir / NP.BROWSER_CONFIGS, exec_dir / NP.BROWSER_CONFIGS)
+
+    if force_reinstall:
+        print(f"Re-install complete")
+
+        console.rule(f"[{STYLE.HLRed}]A silent re-install has been made to nrobo framework. "
+                     f"We have kept a copy of each of your directory and files under project root. "
+                     f"Please take an action on them and clean unwanted directory and files.")
+        Common.write_text_to_file(nrobo_dir / patch_file, "")
+        exit()
+    else:
+        print(f"Installation complete")
 
 
 def install_nrobo(requirements_file: Optional[str] = None) -> None:
