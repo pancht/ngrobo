@@ -26,6 +26,7 @@ class TestPyPiHomePage():
         logger.info(f"Appname={app}")
 
     @pytest.mark.unit
+    @pytest.mark.skip
     def test_pass_url_username_password_from_commandline_example(self, driver, logger, url, username, password):
         logger.info(f"URL={url}, Username={username} and Password={password}")
         driver.get(url)

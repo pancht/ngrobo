@@ -27,7 +27,8 @@ from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
-from selenium.webdriver.common.virtual_authenticator import VirtualAuthenticatorOptions, required_virtual_authenticator, \
+from selenium.webdriver.common.virtual_authenticator \
+    import VirtualAuthenticatorOptions, required_virtual_authenticator, \
     Credential
 from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
@@ -45,7 +46,12 @@ from selenium.webdriver.support import expected_conditions
 from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
 from nrobo.cli.nglobals import *
+from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.webdriver.common.actions.wheel_input import WheelInput
+from selenium.webdriver.common.actions.pointer_input import PointerInput
+from selenium.webdriver.common.actions.key_input import KeyInput
 
+AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 
 class WAITS:
     """Supported wait types in nrobo.
@@ -61,7 +67,7 @@ class WAITS:
 def read_nrobo_configs():
     """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
     import nrobo.cli.detection as detect
-    if detect.production_machine():
+    if detect.production_machine() and not detect.developer_machine():
         return Common.read_yaml(
             Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE, fail_on_failure=False)
     elif detect.developer_machine():
@@ -84,10 +90,32 @@ class WebdriverWrapperNrobo(WebDriver):
         self.logger = logger
         self.nconfig = read_nrobo_configs()
         self.nprint = nprint
+        self._windows = {}
 
     """
     Following are selenium webdriver wrapper methods and properties
     """
+
+    @property
+    def windows(self):
+        return self._windows
+
+    @windows.setter
+    def windows(self, _windows: {str: str}):
+        self._windows = _windows
+
+    def update_windows(self, _window_handles: list[str] = None):
+        for _wh in _window_handles:
+            # switch to current window
+            self.switch_to_window(_wh)
+            # add title and handle to windows
+            try:
+                self.windows[self.title] = _wh
+            except UnexpectedAlertPresentException as e:
+                pass
+            self.switch_to_default_content()
+
+        return self.windows
 
     @property
     def name(self) -> str:
@@ -106,6 +134,8 @@ class WebdriverWrapperNrobo(WebDriver):
         url = str(url).replace('\\', "\\\\")  # perform replacements
         nprint(f"Go to url <{url}>", logger=self.logger)
         self.driver.get(url)
+
+        self.update_windows(self.window_handles)
 
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """selenium webdriver wrapper method: execute"""
@@ -144,7 +174,7 @@ class WebdriverWrapperNrobo(WebDriver):
                <obj>.page_source"""
         return self.driver.page_source
 
-    def close(self) -> None:
+    def close(self, title: str = None) -> None:
         """selenium webdriver wrapper method: close
 
         Closes the current window.
@@ -153,7 +183,14 @@ class WebdriverWrapperNrobo(WebDriver):
             ::
 
                 driver.close()"""
-        return self.driver.close()
+
+        if title is None:
+            self.driver.close()
+            return
+
+        self.switch_to_window(self.windows[title])
+        self.driver.close()
+        self.update_windows(self.window_handles)
 
     def quit(self) -> None:
         """Quits the driver and closes every associated window.
@@ -259,7 +296,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 switch_to_parent_frame()
         """
-        self.switch_to.parent_frame()
+        self.driver.switch_to.parent_frame()
 
     def switch_to_window(self, window_name: str) -> None:
         """Switches focus to the specified window.
@@ -272,7 +309,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 switch_to_window('main')
         """
-        self.switch_to.window(window_name)
+        self.driver.switch_to.window(window_name)
 
     # Navigation
     def back(self) -> None:
@@ -544,7 +581,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 get_window_size()
         """
-        return self.driver.set_window_size(windowHandle)
+        return self.driver.get_window_size(windowHandle)
 
     def set_window_position(self, x, y, windowHandle: str = "current") -> dict:
         """Sets the x,y position of the current window. (window.moveTo)
@@ -765,6 +802,18 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """Clicks the element."""
         self.find_element(by, value).click()
 
+        self.update_windows(self.window_handles)
+
+    def click_and_wait(self, by=By.ID, value: Optional[str] = None, wait: int = 0) -> None:
+        """Clicks the element."""
+        self.find_element(by, value).click()
+
+        if wait:
+            time.sleep(wait)
+
+        self.update_windows(self.window_handles)
+
+
     def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
         """
         wait for <wait> seconds mentioned in nrobo-config.yaml till the element is clickble.
@@ -890,7 +939,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     # RenderedWebElement Items
     def is_displayed(self, by=By.ID, value: Optional[str] = None) -> bool:
         """Whether the element is visible to a user."""
-        return self.find_element(by, value).is_displayed
+        return self.driver.find_element(by, value).is_displayed()
 
     def location_once_scrolled_into_view(self, by=By.ID, value: Optional[str] = None) -> dict:
         """THIS PROPERTY MAY CHANGE WITHOUT WARNING. Use this to discover where
@@ -1021,7 +1070,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         """
         time.sleep(time_in_sec)
 
-    def wait_for_element_to_be_invisible(self, locator: WebElement | tuple[str, str]):
+    def wait_for_element_to_be_invisible(self, locator: WebElement):
         """wait till <element> disappears from the UI"""
 
         nprint("wait for element invisible", style=STYLE.HLOrange)
@@ -1048,7 +1097,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
 
 class ActionChainsNrobo(WaitImplementationsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
@@ -1056,38 +1105,38 @@ class ActionChainsNrobo(WaitImplementationsNrobo):
         :param logger: reference to logger instance
         """
         super().__init__(driver, logger)
-        self._action_chain = ActionChains(self.driver)
+        self._action_chain = ActionChains(self.driver, duration=duration, devices=devices)
 
     def action_chain(self):
         """Return ActionChains object"""
-        return ActionChains(self._action_chain)
+        return self._action_chain
 
 
 class AlertNrobo(ActionChainsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
         :param logger: reference to logger instance
         """
-        super().__init__(driver, logger)
+        super().__init__(driver, logger, duration=duration, devices=devices)
 
     def accept_alert(self) -> None:
         """accept alert"""
-        self.switch_to_alert().accept()
+        self.driver.switch_to.alert.accept()
 
     def dismiss_alert(self) -> None:
         """dismiss alert"""
-        self.switch_to_alert().dismiss()
+        self.driver.switch_to.alert.dismiss()
 
-    def send_keys_to_alert(self, keysToSend: str) -> None:
-        """Send Keys to the Alert.
-
-        :Args:
-         - keysToSend: The text to be sent to Alert.
-        """
-        self.switch_to_alert().send_keys(keysToSend)
+    # def send_keys_to_alert(self, keysToSend: str) -> None:
+    #     """Send Keys to the Alert.
+    #
+    #     :Args:
+    #      - keysToSend: The text to be sent to Alert.
+    #     """
+    #     self.driver.switch_to.alert.send_keys(keysToSend)
 
     def send_keys_and_accept_alert(self, keysToSend: str) -> None:
         """Send Keys to the Alert and accept it.
@@ -1095,12 +1144,12 @@ class AlertNrobo(ActionChainsNrobo):
         :Args:
          - keysToSend: The text to be sent to Alert.
         """
-        self.send_keys_to_alert(keysToSend)
-        self.accept_alert()
+        self.driver.switch_to.alert.send_keys(keysToSend)
+        self.driver.switch_to.alert.accept()
 
     def get_alert_text(self) -> None:
         """Get alert text"""
-        return self.switch_to_alert().text
+        return self.driver.switch_to.alert.text
 
 
 class ByNrobo(AlertNrobo):
@@ -1108,38 +1157,38 @@ class ByNrobo(AlertNrobo):
     Wrapper class for selenium class: By
     """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor
 
         :param driver: reference to selenium webdriver
         :param logger: reference to logger instance
         """
-        super().__init__(driver, logger)
+        super().__init__(driver, logger, duration=duration, devices=devices)
 
 
 class DesiredCapabilitiesNrobo(ByNrobo):
     """Wrapper class for selenium class: DesiredCapabilities"""
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor
 
         :param driver: reference to selenium webdriver
         :param logger: reference to logger instance
         """
-        super().__init__(driver, logger)
+        super().__init__(driver, logger, duration=duration, devices=devices)
 
 
 class SelectNrobo(DesiredCapabilitiesNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor
 
         :param driver: reference to selenium webdriver
         :param logger: reference to logger instance
         """
-        super().__init__(driver, logger)
+        super().__init__(driver, logger, duration=duration, devices=devices)
 
     def select(self, by=By.ID, value: Optional[str] = None) -> Select:
         """
@@ -1194,14 +1243,14 @@ class NRobo(SelectNrobo):
 
         """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
         :param logger: reference to logger instance
         """
-        super().__init__(driver, logger)
+        super().__init__(driver, logger, duration=duration, devices=devices)
 
         # objects from common classes
         self.keys = Keys()

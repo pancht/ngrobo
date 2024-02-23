@@ -63,6 +63,8 @@ class Common:
         :param encoding:
         :return:
         """
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
 
         try:
             if encoding is None:
@@ -73,7 +75,7 @@ class Common:
                     f.write(content)
 
         except FileNotFoundError as file_not_found_error:
-            print("No such file or directory found: " + file_path)
+            print("No such file or directory found: " + str(file_path))
 
     @staticmethod
     def read_json(file_path: Union[str, Path]):
@@ -181,3 +183,48 @@ class Common:
         random_number = random.randint(min, max)
 
         return random_number
+
+    @staticmethod
+    def save_as_pdf(file_content_as_string, path: [str, Path] = None):
+        """Save as pdf to given path"""
+
+        import base64
+
+        if path is None:
+            path = "downloads/temp.pdf"
+
+        if isinstance(path, Path):
+            path = str(path)
+
+        with open(path, 'wb') as theFile:
+            theFile.write(base64.b64decode(file_content_as_string))
+
+    @staticmethod
+    def save_base64string(file_content_as_string, path: [str, Path] = None):
+        """Save base64string as given path"""
+
+        import base64
+
+        if path is None:
+            path = "downloads/temp.pdf"
+
+        if isinstance(path, Path):
+            path = str(path)
+
+        with open(path, 'wb') as theFile:
+            theFile.write(base64.b64decode(file_content_as_string))
+
+    @staticmethod
+    def save_bytes_to_file(bytes, path: [str, Path] = None):
+        """Save bytes to given path"""
+
+        import base64
+
+        if path is None:
+            path = "temp.jpg"
+
+        if isinstance(path, Path):
+            path = str(path)
+
+        with open(path, 'wb') as theFile:
+            theFile.write(bytes)

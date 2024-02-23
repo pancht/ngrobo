@@ -33,7 +33,7 @@ def get_pypi_index(package) -> None | str:
     if not internet_connectivity():
         """Exit programme."""
         from nrobo import console, STYLE
-        console.print(f"[{STYLE.HLRed}]No internet connectivity. Thus, Building package is aborted by nRoBo!")
+        console.print(f"[{STYLE.HLRed}]No internet connectivity!")
 
         # HOW can I proceed without internet connectivity!
         # I need that for performing a few operations.
@@ -73,20 +73,28 @@ def confirm_update() -> None:
 
     # Apply patches silently
     if Version.present_is_a_patch_release(pypi_version.version, host_version.version) \
-            or Version.present_is_a_minor_release(pypi_version.version, host_version.version):
+            or Version.present_is_a_minor_release(pypi_version.version, host_version.version)\
+            or Version.present_is_a_major_release(pypi_version.version, host_version.version):
 
         from nrobo import console, terminal, STYLE
         from nrobo.cli.ncodes import EXIT_CODES
 
         version_forced_update = Version(host_version.version)
 
-        if Version.present_is_a_minor_release(pypi_version.version, host_version.version):
+        if Version.present_is_a_major_release(pypi_version.version, host_version.version)\
+                and host_version <= Version("2024.12.0"):
+            request_version = Version.first_major_release(pypi_version.version)
+            terminal(['pip', 'install', '--upgrade', f'nrobo=={request_version}', '--require-virtualenv'],
+                     debug=False)
+
+        elif Version.present_is_a_minor_release(pypi_version.version, host_version.version)\
+                and host_version <= Version("2024.12.0"):
 
             request_version = Version.first_minor_release(pypi_version.version)
             terminal(['pip', 'install', '--upgrade', f'nrobo=={request_version}', '--require-virtualenv'],
                      debug=False)
 
-        if host_version <= version_forced_update:
+        elif host_version <= Version("2024.12.0"):
             # forced update and apply patch delivered in give version
 
             terminal(['pip', 'install', '--upgrade', f'nrobo=={(host_version + 1).version}', '--require-virtualenv'],

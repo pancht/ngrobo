@@ -155,9 +155,9 @@ def nrobo_cli_parser(exit_on_failure=True):
                             which have names assigned directly to them. The
                             matching is case-insensitive.
         """)
-    # parser.add_argument("--alluredir", help="""
-    #     Path to the directory where Allure Pytest will save the test results.
-    #     """)
+    parser.add_argument("--alluredir", help="""
+        Path to the directory where Allure Pytest will save the test results.
+        """)
     parser.add_argument(f"--{nCLI.GRID}", help="""
                 Remote Grid server url. Tests will be running on the machine when Grid server is running pointed by Grid url.
                 """)

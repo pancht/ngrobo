@@ -18,7 +18,7 @@ class TestNroboArgsPackage():
     DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html',
                           '--durations-min', '0.005', '--verbosity', '0', '--browser',
                           'chrome', '--cache-clear', '--color', 'yes',
-                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml']
+                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml', '--alluredir', 'results/allure']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
         """Replace key-value if given <key> is found in default nRoBo args
