@@ -34,11 +34,11 @@ def transfer_files_to_host_project() -> None:
     # =============================================================
     from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP, NROBO_CONST
 
-    if detect.host_machine_has_nRoBo():
+    stop_auto_silent_update_version = Version("2024.14.0")
+    host_version = Version(get_host_version())
+    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
 
-        stop_auto_silent_update_version = Version("2024.13.0")
-        host_version = Version(get_host_version())
-        pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
+    if detect.host_machine_has_nRoBo():
 
         patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
         patch_2024_6_12 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12"
