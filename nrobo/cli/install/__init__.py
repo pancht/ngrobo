@@ -40,8 +40,8 @@ def transfer_files_to_host_project() -> None:
 
     if detect.host_machine_has_nRoBo():
 
-        patch_2024_6_10 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10"
-        patch_2024_6_12 = Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12"
+        patch_2024_6_10 = NP.NROBO_DIR / "patch_2024_6_10"
+        patch_2024_6_12 = NP.NROBO_DIR / "patch_2024_6_12"
 
         if patch_2024_6_12.exists():
             return
@@ -51,7 +51,7 @@ def transfer_files_to_host_project() -> None:
                 if patch_2024_6_10.exists():
                     remove_file(patch_2024_6_10)
                 # Create new patch file
-                Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_12", "")
+                Common.write_text_to_file(NP.NROBO_DIR / "patch_2024_6_12", "")
 
         if patch_2024_6_10.exists():
             return
@@ -59,14 +59,12 @@ def transfer_files_to_host_project() -> None:
             # Apply patches
 
             if Version(get_host_version()) == Version("2024.6.10"):
-                Common.write_text_to_file(Path(os.environ[EnvKeys.NROBO_DIR]) / "patch_2024_6_10", "")
+                Common.write_text_to_file(NP.NROBO_DIR / "patch_2024_6_10", "")
 
                 # create a copy of host conftest.py
-                copy_file(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY,
-                          Path(os.environ[EnvKeys.EXEC_DIR]) / "copy-conftest.py")
+                copy_file(NP.EXEC_DIR / NP.CONFTEST_PY, NP.EXEC_DIR / "copy-conftest.py")
                 # copy nrobo conftest-host.py
-                copy_file(Path(os.environ[EnvKeys.NROBO_DIR]) / NP.NROBO_CONFTEST_HOST_FILE,
-                          Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY)
+                copy_file(NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE, NP.EXEC_DIR / NP.CONFTEST_PY)
 
                 print("\n")
 
@@ -85,73 +83,70 @@ def transfer_files_to_host_project() -> None:
     # Lets' make it found then!!!
     # Lets' make an ADDRESS on the HOST machine. :)
 
-    exec_dir = Path(os.environ[EnvKeys.EXEC_DIR])
-    nrobo_dir = Path(os.environ[EnvKeys.NROBO_DIR])
-
     force_reinstall = False
 
     patch_file = str(stop_auto_silent_update_version.version).replace('.', "_") + ".txt"
     if host_version <= stop_auto_silent_update_version\
-            and not (nrobo_dir / patch_file).exists():
+            and not (NP.NROBO_DIR / patch_file).exists():
         """force re-install"""
         force_reinstall = True
 
     if force_reinstall:
         print(f"Re-installing framework")
-    elif (exec_dir / NP.CONFTEST_PY).exists():
-        return # Framework already installed, thus, just do nothing and return.
+    elif (NP.EXEC_DIR / NP.CONFTEST_PY).exists():
+        return  # Framework already installed, thus, just do nothing and return.
     else:
         # Fresh install
         print(f"Installing framework")
 
-    if (exec_dir / NP.CONFTEST_PY).exists():
+    if (NP.EXEC_DIR / NP.CONFTEST_PY).exists():
         # create a copy of host conftest.py
-        copy_file(exec_dir / NP.CONFTEST_PY,
-                  exec_dir / f"copy-conftest-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        copy_file(NP.EXEC_DIR / NP.CONFTEST_PY,
+                  NP.EXEC_DIR / f"copy-conftest-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                              f"_{Common.generate_random_numbers(1000, 9999)}.py")
 
     # copy nrobo conftest-host.py
-    copy_file(nrobo_dir / NP.NROBO_CONFTEST_HOST_FILE, exec_dir / NP.CONFTEST_PY)
+    copy_file(NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE, NP.EXEC_DIR / NP.CONFTEST_PY)
 
-    if (exec_dir / NP.INIT_PY).exists():
-        copy_file(exec_dir / NP.INIT_PY,
-                  exec_dir / f"copy-__init__-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+    if (NP.EXEC_DIR / NP.INIT_PY).exists():
+        copy_file(NP.EXEC_DIR / NP.INIT_PY,
+                  NP.EXEC_DIR / f"copy-__init__-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                              f"_{Common.generate_random_numbers(1000, 9999)}.py")
 
-    copy_file(nrobo_dir / NP.INIT_PY, exec_dir / NP.INIT_PY)
+    copy_file(NP.NROBO_DIR / NP.INIT_PY, NP.EXEC_DIR / NP.INIT_PY)
 
-    if (exec_dir / NP.NROBO_CONFIG_FILE).exists():
-        copy_file(exec_dir / NP.NROBO_CONFIG_FILE, \
-        exec_dir / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
+    if (NP.EXEC_DIR / NP.NROBO_CONFIG_FILE).exists():
+        copy_file(NP.EXEC_DIR / NP.NROBO_CONFIG_FILE, \
+        NP.EXEC_DIR / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
                    f"_{Common.generate_random_numbers(1000, 9999)}.yaml")
 
-    copy_file(nrobo_dir / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
-              exec_dir / NP.NROBO_CONFIG_FILE)
+    copy_file(NP.NROBO_DIR / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
+              NP.EXEC_DIR / NP.NROBO_CONFIG_FILE)
 
     # Copy framework to current directory
-    if (exec_dir / NP.PAGES).exists():
+    if (NP.EXEC_DIR / NP.PAGES).exists():
         # move directory
-        move(exec_dir / NP.PAGES,
-             exec_dir /  f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        move(NP.EXEC_DIR / NP.PAGES,
+             NP.EXEC_DIR /  f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
-    copy_dir(nrobo_dir / NP.FRAMEWORK_PAGES, exec_dir / NP.PAGES)
+    copy_dir(NP.NROBO_DIR / NP.FRAMEWORK_PAGES, NP.EXEC_DIR / NP.PAGES)
 
-    if (exec_dir / NP.TESTS).exists():
+    if (NP.EXEC_DIR / NP.TESTS).exists():
         # move directory
-        move(exec_dir / NP.TESTS,
-             exec_dir / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        move(NP.EXEC_DIR / NP.TESTS,
+             NP.EXEC_DIR / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
-    copy_dir(nrobo_dir / NP.FRAMEWORK_TESTS, exec_dir / NP.TESTS)
+    copy_dir(NP.NROBO_DIR / NP.FRAMEWORK_TESTS, NP.EXEC_DIR / NP.TESTS)
 
-    if (exec_dir / NP.BROWSER_CONFIGS).exists():
+    if (NP.EXEC_DIR / NP.BROWSER_CONFIGS).exists():
         # move directory
-        move(exec_dir / NP.BROWSER_CONFIGS,
-             exec_dir / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+        move(NP.EXEC_DIR / NP.BROWSER_CONFIGS,
+             NP.EXEC_DIR / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
                                        f"_{Common.generate_random_numbers(1000, 9999)}")
 
-    copy_dir(nrobo_dir / NP.BROWSER_CONFIGS, exec_dir / NP.BROWSER_CONFIGS)
+    copy_dir(NP.NROBO_DIR / NP.BROWSER_CONFIGS, NP.EXEC_DIR / NP.BROWSER_CONFIGS)
 
     if force_reinstall:
         print(f"Re-install complete")
@@ -159,7 +154,7 @@ def transfer_files_to_host_project() -> None:
         console.rule(f"[{STYLE.HLRed}]A silent re-install has been made to nrobo framework. "
                      f"We have kept a copy of each of your directory and files under project root. "
                      f"Please take an action on them and clean unwanted directory and files.")
-        Common.write_text_to_file(nrobo_dir / patch_file, "")
+        Common.write_text_to_file(NP.NROBO_DIR / patch_file, "")
         exit()
     else:
         print(f"Installation complete")
@@ -179,7 +174,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         print(f"Installing requirements")
 
     if requirements_file is None:
-        requirements_file = f"{os.environ[EnvKeys.NROBO_DIR]}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
+        requirements_file = f"{NP.NROBO_DIR}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
         from nrobo import terminal, NROBO_CONST
         return_code = terminal(command=[os.environ[EnvKeys.PIP_COMMAND], nCLI.INSTALL, '-r', requirements_file],
                                stdout=subprocess.DEVNULL,
@@ -191,7 +186,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
                 print(f"Requirements are installed successfully.")
         else:
             print(f"Requirements are not installed successfully!")
-            exit()
+            return
 
     if detect.production_machine():
         """Install or upgrading framework on Production environment"""

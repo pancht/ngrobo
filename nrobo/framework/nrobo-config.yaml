@@ -12,7 +12,15 @@
 
 
 # Waits
+
+# For future reference. Not used at the moment.
 sleep: 1
+
+# Default sleep time. Ex. <Page_object>.wait_for_a_while() will wait for 1 sec if not given arg value.
 wait: 1
+
+# default page load timeout time.
 timeout: 30
+
+# Default element to be present timeout time.
 ele_wait: 3
