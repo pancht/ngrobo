@@ -22,8 +22,71 @@ import os
 from pathlib import Path
 
 
+class NROBO_CONST:
+    """nrobo special constants"""
+
+    NROBO = "nrobo"
+    DIST_DIR = "dist"
+    SUCCESS = 0
+
+
+class Python:
+    """Information related to python"""
+
+    PIP = "pip"
+    VERSION = "Version"
+
+
+class Environment:
+    """Environments"""
+
+    PRODUCTION = "Production"
+    DEVELOPMENT = "Development"
+
+
+class EnvKeys:
+    """nRoBo environment keys
+
+    Example:
+        PIP_COMMAND = pip | pip3
+
+        and many more such...
+    """
+    PIP_COMMAND = "Pip Command"
+    EXEC_DIR = "Execution Directory"
+    NROBO_DIR = "nRoBo Installation Directory"
+    ENVIRONMENT = "Environment"
+    PYTHON = "Python"
+    APP = "App Name"
+    URL = "App Url"
+    USERNAME = "Username"
+    PASSWORD = "Password"
+    BROWSER = "Browser"
+    HOST_PLATFORM = "Host Platform"
+    DEBUG = "debug mode"
+    SUPPRESS_PROMPT = "suppress prompt"
+
+
+# load environment keys with defaults
+os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
+os.environ[EnvKeys.EXEC_DIR] = ""
+os.environ[EnvKeys.NROBO_DIR] = ""
+os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
+os.environ[EnvKeys.PYTHON] = "python"
+os.environ[EnvKeys.APP] = "nRoBo"
+os.environ[EnvKeys.URL] = ""
+os.environ[EnvKeys.USERNAME] = ""
+os.environ[EnvKeys.PASSWORD] = ""
+os.environ[EnvKeys.BROWSER] = ""
+os.environ[EnvKeys.HOST_PLATFORM] = ""
+os.environ[EnvKeys.DEBUG] = "False"
+os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
+
+
 class NROBO_PATHS:
     """nRoBo framework directories and files"""
+    EXEC_DIR = os.environ[EnvKeys.EXEC_DIR]
+    NROBO_DIR = os.environ[EnvKeys.NROBO_DIR]
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
     BROWSER_CONFIGS = Path("browserConfigs")
@@ -142,66 +205,6 @@ class NROBO_FRAMEWORK_TESTS:
     NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / NROBO_PATHS.CONFTEST_PY
     TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_package_presence.py")
 
-
-class NROBO_CONST:
-    """nrobo special constants"""
-
-    NROBO = "nrobo"
-    DIST_DIR = "dist"
-    SUCCESS = 0
-
-
-class Python:
-    """Information related to python"""
-
-    PIP = "pip"
-    VERSION = "Version"
-
-
-class Environment:
-    """Environments"""
-
-    PRODUCTION = "Production"
-    DEVELOPMENT = "Development"
-
-
-class EnvKeys:
-    """nRoBo environment keys
-
-    Example:
-        PIP_COMMAND = pip | pip3
-
-        and many more such...
-    """
-    PIP_COMMAND = "Pip Command"
-    EXEC_DIR = "Execution Directory"
-    NROBO_DIR = "nRoBo Installation Directory"
-    ENVIRONMENT = "Environment"
-    PYTHON = "Python"
-    APP = "App Name"
-    URL = "App Url"
-    USERNAME = "Username"
-    PASSWORD = "Password"
-    BROWSER = "Browser"
-    HOST_PLATFORM = "Host Platform"
-    DEBUG = "debug mode"
-    SUPPRESS_PROMPT = "suppress prompt"
-
-
-# load environment keys with defaults
-os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
-os.environ[EnvKeys.EXEC_DIR] = ""
-os.environ[EnvKeys.NROBO_DIR] = ""
-os.environ[EnvKeys.ENVIRONMENT] = Environment.DEVELOPMENT
-os.environ[EnvKeys.PYTHON] = "python"
-os.environ[EnvKeys.APP] = "nRoBo"
-os.environ[EnvKeys.URL] = ""
-os.environ[EnvKeys.USERNAME] = ""
-os.environ[EnvKeys.PASSWORD] = ""
-os.environ[EnvKeys.BROWSER] = ""
-os.environ[EnvKeys.HOST_PLATFORM] = ""
-os.environ[EnvKeys.DEBUG] = "False"
-os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
 
 import subprocess
 from nrobo.util.process import terminal
