@@ -112,7 +112,7 @@ def write_new_version_to_pyproject_toml_file(new_version) -> None:
 def write_new_version_to_nrobo_init_py_file(new_version) -> None:
     """Update nrobo.__init__.py with give <new_version>"""
 
-    nrobo_init_py_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.INIT_PY
+    nrobo_init_py_file = NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.INIT_PY
 
     # Read file content as string
     file_content = str(Common.read_file_as_string(nrobo_init_py_file))
@@ -184,8 +184,8 @@ def copy_conftest_file() -> None:
     import shutil
     try:
         shutil.copyfile(
-            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
-            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
+            f"{NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CONFTEST_PY}",
+            f"{NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
     except Exception as e:
         raise e
 
@@ -213,7 +213,7 @@ def run_build_command() -> None:
 def delete_conftest_after_build() -> None:
     """Delete conftest.py file from nrobo package after build process finishes."""
 
-    conftest = f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}"
+    conftest = f"{NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}"
     terminal(["rm", "-f", conftest])
 
 

@@ -261,7 +261,7 @@ class TestNRoboFrameworkPaths():
 
         set_environment()
 
-        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
+        conftest_path = NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
 
         assert not conftest_path.exists()
 

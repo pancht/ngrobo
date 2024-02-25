@@ -31,7 +31,7 @@ def set_switch_environment(env: str, debug=False):
     file_content = ""
 
     file_content = Common.read_file_as_string(
-        Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY)
+        NROBO_PATHS.EXEC_DIR / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY)
     )
 
     # update environment to production_machine
@@ -56,6 +56,6 @@ def set_switch_environment(env: str, debug=False):
 
     # Write file_content
     Common.write_text_to_file(
-        Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY),
+        NROBO_PATHS.EXEC_DIR / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY),
         file_content
     )

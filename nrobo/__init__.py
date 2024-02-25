@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.19.0'
+__version__ = '2024.20.0'
 
 # install rich library
 import os
@@ -85,8 +85,8 @@ os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
 
 class NROBO_PATHS:
     """nRoBo framework directories and files"""
-    EXEC_DIR = os.environ[EnvKeys.EXEC_DIR]
-    NROBO_DIR = os.environ[EnvKeys.NROBO_DIR]
+    EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
+    NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
     BROWSER_CONFIGS = Path("browserConfigs")
