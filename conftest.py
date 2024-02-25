@@ -42,8 +42,8 @@ from nrobo.util.constants import CONST
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constants import NREPORT
-    from nrobo import EnvKeys
-    _log_driver_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
+    from nrobo import EnvKeys, NROBO_PATHS
+    _log_driver_file = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
 
     if not _log_driver_file.exists():
         """ensure driver logs dir"""
@@ -52,7 +52,7 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass
 
-    _test_logs_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
+    _test_logs_dir = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
     if not _test_logs_dir.exists():
         """ensure test logs dir"""
         try:
@@ -60,7 +60,7 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass
 
-    _screenshot_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
+    _screenshot_dir = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
     if not _screenshot_dir.exists():
         """ensure screenshots dir"""
         try:
@@ -68,13 +68,14 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass
 
-    _allure_dir = Path(os.environ[EnvKeys.EXEC_DIR]) / NREPORT.ALLURE_REPORT_PATH
+    _allure_dir = NROBO_PATHS.EXEC_DIR / NREPORT.ALLURE_REPORT_PATH
     if not _allure_dir.exists():
         """ensure allure dir"""
         try:
             os.makedirs(_allure_dir)
         except FileExistsError as e:
             pass
+
 
 def read_browser_config_options(_config_path):
     """
@@ -99,6 +100,7 @@ def read_browser_config_options(_config_path):
     else:
         raise Exception(f"Chrome config file does not exist at path <{_config_path}>!!!")
 
+
 def add_capabilities_from_file(options):
     """Read capabilities from capability.yaml file
 
@@ -108,16 +110,15 @@ def add_capabilities_from_file(options):
     from nrobo.util.common import Common
     from nrobo import NROBO_PATHS, Environment, EnvKeys
     if detect.production_machine() and not detect.developer_machine():
-        capabilities = Common.read_yaml(os.environ[EnvKeys.EXEC_DIR] /
-                                        NROBO_PATHS.BROWSER_CONFIGS / "capability.yaml")
+        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_YAML)
     else:
         capabilities = Common.read_yaml(
-            os.environ[EnvKeys.NROBO_DIR] / NROBO_PATHS.NROBO /
-            NROBO_PATHS.BROWSER_CONFIGS / "capability.yaml")
+            NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_YAML)
     for k, v in capabilities.items():
         options.set_capability(k, v)
 
     return options
+
 
 def pytest_addoption(parser):
     """
@@ -333,7 +334,9 @@ def driver(request):
             from nrobo.cli.tools import console
             console.rule("IE support available on WIN32 platform only! Quiting test run.")
             console.print(
-                """Please note that the Internet Explorer (IE) 11 desktop application ended support for certain operating systems on June 15, 2022. Customers are encouraged to move to Microsoft Edge with IE mode.""")
+                """Please note that the Internet Explorer (IE) 11 desktop application ended support 
+                for certain operating systems on June 15, 2022. 
+                Customers are encouraged to move to Microsoft Edge with IE mode.""")
             exit(1)
 
         options = webdriver.IeOptions()
@@ -425,7 +428,8 @@ def pytest_runtest_makereport(item, call):
             driver = feature_request.getfixturevalue('driver')
 
             # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
-            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}_{Common.generate_random_numbers(1000, 9999)}.png' \
+            screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}' \
+                                  f'_{Common.generate_random_numbers(1000, 9999)}.png' \
                 .replace(CONST.FORWARD_SLASH, CONST.UNDERSCORE) \
                 .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
                 .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
@@ -440,7 +444,9 @@ def pytest_runtest_makereport(item, call):
                 )
 
                 # Attach screenshot to html report
-                screenshot_filepath = NREPORT.REPORT_DIR + os.sep + NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+                screenshot_filepath = NREPORT.REPORT_DIR + os.sep + \
+                                      NREPORT.SCREENSHOTS_DIR + \
+                                      os.sep + screenshot_filename
                 screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
 
                 # Create and save screenshot at <screenshot_filepath>
@@ -473,6 +479,14 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "api: mark as api tests")
     config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
     config.addinivalue_line("markers", "unit: mark as unit test")
+
+    from nrobo import NROBO_PATHS
+    if detect.production_machine() and not detect.developer_machine():
+        markers = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.MARKERS_YAML)
+    else:
+        markers = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.MARKERS_YAML)
+    for marker, desc in markers.items():
+        config.addinivalue_line("markers", f"{marker}: {desc}")
 
 
 def pytest_metadata(metadata):

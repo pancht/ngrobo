@@ -90,6 +90,8 @@ class NROBO_PATHS:
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
     BROWSER_CONFIGS = Path("browserConfigs")
+    CAPABILITY_YAML = BROWSER_CONFIGS / "capability.yaml"
+    MARKERS_YAML = BROWSER_CONFIGS / "markers.yaml"
 
     # Browsers packages
     BROWSERS = Path("browsers")
