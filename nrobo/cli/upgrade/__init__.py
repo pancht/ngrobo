@@ -104,7 +104,7 @@ def confirm_update() -> None:
             console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
             exit(EXIT_CODES['10001'][0])
 
-        return  # Silent patch applied for version 2024.6.10, thus, just return!
+        # return  # Silent patch applied for version 2024.6.10, thus, just return!
 
     # Ask for major and minor version update
     if host_version < pypi_version:
