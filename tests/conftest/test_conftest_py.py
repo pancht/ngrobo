@@ -33,6 +33,11 @@ class TestConftestPy:
         """Verify nogui marker: -m nogui"""
         logger.info("Message from nogui marker test.")
 
+    @pytest.mark.mymarker
+    def test_marker_nogui(self, logger):
+        """Verify mymarker marker: -m mymarker"""
+        logger.info("Message from mymarker marker test.")
+
     @pytest.mark.unit
     def test_cli_additional_args(self, driver, logger, app, url, username, password):
         """Verify additional cli arguments, app, url, username and password"""

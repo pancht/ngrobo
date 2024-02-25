@@ -18,13 +18,13 @@ import os
 from pathlib import Path
 
 from nrobo import EnvKeys, Environment
-from nrobo import NROBO_PATHS as NP
+from nrobo import NROBO_PATHS
 from nrobo.util.constants import EXT
 
 
 def developer_machine() -> bool:
     """Return true if Developer machine else False"""
-    if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.PY_PROJECT_TOML_FILE).exists():
+    if (NROBO_PATHS.EXEC_DIR / NROBO_PATHS.PY_PROJECT_TOML_FILE).exists():
         return True
 
     return False
@@ -56,7 +56,7 @@ def development_machine() -> bool:
 
 def host_machine_has_nRoBo() -> bool:
     """Returns True if host machine has nRoBo installed already else False"""
-    if Path(Path(os.environ[EnvKeys.EXEC_DIR]) / NP.CONFTEST_PY).exists():
+    if (NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CONFTEST_PY).exists():
         # if conftest file found on production_machine system, meaning nrobo is already installed there
         return True
 

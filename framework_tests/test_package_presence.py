@@ -261,7 +261,7 @@ class TestNRoboFrameworkPaths():
 
         set_environment()
 
-        conftest_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
+        conftest_path = NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
 
         assert not conftest_path.exists()
 
@@ -278,7 +278,7 @@ class TestNRoboFrameworkPaths():
         assert browser_config_init_path.exists()
 
     def test_browsers_package_is_present(self):
-        """Validate that browsers package is present_release"""
+        """Validate that browsers package is present in release"""
         set_environment()
 
         browsers_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS
@@ -288,6 +288,22 @@ class TestNRoboFrameworkPaths():
         browsers_init_path = browsers_path / NROBO_PATHS.INIT_PY
 
         assert browsers_init_path.exists()
+
+    def test_browsers_package_capability_yaml_present(self):
+        """Validate that browsers package > capability.yaml file is present in release"""
+        set_environment()
+
+        capability_yaml_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CAPABILITY_YAML
+
+        assert capability_yaml_file.exists()
+
+    def test_browsers_package_markers_yaml_present(self):
+        """Validate that browsers package > markers.yaml file is present in release"""
+        set_environment()
+
+        markers_yaml_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.MARKERS_YAML
+
+        assert markers_yaml_file.exists()
 
     def test_cli_package_is_present(self):
         """Validate that cli package is present_release"""

@@ -53,14 +53,15 @@ from selenium.webdriver.common.actions.key_input import KeyInput
 
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 
+
 class WAITS:
     """Supported wait types in nrobo.
     These names are used as key in nrobo-config.yaml."""
 
-    SLEEP = "sleep"
-    WAIT = "wait"
-    TIMEOUT = "timeout"
-    ELE_WAIT = "ele_wait"
+    SLEEP = "sleep"  # Default sleep time
+    WAIT = "wait"  # Default Wait time
+    TIMEOUT = "timeout"  # Default wait time for page to be loaded
+    ELE_WAIT = "ele_wait"  # Default element wait time
 
 
 @functools.lru_cache(maxsize=None)
@@ -804,15 +805,16 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         self.update_windows(self.window_handles)
 
-    def click_and_wait(self, by=By.ID, value: Optional[str] = None, wait: int = 0) -> None:
+    def click_and_wait(self, by=By.ID, value: Optional[str] = None, wait: int = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
 
-        if wait:
+        if wait is None:
+            time.sleep(WAITS.WAIT)
+        elif wait:
             time.sleep(wait)
 
         self.update_windows(self.window_handles)
-
 
     def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
         """
@@ -1061,14 +1063,17 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             nprint(f"Exception: {ae}", STYLE.HLRed)
         nprint("End of Wait for page load...", style=STYLE.PURPLE4)
 
-    def wait_for_a_while(self, time_in_sec):
+    def wait_for_a_while(self, time_in_sec=None):
         """
         Pause for <time_in_sec>
 
         :param time_in_sec:
         :return:
         """
-        time.sleep(time_in_sec)
+        if time_in_sec is None:
+            time.sleep(WAITS.WAIT)
+        else:
+            time.sleep(time_in_sec)
 
     def wait_for_element_to_be_invisible(self, locator: WebElement):
         """wait till <element> disappears from the UI"""
@@ -1097,7 +1102,8 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
 
 class ActionChainsNrobo(WaitImplementationsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
@@ -1113,7 +1119,8 @@ class ActionChainsNrobo(WaitImplementationsNrobo):
 
 
 class AlertNrobo(ActionChainsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
@@ -1157,7 +1164,8 @@ class ByNrobo(AlertNrobo):
     Wrapper class for selenium class: By
     """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor
 
@@ -1170,7 +1178,8 @@ class ByNrobo(AlertNrobo):
 class DesiredCapabilitiesNrobo(ByNrobo):
     """Wrapper class for selenium class: DesiredCapabilities"""
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor
 
@@ -1181,7 +1190,8 @@ class DesiredCapabilitiesNrobo(ByNrobo):
 
 
 class SelectNrobo(DesiredCapabilitiesNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor
 
@@ -1243,7 +1253,8 @@ class NRobo(SelectNrobo):
 
         """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250, devices: list[AnyDevice] | None = None):
+    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
 
