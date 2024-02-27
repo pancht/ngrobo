@@ -213,7 +213,8 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         # triggers forced update or normal update by comparing host version and pypi version
         from nrobo.cli.upgrade import confirm_update
-        confirm_update()
+        if detect.production_machine() and not detect.developer_machine():
+            confirm_update()
 
         # create framework folders on host system
 
