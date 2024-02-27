@@ -60,8 +60,7 @@ def run_unit_tests(debug=False) -> int:
                                          '--url', 'http://google.com',
                                          '--username', 'shiva',
                                          '--password', 'tandava',
-                                         '--target', "report.html",
-                                         '--reruns', '2'],
+                                         '--target', "report.html"],
                                         debug=debug, use_os_system_call=True)
     if return_code_unit_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
