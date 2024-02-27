@@ -13,6 +13,7 @@ Constants module.
 @email: erpanchdev@gmail.com
 """
 import os
+from pathlib import Path
 
 
 class NREPORT:
@@ -29,6 +30,7 @@ class NREPORT:
     SCREENSHOTS_DIR = "screenshots"
     ALLURE_REPORT_PATH = REPORT_DIR + os.sep + ALLURE
     NROBO_FRAMEWORK_TESTS_DIR = "nrobo_framework_tests"
+    PATCHES = Path("patches")
 
 
 class nCLI:

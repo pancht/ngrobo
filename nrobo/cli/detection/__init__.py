@@ -70,3 +70,13 @@ def build_version_from_version_files() -> str:
     from cli.build import ENV_CLI_SWITCH
     # Grab version number from version yaml files in version/ directory
     return Common.read_yaml(NROBO_PATHS.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}", fail_on_failure=False)['version']
+
+
+def ensure_pathces_dir() -> bool:
+    """Ensures that patches dir is present on Host machine"""
+    from nrobo import NROBO_PATHS
+    import nrobo.cli.detection as detect
+
+    if detect.production_machine() and not detect.developer_machine():
+        if not (NROBO_PATHS.NROBO_DIR / NROBO_PATHS.PATCHES).exists():
+            os.mkdir(NROBO_PATHS.NROBO_DIR / NROBO_PATHS.PATCHES)

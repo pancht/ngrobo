@@ -15,6 +15,7 @@ Installer for installing nrobo framework at host system.
 """
 import os
 import subprocess
+import time
 from pathlib import Path
 from typing import Optional
 from nrobo.cli.cli_constants import nCLI
@@ -34,14 +35,33 @@ def transfer_files_to_host_project() -> None:
     # =============================================================
     from nrobo import console, STYLE, set_environment, EnvKeys, Environment, NROBO_PATHS as NP, NROBO_CONST
 
-    stop_auto_silent_update_version = Version("2024.14.0")
+    stop_auto_silent_update_version = Version("2024.19.3")
     host_version = Version(get_host_version())
     pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
+    detect.ensure_pathces_dir()
 
     if detect.host_machine_has_nRoBo():
 
         patch_2024_6_10 = NP.NROBO_DIR / "patch_2024_6_10"
         patch_2024_6_12 = NP.NROBO_DIR / "patch_2024_6_12"
+        patch_2024_19_5 = NP.NROBO_DIR / NP.PATCHES / "2024.19.5"
+
+        if patch_2024_19_5.exists():
+            return
+        else:
+            # apply patch for 2024.19.4
+            # [NewFile] Copy browserConfigs/markers.yaml to user's project dir from nrobo
+            copy_file(NP.NROBO_DIR / NP.MARKERS_YAML
+                      , NP.EXEC_DIR / NP.MARKERS_YAML)
+            Common.write_text_to_file(patch_2024_19_5, "")
+
+            print("\n")
+            console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your nRoBo copy. "
+                         f"We have added a new file {NP.MARKERS_YAML} under project root. "
+                         f"Now You can add your custom markers to nRoBo using this file."
+                         f"Please take note of it. And rerun tests!")
+            print("\n")
+            exit(1)
 
         if patch_2024_6_12.exists():
             return
@@ -66,12 +86,11 @@ def transfer_files_to_host_project() -> None:
                 # copy nrobo conftest-host.py
                 copy_file(NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE, NP.EXEC_DIR / NP.CONFTEST_PY)
 
-                print("\n")
-
-                console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
-                             f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
-                             f"Please take note of it.")
-                print("\n")
+            print("\n")
+            console.rule(f"[{STYLE.HLOrange}]A silent update has been made to your conftest.py. "
+                         f"We have kept a copy of your conftest.py as copy-conftest.py under project root. "
+                         f"Please take note of it.")
+            print("\n")
 
         if host_version <= stop_auto_silent_update_version:
             # Re-install
@@ -175,6 +194,7 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
     if requirements_file is None:
         requirements_file = f"{NP.NROBO_DIR}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
+
         from nrobo import terminal, NROBO_CONST
         return_code = terminal(command=[os.environ[EnvKeys.PIP_COMMAND], nCLI.INSTALL, '-r', requirements_file],
                                stdout=subprocess.DEVNULL,
@@ -193,7 +213,8 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
 
         # triggers forced update or normal update by comparing host version and pypi version
         from nrobo.cli.upgrade import confirm_update
-        confirm_update()
+        if detect.production_machine() and not detect.developer_machine():
+            confirm_update()
 
         # create framework folders on host system
 

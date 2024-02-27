@@ -76,7 +76,6 @@ def ensure_logs_dir_exists():
         except FileExistsError as e:
             pass
 
-
 def read_browser_config_options(_config_path):
     """
     process browser config options from the <_config_path>
