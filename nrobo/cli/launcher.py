@@ -190,6 +190,15 @@ def launcher_command(exit_on_failure=True):
         command.append(f"--alluredir")
         command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
 
+    if not args.pythonwarnings and args.browser == Browsers.ANTI_BOT_CHROME:
+        # Suppress DeprecationWarning when running in undetected_chromedriver
+        # Due to the following error:
+        #  /Users/einsteinpanchdev/webdev/nrobo/venv/lib/python3.12/site-packages/undetected_chromedriver/__init__.py:363:
+        #  DeprecationWarning: 'locale.getdefaultlocale' is deprecated and slated for removal in Python 3.15.
+        #  Use setlocale(), getencoding() and getlocale() instead.
+        command.append(f"-W")
+        command.append(f"ignore::DeprecationWarning")
+
     # Add single parameter commands by default
     # That make sense.
     # command.append("-V") # This setting is not working. With this, tests are even not running at all.
