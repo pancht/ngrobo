@@ -5,6 +5,11 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.21.0] - On 2024.03.01
+
+#### Added
+- Added new browser support for anti bot chrome. -b=anti_bot_chrome. Basically this is achieved by instantiating driver instance from [undetected_chromedriver](https://pypi.org/project/undetected-chromedriver/).
+
 ### [2024.19.1] - On 2024.02.25
 
 #### Added
