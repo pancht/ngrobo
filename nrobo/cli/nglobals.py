@@ -36,7 +36,8 @@ class Browsers:
 
 
 # list holding supported browser in nRoBo framework
-supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.SAFARI,
+supported_browsers = [Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.ANTI_BOT_CHROME,
+                      Browsers.SAFARI,
                       Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS, Browsers.EDGE, Browsers.IE]
 # # list holding browsers not supported in nRoBo framework
 supported_browsers_in_future = [Browsers.OPERA]
