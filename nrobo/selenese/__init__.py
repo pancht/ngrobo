@@ -275,7 +275,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
         return self.driver.switch_to.frame(frame_reference)
 
-    def switch_to_new_window(self, type_hint: Optional[str] = None) -> None:
+    def switch_to_new_window(self, type_hint: Optional[str] = "window") -> None:
         """Switches to a new top-level browsing context.
 
         The type hint can be one of "tab" or "window". If not specified the
@@ -287,6 +287,19 @@ class WebdriverWrapperNrobo(WebDriver):
                 switch_to_new_window('tab')
         """
         self.driver.switch_to.new_window(type_hint)
+
+    def switch_to_new_tab(self) -> None:
+        """
+        Create a new tab and switch to it.
+
+        :Usage:
+            ::
+
+                switch_to_new_tab()
+
+        :return:
+        """
+        self.switch_to_new_window("tab")
 
     def switch_to_parent_frame(self) -> None:
         """Switches focus to the parent context. If the current context is the

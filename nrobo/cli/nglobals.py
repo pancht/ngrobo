@@ -26,6 +26,7 @@ class Browsers:
 
     CHROME = 'chrome'
     CHROME_HEADLESS = "chrome_headless"
+    ANTI_BOT_CHROME = "anti_bot_chrome"
     EDGE = 'edge'
     FIREFOX = 'firefox'
     FIREFOX_HEADLESS = "firefox_headless"
