@@ -121,9 +121,9 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("-b", f"--{nCLI.BROWSER}", help="""
         Target browser. Default is chrome.
         Options could be:
-            {} | {} | 
+            {} | {} | {} |
             {} | {} | {} | {}
-        """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS,
+        """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.ANTI_BOT_CHROME,
                    Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
                    Browsers.SAFARI, Browsers.EDGE))
     parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""

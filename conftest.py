@@ -261,6 +261,35 @@ def driver(request):
                                        service=ChromeService(
                                            ChromeDriverManager().install(),
                                            log_output=_driver_log_path))
+
+    elif browser == Browsers.ANTI_BOT_CHROME:
+        """if browser requested is anti_bot_chrome"""
+
+        options = webdriver.ChromeOptions()
+        options.add_argument('--headless=new')
+        options = add_capabilities_from_file(options)
+
+        # enable/disable chrome options from a file
+        _browser_options = read_browser_config_options(
+            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        # apply chrome options
+        [options.add_argument(_option) for _option in _browser_options]
+
+        if _grid_server_url:
+            """Get instance of remote webdriver"""
+            from nrobo import console
+            console.rule(f"[{STYLE.HLRed}]Anti-Bot Chrome is not supported by Grid Infrastructure![/]")
+            sys.exit()
+            # _driver = webdriver.Remote(_grid_server_url,
+            #                            options=options)
+        else:
+            """Get instance of local chrom driver"""
+            import undetected_chromedriver as uc
+            _driver = uc.Chrome(use_subprocess=False, options=options)
+            # _driver = webdriver.Chrome(options=options,
+            #                            service=ChromeService(
+            #                                ChromeDriverManager().install(),
+            #                                log_output=_driver_log_path))
     elif browser == Browsers.SAFARI:
         """if browser requested is safari"""
 
