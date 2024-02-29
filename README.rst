@@ -160,8 +160,7 @@ Installation
 
 Notes for running -b=anti_bot_chrome:
     - When running tests on anti_bot_chrome, suppress the python warnings by adding -W switch
-    - `When running from a datacenter (even smaller ones), chances are large you will not pass! Also, if your ip reputation at home is low, you won't pass!
->`_
+    - `When running from a datacenter (even smaller ones), chances are large you will not pass! Also, if your ip reputation at home is low, you won't pass! <https://pypi.org/help/#description-content-type>`_
     - anti_bot_chrome will not work with --grid switch!
 
 .. Command Line Switches
