@@ -87,7 +87,7 @@ def launcher_command(exit_on_failure=True):
                 if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
-                    if key == nCLI.SUPPRESS:
+                    if key == nCLI.SUPPRESS or key == nCLI.FULLPAGE_SCREENSHOT:
                         continue
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)
@@ -139,8 +139,16 @@ def launcher_command(exit_on_failure=True):
                     if key == nCLI.BROWSER:
                         os.environ[EnvKeys.BROWSER] = value
                         raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
-                        command.append(f"--{key}")
-                        command.append(str(value))
+                        if args.fullpagescreenshot:
+                            command.append(f"--{nCLI.BROWSER}")
+                            command.append(str(Browsers.CHROME_HEADLESS))
+                            if f"--{nCLI.FULLPAGE_SCREENSHOT}" not in command:
+                                command.append(f"--{nCLI.FULLPAGE_SCREENSHOT}")
+                            command_builder_notes.append(
+                                f"[{STYLE.HLOrange}]\tOverride --browser switch value with {Browsers.CHROME_HEADLESS} because fullpagescreenshot switch is enabled...")
+                        else:
+                            command.append(f"--{key}")
+                            command.append(str(value))
                         continue
                     elif key == nCLI.MARKER:
                         command.append(f"-m")
@@ -178,10 +186,19 @@ def launcher_command(exit_on_failure=True):
 
     if not args.browser:
         """browser not provided"""
-        command.append(f"--{nCLI.BROWSER}")
-        command.append(f"{Browsers.CHROME}")
-        command_builder_notes.append(
-            f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
+
+        if args.fullpagescreenshot:
+            command.append(f"--{nCLI.BROWSER}")
+            command.append(str(Browsers.CHROME_HEADLESS))
+            command.append(f"--{nCLI.FULLPAGE_SCREENSHOT}")
+            command_builder_notes.append(
+                f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME_HEADLESS} is "
+                f"selected because fullpagescreenshot switch is enabled...")
+        else:
+            command.append(f"--{nCLI.BROWSER}")
+            command.append(f"{Browsers.CHROME}")
+            command_builder_notes.append(
+                f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
     if not args.rootdir:
         command_builder_notes.append(
             f"[{STYLE.HLOrange}]\t--rootdir switch was missing. Default test path <current-dir> is selected...")

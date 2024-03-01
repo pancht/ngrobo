@@ -14,6 +14,8 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 import os
 import sys
 
+from selenium.webdriver.common.by import By
+
 # Add host's project path to sys path for module searching...
 sys.path.append(os.path.join(os.path.dirname(__file__), ''))
 
@@ -75,6 +77,7 @@ def ensure_logs_dir_exists():
             os.makedirs(_allure_dir)
         except FileExistsError as e:
             pass
+
 
 def read_browser_config_options(_config_path):
     """
@@ -142,6 +145,8 @@ def pytest_addoption(parser):
     group.addoption(f"--{nCLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
     group.addoption(f"--{nCLI.PACKAGES}", help="Browser config file path for setting requested options")
     group.addoption(f"--{nCLI.GRID}", help="Url of remote selenium grid server")
+    group.addoption(f"--{nCLI.FULLPAGE_SCREENSHOT}",
+                    help="Take full page screenshot", action="store_true", default=False)
 
     # ini option
     parser.addini(f"{nCLI.APP}", type="string",
@@ -159,6 +164,8 @@ def pytest_addoption(parser):
     parser.addini(f"{nCLI.PACKAGES}", type='string',
                   help="Browser config file path for setting requested options")
     parser.addini(f"--{nCLI.GRID}", type='string', help="Url of remote selenium grid server")
+    parser.addini(f"--{nCLI.FULLPAGE_SCREENSHOT}", type='bool',
+                  help="Take full page screenshot")
 
 
 @pytest.fixture(scope='function')
@@ -462,23 +469,39 @@ def pytest_runtest_makereport(item, call):
                 .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE) \
                 .replace(CONST.COLON, CONST.EMPTY).replace('.py', CONST.EMPTY)
 
+            # build screenshot relative path for html report and actual path for saving screenshot
+            screenshot_filepath = NREPORT.REPORT_DIR + os.sep + \
+                                  NREPORT.SCREENSHOTS_DIR + \
+                                  os.sep + screenshot_filename
+            screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+
+            # Handle fullpagescreenshot cli switch
+            fullpagescreenshot = feature_request.config.getoption(f"--{nCLI.FULLPAGE_SCREENSHOT}")
+
+            if fullpagescreenshot:
+                driver.maximize_window()
+                document_height = \
+                    driver.execute_script(
+                        'return Math.max( document.body.scrollHeight, document.body.offsetHeight, '
+                        'document.documentElement.clientHeight, document.documentElement.scrollHeight, '
+                        'document.documentElement.offsetHeight );')
+                document_size = driver.get_window_size()
+                driver.set_window_size(document_size['width'], document_height)
+                driver.find_element(By.TAG_NAME, 'body').screenshot(screenshot_filepath)
+
             # Attach screenshot to allure report
             try:
                 allure.attach(
                     # Not working. Still work in progress...
-                    driver.get_screenshot_as_png(),
+                    driver.get_screenshot_as_png() if not fullpagescreenshot else driver.find_element(By.TAG_NAME, 'body').screenshot_as_png,
                     name='screenshot',
                     attachment_type=allure.attachment_type.PNG
                 )
 
                 # Attach screenshot to html report
-                screenshot_filepath = NREPORT.REPORT_DIR + os.sep + \
-                                      NREPORT.SCREENSHOTS_DIR + \
-                                      os.sep + screenshot_filename
-                screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
-
                 # Create and save screenshot at <screenshot_filepath>
-                driver.save_screenshot(screenshot_filepath)
+                if not fullpagescreenshot:
+                    driver.save_screenshot(screenshot_filepath)
 
                 # get base64 screenshot
                 # failure_screen_shot = driver.get_screenshot_as_base64()

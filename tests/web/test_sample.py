@@ -3,6 +3,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 import allure
 
+from nrobo.framework.pages import Page
+
 
 class TestWebSamples():
 
@@ -88,3 +90,9 @@ class TestWebSamples():
 
         message = driver.find_element(by=By.ID, value="message")
         text = message.text
+
+    def test_take_full_page_screenshot(self, driver, logger):
+        page = Page(driver, logger)
+
+        page.get("https://namasteydigitalindia.com/")
+
