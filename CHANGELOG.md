@@ -5,6 +5,11 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.24.0] - On 2024.03.01
+
+#### Added
+- Added --fullpagescreenshot nRoBo cli switch. That is when applied, it takes full page screenshot instead of only visible window rect by default. However, this switch only works with chrome_headless browser. nRoBo overrides the --browser switch with chrome_headless or adds --browser chrome_headless if fullpagescreenshot is requested. 
+
 ### [2024.21.3] - On 2024.03.01
 
 #### Added
