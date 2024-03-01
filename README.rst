@@ -194,7 +194,7 @@ A. Pure nCLI Switches
                             Options are <html> or <allure>. Default is <html>
     -b, --browser           Target browser. Default is **chrome**.
                             Following is a list of browser options support in nRoBo.
-                            *chrome*, *chrome_headless*, *edge*, *edge_headless*,
+                            *chrome*, *chrome_headless*, *anti_bot_chrome*, *edge*, *edge_headless*,
                             *safari*, *firefox*, *firefox_headless*, *ie*
     --browser-config        Path of browser-config-file containing additional options that is/are needed to be applied
                             before browser instantiation. Each line in file should contain one option only.
