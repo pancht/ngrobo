@@ -307,7 +307,7 @@ Features
     * VISIT and SUBSCRIBE to Dedicated `nRoBo YouTube channel <https://shorturl.at/hnDM3>`_ with a collection of video tutorials. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Rich Browser Support (Chrome, Headless Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
+    * Rich Browser Support (Chrome, Headless Chrome, Anti Bot Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
     * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
     * nRoBo selenium wrapper classes and methods that saves lot of key presses. Thus, leveraging benefits of compact, readable and manageable of code. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
     * Well-structured thread-safe inbuilt setup and tear down processes. Thus, You can keep focus on testing! Not on maintaining framework. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
