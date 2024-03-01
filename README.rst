@@ -317,3 +317,28 @@ Features
     * Screenshot-capture at the end of each test - Inherited from `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
     * Capture webdriver logs, console logs and screenshots in reports - Inherited from `PyTest <https://docs.pytest.org/>`_
     * Inbuilt integration with NxGen Rich Allure Report (Backed by `Allure <https://allurereport.org/docs/pytest/>`_ Reports and `pytest-html-reports <https://pytest-html.readthedocs.io/en/latest/user_guide.html>`_)
+
+.. list-table:: **Download Statistics**
+   :widths: 25 25
+   :align: center
+   :header-rows: 1
+
+   * - Country
+     - Download Count
+   * - US
+     - 1,351
+   * - SG
+     - 359
+   * - IN
+     - 208
+   * - GB
+     - 140
+   * - CN
+     - 108
+   * - HK
+     - 26
+   * - AE
+     - 2
+   * - **Total**
+     - **2,194**
+

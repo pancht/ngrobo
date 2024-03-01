@@ -78,6 +78,30 @@ class Common:
             print("No such file or directory found: " + str(file_path))
 
     @staticmethod
+    def append_text_to_file(file_path: Union[str, Path], content, encoding=None):
+        """
+        Write text to file
+
+        :param file_path:
+        :param content:
+        :param encoding:
+        :return:
+        """
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+
+        try:
+            if encoding is None:
+                with open(file_path, 'a') as f:
+                    f.write(content)
+            else:
+                with open(file_path, 'w', encoding=encoding) as f:
+                    f.write(content)
+
+        except FileNotFoundError as file_not_found_error:
+            print("No such file or directory found: " + str(file_path))
+
+    @staticmethod
     def read_json(file_path: Union[str, Path]):
         """
         Read Json
