@@ -172,3 +172,4 @@ results-unittests/
 .idea/
 
 *.jar
+/key/
