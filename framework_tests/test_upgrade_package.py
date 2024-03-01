@@ -35,14 +35,14 @@ class TestUpgradePkg():
         result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
 
         import re
-        match = re.search(package + r" \(([\d]+4[.][\d]+[.][\d]+)\)", result.stdout)
+        match = re.search(package + r" \(([\d]+[.][\d]+[.][\d]+)\)", result.stdout)
 
         # Test return type AnyStr
         assert match.group(1) == get_pypi_index(package)
 
         package = "xyzabc"
         result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
-        match = re.search(package + r" \(([\d]+4[.][\d]+[.][\d]+)\)", result.stdout)
+        match = re.search(package + r" \(([\d]+[.][\d]+[.][\d]+)\)", result.stdout)
 
         assert None == get_pypi_index(package)
 

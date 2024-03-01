@@ -42,7 +42,7 @@ def get_pypi_index(package) -> None | str:
 
     result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True, timeout=10)
 
-    match = re.search(package + r" \(([\d]+4[.][\d]+[.][\d]+)\)", result.stdout)
+    match = re.search(package + r" \(([\d]+[.][\d]+[.][\d]+)\)", result.stdout)
 
     if match:
         # Tts' a match!

@@ -54,6 +54,7 @@ class nCLI:
     TARGET = "target"
     VERSION = "VERSION"
     SUPPRESS = "suppress"
+    FULLPAGE_SCREENSHOT = "fullpagescreenshot"
     BROWSER = "browser"
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
@@ -74,6 +75,7 @@ class nCLI:
         TARGET: TARGET,
         VERSION: VERSION,
         SUPPRESS: SUPPRESS,
+        FULLPAGE_SCREENSHOT: FULLPAGE_SCREENSHOT,
         BROWSER: BROWSER,
         BROWSER_CONFIG: BROWSER_CONFIG,
         KEY: KEY,
