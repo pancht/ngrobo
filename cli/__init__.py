@@ -18,6 +18,7 @@ import os
 from cli.build import build
 from cli.check import check
 from cli.development import set_switch_environment
+from cli.downloads import downloads
 from cli.publish import publish
 from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
@@ -51,6 +52,7 @@ def nrobo_cli() -> None:
     parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
     parser.add_argument("--major", help="Increment major version", action="store_true", default=False)
     parser.add_argument("--minor", help="Increment minor version", action="store_true", default=False)
+    parser.add_argument("--downloads", help="Number of downloads", action="store_true", default=False)
 
     # parse cli args
     args = parser.parse_args()
@@ -71,6 +73,9 @@ def nrobo_cli() -> None:
             exit(1)
     elif args.check:
         check()
+    elif args.downloads:
+        downloads()
+        exit(0)
     elif args.publish:
         if args.target:
             publish(args.target, override=args.override)

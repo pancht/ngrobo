@@ -35,6 +35,7 @@ class Python:
 
     PIP = "pip"
     VERSION = "Version"
+    PYPINFO = "pypinfo"
 
 
 class Environment:
