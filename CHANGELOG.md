@@ -5,6 +5,11 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.21.3] - On 2024.03.01
+
+#### Added
+- Added GoogleBigQuery to get download statistics
+
 ### [2024.21.0] - On 2024.03.01
 
 #### Added
@@ -25,7 +30,7 @@ To share more details of nRoBo features, examples, practicals in the form of vid
 - Easy to learn and use - By [nRoBo](https://pypi.org/project/nrobo/)
 - Simple and Well Defined Automation Directory Structure - By [nRoBo](https://pypi.org/project/nrobo/)
 - Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By [PyTest](https://docs.pytest.org/), [nRoBo](https://pypi.org/project/nrobo/)
-- Rich Browser Support (Chrome, Headless Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By [SeleniumWebdriver](https://www.selenium.dev/documentation/webdriver/)
+- Rich Browser Support (Chrome, Headless Chrome, Anti-Bot-Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By [SeleniumWebdriver](https://www.selenium.dev/documentation/webdriver/)
 - Rich Platform Support (Unix, Linux, Mac, Windows) - By [PyTest](https://docs.pytest.org/), [Selenium](https://www.selenium.dev/) and [nRoBo](https://pypi.org/project/nrobo/)
 - nRoBo selenium wrapper classes and methods that saves lot of key presses. Thus, leveraging benefits of compact, readable and manageable of code. - By [nRoBo](https://pypi.org/project/nrobo/)
 - Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By [nRoBo](https://pypi.org/project/nrobo/)
