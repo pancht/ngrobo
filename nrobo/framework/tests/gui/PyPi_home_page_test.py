@@ -4,6 +4,7 @@
 """
 import pytest
 from pages.PagePyPiHome import PagePyPiHome
+from pages import Page
 
 
 class TestPyPiHomePage():
@@ -17,4 +18,10 @@ class TestPyPiHomePage():
 
         # Asset test condition
         assert page_pypi_home.search_button_present() == True
+
+    def test_fullpagescreenshot_nrobo_switch(self, driver, logger):
+        """Example of full page screenshot"""
+
+        page = Page(driver, logger)
+        page.get("https://namasteydigitalindia.com")
 
