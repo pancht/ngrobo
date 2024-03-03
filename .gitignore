@@ -172,4 +172,6 @@ results-unittests/
 .idea/
 
 *.jar
-/key/
+
+/key/BigQueryCredentialLink
+/key/nrobo-statistics-214a0f5d2c1b.json
