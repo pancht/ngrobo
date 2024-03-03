@@ -20,6 +20,11 @@ import argparse
 from nrobo.cli.cli_constants import nCLI, NREPORT
 from nrobo.cli.nglobals import Browsers
 
+
+class BoolArgs:
+    PYARGS = "pyargs"
+
+
 BOOL_SWITCHES = [
     f"--{nCLI.INSTALL}",
     f"--{nCLI.VERSION}",
@@ -57,7 +62,7 @@ BOOL_SWITCHES = [
     "--continue-on-collection-errors",
     "--co",
     "--collect-only",
-    "--pyargs",
+    f"--{BoolArgs.PYARGS}",
     "--noconftest",
     "--keep-duplicates",
     "--collect-in-virtualenv",
@@ -128,6 +133,8 @@ def nrobo_cli_parser(exit_on_failure=True):
         """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.ANTI_BOT_CHROME,
                    Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
                    Browsers.SAFARI, Browsers.EDGE))
+    parser.add_argument(f"--{nCLI.FILES}",
+                        help="Input files", nargs='+')
     parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""
             Path of browser-config-file containing additional options that is/are needed to be applied
             before browser instantiation. Each line in file should contain one option only.
@@ -354,9 +361,9 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("--co", "--collect-only", help="""
                 only collect tests, don't execute them.
                 """, action="store_true")
-    parser.add_argument("--pyargs", help="""
+    parser.add_argument(f"--{BoolArgs.PYARGS}", nargs='+', help="""
                 try to interpret all arguments as python packages.
-                """, action="store_true")
+                """)
     parser.add_argument("--ignore", help="""
                 --ignore=path. ignore path during collection (multi-allowed).
                 """)

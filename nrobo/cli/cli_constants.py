@@ -56,6 +56,7 @@ class nCLI:
     SUPPRESS = "suppress"
     FULLPAGE_SCREENSHOT = "fullpagescreenshot"
     BROWSER = "browser"
+    FILES = "files"
     BROWSER_CONFIG = "browser-config"
     KEY = "key"
     PACKAGES = "packages"
@@ -77,6 +78,7 @@ class nCLI:
         SUPPRESS: SUPPRESS,
         FULLPAGE_SCREENSHOT: FULLPAGE_SCREENSHOT,
         BROWSER: BROWSER,
+        FILES: FILES,
         BROWSER_CONFIG: BROWSER_CONFIG,
         KEY: KEY,
         PACKAGES: PACKAGES,
