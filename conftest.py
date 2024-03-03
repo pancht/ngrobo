@@ -170,6 +170,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture(scope='function')
 def url(request):
+    """Supply test URL given from nRoBo command line"""
     # Global fixture returning app url
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.URL}")
@@ -177,6 +178,7 @@ def url(request):
 
 @pytest.fixture(scope='function')
 def app(request):
+    """Supply app name given from nRoBo command line"""
     # Global fixture returning app name
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.APP}")
@@ -184,6 +186,7 @@ def app(request):
 
 @pytest.fixture(scope='function')
 def username(request):
+    """Supply username given from nRoBo command line"""
     # Global fixture returning admin username
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.USERNAME}")
@@ -191,6 +194,7 @@ def username(request):
 
 @pytest.fixture(scope='function')
 def password(request):
+    """Supply password given from nRoBo command line"""
     # Global fixture returning admin password
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.PASSWORD}")
