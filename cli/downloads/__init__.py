@@ -69,7 +69,10 @@ def downloads() -> str:
     terminal(command=command)
 
     # Get download stats
-    result = terminal([Python.PYPINFO, NROBO_CONST.NROBO, 'country'], debug=True, text=True, capture_output=True)
+    result = terminal([Python.PYPINFO, '--start-date', '2023-01-06', '--end-date',
+                       datetime.today().strftime("%Y-%m-%d"), '--all', '--limit', '200', '--percent',
+                       NROBO_CONST.NROBO, 'country'],
+                      debug=True, text=True, capture_output=True)
     console.print(f"{result.stdout}")
 
     # save download stats
@@ -78,27 +81,30 @@ def downloads() -> str:
 
     output = result.stdout
 
-    # test output conversion
-
     # strip off header
     output = re.sub(r'(Served from cache:[ a-zA-Z:\d.$\n]*)', '', output, count=1)
     # strip off pipes and spaces
     output = output.replace('|', '').replace(' ', '').replace('-','')
-    output = """.. list-table:: **Download Statistics**\n   :widths: 25 25\n   :align: center\n   :header-rows: 1""" + output
-    output = output.replace('countrydownload_count\n', '')
-    output = output.replace(':header-rows: 1', ':header-rows: 1\n\n   * - Country\n     - Download Count')
+    output = """.. list-table:: **Download Statistics**\n   :widths: 33 33 33\n   :align: center\n   :header-rows: 1""" + output
+    output = output.replace('countrypercentdownload_count\n', '')
+    output = output.replace(':header-rows: 1', ':header-rows: 1\n\n   * - Country\n     - Percent\n     - Download Count')
 
-    matches = re.findall(r'([A-Za-z]+[\d,]+)', output)
+    matches = re.findall(r'([A-Za-z]+[\d.%]+[\d,]+)', output)
     for m in matches:
         _country = re.findall(r'([a-zA-Z]+)', m)
-        _count = re.search(r'([\d,]+)', m)
-        _repl = f'   * - **{_country[0]}**\n     - **{_count[0]}**' if _country[0] == 'Total' else f'   * - {_country[0]}\n     - {_count[0]}'
+        _percent = re.search(r'([\d.]+%)', m)
+        _count = re.search(r'%([\d,]+)', m)
+        if _count is None:
+            _count = re.search(r'([\d,]+)', m)
+
+        _count_printable = str(_count[0]).replace('%', '')
+        _repl = f'   * - **{_country[0]}**\n     - **100.00%**\n     - **{_count_printable}**' if _country[0] == 'Total' else f'   * - {_country[0]}\n     - {_percent[0]}\n     - {_count_printable}'
         output = output.replace(m, _repl)
 
     # Read README.rst file
     readme_file_content = Common.read_file_as_string(NROBO_PATHS.README_RST_FILE)
     # Remove previous download stats section
-    readme_file_content = re.sub(r'(\n.. list-table:: [*]+Download Statistics[*]+[\n, :a-z *A-Z\d-]*)', '', readme_file_content, count=1)
+    readme_file_content = re.sub(r'(.. list-table:: [*]+Download Statistics[*]+[\n :*.%,a-zA-Z\d-]*)', '', readme_file_content, count=1)
     # Append new download stats section
     readme_file_content = f"{readme_file_content}\n{output}"
     # Write back to README.rst file
