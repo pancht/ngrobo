@@ -241,8 +241,6 @@ def driver(request):
     _url = request.config.getoption(f"--{nCLI.URL}")
     os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
 
-    _title = str(request.config.getoption(f"--{nCLI.REPORT_TITLE}"))
-    os.environ[EnvKeys.TITLE] = _title
     # get grid url
     _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
 
