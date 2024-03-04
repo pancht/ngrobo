@@ -185,7 +185,7 @@ def launcher_command(exit_on_failure=True):
 
                         if key in [nCLI.APP, nCLI.REPORT_TITLE]:
                             command.append(f"--{key}")
-                            command.append(str(value).replace(' ', '_'))
+                            command.append(str(value).replace(CONST.SPACE, CONST.UNDERSCORE))
                         else:
                             command.append(f"--{key}")
                             command.append(value)
