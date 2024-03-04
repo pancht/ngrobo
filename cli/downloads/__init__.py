@@ -104,9 +104,9 @@ def downloads() -> str:
     # Read README.rst file
     readme_file_content = Common.read_file_as_string(NROBO_PATHS.README_RST_FILE)
     # Remove previous download stats section
-    readme_file_content = re.sub(r'(.. list-table:: [*]+Download Statistics[*]+[\n :*.%,a-zA-Z\d-]*)', '', readme_file_content, count=1)
+    readme_file_content = re.sub(r'([\n]*.. list-table:: [*]+Download Statistics[*]+[\n :*.%,a-zA-Z\d-]*)', '', readme_file_content, count=1)
     # Append new download stats section
-    readme_file_content = f"{readme_file_content}\n{output}"
+    readme_file_content = f"{readme_file_content}\n\n{output}"
     # Write back to README.rst file
     Common.write_text_to_file(NROBO_PATHS.README_RST_FILE, readme_file_content)
 

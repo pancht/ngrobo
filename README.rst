@@ -318,13 +318,6 @@ Features
     * Capture webdriver logs, console logs and screenshots in reports - Inherited from `PyTest <https://docs.pytest.org/>`_
     * Inbuilt integration with NxGen Rich Allure Report (Backed by `Allure <https://allurereport.org/docs/pytest/>`_ Reports and `pytest-html-reports <https://pytest-html.readthedocs.io/en/latest/user_guide.html>`_)
 
-
-
-
-
-
-
-
 .. list-table:: **Download Statistics**
    :widths: 33 33 33
    :align: center
@@ -334,65 +327,65 @@ Features
      - Percent
      - Download Count
    * - US
-     - 41.26%
-     - 18,980
+     - 41.30%
+     - 19,063
    * - CN
-     - 13.06%
-     - 6,006
+     - 13.04%
+     - 6,018
    * - RU
-     - 5.38%
-     - 2,475
+     - 5.37%
+     - 2,478
    * - SG
-     - 5.07%
+     - 5.06%
      - 2,334
    * - DE
-     - 4.07%
+     - 4.06%
      - 1,872
    * - HK
-     - 3.92%
-     - 1,803
+     - 3.91%
+     - 1,807
    * - JP
-     - 3.19%
+     - 3.18%
      - 1,466
    * - FR
-     - 3.06%
-     - 1,407
+     - 3.05%
+     - 1,408
    * - CA
-     - 2.79%
-     - 1,284
+     - 2.78%
+     - 1,285
    * - KR
-     - 2.76%
+     - 2.75%
      - 1,269
    * - GB
-     - 1.87%
+     - 1.86%
      - 859
    * - AU
-     - 1.86%
+     - 1.85%
      - 855
    * - NO
      - 1.62%
-     - 745
+     - 747
    * - IN
-     - 1.47%
-     - 676
+     - 1.56%
+     - 720
    * - SE
      - 1.25%
      - 576
    * - HR
      - 0.83%
-     - 380
+     - 382
    * - TH
-     - 0.81%
-     - 372
+     - 0.82%
+     - 378
    * - TW
-     - 0.79%
+     - 0.78%
      - 362
    * - DK
-     - 0.71%
+     - 0.70%
      - 325
    * - IE
      - 0.67%
-     - 309
+     - 311
    * - ES
      - 0.57%
      - 262
@@ -404,12 +397,12 @@ Features
      - 241
    * - CH
      - 0.42%
-     - 191
+     - 192
    * - AE
      - 0.35%
      - 163
    * - FI
-     - 0.20%
+     - 0.19%
      - 90
    * - ZA
      - 0.19%
@@ -426,10 +419,10 @@ Features
    * - IS
      - 0.09%
      - 42
-   * - CZ
+   * - OM
      - 0.09%
      - 42
-   * - OM
+   * - CZ
      - 0.09%
      - 42
    * - BR
@@ -441,10 +434,10 @@ Features
    * - UA
      - 0.02%
      - 8
-   * - GF
+   * - CY
      - 0.01%
      - 6
-   * - CY
+   * - GF
      - 0.01%
      - 6
    * - EE
@@ -456,10 +449,10 @@ Features
    * - SK
      - 0.00%
      - 2
-   * - RS
+   * - PT
      - 0.00%
      - 1
-   * - PT
+   * - RS
      - 0.00%
      - 1
    * - MX
@@ -467,5 +460,5 @@ Features
      - 1
    * - **Total**
      - **100.00%**
-     - **45,998**
+     - **46,159**
 

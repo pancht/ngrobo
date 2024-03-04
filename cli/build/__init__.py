@@ -276,6 +276,11 @@ def build(target=ENV_CLI_SWITCH.TEST, *, debug=False, override=False, build_vers
     with console.status(f"[{STYLE.TASK}]Deleting {__DIST_DIR__}\n"):
         delete_dist_folder()
 
+    with console.status(f"[{STYLE.TASK}]Fetch download stats and add to README file {__DIST_DIR__}\n"):
+        # Append download stats to README.rst file
+        from cli.downloads import downloads
+        downloads()
+
     with console.status(f"[{STYLE.TASK}]Building packages\n"):
         run_build_command()
         console.print(f"\t[{STYLE.HLOrange}]Packaging completed.")
