@@ -31,6 +31,7 @@ class NREPORT:
     ALLURE_REPORT_PATH = REPORT_DIR + os.sep + ALLURE
     NROBO_FRAMEWORK_TESTS_DIR = "nrobo_framework_tests"
     PATCHES = Path("patches")
+    DEFAULT_REPORT_TITLE = "Test Automation Report"
 
 
 class nCLI:
@@ -50,6 +51,7 @@ class nCLI:
     RERUNS = "reruns"
     RERUNS_DELAY = "reruns-delay"
     REPORT = "report"
+    REPORT_TITLE = "title"
     TESTDIR = "testsdir"
     TARGET = "target"
     VERSION = "VERSION"
@@ -72,6 +74,7 @@ class nCLI:
         INSTANCES: INSTANCES,
         RERUNS: RERUNS,
         REPORT: REPORT,
+        REPORT_TITLE: REPORT_TITLE,
         TESTDIR: TESTDIR,
         TARGET: TARGET,
         VERSION: VERSION,

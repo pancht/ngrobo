@@ -182,8 +182,13 @@ def launcher_command(exit_on_failure=True):
                     else:
                         if key == nCLI.TARGET or key == nCLI.FILES:
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
-                        command.append(f"--{key}")
-                        command.append(value)
+
+                        if key in [nCLI.APP, nCLI.REPORT_TITLE]:
+                            command.append(f"--{key}")
+                            command.append(str(value).replace(' ', '_'))
+                        else:
+                            command.append(f"--{key}")
+                            command.append(value)
 
     if not args.browser:
         """browser not provided"""

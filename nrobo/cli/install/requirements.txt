@@ -28,4 +28,5 @@ pytest-rerunfailures==13.0
 allure-pytest==2.13.2
 pycurl==7.45.3
 pypinfo==21.0.0
+pytest-emoji==0.2.0
 

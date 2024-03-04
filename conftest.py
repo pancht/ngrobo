@@ -16,6 +16,8 @@ import sys
 
 from selenium.webdriver.common.by import By
 
+from nrobo import EnvKeys
+
 # Add host's project path to sys path for module searching...
 sys.path.append(os.path.join(os.path.dirname(__file__), ''))
 
@@ -39,6 +41,14 @@ import os.path as path
 import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
+
+
+def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
+    if detect.developer_machine():
+        from nrobo import NROBO_PATHS
+        Common.append_text_to_file(NROBO_PATHS.PYTEST_LIFE_CYCLE_LOGS,
+                                   f"\n\n-----------------------\n"
+                                   f"Calling from {life_cycle_item} {item_type}")
 
 
 def ensure_logs_dir_exists():
@@ -129,6 +139,8 @@ def pytest_addoption(parser):
     :param parser:
     :return:
     """
+    update_pytest_life_cycle_log("pytest_addoption", "hook")
+
     group = parser.getgroup("nrobo header options")
     group.addoption(
         f"--{nCLI.BROWSER}", help="""
@@ -139,6 +151,7 @@ def pytest_addoption(parser):
     """
     )
     group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")
+    group.addoption(f"--{nCLI.REPORT_TITLE}", help="Defines HTML report title")
     group.addoption(f"--{nCLI.URL}", help="Link of application under test")
     group.addoption(f"--{nCLI.USERNAME}", help="Username for login", default="")
     group.addoption(f"--{nCLI.PASSWORD}", help="Password for login", default="")
@@ -151,6 +164,8 @@ def pytest_addoption(parser):
     # ini option
     parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
+    parser.addini(f"{nCLI.REPORT_TITLE}", type="string",
+                  help="Defines HTML report title")
     parser.addini(f"{nCLI.URL}", type='string',
                   help="Link of application under test")
     parser.addini(f"{nCLI.USERNAME}", type="string",
@@ -173,12 +188,17 @@ def url(request):
     """Supply test URL given from nRoBo command line"""
     # Global fixture returning app url
     # Access pytest command line options
+    update_pytest_life_cycle_log("url")
+
     return request.config.getoption(f"--{nCLI.URL}")
 
 
 @pytest.fixture(scope='function')
 def app(request):
     """Supply app name given from nRoBo command line"""
+
+    update_pytest_life_cycle_log("app")
+
     # Global fixture returning app name
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.APP}")
@@ -187,6 +207,9 @@ def app(request):
 @pytest.fixture(scope='function')
 def username(request):
     """Supply username given from nRoBo command line"""
+
+    update_pytest_life_cycle_log("username")
+
     # Global fixture returning admin username
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.USERNAME}")
@@ -195,6 +218,8 @@ def username(request):
 @pytest.fixture(scope='function')
 def password(request):
     """Supply password given from nRoBo command line"""
+
+    update_pytest_life_cycle_log("password")
     # Global fixture returning admin password
     # Access pytest command line options
     return request.config.getoption(f"--{nCLI.PASSWORD}")
@@ -205,6 +230,9 @@ def driver(request):
     """
     Instantiating driver for given browser.
     """
+
+    update_pytest_life_cycle_log("driver")
+
     # Access pytest command line options
     from nrobo import EnvKeys
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
@@ -212,6 +240,9 @@ def driver(request):
     # get and set url
     _url = request.config.getoption(f"--{nCLI.URL}")
     os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
+
+    _title = str(request.config.getoption(f"--{nCLI.REPORT_TITLE}"))
+    os.environ[EnvKeys.TITLE] = _title
     # get grid url
     _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
 
@@ -413,6 +444,9 @@ def logger(request):
     """
     Instantiate logger instance for each test
     """
+
+    update_pytest_life_cycle_log("logger")
+
     test_method_name = request.node.name
     from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
@@ -436,6 +470,9 @@ def pytest_report_header(config):
     """
     Returns console header
     """
+
+    update_pytest_life_cycle_log("pytest_report_header", "hook")
+
     from nrobo import EnvKeys
     return f"{os.environ[EnvKeys.APP]}" + " test summary".title()
 
@@ -446,6 +483,9 @@ def pytest_runtest_makereport(item, call):
     """
     Make report with screenshot attached
     """
+
+    update_pytest_life_cycle_log("pytest_runtest_makereport", "hook")
+
     outcome = yield
     report = outcome.get_result()
 
@@ -497,7 +537,8 @@ def pytest_runtest_makereport(item, call):
             try:
                 allure.attach(
                     # Not working. Still work in progress...
-                    driver.get_screenshot_as_png() if not fullpagescreenshot else driver.find_element(By.TAG_NAME, 'body').screenshot_as_png,
+                    driver.get_screenshot_as_png() if not fullpagescreenshot else driver.find_element(By.TAG_NAME,
+                                                                                                      'body').screenshot_as_png,
                     name='screenshot',
                     attachment_type=allure.attachment_type.PNG
                 )
@@ -527,6 +568,12 @@ def pytest_configure(config):
     Description
         configure pytest.
     """
+    from nrobo.util.constants import CONST
+    update_pytest_life_cycle_log("pytest_configure", "hook")
+
+    os.environ[EnvKeys.TITLE] = str(config.getoption(f'--{nCLI.REPORT_TITLE}')).replace(CONST.UNDERSCORE, CONST.SPACE)
+    os.environ[EnvKeys.APP] = str(config.getoption(f'--{nCLI.APP}')).replace(CONST.UNDERSCORE, CONST.SPACE)
+
     # add custom markers
     config.addinivalue_line("markers", "sanity: marks as sanity test")
     config.addinivalue_line("markers", "regression: mark as regression test")
@@ -550,8 +597,131 @@ def pytest_metadata(metadata):
         pytest metadata
     """
 
+    update_pytest_life_cycle_log("pytest_metadata", "hook")
+
     # pop all the python environment table data
     # metadata.pop("Packages", None)
     # metadata.pop("Platform", None)
     # metadata.pop("Plugins", None)
     # metadata.pop("Python", None)
+
+
+def pytest_runtest_setup(item):
+    from nrobo.util.common import Common
+    update_pytest_life_cycle_log("pytest_runtest_setup", "hook")
+    from pprint import pprint
+    from nrobo.util.common import Common
+    try:
+        callspec = item.callspec
+    except AttributeError as ae:
+        callspec = None
+
+    try:
+        callobj = item.callobj
+    except AttributeError as ae:
+        callobj = None
+
+    try:
+        fixtureinfo = item.fixtureinfo
+    except AttributeError as ae:
+        fixtureinfo = None
+
+    Common.append_text_to_file("key/experiments/pytest/pytest-life-cycle-logs", f"Function properties:\n"
+                                                                                f"name={item.name}\n"
+                                                                                f"parent={item.parent}\n"
+                                                                                f"config={item.config}\n"
+                                                                                f"callspec={callspec}\n"
+                                                                                f"callobj={callobj}\n"
+                                                                                f"keywords={item.keywords}\n"
+                                                                                f"session={item.session}\n"
+                                                                                f"fixtureinfo={fixtureinfo}\n"
+                                                                                f"originalname={item.originalname}\n"
+                                                                                f"filepath={item.fspath}\n"
+                                                                                f"docstring={item.__doc__}")
+
+    pprint(item.__doc__)
+    pprint(item.config)
+    print(item.parent)
+    pprint(item.name)
+    pprint(item.fspath)
+    pprint(item.session)
+    mod = item.getparent(pytest.Module).obj
+    print("Mod.dir")
+    pprint(mod.__dir__)
+    _class = item.getparent(pytest.Class).obj
+    print(f"class where this test {item.name} belong to")
+    pprint(_class)
+    print(f"All attributes of test class")
+    pprint(_class.__dir__(item.name))
+    print(f"Get doc string")
+    print(_class.__dir__(item.name).__doc__)
+    print("Check if item has attribute hello")
+    pprint(hasattr(mod, "hello"))
+    print(f"node id")
+    pprint(item.nodeid)
+    print(f"Nodeid dir object")
+    pprint(item.nodeid.__dir__)
+
+    if isinstance(item, pytest.Function):
+        pass
+
+    # if isinstance(item, pytest.Function):
+    #     if not item.fspath.relto(mydir):
+    #         return
+    #     mod = item.getparent(pytest.Module).obj
+    #     if hasattr(mod, "hello"):
+    #         print(f"mod.hello {mod.hello!r}")
+
+
+def pytest_runtest_setup(item):
+    # called for running each test in 'a' directory
+    update_pytest_life_cycle_log("pytest_runtest_setup", "hook")
+    print("setting up", item)
+
+
+def pytest_html_report_title(report):
+    from nrobo import EnvKeys, NROBO_CONST
+    from nrobo.cli.cli_constants import NREPORT
+    import os
+    update_pytest_life_cycle_log("pytest_html_report_title", "hook")
+
+    _suffix = NREPORT.DEFAULT_REPORT_TITLE
+    _title_env = os.environ[EnvKeys.TITLE]
+    if _title_env not in [_suffix] and _title_env:
+        _title = os.environ[EnvKeys.TITLE]
+    elif os.environ[EnvKeys.APP].lower() not in [NROBO_CONST.NROBO.lower()]:
+        _title = f"{os.environ[EnvKeys.APP]} {_suffix}"
+    else:
+        _title = f"{_suffix}"
+
+    report.title = _title
+
+
+def pytest_html_results_summary(prefix, summary, postfix, session):
+    """Called before adding the summary section to the report"""
+
+    update_pytest_life_cycle_log("pytest_html_results_summary", "hook")
+
+
+def pytest_html_results_table_header(cells):
+    """Called after building results table header."""
+
+    update_pytest_life_cycle_log("pytest_html_results_table_header", "hook")
+
+
+def pytest_html_results_table_row(report, cells):
+    """Called after building results table row."""
+
+    update_pytest_life_cycle_log("pytest_html_results_table_row", "hook")
+
+
+def pytest_html_results_table_html(report, data):
+    """Called after building results table additional HTML."""
+
+    update_pytest_life_cycle_log("pytest_html_results_table_html", "hook")
+
+
+def pytest_html_duration_format(duration):
+    """Called before using the default duration formatting."""
+
+    update_pytest_life_cycle_log("pytest_html_duration_format", "hook")

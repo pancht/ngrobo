@@ -101,7 +101,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
-                                              "and should only having alphanumeric values.")
+                                              "and should only having alphanumeric values.", default="nRoBo")
     parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
     parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login.", default="")
     parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login.", default="")
@@ -117,6 +117,9 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument(f"--{nCLI.REPORT}",
                         help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
+    parser.add_argument(f"--{nCLI.REPORT_TITLE}",
+                        help="Defines HTML Report title.",
+                        default=f"{NREPORT.DEFAULT_REPORT_TITLE}")
     parser.add_argument(f"--{nCLI.TARGET}",
                         help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
     parser.add_argument(f"--{nCLI.VERSION}",

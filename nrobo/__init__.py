@@ -62,6 +62,7 @@ class EnvKeys:
     URL = "App Url"
     USERNAME = "Username"
     PASSWORD = "Password"
+    TITLE = "Title"
     BROWSER = "Browser"
     HOST_PLATFORM = "Host Platform"
     DEBUG = "debug mode"
@@ -78,6 +79,7 @@ os.environ[EnvKeys.APP] = "nRoBo"
 os.environ[EnvKeys.URL] = ""
 os.environ[EnvKeys.USERNAME] = ""
 os.environ[EnvKeys.PASSWORD] = ""
+os.environ[EnvKeys.TITLE] = ""
 os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
@@ -192,6 +194,8 @@ class NROBO_PATHS:
     PY_PROJECT_TOML_FILE = Path("pyproject.toml")
     README_RST_FILE = Path("README.rst")
     VALIDATE_NROBO_PY_FILE = Path("validatenrobo.py")
+
+    PYTEST_LIFE_CYCLE_LOGS = Path("key") / "experiments" / "pytest" / "pytest-life-cycle-logs"
 
 
 class NROBO_CLI_TOOL_PATH:
