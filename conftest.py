@@ -51,6 +51,13 @@ def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture
                                    f"Calling from {life_cycle_item} {item_type}")
 
 
+def update_pytest_life_cycle_log_with_value(value: str):
+    if detect.developer_machine():
+        from nrobo import NROBO_PATHS
+        Common.append_text_to_file(NROBO_PATHS.PYTEST_LIFE_CYCLE_LOGS,
+                                   f"\n{value}")
+
+
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constants import NREPORT
@@ -624,7 +631,7 @@ def pytest_runtest_setup(item):
     except AttributeError as ae:
         fixtureinfo = None
 
-    Common.append_text_to_file("key/experiments/pytest/pytest-life-cycle-logs", f"Function properties:\n"
+    update_pytest_life_cycle_log_with_value(f"Function properties:\n"
                                                                                 f"name={item.name}\n"
                                                                                 f"parent={item.parent}\n"
                                                                                 f"config={item.config}\n"
