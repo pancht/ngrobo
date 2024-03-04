@@ -5,6 +5,12 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.25.0] - On 2024.03.04
+
+#### Added
+- Introduced a new nRoBo command line switch, --title. If supplied, sets a custom report title of HTML report.
+- Added feature to run tests from specific modules, classes and packages. 
+
 ### [2024.24.0] - On 2024.03.01
 
 #### Added

@@ -15,10 +15,12 @@ from nrobo.exceptions import NRoBoBrowserNotSupported
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
 
-    DEFAULT_NROBO_ARGS = ['-n', '1', '--reruns-delay', '1', '--html', 'results/report.html',
+    DEFAULT_NROBO_ARGS = ['--app', 'nRoBo', '--title', 'Test_Automation_Report',
+                          '-n', '1', '--reruns-delay', '1', '--html', 'results/report.html',
                           '--durations-min', '0.005', '--verbosity', '0', '--browser',
                           'chrome', '--cache-clear', '--color', 'yes',
-                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml', 'results/junit-report.xml', '--alluredir', 'results/allure']
+                          '-r', 'fE', '--code-highlight', 'yes', '--junit-xml',
+                          'results/junit-report.xml', '--alluredir', 'results/allure']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
         """Replace key-value if given <key> is found in default nRoBo args
@@ -178,7 +180,7 @@ class TestNroboArgsPackage():
         command = ['pytest', SWITCH, APP]
         sys.argv = command.copy()
 
-        self._assert_command(command)
+        self._assert_command_replace_default_values(SWITCH, APP)
 
     def test_nrobo_cli_arg_url_switch(self):
         """Validate nRoBo cli --url switch: --url URL"""

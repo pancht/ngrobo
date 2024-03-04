@@ -122,10 +122,8 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                 elif key in nCLI.ARGS:
                     """process nrobo specific keys"""
-                    if key in [nCLI.APP, nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
-                        if key == nCLI.APP:
-                            os.environ[EnvKeys.APP] = value
-                        elif key == nCLI.URL:
+                    if key in [nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
+                        if key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
                         elif key == nCLI.USERNAME:
                             os.environ[EnvKeys.USERNAME] = value
