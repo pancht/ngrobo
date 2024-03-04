@@ -22,7 +22,7 @@ from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import *
 
 from nrobo.util.process import *
-from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES
+from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES, BoolArgs
 import nrobo.cli.detection as detect
 
 global __REQUIREMENTS__
@@ -87,7 +87,7 @@ def launcher_command(exit_on_failure=True):
                 if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
-                    if key == nCLI.SUPPRESS or key == nCLI.FULLPAGE_SCREENSHOT:
+                    if key == nCLI.SUPPRESS or key == nCLI.FULLPAGE_SCREENSHOT or key == BoolArgs.PYARGS:
                         continue
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)
@@ -112,8 +112,9 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                     else:
                         """simply add long keys to launcher command"""
-                        if key == nCLI.TARGET:
+                        if key == nCLI.TARGET or key == nCLI.FILES or key == BoolArgs.PYARGS:
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
+
                         if f"--{key}" in nCLI.DEFAULT_ARGS:
                             override_defaults.append(f"--{key}")
 
@@ -179,10 +180,15 @@ def launcher_command(exit_on_failure=True):
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
                     else:
-                        if key == nCLI.TARGET:
+                        if key == nCLI.TARGET or key == nCLI.FILES:
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
-                        command.append(f"--{key}")
-                        command.append(value)
+
+                        if key in [nCLI.APP, nCLI.REPORT_TITLE]:
+                            command.append(f"--{key}")
+                            command.append(str(value).replace(CONST.SPACE, CONST.UNDERSCORE))
+                        else:
+                            command.append(f"--{key}")
+                            command.append(value)
 
     if not args.browser:
         """browser not provided"""
@@ -224,6 +230,25 @@ def launcher_command(exit_on_failure=True):
         if k in override_defaults:
             continue  # skip adding k,v pair if it is already added by arg parse
         command = command + v
+
+    # Process files
+    if args.files:
+        files = args.files
+        for f in files:
+            command.append(f)
+
+    # Process files
+    if args.pyargs:
+        command.append(f"--{BoolArgs.PYARGS}")
+        files = args.pyargs
+        for f in files:
+            command.append(f)
+
+    if args.pyargs and args.files:
+        # Error
+        console.print(f"[{STYLE.HLRed}]--{BoolArgs.PYARGS} and --{nCLI.FILES} "
+                      f"switch can not be used in combination![/]")
+        exit(1)
 
     return command, args, command_builder_notes
 

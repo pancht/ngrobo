@@ -20,6 +20,11 @@ import argparse
 from nrobo.cli.cli_constants import nCLI, NREPORT
 from nrobo.cli.nglobals import Browsers
 
+
+class BoolArgs:
+    PYARGS = "pyargs"
+
+
 BOOL_SWITCHES = [
     f"--{nCLI.INSTALL}",
     f"--{nCLI.VERSION}",
@@ -57,7 +62,7 @@ BOOL_SWITCHES = [
     "--continue-on-collection-errors",
     "--co",
     "--collect-only",
-    "--pyargs",
+    f"--{BoolArgs.PYARGS}",
     "--noconftest",
     "--keep-duplicates",
     "--collect-in-virtualenv",
@@ -96,7 +101,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "
-                                              "and should only having alphanumeric values.")
+                                              "and should only having alphanumeric values.", default="nRoBo")
     parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
     parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login.", default="")
     parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login.", default="")
@@ -112,6 +117,9 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument(f"--{nCLI.REPORT}",
                         help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. Options are <html> | <allure>. Default is <html>",
                         default="html")
+    parser.add_argument(f"--{nCLI.REPORT_TITLE}",
+                        help="Defines HTML Report title.",
+                        default=f"{NREPORT.DEFAULT_REPORT_TITLE}")
     parser.add_argument(f"--{nCLI.TARGET}",
                         help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}")
     parser.add_argument(f"--{nCLI.VERSION}",
@@ -128,6 +136,8 @@ def nrobo_cli_parser(exit_on_failure=True):
         """.format(Browsers.CHROME, Browsers.CHROME_HEADLESS, Browsers.ANTI_BOT_CHROME,
                    Browsers.FIREFOX, Browsers.FIREFOX_HEADLESS,
                    Browsers.SAFARI, Browsers.EDGE))
+    parser.add_argument(f"--{nCLI.FILES}",
+                        help="Input files", nargs='+')
     parser.add_argument(f"--{nCLI.BROWSER_CONFIG}", help="""
             Path of browser-config-file containing additional options that is/are needed to be applied
             before browser instantiation. Each line in file should contain one option only.
@@ -354,9 +364,9 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser.add_argument("--co", "--collect-only", help="""
                 only collect tests, don't execute them.
                 """, action="store_true")
-    parser.add_argument("--pyargs", help="""
+    parser.add_argument(f"--{BoolArgs.PYARGS}", nargs='+', help="""
                 try to interpret all arguments as python packages.
-                """, action="store_true")
+                """)
     parser.add_argument("--ignore", help="""
                 --ignore=path. ignore path during collection (multi-allowed).
                 """)

@@ -84,10 +84,6 @@ def publish(target, *, debug: bool = False, override: bool = False):
             build_version = get_version_from_yaml_version_files(target)
             write_new_version_to_nrobo_init_py_file(build_version)
 
-            # Append download stats to README.rst file
-            from cli.downloads import downloads
-            downloads()
-
             console.rule(f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully.")
 
 

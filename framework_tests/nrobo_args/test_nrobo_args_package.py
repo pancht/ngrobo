@@ -8,7 +8,7 @@ import pytest
 from nrobo import terminal
 from nrobo.cli.launcher import launcher_command
 from nrobo.cli.cli_constants import NREPORT
-from nrobo.cli.nrobo_args import BOOL_SWITCHES
+from nrobo.cli.nrobo_args import BOOL_SWITCHES, BoolArgs
 from nrobo.exceptions import NRoBoBrowserNotSupported
 
 
@@ -54,7 +54,7 @@ class TestNroboArgsPackage():
                     # key matches
                     if src[_idx_src] == "pytest":
                         break
-                    elif src[_idx_src] in BOOL_SWITCHES:
+                    elif src[_idx_src] in BOOL_SWITCHES and not src[_idx_src] == f"--{BoolArgs.PYARGS}":
                         break
                     else:
                         if src[_idx_src + 1] == dest[_idx_dest + 1]:
@@ -1334,12 +1334,13 @@ class TestNroboArgsPackage():
         self._assert_command_is_None()
 
     def test_nrobo_cli_arg_pyargs_switch(self):
-        """Validate nRoBo cli --pyargs switch: --co """
+        """Validate nRoBo cli --pyargs switch: --pyargs """
 
         SWITCH = '--pyargs'
+        VALUE = 'pkg.apple'
 
         from nrobo.cli.launcher import launcher_command
-        command = ['pytest', SWITCH]
+        command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
         self._assert_command(command)
