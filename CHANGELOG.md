@@ -8,8 +8,8 @@
 ### [2024.25.0] - On 2024.03.04
 
 #### Added
-- Introduced a new nRoBo command line switch, --title. If supplied, sets a custom report title of HTML report.
-- Added feature to run tests from specific modules, classes and packages. 
+- Introduced a new nRoBo command line switch, --title. If supplied, sets a [custom report title of HTML report](https://youtu.be/Qq49PwXP4bE?si=GMT61kFaOo0KJLiJ).
+- Added feature to run tests from specific [modules](https://youtu.be/FR0G-ifr_a4?si=kv553Qb2gMNkHSJl), [classes](https://youtu.be/F5lrKKJhd84?si=Gf-fhBc46C2HpANI) and [packages](https://youtu.be/clUgVfoPZUc?si=8RBiP_Vk21A_6BJB). 
 
 ### [2024.24.0] - On 2024.03.01
 
