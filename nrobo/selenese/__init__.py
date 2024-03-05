@@ -913,11 +913,19 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         Can be used to check if a checkbox or radio button is selected.
         """
-        return self.find_element(by, value).is_selected()
+
+        try:
+            return self.find_element(by, value).is_selected()
+        except Exception as e:
+            return False
 
     def is_enabled(self, by=By.ID, value: Optional[str] = None) -> bool:
         """Returns whether the element is enabled."""
-        return self.find_element(by, value).is_enabled()
+
+        try:
+            return self.find_element(by, value).is_enabled()
+        except Exception as e:
+            return False
 
     def send_keys(self, by=By.ID, value: Optional[str] = None, *text) -> None:
         """Simulates typing into the element.
