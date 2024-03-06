@@ -81,18 +81,23 @@ def confirm_update() -> None:
 
         version_forced_update = Version(host_version.version)
 
-        if Version.present_is_a_major_release(pypi_version.version, host_version.version)\
-                and host_version <= Version("2024.12.0"):
+        if Version.present_is_a_major_release(pypi_version.version, host_version.version):
             request_version = Version.first_major_release(pypi_version.version)
             terminal(['pip', 'install', '--upgrade', f'nrobo=={request_version}', '--require-virtualenv'],
                      debug=False)
+            console.rule(f"[{STYLE.HLOrange}]NOTE: A silent major update was installed from "
+                         f"{host_version.version} => {pypi_version.version}. Please rerun tests.")
+            exit(0)
 
-        elif Version.present_is_a_minor_release(pypi_version.version, host_version.version)\
-                and host_version <= Version("2024.12.0"):
+        elif Version.present_is_a_minor_release(pypi_version.version, host_version.version):
 
             request_version = Version.first_minor_release(pypi_version.version)
             terminal(['pip', 'install', '--upgrade', f'nrobo=={request_version}', '--require-virtualenv'],
                      debug=False)
+
+            console.rule(f"[{STYLE.HLOrange}]NOTE: A silent minor update was installed from "
+                         f"{host_version.version} => {pypi_version.version}. Please rerun tests.")
+            exit(0)
 
         elif host_version <= Version("2024.12.0"):
             # forced update and apply patch delivered in give version
@@ -112,6 +117,10 @@ def confirm_update() -> None:
         # Ok. Since the host version is lower than the latest version,
         # Lets' ask host user if he/she wants to upgrade.
         from nrobo import EnvKeys
+        # Enabled Major and Minor release by default.
+        # Thus, stopping patch releases from version 2024.25.8
+        return
+
         if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
             """Return as --suppress switch is supplied"""
             return
