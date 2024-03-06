@@ -5,6 +5,11 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.25.6] - On 2024.03.06
+
+#### Fixed
+- [Issue with upgrade](https://github.com/pancht/ngrobo/issues/87) 
+
 ### [2024.25.0] - On 2024.03.04
 
 #### Added

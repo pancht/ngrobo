@@ -100,7 +100,8 @@ def confirm_update() -> None:
             terminal(['pip', 'install', '--upgrade', f'nrobo=={(host_version + 1).version}', '--require-virtualenv'],
                      debug=False)
 
-        if detect.production_machine() and not detect.developer_machine():
+        if detect.production_machine() and not detect.developer_machine()\
+                and host_version <= Version("2024.12.0"):
             console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
             exit(EXIT_CODES['10001'][0])
 
@@ -110,6 +111,10 @@ def confirm_update() -> None:
     if host_version < pypi_version:
         # Ok. Since the host version is lower than the latest version,
         # Lets' ask host user if he/she wants to upgrade.
+        from nrobo import EnvKeys
+        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
+            """Return as --suppress switch is supplied"""
+            return
 
         _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
         from nrobo import console, terminal, STYLE

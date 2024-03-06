@@ -87,8 +87,10 @@ def launcher_command(exit_on_failure=True):
                 if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
                         and proceed with next key"""
-                    if key == nCLI.SUPPRESS or key == nCLI.FULLPAGE_SCREENSHOT or key == BoolArgs.PYARGS:
+                    if key == nCLI.FULLPAGE_SCREENSHOT or key == BoolArgs.PYARGS:
                         continue
+                    elif key == nCLI.SUPPRESS:
+                        os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(['pytest', f"--{key}"], debug=True)
                         return None, None, None

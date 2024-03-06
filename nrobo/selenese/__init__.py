@@ -50,6 +50,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 from selenium.webdriver.common.actions.wheel_input import WheelInput
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.common.actions.key_input import KeyInput
+from selenium.common.exceptions import NoSuchElementException
 
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 
@@ -499,6 +500,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
         WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
             .until(expected_conditions.presence_of_element_located([by, value]))
+
         return self.driver.find_element(by, value)
 
     def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
@@ -911,11 +913,19 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         Can be used to check if a checkbox or radio button is selected.
         """
-        return self.find_element(by, value).is_selected()
+
+        try:
+            return self.find_element(by, value).is_selected()
+        except Exception as e:
+            return False
 
     def is_enabled(self, by=By.ID, value: Optional[str] = None) -> bool:
         """Returns whether the element is enabled."""
-        return self.find_element(by, value).is_enabled()
+
+        try:
+            return self.find_element(by, value).is_enabled()
+        except Exception as e:
+            return False
 
     def send_keys(self, by=By.ID, value: Optional[str] = None, *text) -> None:
         """Simulates typing into the element.
@@ -954,7 +964,10 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     # RenderedWebElement Items
     def is_displayed(self, by=By.ID, value: Optional[str] = None) -> bool:
         """Whether the element is visible to a user."""
-        return self.driver.find_element(by, value).is_displayed()
+        try:
+            return self.driver.find_element(by, value).is_displayed()
+        except NoSuchElementException as e:
+            return False
 
     def location_once_scrolled_into_view(self, by=By.ID, value: Optional[str] = None) -> dict:
         """THIS PROPERTY MAY CHANGE WITHOUT WARNING. Use this to discover where

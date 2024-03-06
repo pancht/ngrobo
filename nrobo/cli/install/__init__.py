@@ -46,9 +46,10 @@ def transfer_files_to_host_project() -> None:
         patch_2024_6_12 = NP.NROBO_DIR / "patch_2024_6_12"
         patch_2024_19_5 = NP.NROBO_DIR / NP.PATCHES / "2024.19.5"
 
-        if patch_2024_19_5.exists():
+        if patch_2024_19_5.exists() and host_version < Version("2024.20.0"):
             return
-        else:
+
+        if host_version < Version("2024.20.0"):
             # apply patch for 2024.19.4
             # [NewFile] Copy browserConfigs/markers.yaml to user's project dir from nrobo
             copy_file(NP.NROBO_DIR / NP.MARKERS_YAML
@@ -63,9 +64,10 @@ def transfer_files_to_host_project() -> None:
             print("\n")
             exit(1)
 
-        if patch_2024_6_12.exists():
+        if patch_2024_6_12.exists() and host_version < Version("2024.7.0"):
             return
-        else:
+
+        if host_version < Version("2024.7.0"):
             if Version(get_host_version()) == Version("2024.6.12"):
                 from nrobo.util.filesystem import remove_file
                 if patch_2024_6_10.exists():
@@ -73,9 +75,10 @@ def transfer_files_to_host_project() -> None:
                 # Create new patch file
                 Common.write_text_to_file(NP.NROBO_DIR / "patch_2024_6_12", "")
 
-        if patch_2024_6_10.exists():
+        if patch_2024_6_10.exists() and host_version < Version("2024.7.0"):
             return
-        else:
+
+        if host_version < Version("2024.7.0"):
             # Apply patches
 
             if Version(get_host_version()) == Version("2024.6.10"):
