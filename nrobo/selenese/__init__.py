@@ -25,6 +25,7 @@ from typing import List, Optional, Union
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
+from appium.webdriver.common.appiumby import AppiumBy
 from selenium.webdriver.common.print_page_options import PrintOptions
 from selenium.webdriver.common.timeouts import Timeouts
 from selenium.webdriver.common.virtual_authenticator \
@@ -34,6 +35,7 @@ from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
 from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.webdriver import WebDriver
+from appium.webdriver.webdriver import WebDriver as AppiumWebDriver
 from selenium.webdriver.support.select import Select
 from nrobo import *
 from nrobo.cli.tools import nprint
@@ -53,6 +55,7 @@ from selenium.webdriver.common.actions.key_input import KeyInput
 from selenium.common.exceptions import NoSuchElementException
 
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
+AnyBy = Union[By, AppiumBy]
 
 
 class WAITS:
@@ -83,7 +86,7 @@ class WebdriverWrapperNrobo(WebDriver):
     """Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
     This class is not instantiable."""
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger):
         """Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
@@ -107,6 +110,10 @@ class WebdriverWrapperNrobo(WebDriver):
         self._windows = _windows
 
     def update_windows(self, _window_handles: list[str] = None):
+
+        if bool(os.environ[EnvKeys.APPIUM]):
+            return
+
         for _wh in _window_handles:
             # switch to current window
             self.switch_to_window(_wh)
@@ -221,6 +228,10 @@ class WebdriverWrapperNrobo(WebDriver):
             ::
 
                 <obj>.window_handles"""
+
+        if bool(os.environ[EnvKeys.APPIUM]):
+            return []
+
         return self.driver.window_handles
 
     def maximize_window(self) -> None:
@@ -487,7 +498,7 @@ class WebdriverWrapperNrobo(WebDriver):
         """
         self.driver.timeouts = timeouts
 
-    def find_element(self, by=By.ID, value: Optional[str] = None) -> WebElement:
+    def find_element(self, by: AnyBy, value: Optional[str] = None) -> WebElement:
         """Find an element given a By strategy and locator.
 
         :Usage:
@@ -497,13 +508,12 @@ class WebdriverWrapperNrobo(WebDriver):
 
         :rtype: WebElement
         """
-
         WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
-            .until(expected_conditions.presence_of_element_located([by, value]))
+                .until(expected_conditions.presence_of_element_located([by, value]))
 
         return self.driver.find_element(by, value)
 
-    def find_elements(self, by=By.ID, value: Optional[str] = None) -> List[WebElement]:
+    def find_elements(self, by: AnyBy, value: Optional[str] = None) -> List[WebElement]:
         """Find elements given a By strategy and locator.
 
         :Usage:
@@ -797,7 +807,7 @@ class WebdriverWrapperNrobo(WebDriver):
 class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     """NRobo webelement wrapper class"""
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger):
         """
         Constructor - NroboSeleniumWrapper
 
@@ -806,21 +816,21 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         super().__init__(driver, logger)
 
-    def tag_name(self, by=By.ID, value: Optional[str] = None) -> str:
+    def tag_name(self, by: AnyBy, value: Optional[str] = None) -> str:
         """This element's ``tagName`` property."""
         return super().find_element(by, value).tag_name
 
-    def text(self, by=By.ID, value: Optional[str] = None) -> str:
+    def text(self, by: AnyBy, value: Optional[str] = None) -> str:
         """The text of the element."""
         return self.find_element(by, value).text
 
-    def click(self, by=By.ID, value: Optional[str] = None) -> None:
+    def click(self, by: AnyBy, value: Optional[str] = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
 
         self.update_windows(self.window_handles)
 
-    def click_and_wait(self, by=By.ID, value: Optional[str] = None, wait: int = None) -> None:
+    def click_and_wait(self, by: AnyBy, value: Optional[str] = None, wait: int = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
 
@@ -831,7 +841,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         self.update_windows(self.window_handles)
 
-    def element_to_be_clickable(self, by=By.ID, value: Optional[str] = None) -> None:
+    def element_to_be_clickable(self, by: AnyBy, value: Optional[str] = None) -> None:
         """
         wait for <wait> seconds mentioned in nrobo-config.yaml till the element is clickble.
 
@@ -845,15 +855,15 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
             expected_conditions.element_to_be_clickable([by, value]))
         self.click(by, value)
 
-    def submit(self, by=By.ID, value: Optional[str] = None):
+    def submit(self, by: AnyBy, value: Optional[str] = None):
         """Submits a form."""
         self.find_element(by, value).submit()
 
-    def clear(self, by=By.ID, value: Optional[str] = None) -> None:
+    def clear(self, by: AnyBy, value: Optional[str] = None) -> None:
         """Clears the text if it's a text entry element."""
         self.find_element(by, value).clear()
 
-    def get_property(self, name, by=By.ID, value: Optional[str] = None) -> str | bool | WebElement | dict:
+    def get_property(self, name, by: AnyBy, value: Optional[str] = None) -> str | bool | WebElement | dict:
         """Gets the given property of the element.
 
         :Args:
@@ -866,7 +876,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).get_property(name)
 
-    def get_dom_attribute(self, name, by=By.ID, value: Optional[str] = None) -> str:
+    def get_dom_attribute(self, name, by: AnyBy, value: Optional[str] = None) -> str:
         """Gets the given attribute of the element. Unlike
         :func:`~selenium.webdriver.remote.BaseWebElement.get_attribute`, this
         method only returns attributes declared in the element's HTML markup.
@@ -881,7 +891,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).get_dom_attribute(name)
 
-    def get_attribute(self, name, by=By.ID, value: Optional[str] = None) -> str | None:
+    def get_attribute(self, name, by: AnyBy, value: Optional[str] = None) -> str | None:
         """Gets the given attribute or property of the element.
 
         This method will first try to return the value of a property with the
@@ -908,7 +918,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).get_attribute(name)
 
-    def is_selected(self, by=By.ID, value: Optional[str] = None) -> bool:
+    def is_selected(self, by: AnyBy, value: Optional[str] = None) -> bool:
         """Returns whether the element is selected.
 
         Can be used to check if a checkbox or radio button is selected.
@@ -919,7 +929,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         except Exception as e:
             return False
 
-    def is_enabled(self, by=By.ID, value: Optional[str] = None) -> bool:
+    def is_enabled(self, by: AnyBy, value: Optional[str] = None) -> bool:
         """Returns whether the element is enabled."""
 
         try:
@@ -927,7 +937,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         except Exception as e:
             return False
 
-    def send_keys(self, by=By.ID, value: Optional[str] = None, *text) -> None:
+    def send_keys(self, by: AnyBy, value: Optional[str] = None, *text) -> None:
         """Simulates typing into the element.
 
         :Args:
@@ -951,7 +961,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         self.find_element(by, value).send_keys(text)
 
-    def shadow_root(self, by=By.ID, value: Optional[str] = None) -> ShadowRoot:
+    def shadow_root(self, by: AnyBy, value: Optional[str] = None) -> ShadowRoot:
         """Returns a shadow root of the element if there is one or an error.
         Only works from Chromium 96, Firefox 96, and Safari 16.4 onwards.
 
@@ -962,14 +972,14 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         return self.find_element(by, value).shadow_root
 
     # RenderedWebElement Items
-    def is_displayed(self, by=By.ID, value: Optional[str] = None) -> bool:
+    def is_displayed(self, by: AnyBy, value: Optional[str] = None) -> bool:
         """Whether the element is visible to a user."""
         try:
             return self.driver.find_element(by, value).is_displayed()
         except NoSuchElementException as e:
             return False
 
-    def location_once_scrolled_into_view(self, by=By.ID, value: Optional[str] = None) -> dict:
+    def location_once_scrolled_into_view(self, by: AnyBy, value: Optional[str] = None) -> dict:
         """THIS PROPERTY MAY CHANGE WITHOUT WARNING. Use this to discover where
         on the screen an element is so that we can click it. This method should
         cause the element to be scrolled into view.
@@ -979,31 +989,31 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).location_once_scrolled_into_view
 
-    def size(self, by=By.ID, value: Optional[str] = None) -> dict:
+    def size(self, by: AnyBy, value: Optional[str] = None) -> dict:
         """The size of the element."""
         return self.find_element(by, value).size
 
-    def value_of_css_property(self, property_name, by=By.ID, value: Optional[str] = None) -> str:
+    def value_of_css_property(self, property_name, by: AnyBy, value: Optional[str] = None) -> str:
         """The value of a CSS property."""
         return self.find_element(by, value).value_of_css_property(property_name)
 
-    def location(self, by=By.ID, value: Optional[str] = None) -> dict:
+    def location(self, by: AnyBy, value: Optional[str] = None) -> dict:
         """The location of the element in the renderable canvas."""
         return self.find_element(by, value).location
 
-    def rect(self, by=By.ID, value: Optional[str] = None) -> dict:
+    def rect(self, by: AnyBy, value: Optional[str] = None) -> dict:
         """A dictionary with the size and location of the element."""
         return self.find_element(by, value).rect
 
-    def aria_role(self, by=By.ID, value: Optional[str] = None) -> str:
+    def aria_role(self, by: AnyBy, value: Optional[str] = None) -> str:
         """Returns the ARIA role of the current web element."""
         return self.find_element(by, value).aria_role
 
-    def accessible_name(self, by=By.ID, value: Optional[str] = None) -> str:
+    def accessible_name(self, by: AnyBy, value: Optional[str] = None) -> str:
         """Returns the ARIA Level of the current webelement."""
         return self.find_element(by, value).accessible_name
 
-    def screenshot_as_base64(self, by=By.ID, value: Optional[str] = None) -> str:
+    def screenshot_as_base64(self, by: AnyBy, value: Optional[str] = None) -> str:
         """Gets the screenshot of the current element as a base64 encoded
         string.
 
@@ -1014,7 +1024,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).screenshot_as_base64
 
-    def screenshot_as_png(self, by=By.ID, value: Optional[str] = None) -> bytes:
+    def screenshot_as_png(self, by: AnyBy, value: Optional[str] = None) -> bytes:
         """Gets the screenshot of the current element as a binary data.
 
         :Usage:
@@ -1024,7 +1034,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).screenshot_as_png
 
-    def screenshot(self, filename, by=By.ID, value: Optional[str] = None) -> bool:
+    def screenshot(self, filename, by: AnyBy, value: Optional[str] = None) -> bool:
         """Saves a screenshot of the current element to a PNG image file.
         Returns False if there is any IOError, else returns True. Use full
         paths in your filename.
@@ -1040,12 +1050,12 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """
         return self.find_element(by, value).screenshot(filename)
 
-    def parent(self, by=By.ID, value: Optional[str] = None):
+    def parent(self, by: AnyBy, value: Optional[str] = None):
         """Internal reference to the WebDriver instance this element was found
         from."""
         return self.find_element(by, value).parent
 
-    def id(self, by=By.ID, value: Optional[str] = None) -> str:
+    def id(self, by: AnyBy, value: Optional[str] = None) -> str:
         """Internal ID used by selenium.
 
         This is mainly for internal use. Simple use cases such as checking if 2
@@ -1062,7 +1072,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
     Nrobo implementation of wait methods
     """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger):
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger):
         """
         Constructor - NroboSeleniumWrapper
 
@@ -1077,7 +1087,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
         if bool(os.environ[EnvKeys.APPIUM]):
             return
-        
+
         nprint("Wait for page load...", style=STYLE.HLOrange)
         try:
             # Webdriver implementation of page load timeout
@@ -1120,10 +1130,12 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
         nprint("end of wait for element invisible", style=STYLE.PURPLE4)
 
-    def wait_for_element_to_be_clickable(self, timeout=None, by=By.ID, value: Optional[str] = None):
+    def wait_for_element_to_be_clickable(self, timeout=None, by: AnyBy = None, value: Optional[str] = None):
         """
         wait till element is visible and clickable.
 
+        :param value:
+        :param by:
         :param timeout:
         :return:
         """
@@ -1131,7 +1143,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
 
 class ActionChainsNrobo(WaitImplementationsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
@@ -1148,7 +1160,7 @@ class ActionChainsNrobo(WaitImplementationsNrobo):
 
 
 class AlertNrobo(ActionChainsNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper
@@ -1193,7 +1205,7 @@ class ByNrobo(AlertNrobo):
     Wrapper class for selenium class: By
     """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor
@@ -1207,7 +1219,7 @@ class ByNrobo(AlertNrobo):
 class DesiredCapabilitiesNrobo(ByNrobo):
     """Wrapper class for selenium class: DesiredCapabilities"""
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor
@@ -1219,7 +1231,7 @@ class DesiredCapabilitiesNrobo(ByNrobo):
 
 
 class SelectNrobo(DesiredCapabilitiesNrobo):
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor
@@ -1229,7 +1241,7 @@ class SelectNrobo(DesiredCapabilitiesNrobo):
         """
         super().__init__(driver, logger, duration=duration, devices=devices)
 
-    def select(self, by=By.ID, value: Optional[str] = None) -> Select:
+    def select(self, by: AnyBy, value: Optional[str] = None) -> Select:
         """
         Get SELECT element
 
@@ -1282,7 +1294,7 @@ class NRobo(SelectNrobo):
 
         """
 
-    def __init__(self, driver: Union[None, WebDriver], logger: logging.Logger, duration: int = 250,
+    def __init__(self, driver: Union[None, WebDriver, AppiumWebDriver], logger: logging.Logger, duration: int = 250,
                  devices: list[AnyDevice] | None = None):
         """
         Constructor - NroboSeleniumWrapper

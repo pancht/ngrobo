@@ -42,6 +42,7 @@ import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
 from nrobo.appium import AUTOMATION_NAMES, CAPABILITY
+from selenium.common.exceptions import WebDriverException
 
 
 def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
@@ -129,7 +130,11 @@ def add_capabilities_from_file(options):
        and return updated options"""
     from nrobo.util.common import Common
     from nrobo import NROBO_PATHS, Environment, EnvKeys
-    capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_YAML)
+    if detect.production_machine() and not detect.developer_machine():
+        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_YAML)
+    else:
+        capabilities = Common.read_yaml(
+            NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_YAML)
 
     for k, v in capabilities.items():
         options.set_capability(k, v)
@@ -143,7 +148,11 @@ def get_appium_capabilities_from_file():
        return appium_capabilities"""
     from nrobo.util.common import Common
     from nrobo import NROBO_PATHS, Environment, EnvKeys
-    capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_APPIUM_YAML)
+    if detect.production_machine() and not detect.developer_machine():
+        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_APPIUM_YAML)
+    else:
+        capabilities = Common.read_yaml(
+            NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_APPIUM_YAML)
 
     return capabilities
 
@@ -258,7 +267,7 @@ def driver(request):
     update_pytest_life_cycle_log("driver")
 
     # Access pytest command line options
-    from nrobo import EnvKeys
+    from nrobo import EnvKeys, console
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
 
     # get and set url
@@ -291,7 +300,22 @@ def driver(request):
             from appium.options.android import UiAutomator2Options
 
             options = UiAutomator2Options().load_capabilities(capabilities)
-            _driver = _webdriver.Remote(_grid_server_url, options=options)
+
+            _grid_url_missing = False
+
+            if _grid_server_url is None:
+                _grid_url_missing = True
+                _grid_server_url = "http://localhost:4723"
+
+            try:
+                _driver = _webdriver.Remote(_grid_server_url, options=options)
+            except Exception as e:
+                if _grid_url_missing:
+                    console.rule(f"[{STYLE.HLRed}]\n\nAppium server url is missing![/]\n\n")
+                else:
+                    console.rule(f"[{STYLE.HLRed}]\n\nIt seems like appium server is not running? "
+                                 f"\nor Is appium server url incorrect?"
+                                 f"\nPlease check!!![/]\n\n")
 
     elif browser == Browsers.CHROME:
         """if browser requested is chrome"""
