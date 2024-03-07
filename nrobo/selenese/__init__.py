@@ -1075,6 +1075,9 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         """Waits for give timeout time for page to completely load.
         timeout time is configurable in nrobo-config.yaml"""
 
+        if bool(os.environ[EnvKeys.APPIUM]):
+            return
+        
         nprint("Wait for page load...", style=STYLE.HLOrange)
         try:
             # Webdriver implementation of page load timeout

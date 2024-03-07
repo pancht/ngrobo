@@ -53,6 +53,7 @@ class EnvKeys:
 
         and many more such...
     """
+    APPIUM = "appium"
     PIP_COMMAND = "Pip Command"
     EXEC_DIR = "Execution Directory"
     NROBO_DIR = "nRoBo Installation Directory"
@@ -70,6 +71,7 @@ class EnvKeys:
 
 
 # load environment keys with defaults
+os.environ[EnvKeys.APPIUM] = "False"
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
@@ -90,11 +92,13 @@ class NROBO_PATHS:
     """nRoBo framework directories and files"""
     EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
     NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])
+    NODE_MODULES = Path("node_modules")
     PATCHES = Path("patches")
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
     BROWSER_CONFIGS = Path("browserConfigs")
     CAPABILITY_YAML = BROWSER_CONFIGS / "capability.yaml"
+    CAPABILITY_APPIUM_YAML = BROWSER_CONFIGS / "appium_capability.yaml"
     MARKERS_YAML = BROWSER_CONFIGS / "markers.yaml"
 
     # Browsers packages
@@ -139,6 +143,7 @@ class NROBO_PATHS:
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
     FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
+    MOBILE = Path("mobile")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     GUI = FRAMEWORK_TESTS / Path("gui")
     GUI_PKG = GUI / INIT_PY

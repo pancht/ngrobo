@@ -47,7 +47,7 @@ def main():
         greet_the_guest()
 
         # install dependencies
-        install_nrobo(None)
+        install_nrobo(install_only=True)
 
         # verify python installation and version
         verify_set_python_install_pip_command()

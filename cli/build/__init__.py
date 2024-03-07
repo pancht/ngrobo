@@ -193,13 +193,7 @@ def copy_conftest_file() -> None:
 def delete_dist_folder() -> None:
     """Deletes dist folder for vacating space for fresh packages."""
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-        try:
-            remove_files_recursively(__DIST_DIR__)
-        except Exception as e:
-            print(e)
-    elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-        terminal(["del", "/q", "/S", __DIST_DIR__ + os.sep + "*.*"])
+    remove_files_recursively(__DIST_DIR__)
 
 
 def run_build_command() -> None:
