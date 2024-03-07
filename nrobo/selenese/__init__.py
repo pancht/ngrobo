@@ -48,7 +48,7 @@ from selenium.webdriver.support import expected_conditions
 from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
 from nrobo.cli.nglobals import *
-from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import UnexpectedAlertPresentException, WebDriverException
 from selenium.webdriver.common.actions.wheel_input import WheelInput
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.common.actions.key_input import KeyInput
@@ -112,7 +112,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
     def update_windows(self, _window_handles: list[str] = None):
 
-        if bool(os.environ[EnvKeys.APPIUM]):
+        if int(os.environ[EnvKeys.APPIUM]):
             return
 
         for _wh in _window_handles:
@@ -230,7 +230,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
                 <obj>.window_handles"""
 
-        if bool(os.environ[EnvKeys.APPIUM]):
+        if int(os.environ[EnvKeys.APPIUM]):
             return []
 
         return self.driver.window_handles
@@ -509,8 +509,9 @@ class WebdriverWrapperNrobo(WebDriver):
 
         :rtype: WebElement
         """
+
         WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
-                .until(expected_conditions.presence_of_element_located([by, value]))
+            .until(expected_conditions.presence_of_element_located((by, value)))
 
         return self.driver.find_element(by, value)
 
@@ -525,7 +526,7 @@ class WebdriverWrapperNrobo(WebDriver):
         :rtype: list of WebElement
         """
         WebDriverWait(self.driver, self.nconfig[WAITS.ELE_WAIT]) \
-            .until(expected_conditions.presence_of_element_located([by, value]))
+            .until(expected_conditions.presence_of_element_located((by, value)))
         return self.driver.find_elements(by, value)
 
     @property
@@ -828,7 +829,6 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     def click(self, by: AnyBy, value: Optional[str] = None) -> None:
         """Clicks the element."""
         self.find_element(by, value).click()
-
         self.update_windows(self.window_handles)
 
     def click_and_wait(self, by: AnyBy, value: Optional[str] = None, wait: int = None) -> None:
@@ -1086,7 +1086,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         """Waits for give timeout time for page to completely load.
         timeout time is configurable in nrobo-config.yaml"""
 
-        if bool(os.environ[EnvKeys.APPIUM]):
+        if int(os.environ[EnvKeys.APPIUM]):
             return
 
         nprint("Wait for page load...", style=STYLE.HLOrange)

@@ -60,15 +60,31 @@ def run_unit_tests(debug=False) -> int:
                                          '--url', 'http://google.com',
                                          '--username', 'shiva',
                                          '--password', 'tandava',
-                                         '--target', "report.html"],
+                                         '--target', "web_tests_report.html"],
                                         debug=debug, use_os_system_call=True)
-    if return_code_unit_test_run == 0:
+    if return_code_web_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
     else:
         console.rule(f"[{STYLE.HLRed}]Exit. [Reason] One or more web tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.",  style=f"{STYLE.HLRed}")
-        return_code_web_test_run
+        return return_code_web_test_run
 
-    console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/] and [{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
+    return_code_mobile_test_run = terminal(['python', 'nrobo.py',
+                                            '--appium',
+                                            '--grid', 'http://localhost:4723',
+                                            '--target', "mobile_tests_report.html"],
+                                        debug=debug, use_os_system_call=True)
+    if return_code_mobile_test_run == 0:
+        console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Mobile tests[/] [{STYLE.BOLD}]PASSED[/].")
+    else:
+        console.rule(
+            f"[{STYLE.HLRed}]Exit. [Reason] One or more mobile tests [{STYLE.BOLD}]failed[/]! Please fix them to "
+            f"proceed.",
+            style=f"{STYLE.HLRed}")
+        return return_code_mobile_test_run
+
+    console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/], "
+                 f"[{STYLE.ITALIC}]Web tests[/] and "
+                 f"[{STYLE.ITALIC}]Mobile tests[/] [{STYLE.BOLD}]PASSED[/].")
     # file:///Users/einsteinpanchdev/webdev/nrobo/results-unittests/nrobo_unit_tests_run_report.html
 
     from nrobo.cli.cli_constants import NREPORT

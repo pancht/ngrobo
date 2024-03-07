@@ -289,7 +289,8 @@ def driver(request):
                        NREPORT.LOG_DIR_DRIVER + os.sep + \
                        test_method_name + NREPORT.LOG_EXTENTION
 
-    if bool(os.environ[EnvKeys.APPIUM]):
+    if int(os.environ[EnvKeys.APPIUM]):
+
         """get appium driver with given capabilities"""
         from appium import webdriver as _webdriver
 
@@ -637,7 +638,7 @@ def pytest_configure(config):
 
     os.environ[EnvKeys.TITLE] = str(config.getoption(f'--{nCLI.REPORT_TITLE}')).replace(CONST.UNDERSCORE, CONST.SPACE)
     os.environ[EnvKeys.APP] = str(config.getoption(f'--{nCLI.APP}')).replace(CONST.UNDERSCORE, CONST.SPACE)
-    os.environ[EnvKeys.APPIUM] = str(config.getoption(f'--{nCLI.APPIUM}'))
+    os.environ[EnvKeys.APPIUM] = "1" if str(config.getoption(f'--{nCLI.APPIUM}')) == "True" else "0"
 
     # add custom markers
     config.addinivalue_line("markers", "sanity: marks as sanity test")

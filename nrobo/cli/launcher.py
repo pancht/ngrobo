@@ -281,8 +281,11 @@ def launcher_command(exit_on_failure=True):
         exit(1)
 
     # select tests directory
-    if args.appium:
-        command.append(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE)
+    if not args.files:
+        if args.appium:
+            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE))
+        else:
+            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB))
 
     return command, args, command_builder_notes
 

@@ -5,3 +5,4 @@ appPackage: com.android.settings
 appActivity: .Settings
 language: en
 locale: US
+avdReadyTimeout: 30

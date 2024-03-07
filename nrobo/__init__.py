@@ -71,7 +71,7 @@ class EnvKeys:
 
 
 # load environment keys with defaults
-os.environ[EnvKeys.APPIUM] = "False"
+os.environ[EnvKeys.APPIUM] = "0"
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
@@ -144,11 +144,12 @@ class NROBO_PATHS:
     FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
     MOBILE = Path("mobile")
+    WEB = Path("web")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
-    GUI = FRAMEWORK_TESTS / Path("gui")
+    GUI = FRAMEWORK_TESTS / WEB / Path("gui")
     GUI_PKG = GUI / INIT_PY
     GUI_PYPI_HOME_PAGE_TEST_PY_FILE = GUI / Path("PyPi_home_page_test.py")
-    NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
+    NO_GUI_PKG = TESTS / WEB / "no_gui" / INIT_PY
 
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
