@@ -298,19 +298,19 @@ Features
 .. topic:: @ @
 
 
-    * Easy and standard install - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Easy to learn and use - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Simple and Well Defined Automation Directory Structure - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Report Customization - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Rich Command Line Support that helps integration with CI/CD pipeline or any DevOps tech. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Shipped with rich set of examples along with install. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * VISIT and SUBSCRIBE to Dedicated `nRoBo YouTube channel <https://www.youtube.com/@nrobotestautomationframework/playlists>`_ with a collection of video tutorials. Thus, speedup learning. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Easy and standard install - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Easy to learn and use - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Simple and Well Defined Automation Directory Structure - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Report Customization - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Rich Command Line Support that helps integration with CI/CD pipeline or any DevOps tech. - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Shipped with rich set of examples along with install. Thus, speedup learning. - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * VISIT and SUBSCRIBE to Dedicated `nRoBo YouTube channel <https://www.youtube.com/@nrobotestautomationframework/playlists>`_ with a collection of video tutorials. Thus, speedup learning. - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Ready to use framework loaded with power of PyTest, Selenium Webdriver 4, HTML Report, Rich Allure Report and other tools. By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Ability to organize tests in Groups. Inbuilt groups are sanity, ui, regression, nogui, api at present. - By `PyTest <https://docs.pytest.org/>`_ and `nRoBo <https://pypi.org/project/nrobo/>`_
     * Rich Browser Support (Chrome, Headless Chrome, Anti Bot Chrome, Edge, Safari, Firefox, FireFox Headless, IE) - By `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
-    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_ and `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * nRoBo selenium wrapper classes and methods that saves lot of key presses. Thus, leveraging benefits of compact, readable and manageable of code. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
-    * Well-structured thread-safe inbuilt setup and tear down processes. Thus, You can keep focus on testing! Not on maintaining framework. - By `nRoBo] <https://pypi.org/project/nrobo/>`_
+    * Rich Platform Support (Unix, Linux, Mac, Windows) - By `PyTest <https://docs.pytest.org/>`_, `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_ and `nRoBo <https://pypi.org/project/nrobo/>`_
+    * nRoBo selenium wrapper classes and methods that saves lot of key presses. Thus, leveraging benefits of compact, readable and manageable of code. - By `nRoBo <https://pypi.org/project/nrobo/>`_
+    * Well-structured thread-safe inbuilt setup and tear down processes. Thus, You can keep focus on testing! Not on maintaining framework. - By `nRoBo <https://pypi.org/project/nrobo/>`_
     * Test Parallelization - Inherited from `PyTest <https://docs.pytest.org/>`_
     * Distributed testing over Grid infrastructure - Inherited from `SeleniumWebdriver <https://www.selenium.dev/documentation/webdriver/>`_
     * Test parameterization - Inherited from `PyTest <https://docs.pytest.org/>`_
@@ -327,108 +327,108 @@ Features
      - Percent
      - Download Count
    * - US
-     - 41.38%
-     - 19,662
+     - 41.24%
+     - 20,440
    * - CN
-     - 13.01%
-     - 6,182
+     - 13.06%
+     - 6,475
    * - RU
-     - 5.30%
-     - 2,517
+     - 5.28%
+     - 2,615
    * - SG
-     - 5.14%
-     - 2,442
-   * - DE
-     - 3.98%
-     - 1,891
+     - 5.16%
+     - 2,560
    * - HK
-     - 3.83%
-     - 1,821
+     - 3.93%
+     - 1,947
+   * - DE
+     - 3.85%
+     - 1,910
    * - JP
-     - 3.24%
-     - 1,540
+     - 3.23%
+     - 1,602
    * - FR
-     - 3.01%
-     - 1,431
+     - 3.05%
+     - 1,510
    * - CA
-     - 2.85%
-     - 1,353
+     - 2.88%
+     - 1,429
    * - KR
-     - 2.75%
+     - 2.64%
      - 1,307
-   * - AU
-     - 1.84%
-     - 876
-   * - GB
-     - 1.83%
-     - 869
    * - NO
-     - 1.68%
-     - 797
+     - 1.82%
+     - 903
+   * - AU
+     - 1.80%
+     - 894
+   * - GB
+     - 1.79%
+     - 886
    * - IN
      - 1.57%
-     - 746
+     - 778
    * - SE
-     - 1.29%
-     - 615
-   * - HR
-     - 0.83%
-     - 396
+     - 1.28%
+     - 636
    * - TH
-     - 0.81%
-     - 385
+     - 0.84%
+     - 416
+   * - HR
+     - 0.84%
+     - 415
    * - TW
-     - 0.76%
+     - 0.73%
      - 362
-   * - DK
-     - 0.68%
-     - 325
    * - IE
      - 0.67%
-     - 317
-   * - IL
-     - 0.57%
-     - 273
-   * - ES
-     - 0.55%
-     - 262
+     - 331
+   * - DK
+     - 0.66%
+     - 325
    * - NL
-     - 0.51%
-     - 241
+     - 0.60%
+     - 297
+   * - IL
+     - 0.58%
+     - 287
+   * - ES
+     - 0.53%
+     - 262
    * - CH
-     - 0.43%
-     - 203
+     - 0.44%
+     - 217
    * - AE
-     - 0.36%
-     - 173
+     - 0.35%
+     - 175
    * - FI
-     - 0.19%
+     - 0.18%
      - 90
    * - ZA
-     - 0.19%
+     - 0.18%
      - 89
+   * - BR
+     - 0.16%
+     - 77
    * - PL
-     - 0.13%
+     - 0.12%
      - 61
-   * - CW
-     - 0.09%
-     - 44
    * - TR
      - 0.09%
      - 44
-   * - CZ
+   * - CW
      - 0.09%
+     - 44
+   * - CZ
+     - 0.08%
      - 42
    * - IS
-     - 0.09%
+     - 0.08%
      - 42
    * - OM
-     - 0.09%
+     - 0.08%
      - 42
    * - RO
-     - 0.05%
-     - 24
-   * - BR
      - 0.05%
      - 24
    * - UA
@@ -440,10 +440,10 @@ Features
    * - CY
      - 0.01%
      - 6
-   * - AR
+   * - EE
      - 0.01%
      - 3
-   * - EE
+   * - AR
      - 0.01%
      - 3
    * - SK
@@ -460,5 +460,5 @@ Features
      - 1
    * - **Total**
      - **100.00%**
-     - **47,519**
+     - **49,565**
 

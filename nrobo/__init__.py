@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.26.0'
+__version__ = '2024.27.0'
 
 # install rich library
 import os
@@ -238,7 +238,7 @@ console = Console(theme=th)
 def greet_the_guest():
     """greet the guest with Indian way of greeting!"""
 
-    greet_msg = 'Namastey World!. Thank you for choosing, nRoBo.'
+    greet_msg = 'Namastey World! Thank you for choosing, nRoBo.'
     formatted_heart_string = CONST.HEART_RED * len(greet_msg)
 
     console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')

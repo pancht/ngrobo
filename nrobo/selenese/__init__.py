@@ -1310,6 +1310,20 @@ class NRobo(SelectNrobo):
         self.by = By()
         self.print_options = PrintOptions()
         self.window_types = WindowTypes()
+        self.scrolled_height = 0
 
         # wait for page load
         self.wait_for_page_to_be_loaded()
+
+    def scroll_down(self):
+        """scroll down web page by its scroll height"""
+        screen_height = int(self.driver.execute_script("return screen.height"))
+        self.driver.execute_script(f"window.scrollTo({self.scrolled_height}, "
+                                   f"{self.scrolled_height + screen_height})")
+        self.scrolled_height += screen_height
+
+    def scroll_to_top(self):
+        """scroll to top of the page"""
+        self.scrolled_height = 0
+        self.driver.execute_script(f"window.scrollTo({self.scrolled_height}, "
+                                   f"{self.scrolled_height})")
