@@ -336,6 +336,8 @@ def driver(request):
         """if browser requested is chrome"""
 
         options = webdriver.ChromeOptions()
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        options.add_experimental_option("useAutomationExtension", False)
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options = add_capabilities_from_file(options)
 
@@ -354,6 +356,22 @@ def driver(request):
                                        service=ChromeService(
                                            ChromeDriverManager().install(),
                                            log_output=_driver_log_path))
+
+        # Anti Bot Detection logic by ZenRows
+        # URL: https://www.zenrows.com/blog/selenium-avoid-bot-detection#how-anti-bots-work
+        _driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+
+        # Initializing a list with two Useragents
+        useragentarray = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+        ]
+
+        for i in range(len(useragentarray)):
+            # Setting user agent iteratively as Chrome 108 and 107
+            _driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragentarray[i]})
+            print(_driver.execute_script("return navigator.userAgent;"))
+            # _driver.get("https://www.httpbin.org/headers")
 
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""

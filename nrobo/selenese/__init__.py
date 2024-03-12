@@ -1252,8 +1252,29 @@ class SelectNrobo(DesiredCapabilitiesNrobo):
         """
         return Select(self.find_element(by, value))
 
+    def get_status(self) -> Dict:
+        """
+        Get the Appium server status
 
-class NRobo(SelectNrobo):
+        Usage:
+            driver.get_status()
+        Returns:
+            Dict: The status information
+
+        """
+        return self.driver.get_status()
+
+
+class AppiumNrobo(SelectNrobo):
+    """Appium specific nRoBo methods"""
+
+    def __init__(self, driver: AnyDriver, logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
+        """constructor"""
+        super().__init__(driver, logger, duration=duration, devices=devices)
+
+
+class NRobo(AppiumNrobo):
     """Base NRobo class for each of the Page Classes in nRoBo framework.
 
        Each Page class must inherit NRobo class in order to leverage the nRoBo framework.

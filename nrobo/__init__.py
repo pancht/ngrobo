@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.27.0'
+__version__ = '2024.28.0'
 
 # install rich library
 import os
@@ -96,9 +96,11 @@ class NROBO_PATHS:
     PATCHES = Path("patches")
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
+    APPIUM = Path("appium")
     BROWSER_CONFIGS = Path("browserConfigs")
     CAPABILITY_YAML = BROWSER_CONFIGS / "capability.yaml"
-    CAPABILITY_APPIUM_YAML = BROWSER_CONFIGS / "appium_capability.yaml"
+    CAPABILITY_APPIUM_ANDROID_YAML = APPIUM / "android_capability.yaml"
+    CAPABILITY_APPIUM_IOS_YAML = APPIUM / "ios_capability.yaml"
     MARKERS_YAML = BROWSER_CONFIGS / "markers.yaml"
 
     # Browsers packages

@@ -44,6 +44,7 @@ class nCLI:
 
     NPM = "npm"
     APPIUM = "appium"
+    CAP = "cap"
     INSTALL = "install"
     APP = "app"
     URL = "url"
@@ -70,6 +71,7 @@ class nCLI:
     ARGS = {
         NPM: NPM,
         APPIUM: APPIUM,
+        CAP: CAP,
         INSTALL: INSTALL,
         APP: APP,
         URL: URL,

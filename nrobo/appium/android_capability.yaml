@@ -1,8 +1,4 @@
 platformName: Android
 automationName: uiautomator2
 deviceName: Android
-appPackage: com.android.settings
-appActivity: .Settings
-language: en
-locale: US
-avdReadyTimeout: 30
+

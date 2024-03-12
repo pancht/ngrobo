@@ -23,3 +23,4 @@ class AUTOMATION_NAMES:
     """Possible appium capabilities for automationName"""
 
     UI_AUTOMATION2 = 'uiautomator2'
+    XCUITEST = 'XCUITest'
