@@ -142,17 +142,17 @@ def add_capabilities_from_file(options):
     return options
 
 
-def get_appium_capabilities_from_file():
-    """Read appium capabilities from appium_capability.yaml file
+def get_appium_capabilities_from_file(cap_file_name):
+    """Read appium capabilities from android_capability.yaml file
 
        return appium_capabilities"""
     from nrobo.util.common import Common
     from nrobo import NROBO_PATHS, Environment, EnvKeys
     if detect.production_machine() and not detect.developer_machine():
-        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_APPIUM_YAML)
+        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.APPIUM / cap_file_name)
     else:
         capabilities = Common.read_yaml(
-            NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_APPIUM_YAML)
+            NROBO_PATHS.EXEC_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.APPIUM / cap_file_name)
 
     return capabilities
 
@@ -171,6 +171,11 @@ def pytest_addoption(parser):
     group.addoption(
         f"--{nCLI.APPIUM}", help=f"Tells nRoBo to trigger via appium client",
         action="store_true", default=False
+    )
+    group.addoption(
+        f"--{nCLI.CAP}", help="File name of appium capability file."
+                              "nRoBo will search the given capability file "
+                              "in appium directory under project root folder."
     )
 
     # nRoBo webdriver options
@@ -195,6 +200,9 @@ def pytest_addoption(parser):
 
     # ini option
     parser.addini(f"--{nCLI.APPIUM}", type='bool', help=f"Tells nRoBo to trigger via appium client")
+    parser.addini(f"--{nCLI.CAP}", type='string', help="File name of appium capability file."
+                                                       "nRoBo will search the given capability file "
+                                                       "in appium directory under project root folder.")
     parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
     parser.addini(f"{nCLI.REPORT_TITLE}", type="string",
@@ -293,8 +301,9 @@ def driver(request):
 
         """get appium driver with given capabilities"""
         from appium import webdriver as _webdriver
+        from nrobo import NROBO_PATHS
 
-        capabilities = get_appium_capabilities_from_file()
+        capabilities = get_appium_capabilities_from_file(request.config.getoption(f"--{nCLI.CAP}"))
 
         if capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.UI_AUTOMATION2:
             """Create uiautomator2 driver instance"""
@@ -302,21 +311,26 @@ def driver(request):
 
             options = UiAutomator2Options().load_capabilities(capabilities)
 
-            _grid_url_missing = False
+        elif capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.XCUITEST:
+            from appium.options.ios import XCUITestOptions
 
-            if _grid_server_url is None:
-                _grid_url_missing = True
-                _grid_server_url = "http://localhost:4723"
+            options = XCUITestOptions().load_capabilities(capabilities)
 
-            try:
-                _driver = _webdriver.Remote(_grid_server_url, options=options)
-            except Exception as e:
-                if _grid_url_missing:
-                    console.rule(f"[{STYLE.HLRed}]\n\nAppium server url is missing![/]\n\n")
-                else:
-                    console.rule(f"[{STYLE.HLRed}]\n\nIt seems like appium server is not running? "
-                                 f"\nor Is appium server url incorrect?"
-                                 f"\nPlease check!!![/]\n\n")
+        _grid_url_missing = False
+
+        if _grid_server_url is None:
+            _grid_url_missing = True
+            _grid_server_url = "http://localhost:4723"
+
+        try:
+            _driver = _webdriver.Remote(_grid_server_url, options=options)
+        except Exception as e:
+            if _grid_url_missing:
+                console.rule(f"[{STYLE.HLRed}]\n\nAppium server url is missing![/]\n\n")
+            else:
+                console.rule(f"[{STYLE.HLRed}]\n\nIt seems like appium server is not running? "
+                             f"\nor Is appium server url incorrect?"
+                             f"\nPlease check!!![/]\n\n")
 
     elif browser == Browsers.CHROME:
         """if browser requested is chrome"""
