@@ -56,7 +56,7 @@ def run_unit_tests(debug=False) -> int:
             style=f"{STYLE.HLRed}")
         return return_code_unit_test_run
 
-    web_test_report_name = "web_tests_report.html"
+    web_test_report_name = "results-web-tests/web_tests_report.html"
     return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
                                          '--instances', '10',
                                          '--app', 'NdiTestLabs',
@@ -73,7 +73,7 @@ def run_unit_tests(debug=False) -> int:
             style=f"{STYLE.HLRed}")
         return return_code_web_test_run
 
-    android_mobile_test_report_name = "android_mobile_tests_report.html"
+    android_mobile_test_report_name = "results-android/android_mobile_tests_report.html"
     return_code_mobile_android_device_test_run = terminal(['python', 'nrobo.py',
                                                            '--appium',
                                                            '--grid', 'http://localhost:4723',
@@ -90,7 +90,7 @@ def run_unit_tests(debug=False) -> int:
             style=f"{STYLE.HLRed}")
         return return_code_mobile_android_device_test_run
 
-    ios_mobile_test_report = "ios_mobile_tests_report.html"
+    ios_mobile_test_report = "results-ios/ios_mobile_tests_report.html"
     return_code_mobile_ios_device_test_run = terminal(['python', 'nrobo.py',
                                                        '--appium',
                                                        '--grid', 'http://localhost:4723',

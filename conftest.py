@@ -339,6 +339,9 @@ def driver(request):
         options.add_argument("--disable-blink-features=AutomationControlled")
         options.add_experimental_option("useAutomationExtension", False)
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        prefs = {"credentials_enable_service": False,
+                 "profile.password_manager_enabled": False}
+        options.add_experimental_option("prefs", prefs)
         options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file

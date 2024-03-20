@@ -115,7 +115,10 @@ class WebdriverWrapperNrobo(WebDriver):
         if int(os.environ[EnvKeys.APPIUM]):
             return
 
-        for _wh in _window_handles:
+        # Save location where you're at the moment!
+        _current_handle = self.current_window_handle
+
+        for idx, _wh in enumerate(_window_handles):
             # switch to current window
             self.switch_to_window(_wh)
             # add title and handle to windows
@@ -123,7 +126,9 @@ class WebdriverWrapperNrobo(WebDriver):
                 self.windows[self.title] = _wh
             except UnexpectedAlertPresentException as e:
                 pass
-            self.switch_to_default_content()
+
+        # Go back to where you were. Isn't that cool?
+        self.switch_to_window(_current_handle)
 
         return self.windows
 
