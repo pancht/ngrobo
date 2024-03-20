@@ -115,10 +115,7 @@ class WebdriverWrapperNrobo(WebDriver):
         if int(os.environ[EnvKeys.APPIUM]):
             return
 
-        # Save location where you're at the moment!
-        _current_handle = self.current_window_handle
-
-        for idx, _wh in enumerate(_window_handles):
+        for _wh in _window_handles:
             # switch to current window
             self.switch_to_window(_wh)
             # add title and handle to windows
@@ -126,9 +123,7 @@ class WebdriverWrapperNrobo(WebDriver):
                 self.windows[self.title] = _wh
             except UnexpectedAlertPresentException as e:
                 pass
-
-        # Go back to where you were. Isn't that cool?
-        self.switch_to_window(_current_handle)
+            self.switch_to_default_content()
 
         return self.windows
 
@@ -865,9 +860,18 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """Submits a form."""
         self.find_element(by, value).submit()
 
+    def clear_spl(self, by: AnyBy, value: Optional[str] = None):
+
+        element = self.find_element(by, value)
+        self.action_chain().click(element).send_keys(Keys.ARROW_LEFT)\
+            .double_click(self.find_element(by, value)).send_keys(Keys.DELETE)\
+            .perform()
+        # self.wait_for_a_while(1)
+
     def clear(self, by: AnyBy, value: Optional[str] = None) -> None:
         """Clears the text if it's a text entry element."""
-        self.find_element(by, value).clear()
+        # self.find_element(by, value).clear()
+        self.clear_spl(by, value)
 
     def get_property(self, name, by: AnyBy, value: Optional[str] = None) -> str | bool | WebElement | dict:
         """Gets the given property of the element.
@@ -1129,12 +1133,60 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])
 
         # wait until the locator becomes invisible
-        WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
-            expected_conditions.invisibility_of_element_located(locator))
+        try:
+            WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
+                expected_conditions.invisibility_of_element_located(locator))
+        except Exception as e:
+            return False
 
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])
 
         nprint("end of wait for element invisible", style=STYLE.PURPLE4)
+        return True
+
+    def wait_for_element_to_be_present(self, by: AnyBy, value: Optional[str] = None, wait: int = 0):
+        """Wait for element to be visible"""
+
+        if wait:
+            try:
+                WebDriverWait(self.driver, wait).until(
+                    expected_conditions.presence_of_element_located([by, value]))
+                return True
+            except Exception as e:
+                return False
+
+        try:
+            WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
+                expected_conditions.presence_of_element_located([by, value]))
+            return True
+        except Exception as e:
+            return False
+
+    def wait_for_element_to_be_disappeared(self, by: AnyBy, value: Optional[str] = None, wait: int = 0):
+        """wait till <element> disappears from the UI"""
+
+        # wait a little
+        self.wait_for_a_while(self.nconfig[WAITS.WAIT])
+
+        # wait until the locator becomes invisible
+        if wait:
+            try:
+                WebDriverWait(self.driver, wait).until(
+                    expected_conditions.invisibility_of_element_located([by, value]))
+            except Exception as e:
+                return False
+
+            self.wait_for_a_while(self.nconfig[WAITS.WAIT])
+            return True
+
+        try:
+            WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
+                expected_conditions.invisibility_of_element_located([by, value]))
+        except Exception as e:
+            return False
+
+        self.wait_for_a_while(self.nconfig[WAITS.WAIT])
+        return True
 
     def wait_for_element_to_be_clickable(self, timeout=None, by: AnyBy = None, value: Optional[str] = None):
         """
