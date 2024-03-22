@@ -115,6 +115,12 @@ class WebdriverWrapperNrobo(WebDriver):
         if int(os.environ[EnvKeys.APPIUM]):
             return
 
+        try:
+            __cur_window_handle = self.current_window_handle
+        except Exception as e:
+            return
+
+        self.windows = {}
         for _wh in _window_handles:
             # switch to current window
             self.switch_to_window(_wh)
@@ -123,7 +129,8 @@ class WebdriverWrapperNrobo(WebDriver):
                 self.windows[self.title] = _wh
             except UnexpectedAlertPresentException as e:
                 pass
-            self.switch_to_default_content()
+
+        self.switch_to_window(__cur_window_handle)
 
         return self.windows
 
@@ -198,8 +205,27 @@ class WebdriverWrapperNrobo(WebDriver):
             self.driver.close()
             return
 
+        __parent_window_handle_idx = -1
+
+        # Find index of given window/tab in selenium windows list
+        for __idx, __wh in enumerate(self.window_handles):
+            if __wh == self.windows[title]:
+                # Grab parent window handle
+                if __idx == 0:
+                    __parent_window_handle_idx = 0
+                else:
+                    __parent_window_handle_idx = __idx - 1
+
+        # switch to given window/tab
         self.switch_to_window(self.windows[title])
+
+        # close given window/tab
         self.driver.close()
+
+        # switch to parent window/tab
+        self.switch_to_window(self.window_handles[__parent_window_handle_idx])
+
+        # updated nRoBo windows attribute
         self.update_windows(self.window_handles)
 
     def quit(self) -> None:
@@ -300,6 +326,7 @@ class WebdriverWrapperNrobo(WebDriver):
                 switch_to_new_window('tab')
         """
         self.driver.switch_to.new_window(type_hint)
+        self.update_windows(self.window_handles)
 
     def switch_to_new_tab(self) -> None:
         """

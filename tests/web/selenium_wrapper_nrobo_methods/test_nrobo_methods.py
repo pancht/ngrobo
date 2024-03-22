@@ -242,9 +242,11 @@ class TestNRoBoSeleniumWrapperMethods:
         page.get("http://google.com")
         page.wait_for_a_while(4)
         page.close("Google")
+        page.wait_for_a_while(4)
 
         # open a new window as New Window
         page.switch_to_new_window("window")
+        page.wait_for_a_while(5)
         page.get("http://google.com")
         page.wait_for_a_while(4)
         page.close("Google")
