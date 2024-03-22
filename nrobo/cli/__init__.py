@@ -47,7 +47,7 @@ def main():
         greet_the_guest()
 
         # install dependencies
-        install_nrobo(None)
+        install_nrobo(install_only=True)
 
         # verify python installation and version
         verify_set_python_install_pip_command()
@@ -56,7 +56,7 @@ def main():
         remove_files_recursively(NROBO_CONST.DIST_DIR)
 
         # delete results directory created by nrobo for storing test results
-        remove_files_recursively(NREPORT.REPORT_DIR)
+        # remove_files_recursively(NREPORT.REPORT_DIR)
 
         # parse nrobo cli arguments
         launch_nrobo()

@@ -41,6 +41,8 @@ import os.path as path
 import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
+from nrobo.appium import AUTOMATION_NAMES, CAPABILITY
+from selenium.common.exceptions import WebDriverException
 
 
 def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
@@ -133,10 +135,26 @@ def add_capabilities_from_file(options):
     else:
         capabilities = Common.read_yaml(
             NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_YAML)
+
     for k, v in capabilities.items():
         options.set_capability(k, v)
 
     return options
+
+
+def get_appium_capabilities_from_file(cap_file_name):
+    """Read appium capabilities from android_capability.yaml file
+
+       return appium_capabilities"""
+    from nrobo.util.common import Common
+    from nrobo import NROBO_PATHS, Environment, EnvKeys
+    if detect.production_machine() and not detect.developer_machine():
+        capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.APPIUM / cap_file_name)
+    else:
+        capabilities = Common.read_yaml(
+            NROBO_PATHS.EXEC_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.APPIUM / cap_file_name)
+
+    return capabilities
 
 
 def pytest_addoption(parser):
@@ -149,6 +167,18 @@ def pytest_addoption(parser):
     update_pytest_life_cycle_log("pytest_addoption", "hook")
 
     group = parser.getgroup("nrobo header options")
+    # nRoBo appium options
+    group.addoption(
+        f"--{nCLI.APPIUM}", help=f"Tells nRoBo to trigger via appium client",
+        action="store_true", default=False
+    )
+    group.addoption(
+        f"--{nCLI.CAP}", help="File name of appium capability file."
+                              "nRoBo will search the given capability file "
+                              "in appium directory under project root folder."
+    )
+
+    # nRoBo webdriver options
     group.addoption(
         f"--{nCLI.BROWSER}", help="""
     Target browser name. Default is chrome.
@@ -169,6 +199,10 @@ def pytest_addoption(parser):
                     help="Take full page screenshot", action="store_true", default=False)
 
     # ini option
+    parser.addini(f"--{nCLI.APPIUM}", type='bool', help=f"Tells nRoBo to trigger via appium client")
+    parser.addini(f"--{nCLI.CAP}", type='string', help="File name of appium capability file."
+                                                       "nRoBo will search the given capability file "
+                                                       "in appium directory under project root folder.")
     parser.addini(f"{nCLI.APP}", type="string",
                   help="Name of your app project under test")
     parser.addini(f"{nCLI.REPORT_TITLE}", type="string",
@@ -241,7 +275,7 @@ def driver(request):
     update_pytest_life_cycle_log("driver")
 
     # Access pytest command line options
-    from nrobo import EnvKeys
+    from nrobo import EnvKeys, console
     browser = request.config.getoption(f"--{nCLI.BROWSER}")
 
     # get and set url
@@ -263,11 +297,51 @@ def driver(request):
                        NREPORT.LOG_DIR_DRIVER + os.sep + \
                        test_method_name + NREPORT.LOG_EXTENTION
 
-    if browser == Browsers.CHROME:
+    if int(os.environ[EnvKeys.APPIUM]):
+
+        """get appium driver with given capabilities"""
+        from appium import webdriver as _webdriver
+        from nrobo import NROBO_PATHS
+
+        capabilities = get_appium_capabilities_from_file(request.config.getoption(f"--{nCLI.CAP}"))
+
+        if capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.UI_AUTOMATION2:
+            """Create uiautomator2 driver instance"""
+            from appium.options.android import UiAutomator2Options
+
+            options = UiAutomator2Options().load_capabilities(capabilities)
+
+        elif capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.XCUITEST:
+            from appium.options.ios import XCUITestOptions
+
+            options = XCUITestOptions().load_capabilities(capabilities)
+
+        _grid_url_missing = False
+
+        if _grid_server_url is None:
+            _grid_url_missing = True
+            _grid_server_url = "http://localhost:4723"
+
+        try:
+            _driver = _webdriver.Remote(_grid_server_url, options=options)
+        except Exception as e:
+            if _grid_url_missing:
+                console.rule(f"[{STYLE.HLRed}]\n\nAppium server url is missing![/]\n\n")
+            else:
+                console.rule(f"[{STYLE.HLRed}]\n\nIt seems like appium server is not running? "
+                             f"\nor Is appium server url incorrect?"
+                             f"\nPlease check!!![/]\n\n")
+
+    elif browser == Browsers.CHROME:
         """if browser requested is chrome"""
 
         options = webdriver.ChromeOptions()
+        options.add_argument("--disable-blink-features=AutomationControlled")
+        options.add_experimental_option("useAutomationExtension", False)
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
+        prefs = {"credentials_enable_service": False,
+                 "profile.password_manager_enabled": False}
+        options.add_experimental_option("prefs", prefs)
         options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
@@ -285,6 +359,23 @@ def driver(request):
                                        service=ChromeService(
                                            ChromeDriverManager().install(),
                                            log_output=_driver_log_path))
+
+        # Anti Bot Detection logic by ZenRows
+        # URL: https://www.zenrows.com/blog/selenium-avoid-bot-detection#how-anti-bots-work
+        _driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+
+        # Initializing a list with two Useragents
+        useragentarray = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
+        ]
+
+        for i in range(len(useragentarray)):
+            # Setting user agent iteratively as Chrome 108 and 107
+            _driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragentarray[i]})
+            print(_driver.execute_script("return navigator.userAgent;"))
+            # _driver.get("https://www.httpbin.org/headers")
+
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""
 
@@ -337,6 +428,7 @@ def driver(request):
             #                            service=ChromeService(
             #                                ChromeDriverManager().install(),
             #                                log_output=_driver_log_path))
+
     elif browser == Browsers.SAFARI:
         """if browser requested is safari"""
 
@@ -382,6 +474,7 @@ def driver(request):
             """Get instance of local firefox driver"""
             _service = webdriver.FirefoxService(log_output=_driver_log_path, service_args=['--log', 'debug'])
             _driver = webdriver.Firefox(options=options, service=_service)
+
     elif browser == Browsers.EDGE:
         """if browser requested is microsoft edge"""
 
@@ -401,6 +494,7 @@ def driver(request):
             """Get instance of local firefox driver"""
             _service = webdriver.EdgeService(log_output=_driver_log_path)
             _driver = webdriver.Edge(options=options, service=_service)
+
     elif browser == Browsers.IE:
         """if browser requested is microsoft internet explorer"""
 
@@ -429,6 +523,7 @@ def driver(request):
             """Get instance of local firefox driver"""
             _service = webdriver.IeService(log_output=_driver_log_path)
             _driver = webdriver.Ie(options=options)
+
     else:
         from nrobo.cli.tools import console
         console.rule(f"[{STYLE.HLRed}]DriverNotConfigured Error!")
@@ -578,6 +673,7 @@ def pytest_configure(config):
 
     os.environ[EnvKeys.TITLE] = str(config.getoption(f'--{nCLI.REPORT_TITLE}')).replace(CONST.UNDERSCORE, CONST.SPACE)
     os.environ[EnvKeys.APP] = str(config.getoption(f'--{nCLI.APP}')).replace(CONST.UNDERSCORE, CONST.SPACE)
+    os.environ[EnvKeys.APPIUM] = "1" if str(config.getoption(f'--{nCLI.APPIUM}')) == "True" else "0"
 
     # add custom markers
     config.addinivalue_line("markers", "sanity: marks as sanity test")
@@ -632,17 +728,17 @@ def pytest_runtest_setup(item):
         fixtureinfo = None
 
     update_pytest_life_cycle_log_with_value(f"Function properties:\n"
-                                                                                f"name={item.name}\n"
-                                                                                f"parent={item.parent}\n"
-                                                                                f"config={item.config}\n"
-                                                                                f"callspec={callspec}\n"
-                                                                                f"callobj={callobj}\n"
-                                                                                f"keywords={item.keywords}\n"
-                                                                                f"session={item.session}\n"
-                                                                                f"fixtureinfo={fixtureinfo}\n"
-                                                                                f"originalname={item.originalname}\n"
-                                                                                f"filepath={item.fspath}\n"
-                                                                                f"docstring={item.__doc__}")
+                                            f"name={item.name}\n"
+                                            f"parent={item.parent}\n"
+                                            f"config={item.config}\n"
+                                            f"callspec={callspec}\n"
+                                            f"callobj={callobj}\n"
+                                            f"keywords={item.keywords}\n"
+                                            f"session={item.session}\n"
+                                            f"fixtureinfo={fixtureinfo}\n"
+                                            f"originalname={item.originalname}\n"
+                                            f"filepath={item.fspath}\n"
+                                            f"docstring={item.__doc__}")
 
     pprint(item.__doc__)
     pprint(item.config)

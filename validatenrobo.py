@@ -42,7 +42,7 @@ def run_unit_tests(debug=False) -> int:
          '--html', target,
          '-n', '20',
          '--rootdir', str(conftest_dir),
-        unit_tests_dir],
+         unit_tests_dir],
         debug=debug,
         use_os_system_call=True
     )
@@ -51,24 +51,66 @@ def run_unit_tests(debug=False) -> int:
     if return_code_unit_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/] [{STYLE.BOLD}]PASSED[/].")
     else:
-        console.rule(f"[{STYLE.HLRed}]Exit. [Reason] One or more unit tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.", style=f"{STYLE.HLRed}")
+        console.rule(
+            f"[{STYLE.HLRed}]Exit. [Reason] One or more unit tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.",
+            style=f"{STYLE.HLRed}")
         return return_code_unit_test_run
 
+    web_test_report_name = "results-web-tests/web_tests_report.html"
     return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
-                                         '--instances', '20',
+                                         '--instances', '10',
                                          '--app', 'NdiTestLabs',
                                          '--url', 'http://google.com',
                                          '--username', 'shiva',
                                          '--password', 'tandava',
-                                         '--target', "report.html"],
+                                         '--target', web_test_report_name],
                                         debug=debug, use_os_system_call=True)
-    if return_code_unit_test_run == 0:
+    if return_code_web_test_run == 0:
         console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
     else:
-        console.rule(f"[{STYLE.HLRed}]Exit. [Reason] One or more web tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.",  style=f"{STYLE.HLRed}")
-        return_code_web_test_run
+        console.rule(
+            f"[{STYLE.HLRed}]Exit. [Reason] One or more web tests [{STYLE.BOLD}]failed[/]! Please fix them to proceed.",
+            style=f"{STYLE.HLRed}")
+        return return_code_web_test_run
 
-    console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/] and [{STYLE.ITALIC}]Web tests[/] [{STYLE.BOLD}]PASSED[/].")
+    android_mobile_test_report_name = "results-android/android_mobile_tests_report.html"
+    return_code_mobile_android_device_test_run = terminal(['python', 'nrobo.py',
+                                                           '--appium',
+                                                           '--grid', 'http://localhost:4723',
+                                                           '--target', android_mobile_test_report_name,
+                                                           '--cap', 'android_capability.yaml',
+                                                           '--files', 'tests/mobile/appium/android'],
+                                                          debug=debug, use_os_system_call=True)
+    if return_code_mobile_android_device_test_run == 0:
+        console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]Android Mobile tests[/] [{STYLE.BOLD}]PASSED[/].")
+    else:
+        console.rule(
+            f"[{STYLE.HLRed}]Exit. [Reason] One or more android mobile tests [{STYLE.BOLD}]failed[/]! Please fix them to "
+            f"proceed.",
+            style=f"{STYLE.HLRed}")
+        return return_code_mobile_android_device_test_run
+
+    ios_mobile_test_report = "results-ios/ios_mobile_tests_report.html"
+    return_code_mobile_ios_device_test_run = terminal(['python', 'nrobo.py',
+                                                       '--appium',
+                                                       '--grid', 'http://localhost:4723',
+                                                       '--target', ios_mobile_test_report,
+                                                       '--cap', 'ios_capability.yaml',
+                                                       '--files', 'tests/mobile/appium/ios'],
+                                                      debug=debug, use_os_system_call=True)
+    if return_code_mobile_ios_device_test_run == 0:
+        console.rule(f"[{STYLE.HLGreen}][{STYLE.ITALIC}]iOS Mobile tests[/] [{STYLE.BOLD}]PASSED[/].")
+    else:
+        console.rule(
+            f"[{STYLE.HLRed}]Exit. [Reason] One or more iOS mobile tests [{STYLE.BOLD}]failed[/]! Please fix them to "
+            f"proceed.",
+            style=f"{STYLE.HLRed}")
+        return return_code_mobile_ios_device_test_run
+
+    console.rule(f"\n\n[{STYLE.HLGreen}][{STYLE.ITALIC}]Unit tests[/], "
+                 f"[{STYLE.ITALIC}]Web tests[/], "
+                 f"[{STYLE.ITALIC}]Android Mobile tests[/] and "
+                 f"[{STYLE.ITALIC}]iOS Mobile tests[/] [{STYLE.BOLD}]PASSED[/].")
     # file:///Users/einsteinpanchdev/webdev/nrobo/results-unittests/nrobo_unit_tests_run_report.html
 
     from nrobo.cli.cli_constants import NREPORT
@@ -76,7 +118,12 @@ def run_unit_tests(debug=False) -> int:
     console.rule(
         f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Unit tests report at: [/] file://{exec_dir / target}")
     console.rule(
-        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]UI/Functional tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / 'report.html'}")
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Web tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / web_test_report_name}")
+    console.rule(
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Android mobile tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / android_mobile_test_report_name}")
+    console.rule(
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]iOS mobile tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / ios_mobile_test_report}")
+
     return 0  # A SUCCESS
 
 

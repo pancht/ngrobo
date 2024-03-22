@@ -147,9 +147,6 @@ def update_version_pyproject_toml_file(target, override=False) -> int:
     # get version
     version = get_version_from_yaml_version_files(__CUR_ENV__)
 
-    # Increment version
-    # version = increment_version(version)
-
     # update version in pyproject.toml and nrobo/__init__.py files
     write_new_version_in_test_version_file(version)
 
@@ -179,7 +176,7 @@ def execute_unittests(debug=False) -> None:
 
 
 def copy_conftest_file() -> None:
-    """Copies conftest-host.py file from nrobo.framework package to nrobo package."""
+    """Copies conftest-host.py file from nrobo framework package to nrobo package."""
 
     import shutil
     try:
@@ -193,13 +190,7 @@ def copy_conftest_file() -> None:
 def delete_dist_folder() -> None:
     """Deletes dist folder for vacating space for fresh packages."""
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-        try:
-            remove_files_recursively(__DIST_DIR__)
-        except Exception as e:
-            print(e)
-    elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-        terminal(["del", "/q", "/S", __DIST_DIR__ + os.sep + "*.*"])
+    remove_files_recursively(__DIST_DIR__)
 
 
 def run_build_command() -> None:

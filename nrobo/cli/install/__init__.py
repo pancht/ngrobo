@@ -182,7 +182,7 @@ def transfer_files_to_host_project() -> None:
         print(f"Installation complete")
 
 
-def install_nrobo(requirements_file: Optional[str] = None) -> None:
+def install_nrobo(requirements_file: Optional[str] = None, install_only: bool = False) -> None:
     """This will install nrobo framework and its dependencies on host system in the current directory
     from where nrobo command was executed in the Production environment.
 
@@ -210,6 +210,16 @@ def install_nrobo(requirements_file: Optional[str] = None) -> None:
         else:
             print(f"Requirements are not installed successfully!")
             return
+
+    # triggers forced update or normal update by comparing host version and pypi version
+    from nrobo.cli.upgrade import confirm_update
+    if detect.production_machine() and not detect.developer_machine():
+        confirm_update()
+
+    if install_only:
+        # No need to install or upgrade framework
+        # Just return after installing requirements
+        return
 
     if detect.production_machine():
         """Install or upgrading framework on Production environment"""
