@@ -113,6 +113,10 @@ def transfer_files_to_host_project() -> None:
         """force re-install"""
         force_reinstall = True
 
+    if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
+        """Create if not exist"""
+        copy_file(NP.NROBO_DIR / NP.FRAMEWORK / NP.REQUIREMENTS_TXT_FILE, NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE)
+
     if force_reinstall:
         print(f"Re-installing framework")
     elif (NP.EXEC_DIR / NP.CONFTEST_PY).exists():
