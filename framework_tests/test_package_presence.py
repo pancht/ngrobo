@@ -175,7 +175,7 @@ class TestNRoboFrameworkPaths():
         set_environment()
 
         cli_install_requirements_txt_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.REQUIREMENTS_TXT_FILE
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.REQUIREMENTS_TXT_FILE_CLI
 
         assert cli_install_requirements_txt_file_pkg_path.exists()
 
@@ -191,7 +191,8 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.nrobo_args package is present_release"""
         set_environment()
 
-        cli_nrobo_args_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_NROBO_ARGS_PKG
+        cli_nrobo_args_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_NROBO_ARGS_PKG
 
         assert cli_nrobo_args_pkg_path.exists()
 
@@ -412,6 +413,15 @@ class TestNRoboFrameworkPaths():
             os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE
 
         assert nrobo_framework_conftest_host_py_file_path.exists()
+
+    def test_framework_requirements_txt_file_is_present(self):
+        """Validate that nrobo.framework.requirements.txt file is present_release"""
+        set_environment()
+
+        framework_requirements_txt_file_pkg_path = Path(
+            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK \
+                                                   / NROBO_PATHS.REQUIREMENTS_TXT_FILE
+        assert framework_requirements_txt_file_pkg_path.exists()
 
     def test_selenes_pkg_is_present(self):
         """Validate that selenes pkg is present_release"""
