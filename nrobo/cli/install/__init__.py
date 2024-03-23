@@ -108,7 +108,7 @@ def transfer_files_to_host_project() -> None:
     force_reinstall = False
 
     patch_file = str(stop_auto_silent_update_version.version).replace('.', "_") + ".txt"
-    if host_version <= stop_auto_silent_update_version\
+    if host_version <= stop_auto_silent_update_version \
             and not (NP.NROBO_DIR / patch_file).exists():
         """force re-install"""
         force_reinstall = True
@@ -125,7 +125,7 @@ def transfer_files_to_host_project() -> None:
         # create a copy of host conftest.py
         copy_file(NP.EXEC_DIR / NP.CONFTEST_PY,
                   NP.EXEC_DIR / f"copy-conftest-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
-                             f"_{Common.generate_random_numbers(1000, 9999)}.py")
+                                f"_{Common.generate_random_numbers(1000, 9999)}.py")
 
     # copy nrobo conftest-host.py
     copy_file(NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE, NP.EXEC_DIR / NP.CONFTEST_PY)
@@ -133,14 +133,14 @@ def transfer_files_to_host_project() -> None:
     if (NP.EXEC_DIR / NP.INIT_PY).exists():
         copy_file(NP.EXEC_DIR / NP.INIT_PY,
                   NP.EXEC_DIR / f"copy-__init__-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
-                             f"_{Common.generate_random_numbers(1000, 9999)}.py")
+                                f"_{Common.generate_random_numbers(1000, 9999)}.py")
 
     copy_file(NP.NROBO_DIR / NP.INIT_PY, NP.EXEC_DIR / NP.INIT_PY)
 
     if (NP.EXEC_DIR / NP.NROBO_CONFIG_FILE).exists():
         copy_file(NP.EXEC_DIR / NP.NROBO_CONFIG_FILE, \
-        NP.EXEC_DIR / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
-                   f"_{Common.generate_random_numbers(1000, 9999)}.yaml")
+                  NP.EXEC_DIR / f"copy-nrobo-config-{datetime.today().strftime('%Y_%m_%d_%H_%M')}" \
+                                f"_{Common.generate_random_numbers(1000, 9999)}.yaml")
 
     copy_file(NP.NROBO_DIR / NP.FRAMEWORK / NP.NROBO_CONFIG_FILE,
               NP.EXEC_DIR / NP.NROBO_CONFIG_FILE)
@@ -149,8 +149,8 @@ def transfer_files_to_host_project() -> None:
     if (NP.EXEC_DIR / NP.PAGES).exists():
         # move directory
         move(NP.EXEC_DIR / NP.PAGES,
-             NP.EXEC_DIR /  f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
-                                       f"_{Common.generate_random_numbers(1000, 9999)}")
+             NP.EXEC_DIR / f"copy-pages--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
+                           f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(NP.NROBO_DIR / NP.FRAMEWORK_PAGES, NP.EXEC_DIR / NP.PAGES)
 
@@ -158,7 +158,7 @@ def transfer_files_to_host_project() -> None:
         # move directory
         move(NP.EXEC_DIR / NP.TESTS,
              NP.EXEC_DIR / f"copy-tests--{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
-                                       f"_{Common.generate_random_numbers(1000, 9999)}")
+                           f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(NP.NROBO_DIR / NP.FRAMEWORK_TESTS, NP.EXEC_DIR / NP.TESTS)
 
@@ -166,7 +166,7 @@ def transfer_files_to_host_project() -> None:
         # move directory
         move(NP.EXEC_DIR / NP.BROWSER_CONFIGS,
              NP.EXEC_DIR / f"copy-browserConfigs-{datetime.today().strftime('%Y_%m_%d_%H_%M')}"
-                                       f"_{Common.generate_random_numbers(1000, 9999)}")
+                           f"_{Common.generate_random_numbers(1000, 9999)}")
 
     copy_dir(NP.NROBO_DIR / NP.BROWSER_CONFIGS, NP.EXEC_DIR / NP.BROWSER_CONFIGS)
 
@@ -180,6 +180,28 @@ def transfer_files_to_host_project() -> None:
         exit()
     else:
         print(f"Installation complete")
+
+
+def install_user_specified_requirements():
+    """Install User specified requirements"""
+    from nrobo import NROBO_PATHS as NP, EnvKeys
+    user_specified_requirements = Path(f"{NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE}")
+
+    if detect.production_machine() and user_specified_requirements.exists():
+        """Install User Specified Requirements"""
+
+        print(f"Installing project requirements")
+        from nrobo import terminal, NROBO_CONST
+        return_code = terminal(
+            command=[os.environ[EnvKeys.PIP_COMMAND], nCLI.INSTALL, '-r', user_specified_requirements],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT)
+
+        if return_code == NROBO_CONST.SUCCESS:
+            """return code zero means success"""
+            print(f"Project requirements are installed successfully.")
+        else:
+            print(f"Project requirements are not installed successfully.")
 
 
 def install_nrobo(requirements_file: Optional[str] = None, install_only: bool = False) -> None:
@@ -196,6 +218,7 @@ def install_nrobo(requirements_file: Optional[str] = None, install_only: bool = 
         print(f"Installing requirements")
 
     if requirements_file is None:
+        # Install nRoBo requirements
         requirements_file = f"{NP.NROBO_DIR}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
 
         from nrobo import terminal, NROBO_CONST

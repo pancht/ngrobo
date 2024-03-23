@@ -125,7 +125,8 @@ class NROBO_PATHS:
     INSTALL_PKG = CLI / INSTALL / INIT_PY
     NCODES = Path("ncodes")
     NCODES_PKG = CLI / NCODES / INIT_PY
-    REQUIREMENTS_TXT_FILE = CLI / INSTALL / Path("requirements.txt")
+    REQUIREMENTS_TXT_FILE = Path("requirements.txt")
+    REQUIREMENTS_TXT_FILE_CLI = CLI / INSTALL / REQUIREMENTS_TXT_FILE
     CLI_NROBO_ARGS = Path("nrobo_args")
     CLI_NROBO_ARGS_PKG = CLI / CLI_NROBO_ARGS / INIT_PY
     CLI_TOOLS = Path("tools")
