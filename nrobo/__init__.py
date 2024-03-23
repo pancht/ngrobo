@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.32.2'
+__version__ = '2024.32.3'
 
 # install rich library
 import os

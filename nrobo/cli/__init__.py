@@ -30,7 +30,7 @@ def main():
         from nrobo.cli.nrobo_args import nrobo_cli_parser
         from nrobo.cli.install import install_nrobo, \
             install_user_specified_requirements, \
-            verify_user_files_on_production
+            missing_user_files_on_production
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
         from nrobo.util.constants import CONST
@@ -43,13 +43,19 @@ def main():
         # called to set EnvKeys dependent on args
         command, args, command_builder_notes = launcher_command()
         if command is None:
+            if missing_user_files_on_production():
+                install_nrobo(install_only=False)
+
             exit(0)
 
         # greet the guest
         greet_the_guest()
 
         # install nRoBo dependencies
-        install_nrobo(install_only=verify_user_files_on_production())
+        if missing_user_files_on_production():
+            install_nrobo(install_only=False)
+        else:
+            install_nrobo(install_only=True)
 
         # install user specified project dependencies
         install_user_specified_requirements()

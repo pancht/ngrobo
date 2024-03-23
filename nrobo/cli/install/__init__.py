@@ -98,6 +98,8 @@ def transfer_files_to_host_project() -> None:
         if host_version <= stop_auto_silent_update_version:
             # Re-install
             pass
+        elif missing_user_files_on_production():
+            pass
         else:
             return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
 
@@ -267,7 +269,7 @@ def install_nrobo(requirements_file: Optional[str] = None, install_only: bool = 
             transfer_files_to_host_project()
 
 
-def verify_user_files_on_production():
+def missing_user_files_on_production():
     """Verify user files on production
 
        Return True if specific files are present on user system
@@ -275,7 +277,10 @@ def verify_user_files_on_production():
        Else return False"""
 
     from nrobo import NROBO_PATHS as NP
-    if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
-        return False
+    from nrobo.cli.upgrade import get_host_version
 
-    return True
+    host_version = Version(get_host_version())
+    if host_version >= (Version('2024.32.3') - 1) and not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
+        return True
+
+    return False
