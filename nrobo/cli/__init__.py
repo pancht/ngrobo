@@ -28,7 +28,9 @@ def main():
         from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
         from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
         from nrobo.cli.nrobo_args import nrobo_cli_parser
-        from nrobo.cli.install import install_nrobo, install_user_specified_requirements
+        from nrobo.cli.install import install_nrobo, \
+            install_user_specified_requirements, \
+            verify_user_files_on_production
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
         from nrobo.util.constants import CONST
@@ -47,7 +49,7 @@ def main():
         greet_the_guest()
 
         # install nRoBo dependencies
-        install_nrobo(install_only=True)
+        install_nrobo(install_only=verify_user_files_on_production())
 
         # install user specified project dependencies
         install_user_specified_requirements()

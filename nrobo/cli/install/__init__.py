@@ -265,3 +265,12 @@ def install_nrobo(requirements_file: Optional[str] = None, install_only: bool = 
         else:
             """fresh installation"""
             transfer_files_to_host_project()
+
+
+def verify_user_files_on_production():
+    """Verify user files on production"""
+    from nrobo import NROBO_PATHS as NP
+    if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
+        return False
+
+    return True
