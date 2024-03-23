@@ -98,6 +98,21 @@ def nrobo_cli_parser(exit_on_failure=True):
     parser = argparse.ArgumentParser(
         prog="nrobo",
         description='CLI Switches of nRoBo Test Automation framework', exit_on_error=exit_on_failure)
+    # Add NPM command line support
+    parser.add_argument(f"--{nCLI.NPM}", help=f"Executed given npm command."
+                                                         f"\n Usage:"
+                                                         f"\n       --npm <package>"
+                                                         f"\n "
+                                                         f"\n  Example:"
+                                                         f"\n       nrobo --npm appium"
+                                                         f"\n Will install appium dependency as global package")
+    parser.add_argument(f"--{nCLI.APPIUM}", help=f"Tells nRoBo to trigger via appium client",
+                        action="store_true", default=False)
+    parser.add_argument(f"--{nCLI.CAP}", help="File name of appium capability file."
+                                              "nRoBo will search the given capability file "
+                                              "in appium directory under project root folder.")
+
+    # Add nrobo command line args
     parser.add_argument("-i", f"--{nCLI.INSTALL}", help="Install nRoBo requirements and framework on host system",
                         action="store_true")
     parser.add_argument(f"--{nCLI.APP}", help="Name of application under test. Name should not include special chars "

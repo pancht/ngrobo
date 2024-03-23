@@ -30,4 +30,6 @@ pycurl==7.45.3
 pypinfo==21.0.0
 pytest-emoji==0.2.0
 npm==0.1.1
-
+Appium-Python-Client==3.2.1
+# test data generators
+Faker>=24.3.0

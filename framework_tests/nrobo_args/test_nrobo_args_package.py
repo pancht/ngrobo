@@ -10,7 +10,9 @@ from nrobo.cli.launcher import launcher_command
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES, BoolArgs
 from nrobo.exceptions import NRoBoBrowserNotSupported
+from nrobo import NROBO_PATHS, set_environment
 
+set_environment()
 
 class TestNroboArgsPackage():
     """Tests for nrobo.cli.nrobo_args package"""
@@ -20,7 +22,8 @@ class TestNroboArgsPackage():
                           '--durations-min', '0.005', '--verbosity', '0', '--browser',
                           'chrome', '--cache-clear', '--color', 'yes',
                           '-r', 'fE', '--code-highlight', 'yes', '--junit-xml',
-                          'results/junit-report.xml', '--alluredir', 'results/allure']
+                          'results/junit-report.xml', '--alluredir', 'results/allure',
+                          f'{str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB)}']
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:
         """Replace key-value if given <key> is found in default nRoBo args
@@ -57,6 +60,9 @@ class TestNroboArgsPackage():
                     if src[_idx_src] == "pytest":
                         break
                     elif src[_idx_src] in BOOL_SWITCHES and not src[_idx_src] == f"--{BoolArgs.PYARGS}":
+                        break
+                    elif _idx_src == len_dest-1:
+                        # Last cli arg
                         break
                     else:
                         if src[_idx_src + 1] == dest[_idx_dest + 1]:
@@ -300,6 +306,7 @@ class TestNroboArgsPackage():
 
     def test_nrobo_cli_arg_report_switch_with_allure_option(self):
         """Validate nRoBo cli --report switch: --report allure"""
+        set_environment()
 
         SWITCH = '--report'
         VALUE = 'allure'
@@ -316,6 +323,7 @@ class TestNroboArgsPackage():
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
+        print(f"{actual_command}\n\n{expected_command}")
         assert set(actual_command) == set(expected_command)
 
     def test_nrobo_cli_arg_report_switch_without_value(self):

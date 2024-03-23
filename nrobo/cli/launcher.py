@@ -12,6 +12,7 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import os
 import time
 
 from nrobo import *
@@ -20,6 +21,7 @@ from nrobo.cli.cli_constants import *
 from nrobo.cli.install import *
 from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import *
+from nrobo.util.platform import PLATFORMS
 
 from nrobo.util.process import *
 from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES, BoolArgs
@@ -53,18 +55,48 @@ def launcher_command(exit_on_failure=True):
         with console.status(f"[{STYLE.TASK}]Installing dependencies...\n"):
             install_nrobo(None)
             return None, None, None
+
     if args.VERSION:
         # show version
         from nrobo import __version__
         console.print(f"nrobo {__version__}\n")
         return None, None, None
+
     if args.suppress:
         # suppress upgrade prompt
         os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
+
     if args.version:
         result = terminal(['pytest', f"--version"], debug=True, text=True, capture_output=True)
         console.print(f"{result.stdout}")
         return None, None, None
+
+    if args.npm and args.npm in PACKAGES.APPIUM:
+        # command = ['sudo', 'npm', 'cache', 'clean', '-f']
+        # terminal(command=command, debug=True)
+        # command = ['sudo', 'npm', 'install', '-g', 'n']
+        # terminal(command=command, debug=True)
+        # command = ['sudo', 'n', 'stable']
+        # terminal(command=command, debug=True)
+        # --------------------------------------
+        # Steps to upgrade node
+        # 1. sudo npm cache clean -f
+        # 2. sudo npm install -g n
+        # 3. sudo n stable
+        # --------------------------------------
+        # Update node using brew
+        # brew uninstall node
+        # brew install node
+        # Remove any file or dir that are being shown when run node -v command after uninstalling node
+        command = ['sudo', nCLI.NPM, 'install', '-g', args.npm, '--unsafe-perm=true', '--allow-root']
+        terminal(command=command, debug=True)
+
+        exit(0)
+
+    elif args.npm and args.npm not in PACKAGES.APPIUM:
+        console.print(f"[{STYLE.HLRed}]{args.npm} package support is not in [{STYLE.HLOrange}]nRoBo[/].[/]"
+                      f"\nSupported packages are [{STYLE.HLOrange}]{PACKAGES.APPIUM}[/].")
+        exit(1)
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -234,21 +266,26 @@ def launcher_command(exit_on_failure=True):
     # Process files
     if args.files:
         files = args.files
-        for f in files:
-            command.append(f)
+        [command.append(f) for f in files]
 
     # Process files
     if args.pyargs:
         command.append(f"--{BoolArgs.PYARGS}")
         files = args.pyargs
-        for f in files:
-            command.append(f)
+        [command.append(f) for f in files]
 
     if args.pyargs and args.files:
         # Error
         console.print(f"[{STYLE.HLRed}]--{BoolArgs.PYARGS} and --{nCLI.FILES} "
                       f"switch can not be used in combination![/]")
         exit(1)
+
+    # select tests directory
+    if not args.files:
+        if args.appium:
+            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE))
+        else:
+            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB))
 
     return command, args, command_builder_notes
 

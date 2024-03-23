@@ -42,6 +42,9 @@ class nCLI:
         Make sure that the same option is also removed from the
         nCLI.ARGS dictionary too!!!"""
 
+    NPM = "npm"
+    APPIUM = "appium"
+    CAP = "cap"
     INSTALL = "install"
     APP = "app"
     URL = "url"
@@ -66,6 +69,9 @@ class nCLI:
     MARKER = "marker"
 
     ARGS = {
+        NPM: NPM,
+        APPIUM: APPIUM,
+        CAP: CAP,
         INSTALL: INSTALL,
         APP: APP,
         URL: URL,
@@ -103,3 +109,5 @@ class PACKAGES:
 
     NROBO = "nrobo"
     CLI = "cli"
+
+    APPIUM = ['appium']

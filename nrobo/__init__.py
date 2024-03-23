@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.26.0'
+__version__ = '2024.32.1'
 
 # install rich library
 import os
@@ -53,6 +53,7 @@ class EnvKeys:
 
         and many more such...
     """
+    APPIUM = "appium"
     PIP_COMMAND = "Pip Command"
     EXEC_DIR = "Execution Directory"
     NROBO_DIR = "nRoBo Installation Directory"
@@ -70,6 +71,7 @@ class EnvKeys:
 
 
 # load environment keys with defaults
+os.environ[EnvKeys.APPIUM] = "0"
 os.environ[EnvKeys.PIP_COMMAND] = Python.PIP
 os.environ[EnvKeys.EXEC_DIR] = ""
 os.environ[EnvKeys.NROBO_DIR] = ""
@@ -90,11 +92,15 @@ class NROBO_PATHS:
     """nRoBo framework directories and files"""
     EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
     NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])
+    NODE_MODULES = Path("node_modules")
     PATCHES = Path("patches")
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
+    APPIUM = Path("appium")
     BROWSER_CONFIGS = Path("browserConfigs")
     CAPABILITY_YAML = BROWSER_CONFIGS / "capability.yaml"
+    CAPABILITY_APPIUM_ANDROID_YAML = APPIUM / "android_capability.yaml"
+    CAPABILITY_APPIUM_IOS_YAML = APPIUM / "ios_capability.yaml"
     MARKERS_YAML = BROWSER_CONFIGS / "markers.yaml"
 
     # Browsers packages
@@ -119,7 +125,8 @@ class NROBO_PATHS:
     INSTALL_PKG = CLI / INSTALL / INIT_PY
     NCODES = Path("ncodes")
     NCODES_PKG = CLI / NCODES / INIT_PY
-    REQUIREMENTS_TXT_FILE = CLI / INSTALL / Path("requirements.txt")
+    REQUIREMENTS_TXT_FILE = Path("requirements.txt")
+    REQUIREMENTS_TXT_FILE_CLI = CLI / INSTALL / REQUIREMENTS_TXT_FILE
     CLI_NROBO_ARGS = Path("nrobo_args")
     CLI_NROBO_ARGS_PKG = CLI / CLI_NROBO_ARGS / INIT_PY
     CLI_TOOLS = Path("tools")
@@ -139,11 +146,13 @@ class NROBO_PATHS:
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
     FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
+    MOBILE = Path("mobile")
+    WEB = Path("web")
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
-    GUI = FRAMEWORK_TESTS / Path("gui")
+    GUI = FRAMEWORK_TESTS / WEB / Path("gui")
     GUI_PKG = GUI / INIT_PY
     GUI_PYPI_HOME_PAGE_TEST_PY_FILE = GUI / Path("PyPi_home_page_test.py")
-    NO_GUI_PKG = TESTS / "no_gui" / INIT_PY
+    NO_GUI_PKG = TESTS / WEB / "no_gui" / INIT_PY
 
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
@@ -232,7 +241,7 @@ console = Console(theme=th)
 def greet_the_guest():
     """greet the guest with Indian way of greeting!"""
 
-    greet_msg = 'Namastey World!. Thank you for choosing, nRoBo.'
+    greet_msg = 'Namastey World! Thank you for choosing, nRoBo.'
     formatted_heart_string = CONST.HEART_RED * len(greet_msg)
 
     console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')

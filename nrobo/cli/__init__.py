@@ -28,7 +28,7 @@ def main():
         from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
         from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
         from nrobo.cli.nrobo_args import nrobo_cli_parser
-        from nrobo.cli.install import install_nrobo
+        from nrobo.cli.install import install_nrobo, install_user_specified_requirements
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
         from nrobo.util.constants import CONST
@@ -46,8 +46,11 @@ def main():
         # greet the guest
         greet_the_guest()
 
-        # install dependencies
-        install_nrobo(None)
+        # install nRoBo dependencies
+        install_nrobo(install_only=True)
+
+        # install user specified project dependencies
+        install_user_specified_requirements()
 
         # verify python installation and version
         verify_set_python_install_pip_command()
@@ -56,7 +59,7 @@ def main():
         remove_files_recursively(NROBO_CONST.DIST_DIR)
 
         # delete results directory created by nrobo for storing test results
-        remove_files_recursively(NREPORT.REPORT_DIR)
+        # remove_files_recursively(NREPORT.REPORT_DIR)
 
         # parse nrobo cli arguments
         launch_nrobo()

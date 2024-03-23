@@ -52,11 +52,22 @@ def clear_screen():
     terminal([get_command(N_COMMANDS.CLEAR_SCREEN)])
 
 
-def remove_files_recursively(directory):
+def remove_files_recursively(directory) -> int:
     """Remove <directory>
 
     :param directory:
     :return:"""
 
-    run_status = terminal(["rm", "-rf", directory])
-    return run_status
+    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
+        try:
+            return terminal(["rm", "-rf", directory])
+        except Exception as e:
+            print(e)
+
+    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+        try:
+            return terminal(["del", "/q", "/S", directory + os.sep + "*.*"])
+        except Exception as e:
+            print(e)
+
+    return 1
