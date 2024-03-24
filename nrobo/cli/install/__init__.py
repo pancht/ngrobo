@@ -98,9 +98,12 @@ def transfer_files_to_host_project() -> None:
         if host_version <= stop_auto_silent_update_version:
             # Re-install
             pass
-        elif missing_user_files_on_production():
-            pass
         else:
+            if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
+                """Create if not exist"""
+                copy_file(NP.NROBO_DIR / NP.FRAMEWORK / NP.REQUIREMENTS_TXT_FILE,
+                          NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE)
+
             return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
 
     # nRoBo was not found on HOST machine.
