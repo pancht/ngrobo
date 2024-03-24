@@ -5,6 +5,16 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.34.0] - On 2024.03.24
+
+#### Added
+- More sample examples to quickly learn nRoBo Framework
+- Support for project specific dependencies through requirements.txt
+- Added support for `appium` lib. Examples and sample videos will be published once `appium` support will complete.
+
+#### Fixed
+- Issue in handling multiple windows
+
 ### [2024.25.7] - On 2024.03.06
 
 #### Fixed
