@@ -5,6 +5,12 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.35.0] - On 2024.03.24
+
+#### Fixed
+- Issue in update
+
+
 ### [2024.34.0] - On 2024.03.24
 
 #### Added
