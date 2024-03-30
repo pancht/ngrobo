@@ -22,6 +22,10 @@ import os
 from pathlib import Path
 
 
+class DB_CONNECTOR_TYPE:
+    """Database Connector Types"""
+    MYSQL = "mysql"
+
 class NROBO_CONST:
     """nrobo special constants"""
 
