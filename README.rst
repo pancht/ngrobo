@@ -96,6 +96,9 @@ Following pre-requisites needs to be installed in order to run ***nRoBo*** frame
 Installation
 ------------
 
+**On Windows machine**, Run Command Prompt and/or Python IDE of your choice should be run in Administrator mode and execute the following commands.
+(To run in administrator mode, Right click on the tool and select 'Run As Administrator' option)
+
 0. Make a directory for automation project
 
 .. code-block:: bash
