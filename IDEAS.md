@@ -4,3 +4,4 @@
 | Database Testing | Add support for Database testing by enabling all kinds of database connectors and also ways to execute SQL statements, fetch results etc in uniform way all across various databases. |
  | API Testing      | Add support for API automation (Dont' know how exactly yet)                                                                                                                           |
  | Compare Database | Research list of libraries for comparing database tables, databases, and many more. Identify tools and libraries and integrate support for the same in the nRoBo framework.           |
+ | Mobile Automation| Add support for appium library in nRoBo |
