@@ -5,6 +5,11 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.36.0] - On 2024.03.31
+
+### Added
+- Added notes for installing python on Windows machine with screenshots.
+
 ### [2024.35.0] - On 2024.03.24
 
 #### Fixed
