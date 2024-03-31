@@ -15,12 +15,16 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.35.0'
+__version__ = '2024.36.0'
 
 # install rich library
 import os
 from pathlib import Path
 
+
+class DB_CONNECTOR_TYPE:
+    """Database Connector Types"""
+    MYSQL = "mysql"
 
 class NROBO_CONST:
     """nrobo special constants"""
