@@ -40,6 +40,28 @@ Following pre-requisites needs to be installed in order to run ***nRoBo*** frame
     0. Install Python (3.11 or higher)
         - `Check install guide for Python <https://www.python.org/downloads/>`_
 
+        - Notes on Python Installation on Windows:
+            - Go to "Control Panel > Add Or Remove Programs" and make sure that there are not multiple versions of Python are installed.
+            - While installing Python, make sure following options to check as mentioned in the screenshots:
+
+
+        .. image:: http://www.namasteydigitalindia.com/connect/wp-content/uploads/2024/03/Screenshot_1.png
+            :alt: Install Python on Windows Screenshot 1
+            :height: 200
+            :width: 33%
+
+
+        .. image:: http://www.namasteydigitalindia.com/connect/wp-content/uploads/2024/03/Screenshot_2.png
+            :alt: Install Python on Windows Screenshot 2
+            :height: 200
+            :width:  33%
+
+        .. image:: http://www.namasteydigitalindia.com/connect/wp-content/uploads/2024/03/Screenshot_3.png
+            :alt: Install Python on Windows Screenshot 3
+            :height: 200
+            :width: 33%
+
+
         .. code-block:: bash
 
             python --version
@@ -327,80 +349,80 @@ Features
      - Percent
      - Download Count
    * - US
-     - 39.80%
-     - 22,083
+     - 39.39%
+     - 22,502
    * - CN
-     - 12.98%
-     - 7,201
+     - 13.15%
+     - 7,511
    * - DE
-     - 5.50%
-     - 3,053
-   * - RU
-     - 5.28%
-     - 2,927
+     - 5.83%
+     - 3,330
    * - SG
-     - 5.20%
-     - 2,883
+     - 5.30%
+     - 3,025
+   * - RU
+     - 5.18%
+     - 2,962
    * - HK
-     - 4.29%
-     - 2,378
+     - 4.24%
+     - 2,420
    * - JP
-     - 3.18%
-     - 1,762
+     - 3.17%
+     - 1,810
    * - FR
-     - 2.96%
-     - 1,644
-   * - CA
-     - 2.75%
-     - 1,527
+     - 2.90%
+     - 1,657
    * - KR
-     - 2.57%
-     - 1,427
+     - 2.78%
+     - 1,589
+   * - CA
+     - 2.73%
+     - 1,557
    * - NO
-     - 2.01%
-     - 1,113
+     - 1.99%
+     - 1,137
    * - GB
-     - 1.92%
-     - 1,065
+     - 1.88%
+     - 1,072
    * - AU
-     - 1.77%
-     - 980
+     - 1.79%
+     - 1,023
    * - IN
-     - 1.51%
-     - 839
+     - 1.52%
+     - 869
    * - SE
      - 1.23%
-     - 682
-   * - HR
-     - 0.80%
-     - 446
+     - 702
    * - TH
+     - 0.80%
+     - 458
+   * - HR
      - 0.79%
-     - 437
+     - 452
    * - DK
-     - 0.71%
+     - 0.69%
      - 395
    * - IE
      - 0.66%
-     - 367
+     - 375
    * - TW
-     - 0.65%
+     - 0.64%
      - 363
    * - IL
-     - 0.58%
+     - 0.56%
      - 321
    * - NL
-     - 0.54%
+     - 0.52%
      - 297
    * - ES
-     - 0.47%
+     - 0.46%
      - 262
    * - CH
      - 0.43%
-     - 239
+     - 244
    * - AE
-     - 0.36%
-     - 199
+     - 0.35%
+     - 201
    * - FI
      - 0.16%
      - 91
@@ -408,7 +430,7 @@ Features
      - 0.16%
      - 89
    * - BR
-     - 0.14%
+     - 0.13%
      - 77
    * - PL
      - 0.11%
@@ -419,14 +441,14 @@ Features
    * - CW
      - 0.08%
      - 44
-   * - OM
-     - 0.08%
+   * - IS
+     - 0.07%
      - 42
    * - CZ
-     - 0.08%
+     - 0.07%
      - 42
-   * - IS
-     - 0.08%
+   * - OM
+     - 0.07%
      - 42
    * - RO
      - 0.04%
@@ -440,6 +462,9 @@ Features
    * - CY
      - 0.01%
      - 6
+   * - DZ
+     - 0.01%
+     - 4
    * - AR
      - 0.01%
      - 3
@@ -449,16 +474,16 @@ Features
    * - SK
      - 0.00%
      - 2
-   * - MX
+   * - RS
      - 0.00%
      - 1
    * - PT
      - 0.00%
      - 1
-   * - RS
+   * - MX
      - 0.00%
      - 1
    * - **Total**
      - **100.00%**
-     - **55,481**
+     - **57,129**
 

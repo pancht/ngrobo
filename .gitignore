@@ -177,3 +177,4 @@ results-unittests/
 /key/nrobo-statistics-214a0f5d2c1b.json
 /key/experiments/pytest/
 node_modules/
+cred.yaml
