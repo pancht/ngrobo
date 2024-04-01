@@ -5,3 +5,4 @@
  | API Testing      | Add support for API automation (Dont' know how exactly yet)                                                                                                                           |
  | Compare Database | Research list of libraries for comparing database tables, databases, and many more. Identify tools and libraries and integrate support for the same in the nRoBo framework.           |
  | Mobile Automation| Add support for appium library in nRoBo |
+ | Jira Automation | Integration Jira to achieve automated ticket creation on failures, posting test results summary in jira, etc. |
