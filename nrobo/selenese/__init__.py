@@ -890,8 +890,8 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     def clear_spl(self, by: AnyBy, value: Optional[str] = None):
 
         element = self.find_element(by, value)
-        self.action_chain().click(element).send_keys(Keys.ARROW_LEFT)\
-            .double_click(self.find_element(by, value)).send_keys(Keys.DELETE)\
+        self.action_chain().click(element).send_keys(Keys.ARROW_LEFT) \
+            .double_click(self.find_element(by, value)).send_keys(Keys.DELETE) \
             .perform()
         # self.wait_for_a_while(1)
 
@@ -1139,7 +1139,18 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             nprint(f"Exception: {ae}", STYLE.HLRed)
         nprint("End of Wait for page load...", style=STYLE.PURPLE4)
 
-    def wait_for_a_while(self, time_in_sec=None):
+    @staticmethod
+    def wait(time_in_sec=None):
+        """
+               Pause for <time_in_sec>
+
+               :param time_in_sec:
+               :return:
+               """
+        WaitImplementationsNrobo.wait_for_a_while(time_in_sec)
+
+    @staticmethod
+    def wait_for_a_while(time_in_sec=None):
         """
         Pause for <time_in_sec>
 
