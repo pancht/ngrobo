@@ -266,6 +266,25 @@ def password(request):
     return request.config.getoption(f"--{nCLI.PASSWORD}")
 
 
+def get_fake_user_agents():
+    """
+    Get fake user agents at random
+    """
+    from fake_useragent import UserAgent
+
+    _browsers = ['chrome', 'edge', 'firefox', 'safari']
+    _os = ["windows", "macos", "linux", "android", "ios"]
+    _platform = ["pc", "mobile", "tablet"]
+
+    _browser_name = [_browsers[Common.generate_random_numbers(0, 3)]]
+    _os_name = [_os[Common.generate_random_numbers(0, 4)]]
+    _platform_name = [_platform[Common.generate_random_numbers(0, 2)]]
+
+    return UserAgent(browsers=_browser_name,
+                     os=_os_name,
+                     platforms=_platform_name).random
+
+
 @pytest.fixture(autouse=True, scope='function')
 def driver(request):
     """
@@ -364,17 +383,7 @@ def driver(request):
         # URL: https://www.zenrows.com/blog/selenium-avoid-bot-detection#how-anti-bots-work
         _driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
-        # Initializing a list with two Useragents
-        useragentarray = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36",
-        ]
-
-        for i in range(len(useragentarray)):
-            # Setting user agent iteratively as Chrome 108 and 107
-            _driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": useragentarray[i]})
-            print(_driver.execute_script("return navigator.userAgent;"))
-            # _driver.get("https://www.httpbin.org/headers")
+        _driver.execute_cdp_cmd("Network.setUserAgentOverride", {"userAgent": get_fake_user_agents()})
 
     elif browser == Browsers.CHROME_HEADLESS:
         """if browser requested is chrome"""

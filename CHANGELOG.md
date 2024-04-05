@@ -5,6 +5,10 @@
 [//]: <> (The format is based on Keep a Changelog keepachangelog.com/)
 [//]: <> (and this project adheres to Semantic Versioning semver.org/)
 
+### [2024.40.0] - On 2024.04.05
+
+### Added
+- Added faker useragent support for chrome browser by default. This default behaviour will change to opt-in feature in upcoming releases.
 
 ### [2024.36.0] - On 2024.03.31
 
