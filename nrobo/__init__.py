@@ -147,6 +147,7 @@ class NROBO_PATHS:
     # framework packages
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
+    TEST_DATA = Path('test-data')
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
     FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")

@@ -145,12 +145,35 @@ class WebdriverWrapperNrobo(WebDriver):
 
         return self.driver.name
 
+    def _wait_page_load(self):
+        def wait_for_page_to_be_loaded(self):
+            """Waits for give timeout time for page to completely load.
+            timeout time is configurable in nrobo-config.yaml"""
+
+            if int(os.environ[EnvKeys.APPIUM]):
+                return
+
+            # nprint("Wait for page load...", style=STYLE.HLOrange)
+            try:
+                # Webdriver implementation of page load timeout
+                self.set_page_load_timeout(self.nconfig[WAITS.TIMEOUT])
+
+                # Custom page load timeout
+                WebDriverWait(self.driver, self.nconfig[WAITS.TIMEOUT]).until(
+                    lambda driver: driver.execute_script('return document.readyState') == 'complete')
+            except TimeoutException as te:
+                nprint(f"Exception: {te}", STYLE.HLRed)
+            except AttributeError as ae:
+                nprint(f"Exception: {ae}", STYLE.HLRed)
+            # nprint("End of Wait for page load...", style=STYLE.PURPLE4)
+
     def get(self, url: str):
         """selenium webdriver wrapper method: get"""
 
         url = str(url).replace('\\', "\\\\")  # perform replacements
         nprint(f"Go to url <{url}>", logger=self.logger)
         self.driver.get(url)
+        self._wait_page_load()
 
         self.update_windows(self.window_handles)
 
@@ -1125,7 +1148,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
         if int(os.environ[EnvKeys.APPIUM]):
             return
 
-        nprint("Wait for page load...", style=STYLE.HLOrange)
+        # nprint("Wait for page load...", style=STYLE.HLOrange)
         try:
             # Webdriver implementation of page load timeout
             self.set_page_load_timeout(self.nconfig[WAITS.TIMEOUT])
@@ -1137,7 +1160,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             nprint(f"Exception: {te}", STYLE.HLRed)
         except AttributeError as ae:
             nprint(f"Exception: {ae}", STYLE.HLRed)
-        nprint("End of Wait for page load...", style=STYLE.PURPLE4)
+        # nprint("End of Wait for page load...", style=STYLE.PURPLE4)
 
     @staticmethod
     def wait(time_in_sec=None):
@@ -1369,7 +1392,38 @@ class AppiumNrobo(SelectNrobo):
         super().__init__(driver, logger, duration=duration, devices=devices)
 
 
-class NRobo(AppiumNrobo):
+class NRoBoCustomMethods(AppiumNrobo):
+    """NRobo Advanced and custom methods"""
+
+    def __init__(self, driver: AnyDriver, logger: logging.Logger, duration: int = 250,
+                 devices: list[AnyDevice] | None = None):
+        """constructor"""
+        super().__init__(driver, logger, duration=duration, devices=devices)
+
+    def file_upload(self, file_input_by: By,
+                    file_input_value: str,
+                    file_path: Path | str,
+                    upload_ele_by: By,
+                    upload_ele_value: str):
+        """
+        Upload given file
+
+        :param file_input_by: By type of file input element
+        :param file_input_value: By value of file input element
+        :param file_path: absolute path of file to be uploaded
+        :param upload_ele_by: By type of upload action element
+        :param upload_ele_value: By value of upload action element
+        :return:
+        """
+        if isinstance(file_path, Path):
+            file_path = str(file_path.absolute())
+
+        self.find_element(file_input_by, file_input_value).send_keys(file_path)
+
+        self.click(upload_ele_by, upload_ele_value)
+
+
+class NRobo(NRoBoCustomMethods):
     """Base NRobo class for each of the Page Classes in nRoBo framework.
 
        Each Page class must inherit NRobo class in order to leverage the nRoBo framework.
