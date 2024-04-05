@@ -29,6 +29,8 @@ allure-pytest==2.13.2
 pycurl==7.45.3
 pypinfo==21.0.0
 pytest-emoji==0.2.0
+pytest-check==2.3.1
+fake-useragent==1.5.1
 npm==0.1.1
 Appium-Python-Client==3.2.1
 # test data generators
