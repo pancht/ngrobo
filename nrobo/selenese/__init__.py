@@ -1422,6 +1422,10 @@ class NRoBoCustomMethods(AppiumNrobo):
 
         self.click(upload_ele_by, upload_ele_value)
 
+    def type_into(self, by: AnyBy, value: Optional[str] = None, *text) -> None:
+        """Type given text into given element located by (by, value)"""
+        self.send_keys(by, value, text)
+
 
 class NRobo(NRoBoCustomMethods):
     """Base NRobo class for each of the Page Classes in nRoBo framework.
