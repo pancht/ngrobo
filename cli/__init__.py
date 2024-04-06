@@ -43,6 +43,7 @@ def nrobo_cli() -> None:
         prog="nrobo",
         description='nRoBo package and upload utility')
     parser.add_argument("-b", "--build", help="Build package", action="store_true")
+    parser.add_argument("-s", "--skip", help="Skip tests", action="store_true")
     parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
     parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
@@ -62,12 +63,13 @@ def nrobo_cli() -> None:
 
     if args.build:
         if args.target:
+            # Check what version to build. Major | Minor | Patch (Default)
             if args.major:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.MAJOR)
+                build(args.target, override=args.override, build_version=BUILD_VERSION.MAJOR, skip_tests=args.skip)
             elif args.minor:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.MINOR)
+                build(args.target, override=args.override, build_version=BUILD_VERSION.MINOR, skip_tests=args.skip)
             else:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.PATCH)
+                build(args.target, override=args.override, build_version=BUILD_VERSION.PATCH, skip_tests=args.skip)
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
