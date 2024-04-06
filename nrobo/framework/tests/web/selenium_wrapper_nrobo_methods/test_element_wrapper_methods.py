@@ -204,6 +204,28 @@ class TestWebElementWrapperMethods:
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
         page.screenshot('element_screenshot_as_file.png', *lnkLogin)
 
+    @pytest.mark.skip
+    def test_uploads(self, driver, logger):
+        """Example of file upload"""
+
+        page = Page(driver, logger)
+        page.maximize_window()
+        page.get("https://the-internet.herokuapp.com/upload")
+
+        from pathlib import Path
+        from nrobo import NROBO_PATHS
+        upload_file = NROBO_PATHS.TEST_DATA / 'nRoBo-Logo.png'
+
+        file_input = (By.CSS_SELECTOR, "input[type='file']")
+        btn_upload = (By.ID, "file-submit")
+
+        page.file_upload(*file_input, upload_file, *btn_upload)
+
+        file_name_element = page.find_element(By.ID, "uploaded-files")
+        file_name = file_name_element.text
+
+        assert file_name == "nRoBo-Logo.png"
+
 
 
 

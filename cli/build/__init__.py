@@ -168,7 +168,8 @@ def execute_unittests(debug=False) -> None:
     if not return_code == NROBO_CONST.SUCCESS:
         from cli import set_switch_environment
         console.print(
-            f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building packages.")
+            f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building "
+            f"packages.")
         set_switch_environment(ENV_CLI_SWITCH.TEST, debug)
         console.print(
             f"[{STYLE.HLRed}]Build process failed!!!")
@@ -208,9 +209,13 @@ def delete_conftest_after_build() -> None:
     terminal(["rm", "-f", conftest])
 
 
-def build(target=ENV_CLI_SWITCH.TEST, *, debug=False, override=False, build_version=None) -> int:
+def build(target=ENV_CLI_SWITCH.TEST, *, debug=False,
+          override=False, build_version=None, skip_tests: bool = False) -> int:
     """Bundle package for <target> environment.
 
+    :param override:
+    :param build_version:
+    :param skip_tests: skip tests if true. default is not to skip tests.
     :param debug: enable/disable debug mode.
     :param target: Either be 'test' | 'prod'
     :return: 0 if packing succeeds else 1"""
@@ -241,8 +246,11 @@ def build(target=ENV_CLI_SWITCH.TEST, *, debug=False, override=False, build_vers
         from cli import set_switch_environment
         set_switch_environment(ENV_CLI_SWITCH.PROD, debug)
 
-        console.rule(f"[{STYLE.HLOrange}]Running unit tests")
-        execute_unittests(debug)  # run unit tests
+        if skip_tests:
+            console.rule(f"[{STYLE.HLRed}]Skipped unit/web/mobile tests forcefully by your choice!!![/]")
+        else:
+            console.rule(f"[{STYLE.HLOrange}]Running unit/web/mobile tests[/]")
+            execute_unittests(debug)  # run unit tests
 
     with console.status(f"[{STYLE.TASK}]Switching environment to PRODUCTION for testing only\n"):
         # update ENV_CLI_SWITCH=PRODUCTION in nrobo/__INIT__.py

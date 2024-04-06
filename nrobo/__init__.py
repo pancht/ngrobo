@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.40.0'
+__version__ = '2024.40.1'
 
 # install rich library
 import os
@@ -147,6 +147,7 @@ class NROBO_PATHS:
     # framework packages
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
+    TEST_DATA = Path('test-data')
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
     FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
     TESTS = Path("tests")
