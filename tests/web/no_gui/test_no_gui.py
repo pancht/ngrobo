@@ -13,8 +13,9 @@ class TestNoGUI():
 
     @pytest.mark.nogui
     # @pytest.mark.skip
-    def test_exception_in_group(self):
+    def test_exception_in_group(self, logger):
         """Verify no gui test execution in group"""
+        logger.info(f"logger message")
         with pytest.raises(ExceptionGroup) as excinfo:
             self.f2()
         assert excinfo.group_contains(RuntimeError)

@@ -14,6 +14,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 import os
 import sys
 
+from pytest_metadata.plugin import metadata_key
 from selenium.webdriver.common.by import By
 
 from nrobo import EnvKeys, Markers
@@ -568,16 +569,26 @@ def logger(request):
     from nrobo.cli.cli_constants import NREPORT
     ensure_logs_dir_exists()
 
-    # Setup logger for tests
-    logger = logging.getLogger('selenium')
-    logger.setLevel(logging.DEBUG)
+    logger = logging.getLogger('nrobo')
     _test_logs_path = NREPORT.REPORT_DIR + os.sep + \
                       NREPORT.LOG_DIR_TEST + os.sep + \
                       test_method_name + NREPORT.LOG_EXTENTION
+    # logging.basicConfig(filename=_test_logs_path, format='%(message)s', level=logging.DEBUG)
     handler = logging.FileHandler(_test_logs_path)
+    formatter = logging.Formatter(fmt='%(message)s')
+    handler.setFormatter(fmt=formatter)
     logger.addHandler(handler)
-    logging.getLogger('selenium.webdriver.remote').setLevel(logging.WARN)
-    logging.getLogger('selenium.webdriver.common').setLevel(logging.DEBUG)
+    logger.setLevel(logging.DEBUG)
+    # # Setup logger for tests
+    # logger = logging.getLogger('selenium')
+    # logger.setLevel(logging.DEBUG)
+    # _test_logs_path = NREPORT.REPORT_DIR + os.sep + \
+    #                   NREPORT.LOG_DIR_TEST + os.sep + \
+    #                   test_method_name + NREPORT.LOG_EXTENTION
+    # handler = logging.FileHandler(_test_logs_path)
+    # logger.addHandler(handler)
+    # # logging.getLogger('selenium.webdriver.remote').setLevel(logging.WARN)
+    # # logging.getLogger('selenium.webdriver.common').setLevel(logging.DEBUG)
 
     # yield logger instance to calling test method
     yield logger
@@ -719,10 +730,10 @@ def pytest_metadata(metadata):
 
     update_pytest_life_cycle_log("pytest_metadata", "hook")
 
-    # pop all the python environment table data
-    # metadata.pop("Packages", None)
+    # Pop a not-required environment table data
+    metadata.pop("Packages", None)
     # metadata.pop("Platform", None)
-    # metadata.pop("Plugins", None)
+    metadata.pop("Plugins", None)
     # metadata.pop("Python", None)
 
 
