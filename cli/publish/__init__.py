@@ -68,12 +68,12 @@ def publish(target, *, debug: bool = False, override: bool = False):
     with console.status(f"Publish on {PUBLISH_TARGET.PYPI.upper()}..."):
         command = ""
         if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       '--username', TOKEN, '--password', f"{pypi_token}",
+            command = [TWINE.TWINE, TWINE.UPLOAD, TWINE.REPOSITORY, __CUR_ENV__,
+                       TWINE.USERNAME, TOKEN, TWINE.PASSWORD, f"{pypi_token}",
                        "dist" + os.sep + "*"]
         elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       '--username', TOKEN, '--password', f"{pypi_token}",
+            command = [TWINE.TWINE, TWINE.UPLOAD, TWINE.REPOSITORY, __CUR_ENV__,
+                       TWINE.USERNAME, TOKEN, TWINE.PASSWORD, f"{pypi_token}",
                        CONST.DOT + os.sep + "dist" + os.sep + "*.*"]
 
         # add --skip-existing switch

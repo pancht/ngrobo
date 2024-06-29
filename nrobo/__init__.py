@@ -59,6 +59,14 @@ class Markers:
     UNIT = 'unit'
 
 
+class TWINE:
+    TWINE = 'twine'
+    UPLOAD = 'upload'
+    REPOSITORY = '--repository'
+    USERNAME = '--username'
+    PASSWORD = '--password'
+
+
 class EnvKeys:
     """nRoBo environment keys
 
