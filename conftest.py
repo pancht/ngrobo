@@ -616,11 +616,13 @@ def pytest_runtest_makereport(item, call):
 
     outcome = yield
     report = outcome.get_result()
-
+    description = str(item.function.__doc__)
+    if description:
+        report.description = description
     # test_fn = item.obj
     # docstring = getattr(test_fn, '__doc__')
     # if docstring:
-    #     report.nodeid = docstring  # replace __doc__ string with nodeid
+    #    report.nodeid = report.nodeid  # replace __doc__ string with nodeid
 
     extras = getattr(report, 'extras', [])
     if report.when == 'call':
@@ -839,11 +841,15 @@ def pytest_html_results_table_header(cells):
 
     update_pytest_life_cycle_log("pytest_html_results_table_header", "hook")
 
+    cells.insert(2, "<th>Description</th>")
+
 
 def pytest_html_results_table_row(report, cells):
     """Called after building results table row."""
 
     update_pytest_life_cycle_log("pytest_html_results_table_row", "hook")
+
+    cells.insert(2, f"<td>{report.description}</td>")
 
 
 def pytest_html_results_table_html(report, data):
