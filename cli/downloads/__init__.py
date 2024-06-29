@@ -65,7 +65,7 @@ def downloads() -> str:
         return
 
     # add auth key
-    command = [Python.PYPINFO, '--auth', 'key/nrobo-statistics-214a0f5d2c1b.json']
+    command = [Python.PYPINFO, '--auth', 'key/bigquery_google_auth_cred.json']
     terminal(command=command)
 
     # Get download stats

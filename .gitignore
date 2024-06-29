@@ -179,3 +179,4 @@ results-unittests/
 node_modules/
 cred.yaml
 /key/download-stats/
+key/bigquery_google_auth_cred.json

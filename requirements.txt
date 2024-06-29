@@ -8,3 +8,4 @@ fake-useragent==1.5.1
 Appium-Python-Client==4.0.0
 allure-pytest==2.13.5
 webdriver-manager==4.0.1
+pyinfo==1.0.1
