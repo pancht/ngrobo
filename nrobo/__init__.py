@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.40.1'
+__version__ = '2024.41.0'
 
 # install rich library
 import os
@@ -25,6 +25,7 @@ from pathlib import Path
 class DB_CONNECTOR_TYPE:
     """Database Connector Types"""
     MYSQL = "mysql"
+
 
 class NROBO_CONST:
     """nrobo special constants"""
@@ -47,6 +48,15 @@ class Environment:
 
     PRODUCTION = "Production"
     DEVELOPMENT = "Development"
+
+
+class Markers:
+    SANITY = 'sanity'
+    REGRESSION = 'regression'
+    UI = 'ui'
+    API = 'api'
+    NOGUI = 'nogui'
+    UNIT = 'unit'
 
 
 class EnvKeys:

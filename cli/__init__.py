@@ -22,6 +22,9 @@ from cli.downloads import downloads
 from cli.publish import publish
 from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
+from nrobo.util.process import terminal
+import subprocess
+terminal(["pip", "install", "-r",  "requirements.txt"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
 
 
 class BUILD_VERSION:

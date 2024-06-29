@@ -16,7 +16,7 @@ import sys
 
 from selenium.webdriver.common.by import By
 
-from nrobo import EnvKeys
+from nrobo import EnvKeys, Markers
 
 # Add host's project path to sys path for module searching...
 sys.path.append(os.path.join(os.path.dirname(__file__), ''))
@@ -285,7 +285,7 @@ def get_fake_user_agents():
                      platforms=_platform_name).random
 
 
-@pytest.fixture(autouse=True, scope='function')
+@pytest.fixture(scope='function')
 def driver(request):
     """
     Instantiating driver for given browser.
@@ -306,6 +306,14 @@ def driver(request):
 
     # initialize driver with None
     _driver = None
+    for mark in request.node.own_markers:
+        if (mark.name in [Markers.NOGUI, Markers.API]
+                and browser in [Browsers.CHROME_HEADLESS, Browsers.CHROME]):
+            # store web driver ref in request
+            request.node.funcargs['driver'] = None
+            # yield driver instance to calling test method
+            yield _driver
+            return
 
     # Set driver log name
     # current test function name
@@ -614,6 +622,8 @@ def pytest_runtest_makereport(item, call):
             feature_request = item.funcargs['request']
             # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
+            if driver is None:
+                return
 
             # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
             screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}' \
@@ -685,12 +695,12 @@ def pytest_configure(config):
     os.environ[EnvKeys.APPIUM] = "1" if str(config.getoption(f'--{nCLI.APPIUM}')) == "True" else "0"
 
     # add custom markers
-    config.addinivalue_line("markers", "sanity: marks as sanity test")
-    config.addinivalue_line("markers", "regression: mark as regression test")
-    config.addinivalue_line("markers", "ui: mark as ui test")
-    config.addinivalue_line("markers", "api: mark as api tests")
-    config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
-    config.addinivalue_line("markers", "unit: mark as unit test")
+    config.addinivalue_line("markers", f"{Markers.SANITY}: marks as sanity test")
+    config.addinivalue_line("markers", f"{Markers.REGRESSION}: mark as regression test")
+    config.addinivalue_line("markers", f"{Markers.UI}: mark as ui test")
+    config.addinivalue_line("markers", f"{Markers.API}: mark as api tests")
+    config.addinivalue_line("markers", f"{Markers.NOGUI}: mark as NOGUI tests")
+    config.addinivalue_line("markers", f"{Markers.UNIT}: mark as unit test")
 
     from nrobo import NROBO_PATHS
     if detect.production_machine() and not detect.developer_machine():

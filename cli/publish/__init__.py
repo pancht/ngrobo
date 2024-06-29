@@ -17,6 +17,7 @@ process.
 from cli.build import ENV_CLI_SWITCH
 from cli.check import check
 from nrobo import *
+from nrobo.util.common import Common
 from nrobo.util.constants import CONST
 from nrobo.util.platform import PLATFORMS
 from nrobo.util.process import terminal
@@ -60,13 +61,19 @@ def publish(target, *, debug: bool = False, override: bool = False):
         print(f"Invalid target environment <{target}>. Options: {ENV_CLI_SWITCH.TEST} | {ENV_CLI_SWITCH.PROD}")
         exit(1)
 
+    # Get pypi token
+    pypi_cred = Common.read_yaml('key/pypi_cred.yaml')
+    pypi_token = pypi_cred['token']
+    TOKEN = '__token__'
     with console.status(f"Publish on {PUBLISH_TARGET.PYPI.upper()}..."):
         command = ""
         if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
             command = ["twine", "upload", "--repository", __CUR_ENV__,
+                       '--username', TOKEN, '--password', f"{pypi_token}",
                        "dist" + os.sep + "*"]
         elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
             command = ["twine", "upload", "--repository", __CUR_ENV__,
+                       '--username', TOKEN, '--password', f"{pypi_token}",
                        CONST.DOT + os.sep + "dist" + os.sep + "*.*"]
 
         # add --skip-existing switch
