@@ -306,6 +306,13 @@ def driver(request):
 
     # initialize driver with None
     _driver = None
+    for mark in request.node.own_markers:
+        if mark.name == 'nogui' and browser in [Browsers.CHROME_HEADLESS, Browsers.CHROME]:
+            # store web driver ref in request
+            request.node.funcargs['driver'] = None
+            # yield driver instance to calling test method
+            yield _driver
+            return
 
     # Set driver log name
     # current test function name
@@ -614,6 +621,8 @@ def pytest_runtest_makereport(item, call):
             feature_request = item.funcargs['request']
             # Get driver reference from test method by calling driver(request) fixture
             driver = feature_request.getfixturevalue('driver')
+            if driver is None:
+                return
 
             # replace unwanted chars from node id, datetime and prepare a good name for screenshot file
             screenshot_filename = f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}' \
