@@ -178,3 +178,4 @@ results-unittests/
 /key/experiments/pytest/
 node_modules/
 cred.yaml
+/key/download-stats/
