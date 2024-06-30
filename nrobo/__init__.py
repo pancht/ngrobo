@@ -15,7 +15,7 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.41.0'
+__version__ = '2024.41.1'
 
 # install rich library
 import os
@@ -57,6 +57,14 @@ class Markers:
     API = 'api'
     NOGUI = 'nogui'
     UNIT = 'unit'
+
+
+class TWINE:
+    TWINE = 'twine'
+    UPLOAD = 'upload'
+    REPOSITORY = '--repository'
+    USERNAME = '--username'
+    PASSWORD = '--password'
 
 
 class EnvKeys:
