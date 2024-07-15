@@ -19,7 +19,7 @@ PyYAML==6.0.1
 selenium==4.17.2
 webdriver-manager==4.0.1
 undetected-chromedriver==3.5.5
-setuptools==69.1.1
+setuptools==70.0.0
 selenium-page-factory==2.6
 pytest-html==4.1.1
 pytest-xdist==3.5.0
