@@ -19,7 +19,6 @@ import functools
 import time
 import typing
 import logging
-from dataclasses import dataclass
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
