@@ -41,7 +41,7 @@ import os.path as path
 import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
-from nrobo.appium import AUTOMATION_NAMES, CAPABILITY
+from nrobo.appium import AutomationNames, CAPABILITY
 from selenium.common.exceptions import WebDriverException
 
 
@@ -324,13 +324,13 @@ def driver(request):
 
         capabilities = get_appium_capabilities_from_file(request.config.getoption(f"--{nCLI.CAP}"))
 
-        if capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.UI_AUTOMATION2:
+        if capabilities[CAPABILITY.AUTOMATION_NAME] == AutomationNames.UI_AUTOMATION2:
             """Create uiautomator2 driver instance"""
             from appium.options.android import UiAutomator2Options
 
             options = UiAutomator2Options().load_capabilities(capabilities)
 
-        elif capabilities[CAPABILITY.AUTOMATION_NAME] == AUTOMATION_NAMES.XCUITEST:
+        elif capabilities[CAPABILITY.AUTOMATION_NAME] == AutomationNames.XCUITEST:
             from appium.options.ios import XCUITestOptions
 
             options = XCUITestOptions().load_capabilities(capabilities)

@@ -96,7 +96,7 @@ class TestNRoboFrameworkPaths():
         assert publish_pkg_init_path.exists() == True
 
     def test_browser_configs_chrome_pkg_is_present(self):
-        """Validate that browserConfigs.chrome package is present_release"""
+        """Validate that browser_configs.chrome package is present_release"""
         set_environment()
 
         browserConfigs_chrome_pkg_path = Path(
