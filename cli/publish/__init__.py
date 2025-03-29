@@ -38,15 +38,19 @@ def publish(target, *, debug: bool = False, override: bool = False):
 
     from rich.prompt import Prompt
     import nrobo.cli.detection as detect
+
     reply = Prompt.ask(
         f"Do You really want to publish version: [{STYLE.HLOrange}]{detect.build_version_from_version_files()}[/]"
-        f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)")
+        f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
+    )
     if reply.strip().lower() not in ["yes", "y"]:
         # Hmm! Host don't want an update.
         # I don't know why he/she doesn't!!!
         # Anyway, I've had to obey her/his command,
         # Thus, I'm not going to update.
-        console.print(f"[{STYLE.HLOrange}]Alright! You chose not to publish.\nPublish aborted by choice![/]")
+        console.print(
+            f"[{STYLE.HLOrange}]Alright! You chose not to publish.\nPublish aborted by choice![/]"
+        )
         return  # Bye, Host!
 
     global __CUR_ENV__
@@ -56,17 +60,33 @@ def publish(target, *, debug: bool = False, override: bool = False):
     elif str(target).lower() == ENV_CLI_SWITCH.PROD:
         __CUR_ENV__ = PUBLISH_TARGET.PYPI
     else:
-        print(f"Invalid target environment <{target}>. Options: {ENV_CLI_SWITCH.TEST} | {ENV_CLI_SWITCH.PROD}")
+        print(
+            f"Invalid target environment <{target}>. Options: {ENV_CLI_SWITCH.TEST} | {ENV_CLI_SWITCH.PROD}"
+        )
         exit(1)
 
     with console.status(f"Publish on {PUBLISH_TARGET.PYPI.upper()}..."):
         command = ""
-        if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       "dist" + os.sep + "*"]
+        if os.environ[EnvKeys.HOST_PLATFORM] in [
+            PLATFORMS.DARWIN,
+            PLATFORMS.LINUX,
+            PLATFORMS.MACOS,
+        ]:
+            command = [
+                "twine",
+                "upload",
+                "--repository",
+                __CUR_ENV__,
+                "dist" + os.sep + "*",
+            ]
         elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       CONST.DOT + os.sep + "dist" + os.sep + "*.*"]
+            command = [
+                "twine",
+                "upload",
+                "--repository",
+                __CUR_ENV__,
+                CONST.DOT + os.sep + "dist" + os.sep + "*.*",
+            ]
 
         # add --skip-existing switch
         if override:
@@ -75,18 +95,25 @@ def publish(target, *, debug: bool = False, override: bool = False):
         # Run command
         console_output = terminal(command, text=True, capture_output=True)
 
-        if errors_in_console(r'(HTTPError:)', console_output.stdout):
+        if errors_in_console(r"(HTTPError:)", console_output.stdout):
             print(console_output.stdout)
             exit(1)
         else:
-            from cli.build import get_version_from_yaml_version_files, write_new_version_to_nrobo_init_py_file
+            from cli.build import (
+                get_version_from_yaml_version_files,
+                write_new_version_to_nrobo_init_py_file,
+            )
+
             build_version = get_version_from_yaml_version_files(target)
             write_new_version_to_nrobo_init_py_file(build_version)
 
-            console.rule(f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully.")
+            console.rule(
+                f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully."
+            )
 
 
 def errors_in_console(pattern: str, string: str) -> bool:
     """return True if pattern is found in string else false."""
     import re
+
     return re.search(pattern, string)

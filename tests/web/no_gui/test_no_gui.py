@@ -1,7 +1,7 @@
 import pytest
 
 
-class TestNoGUI():
+class TestNoGUI:
     def f2(self):
         """Verify no gui test f2"""
         raise ExceptionGroup(
@@ -29,5 +29,3 @@ class TestNoGUI():
         """Verify no gui test mytest"""
         with pytest.raises(SystemExit):
             self.f()
-
-

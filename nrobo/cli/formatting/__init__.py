@@ -18,6 +18,7 @@ for rich formatted console outputs.
 from dataclasses import dataclass
 from rich.theme import Theme
 
+
 @dataclass
 class STYLE:
     """Types of styles"""

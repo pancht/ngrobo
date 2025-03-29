@@ -12,15 +12,23 @@ Unit tests for validating framework directories.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 from pathlib import Path
 
 import pytest
 
-from nrobo import set_environment, EnvKeys, NROBO_CONST, NROBO_PATHS, NROBO_CLI_TOOL_PATH, NROBO_FRAMEWORK_TESTS
+from nrobo import (
+    set_environment,
+    EnvKeys,
+    NROBO_CONST,
+    NROBO_PATHS,
+    NROBO_CLI_TOOL_PATH,
+    NROBO_FRAMEWORK_TESTS,
+)
 
 
-class TestNRoboFrameworkPaths():
+class TestNRoboFrameworkPaths:
     """nRobo tests"""
 
     def test_cli_package_is_present(self):
@@ -63,7 +71,9 @@ class TestNRoboFrameworkPaths():
         """Validate that compile package is present_release"""
         set_environment()
 
-        compile_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.COMPILE
+        compile_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.COMPILE
+        )
 
         assert compile_pkg_path.exists() == True
 
@@ -75,7 +85,9 @@ class TestNRoboFrameworkPaths():
         """Validate that development package is present_release"""
         set_environment()
 
-        development_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.DEVELOPMENT
+        development_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.DEVELOPMENT
+        )
 
         assert development_pkg_path.exists() == True
 
@@ -87,7 +99,9 @@ class TestNRoboFrameworkPaths():
         """Validate that publish package is present_release"""
         set_environment()
 
-        publish_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.PUBLISH
+        publish_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CLI_TOOL_PATH.PUBLISH
+        )
 
         assert publish_pkg_path.exists() == True
 
@@ -99,12 +113,17 @@ class TestNRoboFrameworkPaths():
         """Validate that browser_configs.chrome package is present_release"""
         set_environment()
 
-        browserConfigs_chrome_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
+        browserConfigs_chrome_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSERS_CHROME_PKG
+        )
 
         assert browserConfigs_chrome_pkg_path.exists() == True
 
-        browserConfigs_chrome_pkg_init_path = browserConfigs_chrome_pkg_path / NROBO_PATHS.INIT_PY
+        browserConfigs_chrome_pkg_init_path = (
+            browserConfigs_chrome_pkg_path / NROBO_PATHS.INIT_PY
+        )
 
         assert browserConfigs_chrome_pkg_init_path.exists() == True
 
@@ -112,7 +131,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers.edge package is present_release"""
         set_environment()
 
-        browsers_edge_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_EDGE_PKG
+        browsers_edge_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSERS_EDGE_PKG
+        )
 
         assert browsers_edge_pkg_path.exists() == True
 
@@ -124,8 +147,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers.firefox package is present_release"""
         set_environment()
 
-        browsers_firefox_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_FIREFOX_PKG
+        browsers_firefox_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSERS_FIREFOX_PKG
+        )
 
         assert browsers_firefox_pkg_path.exists() == True
 
@@ -137,8 +163,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers.safari package is present_release"""
         set_environment()
 
-        browsers_safari_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS_CHROME_PKG
+        browsers_safari_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSERS_CHROME_PKG
+        )
 
         assert browsers_safari_pkg_path.exists() == True
 
@@ -150,7 +179,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.detection package is present_release"""
         set_environment()
 
-        cli_detection_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.DETECTION_PKG
+        cli_detection_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.DETECTION_PKG
+        )
 
         assert cli_detection_pkg_path.exists() == True
 
@@ -158,7 +191,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.formatting package is present_release"""
         set_environment()
 
-        cli_formatting_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FORMATTING_PKG
+        cli_formatting_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FORMATTING_PKG
+        )
 
         assert cli_formatting_pkg_path.exists() == True
 
@@ -166,7 +203,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.install package is present_release"""
         set_environment()
 
-        cli_install_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.INSTALL_PKG
+        cli_install_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.INSTALL_PKG
+        )
 
         assert cli_install_pkg_path.exists()
 
@@ -174,8 +215,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.tools.requirements.txt file is present_release"""
         set_environment()
 
-        cli_install_requirements_txt_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.REQUIREMENTS_TXT_FILE_CLI
+        cli_install_requirements_txt_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.REQUIREMENTS_TXT_FILE_CLI
+        )
 
         assert cli_install_requirements_txt_file_pkg_path.exists()
 
@@ -183,7 +227,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.ncodes package is present_release"""
         set_environment()
 
-        cli_ncodes_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NCODES_PKG
+        cli_ncodes_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.NCODES_PKG
+        )
 
         assert cli_ncodes_pkg_path.exists()
 
@@ -191,8 +239,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.nrobo_args package is present_release"""
         set_environment()
 
-        cli_nrobo_args_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_NROBO_ARGS_PKG
+        cli_nrobo_args_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CLI_NROBO_ARGS_PKG
+        )
 
         assert cli_nrobo_args_pkg_path.exists()
 
@@ -200,7 +251,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.tools package is present_release"""
         set_environment()
 
-        cli_tools_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_TOOLS_PKG
+        cli_tools_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CLI_TOOLS_PKG
+        )
 
         assert cli_tools_pkg_path.exists() == True
 
@@ -208,7 +263,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.upgrade package is present_release"""
         set_environment()
 
-        cli_upgrade_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.UPGRADE_PKG
+        cli_upgrade_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.UPGRADE_PKG
+        )
 
         assert cli_upgrade_pkg_path.exists()
 
@@ -216,8 +275,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.launcher.py file is present_release"""
         set_environment()
 
-        cli_launcher_py_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_LAUNCHER_PY_FILE
+        cli_launcher_py_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CLI_LAUNCHER_PY_FILE
+        )
 
         assert cli_launcher_py_file_pkg_path.exists()
 
@@ -225,8 +287,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.cli_constants.py file is present_release"""
         set_environment()
 
-        cli_cli_constants_py_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_CONSTANTS_PY_FILE
+        cli_cli_constants_py_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CLI_CONSTANTS_PY_FILE
+        )
 
         assert cli_cli_constants_py_file_pkg_path.exists()
 
@@ -234,8 +299,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.version.yaml file is present_release"""
         set_environment()
 
-        cli_cli_version_yaml_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI_VERSION_YAML_FILE
+        cli_cli_version_yaml_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CLI_VERSION_YAML_FILE
+        )
 
         assert cli_cli_version_yaml_file_pkg_path.exists()
 
@@ -243,8 +311,11 @@ class TestNRoboFrameworkPaths():
         """Validate that cli.nglobals.py file is present_release"""
         set_environment()
 
-        cli_nglobals_py_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NGLOBALS_PY_FILE
+        cli_nglobals_py_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.NGLOBALS_PY_FILE
+        )
 
         assert cli_nglobals_py_file_pkg_path.exists()
 
@@ -262,7 +333,9 @@ class TestNRoboFrameworkPaths():
 
         set_environment()
 
-        conftest_path = NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
+        conftest_path = (
+            NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY
+        )
 
         assert not conftest_path.exists()
 
@@ -270,7 +343,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browserConfig package is present_release"""
         set_environment()
 
-        browser_config_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSER_CONFIGS
+        browser_config_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSER_CONFIGS
+        )
 
         assert browser_config_path.exists()
 
@@ -282,7 +359,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers package is present in release"""
         set_environment()
 
-        browsers_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.BROWSERS
+        browsers_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.BROWSERS
+        )
 
         assert browsers_path.exists()
 
@@ -294,7 +375,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers package > capability.yaml file is present in release"""
         set_environment()
 
-        capability_yaml_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CAPABILITY_YAML
+        capability_yaml_file = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.CAPABILITY_YAML
+        )
 
         assert capability_yaml_file.exists()
 
@@ -302,7 +387,11 @@ class TestNRoboFrameworkPaths():
         """Validate that browsers package > markers.yaml file is present in release"""
         set_environment()
 
-        markers_yaml_file = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.MARKERS_YAML
+        markers_yaml_file = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.MARKERS_YAML
+        )
 
         assert markers_yaml_file.exists()
 
@@ -310,7 +399,9 @@ class TestNRoboFrameworkPaths():
         """Validate that cli package is present_release"""
         set_environment()
 
-        cli_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI
+        cli_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.CLI
+        )
 
         assert cli_path.exists()
 
@@ -322,7 +413,11 @@ class TestNRoboFrameworkPaths():
         """Validate that exceptions package is present_release"""
         set_environment()
 
-        excepations_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.EXCEPTIONS
+        excepations_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.EXCEPTIONS
+        )
 
         assert excepations_pkg_path.exists()
 
@@ -334,7 +429,11 @@ class TestNRoboFrameworkPaths():
         """Validate that framework package is present_release"""
         set_environment()
 
-        framework_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK
+        framework_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK
+        )
 
         assert framework_pkg_path.exists()
 
@@ -346,8 +445,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.pages package is present_release"""
         set_environment()
 
-        nrobo_framework_pages_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_PAGES
+        nrobo_framework_pages_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK_PAGES
+        )
 
         assert nrobo_framework_pages_pkg_path.exists()
 
@@ -355,8 +457,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.pages.PagePyPiHome.py file is present_release"""
         set_environment()
 
-        nrobo_framework_pages_page_pypi_homw_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_PAGE_PYPI_HOME_PY_FILE
+        nrobo_framework_pages_page_pypi_homw_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK_PAGE_PYPI_HOME_PY_FILE
+        )
 
         assert nrobo_framework_pages_page_pypi_homw_py_file_path.exists()
 
@@ -364,8 +469,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.tests.gui package is present_release"""
         set_environment()
 
-        nrobo_framework_tests_gui_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
+        nrobo_framework_tests_gui_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
+        )
 
         assert nrobo_framework_tests_gui_pkg_path.exists()
 
@@ -373,8 +479,12 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.tests.no_gui package is present_release"""
         set_environment()
 
-        nrobo_framework_tests_no_gui_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.NO_GUI_PKG
+        nrobo_framework_tests_no_gui_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK
+            / NROBO_PATHS.NO_GUI_PKG
+        )
 
         assert nrobo_framework_tests_no_gui_pkg_path.exists()
 
@@ -382,8 +492,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.tests.gui.PyPi_home_page_test.py file is present_release"""
         set_environment()
 
-        nrobo_framework_tests_gui_pypi_home_page_test_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PYPI_HOME_PAGE_TEST_PY_FILE
+        nrobo_framework_tests_gui_pypi_home_page_test_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.GUI_PYPI_HOME_PAGE_TEST_PY_FILE
+        )
 
         assert nrobo_framework_tests_gui_pypi_home_page_test_py_file_path.exists()
 
@@ -391,8 +504,12 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.tests package is present_release"""
         set_environment()
 
-        nrobo_framework_tests_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_TESTS / NROBO_PATHS.INIT_PY
+        nrobo_framework_tests_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK_TESTS
+            / NROBO_PATHS.INIT_PY
+        )
 
         assert nrobo_framework_tests_pkg_path.exists()
 
@@ -400,8 +517,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.nrobo-config.yaml file is present_release"""
         set_environment()
 
-        nrobo_framework_nrobo_config_yaml_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK_NROBO_CONFIG
+        nrobo_framework_nrobo_config_yaml_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK_NROBO_CONFIG
+        )
 
         assert nrobo_framework_nrobo_config_yaml_file_path.exists()
 
@@ -409,8 +529,11 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.conftest-host.py file is present_release"""
         set_environment()
 
-        nrobo_framework_conftest_host_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE
+        nrobo_framework_conftest_host_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.NROBO_CONFTEST_HOST_FILE
+        )
 
         assert nrobo_framework_conftest_host_py_file_path.exists()
 
@@ -418,16 +541,23 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.framework.requirements.txt file is present_release"""
         set_environment()
 
-        framework_requirements_txt_file_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK \
-                                                   / NROBO_PATHS.REQUIREMENTS_TXT_FILE
+        framework_requirements_txt_file_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK
+            / NROBO_PATHS.REQUIREMENTS_TXT_FILE
+        )
         assert framework_requirements_txt_file_pkg_path.exists()
 
     def test_selenes_pkg_is_present(self):
         """Validate that selenes pkg is present_release"""
         set_environment()
 
-        selenes_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.SELENESE
+        selenes_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.SELENESE
+        )
 
         assert selenes_pkg_path.exists()
 
@@ -439,7 +569,9 @@ class TestNRoboFrameworkPaths():
         """Validate that util package is present_release"""
         set_environment()
 
-        util_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.UTIL
+        util_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.UTIL
+        )
 
         assert util_pkg_path.exists()
 
@@ -451,8 +583,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.commands.ncommands package is present_release"""
         set_environment()
 
-        nrobo_util_commands_ncommands_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
+        nrobo_util_commands_ncommands_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.GUI_PKG
+        )
 
         assert nrobo_util_commands_ncommands_pkg_path.exists()
 
@@ -460,7 +593,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.commands.posix package is present_release"""
         set_environment()
 
-        nrobo_util_commands_posix_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_POSIX_PKG
+        nrobo_util_commands_posix_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_POSIX_PKG
+        )
 
         assert nrobo_util_commands_posix_pkg_path.exists()
 
@@ -468,7 +603,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.commands.windows package is present_release"""
         set_environment()
 
-        nrobo_util_commands_windows_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_WINDOWS_PKG
+        nrobo_util_commands_windows_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_WINDOWS_PKG
+        )
 
         assert nrobo_util_commands_windows_pkg_path.exists()
 
@@ -476,8 +613,13 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.commands package is present_release"""
         set_environment()
 
-        nrobo_util_commands_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / \
-                                       NROBO_PATHS.UTIL / NROBO_PATHS.COMMANDS / NROBO_PATHS.INIT_PY
+        nrobo_util_commands_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.UTIL
+            / NROBO_PATHS.COMMANDS
+            / NROBO_PATHS.INIT_PY
+        )
 
         assert nrobo_util_commands_pkg_path.exists()
 
@@ -485,7 +627,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.common package is present_release"""
         set_environment()
 
-        nrobo_util_common_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_COMMON_PKG
+        nrobo_util_common_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_COMMON_PKG
+        )
 
         assert nrobo_util_common_pkg_path.exists()
 
@@ -493,7 +637,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.constant package is present_release"""
         set_environment()
 
-        nrobo_util_constants_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_CONSTANT_PKG
+        nrobo_util_constants_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_CONSTANT_PKG
+        )
 
         assert nrobo_util_constants_pkg_path.exists()
 
@@ -501,7 +647,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.filesystem package is present_release"""
         set_environment()
 
-        nrobo_util_filesystem_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_FILESYSTEM_PKG
+        nrobo_util_filesystem_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_FILESYSTEM_PKG
+        )
 
         assert nrobo_util_filesystem_pkg_path.exists()
 
@@ -509,7 +657,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.network package is present_release"""
         set_environment()
 
-        nrobo_util_network_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_NETWORK_PKG
+        nrobo_util_network_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_NETWORK_PKG
+        )
 
         assert nrobo_util_network_pkg_path.exists()
 
@@ -517,7 +667,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.platform package is present_release"""
         set_environment()
 
-        nrobo_util_platform_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PLATFORM_PKG
+        nrobo_util_platform_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PLATFORM_PKG
+        )
 
         assert nrobo_util_platform_pkg_path.exists()
 
@@ -525,7 +677,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.process package is present_release"""
         set_environment()
 
-        nrobo_util_process_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PROCESS_PKG
+        nrobo_util_process_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PROCESS_PKG
+        )
 
         assert nrobo_util_process_pkg_path.exists()
 
@@ -533,7 +687,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.python package is present_release"""
         set_environment()
 
-        nrobo_util_python_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PYTHON_PKG
+        nrobo_util_python_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_PYTHON_PKG
+        )
 
         assert nrobo_util_python_pkg_path.exists()
 
@@ -541,7 +697,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.regex package is present_release"""
         set_environment()
 
-        nrobo_util_regex_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_REGEX_PKG
+        nrobo_util_regex_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_REGEX_PKG
+        )
 
         assert nrobo_util_regex_pkg_path.exists()
 
@@ -549,7 +707,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.util.version package is present_release"""
         set_environment()
 
-        nrobo_util_version_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_VERSION_PKG
+        nrobo_util_version_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.UTIL_VERSION_PKG
+        )
 
         assert nrobo_util_version_pkg_path.exists()
 
@@ -557,12 +717,15 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo_framework_tests package is present_release"""
         set_environment()
 
-        nrobo_framework_tests_pkg_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_FRAMEWORK_TESTS
+        nrobo_framework_tests_pkg_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_FRAMEWORK_TESTS
+        )
 
         assert nrobo_framework_tests_pkg_path.exists()
 
-        nrobo_framework_tests_pkg_init_path = nrobo_framework_tests_pkg_path / NROBO_PATHS.INIT_PY
+        nrobo_framework_tests_pkg_init_path = (
+            nrobo_framework_tests_pkg_path / NROBO_PATHS.INIT_PY
+        )
 
         assert nrobo_framework_tests_pkg_init_path.exists()
 
@@ -571,8 +734,10 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo_framework_tests.conftest.py file is present_release"""
         set_environment()
 
-        nrobo_framework_tests_conftest_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE
+        nrobo_framework_tests_conftest_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_FRAMEWORK_TESTS.NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE
+        )
 
         assert nrobo_framework_tests_conftest_py_file_path.exists()
 
@@ -580,8 +745,10 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo_framework_tests.test_package_presence.py file is present_release"""
         set_environment()
 
-        test_nrobo_framework_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_FRAMEWORK_TESTS.TEST_NROBO_FRAMEWORK_PY_FILE
+        test_nrobo_framework_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_FRAMEWORK_TESTS.TEST_NROBO_FRAMEWORK_PY_FILE
+        )
 
         assert test_nrobo_framework_py_file_path.exists()
 
@@ -625,7 +792,9 @@ class TestNRoboFrameworkPaths():
         """Validate that LICENSE file is present_release"""
         set_environment()
 
-        license_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.LICENSE_FILE
+        license_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.LICENSE_FILE
+        )
 
         assert license_file_path.exists()
 
@@ -633,7 +802,9 @@ class TestNRoboFrameworkPaths():
         """Validate that nrobo.py file is present_release"""
         set_environment()
 
-        nrobo_py_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_PY_FILE
+        nrobo_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_PY_FILE
+        )
 
         assert nrobo_py_file_path.exists()
 
@@ -641,7 +812,9 @@ class TestNRoboFrameworkPaths():
         """Validate that package.py file is present_release"""
         set_environment()
 
-        package_py_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PACKAGE_PY_FILE
+        package_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PACKAGE_PY_FILE
+        )
 
         assert package_py_file_path.exists()
 
@@ -649,8 +822,9 @@ class TestNRoboFrameworkPaths():
         """Validate that pyproject.toml file is present_release"""
         set_environment()
 
-        pyproject_toml_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PY_PROJECT_TOML_FILE
+        pyproject_toml_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.PY_PROJECT_TOML_FILE
+        )
 
         assert pyproject_toml_file_path.exists()
 
@@ -658,7 +832,9 @@ class TestNRoboFrameworkPaths():
         """Validate that README.rst file is present_release"""
         set_environment()
 
-        readme_rst_file_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.README_RST_FILE
+        readme_rst_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.README_RST_FILE
+        )
 
         assert readme_rst_file_path.exists()
 
@@ -666,7 +842,8 @@ class TestNRoboFrameworkPaths():
         """Validate that validate.py file is present_release"""
         set_environment()
 
-        validate_nrob_py_file_path = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.VALIDATE_NROBO_PY_FILE
+        validate_nrob_py_file_path = (
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.VALIDATE_NROBO_PY_FILE
+        )
 
         assert validate_nrob_py_file_path.exists()

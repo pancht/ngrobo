@@ -36,6 +36,3 @@ class TestNroboWaitMethods:
         page.wait_for_element_to_be_invisible(eleMnuPortfolio)
 
         page.wait_for_a_while(3)
-
-
-

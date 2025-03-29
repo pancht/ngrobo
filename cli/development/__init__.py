@@ -22,7 +22,9 @@ def set_switch_environment(env: str, debug=False):
     """sets the environment"""
 
     if env not in [ENV_CLI_SWITCH.TEST, ENV_CLI_SWITCH.PROD]:
-        print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
+        print(
+            f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}"
+        )
         exit()
 
     # set the environment
@@ -41,21 +43,29 @@ def set_switch_environment(env: str, debug=False):
     # Replacement text
     if env == ENV_CLI_SWITCH.TEST:
         PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.PRODUCTION)"
-        REPLACEMENT_TEXT = "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
+        REPLACEMENT_TEXT = (
+            "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
+        )
     elif env == ENV_CLI_SWITCH.PROD:
         PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.DEVELOPMENT)"
-        REPLACEMENT_TEXT = "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
+        REPLACEMENT_TEXT = (
+            "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
+        )
     else:
-        print(f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}")
+        print(
+            f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}"
+        )
         exit()
 
     PATTERN_REGULAR_EXPRESSION = PATTERN
 
     # Update version number in README file
-    file_content = re.sub(PATTERN_REGULAR_EXPRESSION, REPLACEMENT_TEXT, file_content, count=1)
+    file_content = re.sub(
+        PATTERN_REGULAR_EXPRESSION, REPLACEMENT_TEXT, file_content, count=1
+    )
 
     # Write file_content
     Common.write_text_to_file(
         NROBO_PATHS.EXEC_DIR / Path(NROBO_CONST.NROBO) / Path(NROBO_PATHS.INIT_PY),
-        file_content
+        file_content,
     )

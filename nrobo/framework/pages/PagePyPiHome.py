@@ -3,7 +3,6 @@
 @email: erpanchdev@gmail.com
 """
 
-
 from selenium.webdriver.common.by import By
 from pages import Page
 from pages.PageSearch import PageSearch

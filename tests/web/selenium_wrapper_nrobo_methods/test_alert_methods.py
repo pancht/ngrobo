@@ -71,4 +71,3 @@ class TestAlertMethods:
         page.dismiss_alert()
 
         page.wait_for_a_while(3)
-

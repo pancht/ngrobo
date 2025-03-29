@@ -13,12 +13,14 @@ working with appium framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from dataclasses import dataclass
 
 
 @dataclass
 class CAPABILITY:
     """Capability class."""
+
     AUTOMATION_NAME = "automationName"
 
 

@@ -20,13 +20,13 @@ import subprocess
 import time
 from pathlib import Path
 from typing import Optional
+from datetime import datetime
 from nrobo.cli.cli_constants import NCli
 from nrobo.util.common import Common
 from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree
 from nrobo.util.version import Version
 from nrobo.cli.upgrade import get_host_version, get_pypi_index
 import nrobo.cli.detection as detect
-from datetime import datetime
 
 
 def transfer_files_to_host_project() -> None:  # noqa: R0914
@@ -38,11 +38,7 @@ def transfer_files_to_host_project() -> None:  # noqa: R0914
     from nrobo import (
         console,
         STYLE,
-        set_environment,
-        EnvKeys,
-        Environment,
         NROBO_PATHS as NP,
-        NROBO_CONST,
     )
 
     stop_auto_silent_update_version = Version("2024.19.3")

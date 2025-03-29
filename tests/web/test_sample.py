@@ -4,10 +4,12 @@ from selenium.webdriver.common.by import By
 from nrobo.framework.pages import Page
 
 
-class TestWebSamples():
+class TestWebSamples:
 
     @pytest.mark.regression
-    def test_pass_url_username_password_from_commandline(self, driver, logger, url, username, password):
+    def test_pass_url_username_password_from_commandline(
+        self, driver, logger, url, username, password
+    ):
         driver.get(url)
         logger.info(f"URL={url}, Username={username} and Password={password}")
 
@@ -51,7 +53,9 @@ class TestWebSamples():
         logger.info("Click submit button")
         submit_button.click()
 
-        raise Exception("Forcefully failed test for demonstration of screencapture feature!")
+        raise Exception(
+            "Forcefully failed test for demonstration of screencapture feature!"
+        )
 
     @pytest.mark.sanity
     # @pytest.mark.skip
@@ -78,4 +82,3 @@ class TestWebSamples():
         page = Page(driver, logger)
 
         page.get("https://namasteydigitalindia.com/")
-

@@ -22,5 +22,3 @@ class TestActionChainMethods:
         page.action_chain().drag_and_drop(eleHeaderA, eleHeaderB).perform()
 
         page.wait_for_a_while(4)
-
-

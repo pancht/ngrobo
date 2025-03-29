@@ -96,7 +96,7 @@ def confirm_update() -> None:
         from nrobo import console, terminal, STYLE
         from nrobo.cli.ncodes import EXIT_CODES
 
-        version_forced_update = Version(host_version.version)
+        # version_forced_update = Version(host_version.version)
 
         if Version.present_is_a_major_release(
             pypi_version.version, host_version.version
@@ -168,7 +168,7 @@ def confirm_update() -> None:
     if host_version < pypi_version:
         # Ok. Since the host version is lower than the latest version,
         # Lets' ask host user if he/she wants to upgrade.
-        from nrobo import EnvKeys
+        # from nrobo import EnvKeys
 
         # Enabled Major and Minor release by default.
         # Thus, stopping patch releases from version 2024.25.8

@@ -16,7 +16,7 @@ Unit tests for validating upgrade process.
 from nrobo import console, NROBO_CONST
 
 
-class TestUpgradePkg():
+class TestUpgradePkg:
 
     def test_get_host_version_method(self):
         """Validate nrobo.cli.upgrade.get_host_version() method"""
@@ -30,18 +30,25 @@ class TestUpgradePkg():
         """Validate nrobo.cli.upgrade.get_pypi_index() method"""
 
         from nrobo.cli.upgrade import get_pypi_index
+
         package = NROBO_CONST.NROBO
         import subprocess
-        result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
+
+        result = subprocess.run(
+            ["pip", "index", "versions", package], text=True, capture_output=True
+        )
 
         import re
+
         match = re.search(package + r" \(([\d]+[.][\d]+[.][\d]+)\)", result.stdout)
 
         # Test return type AnyStr
         assert match.group(1) == get_pypi_index(package)
 
         package = "xyzabc"
-        result = subprocess.run(['pip', 'index', 'versions', package], text=True, capture_output=True)
+        result = subprocess.run(
+            ["pip", "index", "versions", package], text=True, capture_output=True
+        )
         match = re.search(package + r" \(([\d]+[.][\d]+[.][\d]+)\)", result.stdout)
 
         assert None == get_pypi_index(package)
@@ -57,6 +64,7 @@ class TestUpgradePkg():
             # scenario-1: Update not available
             package = NROBO_CONST.NROBO
             from nrobo import __version__
+
             if Version(__version__) < Version(get_pypi_index(package)):
                 assert update_available() == True
             else:

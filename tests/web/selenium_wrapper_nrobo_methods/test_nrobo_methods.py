@@ -1,4 +1,3 @@
-
 import pytest
 
 from nrobo.framework.pages import Page
@@ -133,6 +132,7 @@ class TestNRoBoSeleniumWrapperMethods:
         result = page.print_page()
 
         from nrobo.util.common import Common
+
         Common.save_as_pdf(result)
 
     def test_switch_to_active_element(self, driver, logger):
@@ -295,15 +295,15 @@ class TestNRoBoSeleniumWrapperMethods:
     def test_get_all_cookies(self, driver, logger):
         """Example of working with cookies
 
-           get_cookies()
+        get_cookies()
 
-           get_cookie(name)
+        get_cookie(name)
 
-           delete_cookie(name)
+        delete_cookie(name)
 
-           delete_all_cookies()
+        delete_all_cookies()
 
-           add_cookie(cookies:{})"""
+        add_cookie(cookies:{})"""
 
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
@@ -318,9 +318,7 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        custom_cookies = {
-            'name': 'company', 'value': 'ndi', 'path': '/'
-        }
+        custom_cookies = {"name": "company", "value": "ndi", "path": "/"}
         page.add_cookie(custom_cookies)
 
         logger.info(f"updated cookies= {page.get_cookies()}")
@@ -335,7 +333,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         logger.info(f"All cookies ==> {page.get_cookies()}")
 
-        page.delete_cookie('optimizelyEndUserId')
+        page.delete_cookie("optimizelyEndUserId")
 
         logger.info(f"All cookies ==> {page.get_cookies()}")
 
@@ -453,6 +451,7 @@ class TestNRoBoSeleniumWrapperMethods:
         bytes = page.get_screenshot_as_png()
 
         from nrobo.util.common import Common
+
         Common.save_bytes_to_file(bytes, "downloads/screenshot_as_png.png")
 
     def test_get_screenshot_as_base64(self, driver, logger):
@@ -464,7 +463,10 @@ class TestNRoBoSeleniumWrapperMethods:
         base64string = page.get_screenshot_as_base64()
 
         from nrobo.util.common import Common
-        Common.save_base64string(base64string, "downloads/screenshot_as_base64string.png")
+
+        Common.save_base64string(
+            base64string, "downloads/screenshot_as_base64string.png"
+        )
 
     def test_set_window_size(self, driver, logger):
         """example of get_screenshot_as_base64"""
@@ -519,7 +521,3 @@ class TestNRoBoSeleniumWrapperMethods:
 
         logger.info(f"Get Driver Log = {page.get_log('driver')}")
         logger.info(f"Get Driver Log = {page.get_log('browser')}")
-
-
-
-

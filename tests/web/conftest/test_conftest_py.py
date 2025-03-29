@@ -43,6 +43,8 @@ class TestConftestPy:
         assert len(password) > 0
 
         import logging
+
         assert isinstance(logger, logging.Logger)
         from selenium.webdriver.remote.webdriver import WebDriver
+
         assert isinstance(driver, WebDriver)

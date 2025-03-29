@@ -76,7 +76,7 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_value('1')
+        dropdown.select_by_value("1")
 
         page.wait_for_a_while(3)
 
@@ -110,7 +110,7 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_visible_text('Option 2')
+        dropdown.select_by_visible_text("Option 2")
 
         page.wait_for_a_while(3)
 
@@ -128,7 +128,7 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_visible_text('Option 2')
+        dropdown.select_by_visible_text("Option 2")
         page.wait_for_a_while(1)
 
         dropdown.deselect_all()
@@ -149,10 +149,10 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_visible_text('Option 2')
+        dropdown.select_by_visible_text("Option 2")
         page.wait_for_a_while(1)
 
-        dropdown.deselect_by_value('2')
+        dropdown.deselect_by_value("2")
 
         page.wait_for_a_while(3)
 
@@ -170,7 +170,7 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_visible_text('Option 2')
+        dropdown.select_by_visible_text("Option 2")
         page.wait_for_a_while(1)
 
         dropdown.deselect_by_index(2)
@@ -191,10 +191,9 @@ class TestSelect:
         dropdown = page.select(*drdDropDownList)
 
         # select first option
-        dropdown.select_by_visible_text('Option 2')
+        dropdown.select_by_visible_text("Option 2")
         page.wait_for_a_while(1)
 
-        dropdown.deselect_by_visible_text('Option 2')
+        dropdown.deselect_by_visible_text("Option 2")
 
         page.wait_for_a_while(3)
-

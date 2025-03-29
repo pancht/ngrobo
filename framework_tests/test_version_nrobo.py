@@ -8,13 +8,20 @@ from nrobo import terminal, EnvKeys, NROBO_PATHS, NROBO_CONST
 from nrobo.cli.nglobals import Browsers
 
 
-class TestNRoboFramework():
+class TestNRoboFramework:
 
     @pytest.mark.skip
     def test_nrobo_framework_developer_tests(self):
         """Validate that nrobo framework developer-tests passed located at root"""
 
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS, '-n', '20']
+        command = [
+            "python",
+            "nrobo.py",
+            "--browser",
+            Browsers.CHROME_HEADLESS,
+            "-n",
+            "20",
+        ]
         return_code = terminal(command)
 
         assert return_code == 0
@@ -24,8 +31,12 @@ class TestNRoboFramework():
         """Validate that nrobo host framework tests passed located at root/nrobo/framework/tests dir"""
 
         # conftest_file_path_in_framework_folder
-        conftest_in_framework_pkg = Path(
-            os.environ[EnvKeys.EXEC_DIR]) / NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.CONFTEST_PY
+        conftest_in_framework_pkg = (
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NROBO_CONST.NROBO
+            / NROBO_PATHS.FRAMEWORK
+            / NROBO_PATHS.CONFTEST_PY
+        )
         command = []
 
         # copy conftest.py from root to nrobo/framework/tests dir
@@ -35,17 +46,30 @@ class TestNRoboFramework():
             # already exists, then remove it
             remove_file(conftest_in_framework_pkg)
 
-        copy_file(f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
-                      f"{conftest_in_framework_pkg}")
+        copy_file(
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
+            f"{conftest_in_framework_pkg}",
+        )
 
         # pause for 1 sec
         time.sleep(1)
 
         # set command with --confcutdir switch
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME,
-                       '--confcutdir', str(conftest_in_framework_pkg),
-                       '--rootdir', str(Path(os.environ[EnvKeys.EXEC_DIR]) /
-                                        NROBO_CONST.NROBO / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.TESTS)]
+        command = [
+            "python",
+            "nrobo.py",
+            "--browser",
+            Browsers.CHROME,
+            "--confcutdir",
+            str(conftest_in_framework_pkg),
+            "--rootdir",
+            str(
+                Path(os.environ[EnvKeys.EXEC_DIR])
+                / NROBO_CONST.NROBO
+                / NROBO_PATHS.FRAMEWORK
+                / NROBO_PATHS.TESTS
+            ),
+        ]
         # run command
         return_code = terminal(command)
 
@@ -60,15 +84,25 @@ class TestNRoboFramework():
 
         from nrobo.cli.upgrade import get_pypi_index, get_host_version
 
-        command = ['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
-                   '--rootdir', str(Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.TESTS)]
+        command = [
+            "python",
+            "nrobo.py",
+            "--browser",
+            Browsers.CHROME_HEADLESS,
+            "--rootdir",
+            str(
+                Path(os.environ[EnvKeys.EXEC_DIR])
+                / NROBO_PATHS.FRAMEWORK
+                / NROBO_PATHS.TESTS
+            ),
+        ]
 
         if get_host_version() == get_pypi_index("nrobo"):
             """no upgrade prompt"""
             assert True  # this scenario already covered in another test: test_nrobo_framework_simplest_way
         else:
             """upgrade prompt"""
-            command.append('--suppress')
+            command.append("--suppress")
 
             assert terminal(command) == 0  # 0 means success
 
@@ -79,4 +113,3 @@ class TestNRoboFramework():
         from nrobo import __version__
 
         assert detect.build_version_from_version_files() == __version__
-

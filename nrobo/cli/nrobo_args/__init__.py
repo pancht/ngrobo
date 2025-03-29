@@ -16,14 +16,15 @@ Definitions of nRoBo command line arguments.
 
 # Define nrobo command line argument parser
 import argparse
-
+from dataclasses import dataclass
 from nrobo.cli.cli_constants import NCli, NREPORT
 from nrobo.cli.nglobals import Browsers
-from dataclasses import dataclass
+
 
 @dataclass
 class BoolArgs:
     """Boolean arguments."""
+
     PYARGS = "pyargs"
 
 
@@ -146,7 +147,7 @@ def nrobo_cli_parser(exit_on_failure=True):  # noqa: R0915
         "-n",
         f"--{NCli.INSTANCES}",
         help="Number of parallel tests to reduce test-run-time. "
-             "Default value is 1. Meaning single test at a time in sequence.",
+        "Default value is 1. Meaning single test at a time in sequence.",
         default=1,
     )
     parser.add_argument(
@@ -162,8 +163,8 @@ def nrobo_cli_parser(exit_on_failure=True):  # noqa: R0915
     parser.add_argument(
         f"--{NCli.REPORT}",
         help="Defines type of test report. "
-             "Two types are supported, Simple HTML or Rich Allure report. "
-             "Options are <html> | <allure>. Default is <html>",
+        "Two types are supported, Simple HTML or Rich Allure report. "
+        "Options are <html> | <allure>. Default is <html>",
         default="html",
     )
     parser.add_argument(

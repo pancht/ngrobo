@@ -12,6 +12,7 @@ Defines nRoBo command line switches.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import argparse
 import os
 
@@ -27,7 +28,8 @@ from nrobo.util.python import verify_set_python_install_pip_command
 class BUILD_VERSION:
     """Build Version.
 
-       Could be major | minor | patch"""
+    Could be major | minor | patch"""
+
     MAJOR = "major"
     MINOR = "minor"
     PATCH = "patch"
@@ -40,36 +42,69 @@ def nrobo_cli() -> None:
     verify_set_python_install_pip_command()
 
     parser = argparse.ArgumentParser(
-        prog="nrobo",
-        description='nRoBo package and upload utility')
+        prog="nrobo", description="nRoBo package and upload utility"
+    )
     parser.add_argument("-b", "--build", help="Build package", action="store_true")
     parser.add_argument("-s", "--skip", help="Skip tests", action="store_true")
-    parser.add_argument("-c", "--check", help="Check package bundle before upload", action="store_true")
+    parser.add_argument(
+        "-c", "--check", help="Check package bundle before upload", action="store_true"
+    )
     parser.add_argument("-p", "--publish", help="Publish package", action="store_true")
-    parser.add_argument("-t", "--target", help="Target pypi repository. Options: test | prod")
-    parser.add_argument("-e", "--env",
-                        help="Set/switch environment between production_machine and development. Options: test | prod")
-    parser.add_argument("-d", "--debug", help="Build package", action="store_true", default=False)
-    parser.add_argument("-o", "--override", help="Build package", action="store_true", default=False)
-    parser.add_argument("--major", help="Increment major version", action="store_true", default=False)
-    parser.add_argument("--minor", help="Increment minor version", action="store_true", default=False)
-    parser.add_argument("--downloads", help="Number of downloads", action="store_true", default=False)
+    parser.add_argument(
+        "-t", "--target", help="Target pypi repository. Options: test | prod"
+    )
+    parser.add_argument(
+        "-e",
+        "--env",
+        help="Set/switch environment between production_machine and development. Options: test | prod",
+    )
+    parser.add_argument(
+        "-d", "--debug", help="Build package", action="store_true", default=False
+    )
+    parser.add_argument(
+        "-o", "--override", help="Build package", action="store_true", default=False
+    )
+    parser.add_argument(
+        "--major", help="Increment major version", action="store_true", default=False
+    )
+    parser.add_argument(
+        "--minor", help="Increment minor version", action="store_true", default=False
+    )
+    parser.add_argument(
+        "--downloads", help="Number of downloads", action="store_true", default=False
+    )
 
     # parse cli args
     args = parser.parse_args()
 
     from nrobo import EnvKeys
+
     os.environ[EnvKeys.DEBUG] = str(args.debug)
 
     if args.build:
         if args.target:
             # Check what version to build. Major | Minor | Patch (Default)
             if args.major:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.MAJOR, skip_tests=args.skip)
+                build(
+                    args.target,
+                    override=args.override,
+                    build_version=BUILD_VERSION.MAJOR,
+                    skip_tests=args.skip,
+                )
             elif args.minor:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.MINOR, skip_tests=args.skip)
+                build(
+                    args.target,
+                    override=args.override,
+                    build_version=BUILD_VERSION.MINOR,
+                    skip_tests=args.skip,
+                )
             else:
-                build(args.target, override=args.override, build_version=BUILD_VERSION.PATCH, skip_tests=args.skip)
+                build(
+                    args.target,
+                    override=args.override,
+                    build_version=BUILD_VERSION.PATCH,
+                    skip_tests=args.skip,
+                )
         else:
             print("Missing CLI arg -t | --target")
             exit(1)
