@@ -34,17 +34,21 @@ class PagePyPiHome(Page):
     # ----------------------------------------
 
     def open(self):
+        """Open url."""
         self.logger.info(f"Open url: {self.url}")
         self.get(self.url)
 
     def search_button_present(self):
+        """Search button present."""
         return self.find_element(*self.txt_search).is_displayed()
 
     def type_search_keyword(self, keyword):
+        """type_search_keyword."""
         self.logger.info(f"Type search keyword: {keyword}")
         self.send_keys(*self.txt_search, keyword)
 
     def search(self) -> PageSearch:
+        """Search."""
         self.logger.info("Click on Search button.")
         self.click(*self.btn_search)
 

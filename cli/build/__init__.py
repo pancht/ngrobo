@@ -112,7 +112,7 @@ def write_new_version_to_pyproject_toml_file(new_version) -> None:
 def write_new_version_to_nrobo_init_py_file(new_version) -> None:
     """Update nrobo.__init__.py with give <new_version>"""
 
-    nrobo_init_py_file = NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.INIT_PY
+    nrobo_init_py_file = NroboPaths.EXEC_DIR / NroboConst.NROBO / NroboPaths.INIT_PY
 
     # Read file content as string
     file_content = str(Common.read_file_as_string(nrobo_init_py_file))
@@ -165,7 +165,7 @@ def execute_unittests(debug=False) -> None:
 
     return_code = validatenrobo.run_unit_tests()
 
-    if not return_code == NROBO_CONST.SUCCESS:
+    if not return_code == NroboConst.SUCCESS:
         from cli import set_switch_environment
         console.print(
             f"[{STYLE.HLRed}]One or more validator tests have failed. Please fix failing tests and retry building "
@@ -182,8 +182,8 @@ def copy_conftest_file() -> None:
     import shutil
     try:
         shutil.copyfile(
-            f"{NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CONFTEST_PY}",
-            f"{NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}")
+            f"{NroboPaths.EXEC_DIR / NroboPaths.CONFTEST_PY}",
+            f"{NroboPaths.EXEC_DIR / NroboConst.NROBO / NroboPaths.CONFTEST_PY}")
     except Exception as e:
         raise e
 
@@ -205,7 +205,7 @@ def run_build_command() -> None:
 def delete_conftest_after_build() -> None:
     """Delete conftest.py file from nrobo package after build process finishes."""
 
-    conftest = f"{NROBO_PATHS.EXEC_DIR / NROBO_CONST.NROBO / NROBO_PATHS.CONFTEST_PY}"
+    conftest = f"{NroboPaths.EXEC_DIR / NroboConst.NROBO / NroboPaths.CONFTEST_PY}"
     terminal(["rm", "-f", conftest])
 
 
@@ -225,7 +225,7 @@ def build(target=ENV_CLI_SWITCH.TEST, *, debug=False,
     from nrobo.util.version import Version
     from cli import BUILD_VERSION
 
-    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
+    pypi_version = Version(get_pypi_index(NroboConst.NROBO))
 
     if build_version == BUILD_VERSION.MAJOR:
         new_version = pypi_version.major_incremented()

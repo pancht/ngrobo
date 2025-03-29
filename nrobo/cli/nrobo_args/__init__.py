@@ -193,20 +193,10 @@ def nrobo_cli_parser(exit_on_failure=True):  # noqa: R0915
     parser.add_argument(
         "-b",
         f"--{NCli.BROWSER}",
-        help="""
-        Target browser. Default is chrome.
-        Options could be:
-            {} | {} | {} |
-            {} | {} | {} | {}
-        """.format(
-            Browsers.CHROME,
-            Browsers.CHROME_HEADLESS,
-            Browsers.ANTI_BOT_CHROME,
-            Browsers.FIREFOX,
-            Browsers.FIREFOX_HEADLESS,
-            Browsers.SAFARI,
-            Browsers.EDGE,
-        ),
+        help=f"Target browser. Default is chrome. "
+             f"Options could be: {Browsers.CHROME} | {Browsers.CHROME_HEADLESS} | "
+             f"{Browsers.ANTI_BOT_CHROME} | {Browsers.FIREFOX} | "
+             f"{Browsers.FIREFOX_HEADLESS} | {Browsers.SAFARI} | {Browsers.EDGE}",
     )
     parser.add_argument(f"--{NCli.FILES}", help="Input files", nargs="+")
     parser.add_argument(

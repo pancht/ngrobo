@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from nrobo import terminal, EnvKeys, NROBO_PATHS, NROBO_CONST
+from nrobo import terminal, EnvKeys, NroboPaths, NroboConst
 from nrobo.cli.nglobals import Browsers
 
 
@@ -32,10 +32,10 @@ class TestNRoboFramework:
 
         # conftest_file_path_in_framework_folder
         conftest_in_framework_pkg = (
-            Path(os.environ[EnvKeys.EXEC_DIR])
-            / NROBO_CONST.NROBO
-            / NROBO_PATHS.FRAMEWORK
-            / NROBO_PATHS.CONFTEST_PY
+                Path(os.environ[EnvKeys.EXEC_DIR])
+                / NroboConst.NROBO
+                / NroboPaths.FRAMEWORK
+                / NroboPaths.CONFTEST_PY
         )
         command = []
 
@@ -47,7 +47,7 @@ class TestNRoboFramework:
             remove_file(conftest_in_framework_pkg)
 
         copy_file(
-            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.CONFTEST_PY}",
+            f"{Path(os.environ[EnvKeys.EXEC_DIR]) / NroboPaths.CONFTEST_PY}",
             f"{conftest_in_framework_pkg}",
         )
 
@@ -65,9 +65,9 @@ class TestNRoboFramework:
             "--rootdir",
             str(
                 Path(os.environ[EnvKeys.EXEC_DIR])
-                / NROBO_CONST.NROBO
-                / NROBO_PATHS.FRAMEWORK
-                / NROBO_PATHS.TESTS
+                / NroboConst.NROBO
+                / NroboPaths.FRAMEWORK
+                / NroboPaths.TESTS
             ),
         ]
         # run command
@@ -92,8 +92,8 @@ class TestNRoboFramework:
             "--rootdir",
             str(
                 Path(os.environ[EnvKeys.EXEC_DIR])
-                / NROBO_PATHS.FRAMEWORK
-                / NROBO_PATHS.TESTS
+                / NroboPaths.FRAMEWORK
+                / NroboPaths.TESTS
             ),
         ]
 

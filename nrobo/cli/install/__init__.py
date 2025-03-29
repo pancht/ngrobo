@@ -17,17 +17,19 @@ Installer for installing nrobo framework at host system.
 import os
 import sys
 import subprocess
-import time
 from pathlib import Path
 from typing import Optional
 from datetime import datetime
 from nrobo.cli.cli_constants import NCli
 from nrobo.util.common import Common
-from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree
+from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree, remove_file
 from nrobo.util.version import Version
-from nrobo.cli.upgrade import get_host_version, get_pypi_index
+from nrobo.cli.upgrade import get_host_version
 import nrobo.cli.detection as detect
-
+from nrobo.cli.upgrade import confirm_update
+from nrobo import terminal, NroboConst
+from nrobo import set_environment, EnvKeys, NroboPaths as NP
+from nrobo import console, STYLE
 
 def transfer_files_to_host_project() -> None:  # noqa: R0914
     """Transfer nrobo project files to HOST project dir"""
@@ -35,11 +37,6 @@ def transfer_files_to_host_project() -> None:  # noqa: R0914
     # =============================================================
     # THIS FILE OPERATION MUST BE FIRST STATEMENT IN IF BLOCK!!!!
     # =============================================================
-    from nrobo import (
-        console,
-        STYLE,
-        NROBO_PATHS as NP,
-    )
 
     stop_auto_silent_update_version = Version("2024.19.3")
     host_version = Version(get_host_version())
@@ -76,7 +73,6 @@ def transfer_files_to_host_project() -> None:  # noqa: R0914
 
         if host_version < Version("2024.7.0"):
             if Version(get_host_version()) == Version("2024.6.12"):
-                from nrobo.util.filesystem import remove_file
 
                 if patch_2024_6_10.exists():
                     remove_file(patch_2024_6_10)
@@ -235,7 +231,7 @@ def transfer_files_to_host_project() -> None:  # noqa: R0914
 
 def install_user_specified_requirements():
     """Install User specified requirements"""
-    from nrobo import NROBO_PATHS as NP, EnvKeys
+
 
     user_specified_requirements = Path(f"{NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE}")
 
@@ -243,7 +239,6 @@ def install_user_specified_requirements():
         # Install User Specified Requirements
 
         print("Installing project requirements")
-        from nrobo import terminal, NROBO_CONST
 
         return_code = terminal(
             command=[
@@ -256,7 +251,7 @@ def install_user_specified_requirements():
             stderr=subprocess.STDOUT,
         )
 
-        if return_code == NROBO_CONST.SUCCESS:
+        if return_code == NroboConst.SUCCESS:
             # return code zero means success
             print("Project requirements are installed successfully.")
         else:
@@ -276,7 +271,7 @@ def install_nrobo(
 
     # Inline imports to handle circular import exception
     # while importing partially initialized module
-    from nrobo import set_environment, EnvKeys, NROBO_PATHS as NP
+
 
     set_environment()
 
@@ -288,8 +283,6 @@ def install_nrobo(
         requirements_file = (
             f"{NP.NROBO_DIR}{os.sep}cli{os.sep}install{os.sep}requirements.txt"
         )
-
-        from nrobo import terminal, NROBO_CONST
 
         return_code = terminal(
             command=[
@@ -303,7 +296,7 @@ def install_nrobo(
         )
 
         # return code zero means success
-        if return_code == NROBO_CONST.SUCCESS:
+        if return_code == NroboConst.SUCCESS:
             if detect.production_machine() and not detect.host_machine_has_nrobo():
                 print("Requirements are installed successfully.")
         else:
@@ -311,7 +304,7 @@ def install_nrobo(
             return
 
     # triggers forced update or normal update by comparing host version and pypi version
-    from nrobo.cli.upgrade import confirm_update
+
 
     if detect.production_machine() and not detect.developer_machine():
         confirm_update()
@@ -325,7 +318,7 @@ def install_nrobo(
         # Install or upgrading framework on Production environment
 
         # triggers forced update or normal update by comparing host version and pypi version
-        from nrobo.cli.upgrade import confirm_update
+
 
         if detect.production_machine() and not detect.developer_machine():
             confirm_update()
@@ -348,9 +341,6 @@ def missing_user_files_on_production():
     Return True if specific files are present on user system
 
     Else return False"""
-
-    from nrobo import NROBO_PATHS as NP
-    from nrobo.cli.upgrade import get_host_version
 
     host_version = Version(get_host_version())
     if (

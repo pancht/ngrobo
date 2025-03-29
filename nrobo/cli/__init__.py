@@ -13,7 +13,7 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
-
+from nrobo.util.python import verify_set_python_install_pip_command
 
 def main():
     """Entry point of nrobo command-line-utility."""
@@ -30,7 +30,7 @@ def main():
         )
         from nrobo.cli.launcher import launch_nrobo, launcher_command
         from nrobo.cli.upgrade import confirm_update
-        from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
+        from nrobo import EnvKeys, NroboConst, NroboPaths
         from nrobo import greet_the_guest
         from nrobo.cli.nrobo_args import nrobo_cli_parser
         from nrobo.cli.install import (
@@ -41,8 +41,7 @@ def main():
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
         from nrobo.util.process import terminal
         from nrobo.util.constants import CONST
-        from nrobo.cli.cli_constants import NREPORT
-        from nrobo.util.python import verify_set_python_install_pip_command
+
 
         # clear screen
         clear_screen()
@@ -53,7 +52,7 @@ def main():
             if missing_user_files_on_production():
                 install_nrobo(install_only=False)
 
-            exit(0)
+            sys.exit(0)
 
         # greet the guest
         greet_the_guest()
@@ -71,7 +70,7 @@ def main():
         verify_set_python_install_pip_command()
 
         # remove 'dist' directory created by python build module during packaging
-        remove_files_recursively(NROBO_CONST.DIST_DIR)
+        remove_files_recursively(NroboConst.DIST_DIR)
 
         # delete results directory created by nrobo for storing test results
         # remove_files_recursively(NREPORT.REPORT_DIR)

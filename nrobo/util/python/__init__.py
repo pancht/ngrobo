@@ -14,9 +14,8 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 # Holds python command to run other commands.
 # Options: python | python3
 import os
-import re
 import platform
-from nrobo.util.process import *
+import subprocess
 
 
 def verify_set_python_install_pip_command() -> None:
@@ -27,10 +26,9 @@ def verify_set_python_install_pip_command() -> None:
 
     If found and sets python command, install pip as well."""
 
-    from nrobo import EnvKeys, Environment, NROBO_CONST, Python
-
     # regular expression to verify python version
     # major.minor.nightly-build
+    import re
     regx = re.compile(r"([\d]+).[\d]+.[\d]+.*")
 
     if regx.match(platform.python_version()) is None:
@@ -40,7 +38,8 @@ def verify_set_python_install_pip_command() -> None:
         exit(1)
     else:
         # python is installed on the host system
-
+        import re
+        from nrobo import terminal, NroboConst, EnvKeys
         if int(re.search(r"[\d]+", platform.python_version())[0]) >= 3:
             # check if python version is >=3
 
@@ -52,16 +51,16 @@ def verify_set_python_install_pip_command() -> None:
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )
-                == NROBO_CONST.SUCCESS
+                == NroboConst.SUCCESS
             ):
                 os.environ[EnvKeys.PYTHON] = python3
             elif (
-                terminal(
+                    terminal(
                     [os.environ[EnvKeys.PYTHON], "--version"],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )
-                == NROBO_CONST.SUCCESS
+                    == NroboConst.SUCCESS
             ):
                 pass
             else:

@@ -15,13 +15,10 @@ Definition of nRoBo framework base class, NRobo
 """
 
 import functools
-import os
 import time
 import typing
-from abc import ABC, ABCMeta
 import logging
-from typing import List, Optional, Union
-
+from dataclasses import dataclass
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
@@ -39,31 +36,31 @@ from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.webdriver import WebDriver
 from appium.webdriver.webdriver import WebDriver as AppiumWebDriver
 from selenium.webdriver.support.select import Select
-from nrobo import *
-from nrobo.cli.tools import nprint
-
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common import TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
-from seleniumpagefactory import PageFactory
 from selenium.webdriver.support import expected_conditions
-from nrobo.util.common import Common
 from selenium.webdriver.common.keys import Keys
-from nrobo.cli.nglobals import *
 from selenium.common.exceptions import (
     UnexpectedAlertPresentException,
-    WebDriverException,
 )
 from selenium.webdriver.common.actions.wheel_input import WheelInput
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.common.actions.key_input import KeyInput
 from selenium.common.exceptions import NoSuchElementException
 
+
+from nrobo import *
+from nrobo.cli.tools import nprint
+from nrobo.util.common import Common
+from nrobo.cli.nglobals import *
+import nrobo.cli.detection as detect
+
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 AnyBy = Union[By, AppiumBy]
 AnyDriver = Union[None, WebDriver, AppiumWebDriver]
 
-
+@dataclass
 class WAITS:
     """Supported wait types in nrobo.
     These names are used as key in nrobo-config.yaml."""
@@ -77,19 +74,18 @@ class WAITS:
 @functools.lru_cache(maxsize=None)
 def read_nrobo_configs():
     """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
-    import nrobo.cli.detection as detect
 
     if detect.production_machine() and not detect.developer_machine():
         return Common.read_yaml(
-            Path(os.environ[EnvKeys.EXEC_DIR]) / NROBO_PATHS.NROBO_CONFIG_FILE,
+            Path(os.environ[EnvKeys.EXEC_DIR]) / NroboPaths.NROBO_CONFIG_FILE,
             fail_on_failure=False,
         )
-    elif detect.developer_machine():
+    if detect.developer_machine():
         return Common.read_yaml(
             Path(os.environ[EnvKeys.EXEC_DIR])
-            / Path(NROBO_CONST.NROBO)
-            / NROBO_PATHS.FRAMEWORK
-            / NROBO_PATHS.NROBO_CONFIG_FILE,
+            / Path(NroboConst.NROBO)
+            / NroboPaths.FRAMEWORK
+            / NroboPaths.NROBO_CONFIG_FILE,
             fail_on_failure=False,
         )
 
@@ -109,19 +105,19 @@ class WebdriverWrapperNrobo(WebDriver):
         self.nprint = nprint
         self._windows = {}
 
-    """
-    Following are selenium webdriver wrapper methods and properties
-    """
-
+    # Following are selenium webdriver wrapper methods and properties
     @property
     def windows(self):
+        """wondows."""
         return self._windows
 
     @windows.setter
     def windows(self, _windows: {str: str}):
+        """windows."""
         self._windows = _windows
 
     def update_windows(self, _window_handles: list[str] = None):
+        """update windows."""
 
         if int(os.environ[EnvKeys.APPIUM]):
             return
@@ -797,12 +793,12 @@ class WebdriverWrapperNrobo(WebDriver):
         """
         return self.driver.get_log(log_type)
 
-    """
-    Research needed to wrap this method!
-
-    @asynccontextmanager
-    async def bidi_connection(self):
-    """
+    # """
+    # Research needed to wrap this method!
+    #
+    # @asynccontextmanager
+    # async def bidi_connection(self):
+    # """
 
     # Virtual Authenticator Methods
     def add_virtual_authenticator(self, options: VirtualAuthenticatorOptions) -> None:
@@ -917,7 +913,6 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         :param value:
         :return:
         """
-        from nrobo.cli.tools import console
 
         console.print(self.nconfig)
         WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
@@ -930,7 +925,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         self.find_element(by, value).submit()
 
     def clear_spl(self, by: AnyBy, value: Optional[str] = None):
-
+        """clear_spl."""
         element = self.find_element(by, value)
         self.action_chain().click(element).send_keys(Keys.ARROW_LEFT).double_click(
             self.find_element(by, value)
@@ -1225,7 +1220,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
                 expected_conditions.invisibility_of_element_located(locator)
             )
-        except Exception:
+        except Exception:  # noqa: W0718
             return False
 
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])
@@ -1244,7 +1239,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                     expected_conditions.presence_of_element_located([by, value])
                 )
                 return True
-            except Exception:
+            except Exception:  # noqa: W0718
                 return False
 
         try:
@@ -1252,7 +1247,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                 expected_conditions.presence_of_element_located([by, value])
             )
             return True
-        except Exception:
+        except Exception:  # noqa: W0718
             return False
 
     def wait_for_element_to_be_disappeared(
@@ -1269,7 +1264,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                 WebDriverWait(self.driver, wait).until(
                     expected_conditions.invisibility_of_element_located([by, value])
                 )
-            except Exception:
+            except Exception:  # noqa: W0718
                 return False
 
             self.wait_for_a_while(self.nconfig[WAITS.WAIT])
@@ -1279,14 +1274,14 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
                 expected_conditions.invisibility_of_element_located([by, value])
             )
-        except Exception:
+        except Exception:  # noqa: W0718
             return False
 
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])
         return True
 
     def wait_for_element_to_be_clickable(
-        self, timeout=None, by: AnyBy = None, value: Optional[str] = None
+        self, by: AnyBy = None, value: Optional[str] = None
     ):
         """
         wait till element is visible and clickable.
@@ -1300,6 +1295,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
 
 class ActionChainsNrobo(WaitImplementationsNrobo):
+    """Action chains nrobo."""
     def __init__(
         self,
         driver: AnyDriver,
@@ -1324,6 +1320,7 @@ class ActionChainsNrobo(WaitImplementationsNrobo):
 
 
 class AlertNrobo(ActionChainsNrobo):
+    """Alert nrobo."""
     def __init__(
         self,
         driver: AnyDriver,
@@ -1410,6 +1407,7 @@ class DesiredCapabilitiesNrobo(ByNrobo):
 
 
 class SelectNrobo(DesiredCapabilitiesNrobo):
+    """Select nrobo."""
     def __init__(
         self,
         driver: AnyDriver,

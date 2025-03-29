@@ -47,10 +47,10 @@ from nrobo.appium import AutomationNames, CAPABILITY
 
 def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
     if detect.developer_machine():
-        from nrobo import NROBO_PATHS
+        from nrobo import NroboPaths
 
         Common.append_text_to_file(
-            NROBO_PATHS.PYTEST_LIFE_CYCLE_LOGS,
+            NroboPaths.PYTEST_LIFE_CYCLE_LOGS,
             f"\n\n-----------------------\n"
             f"Calling from {life_cycle_item} {item_type}",
         )
@@ -58,18 +58,18 @@ def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture
 
 def update_pytest_life_cycle_log_with_value(value: str):
     if detect.developer_machine():
-        from nrobo import NROBO_PATHS
+        from nrobo import NroboPaths
 
-        Common.append_text_to_file(NROBO_PATHS.PYTEST_LIFE_CYCLE_LOGS, f"\n{value}")
+        Common.append_text_to_file(NroboPaths.PYTEST_LIFE_CYCLE_LOGS, f"\n{value}")
 
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constants import NREPORT
-    from nrobo import NROBO_PATHS
+    from nrobo import NroboPaths
 
     _log_driver_file = (
-        NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
+            NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
     )
 
     if not _log_driver_file.exists():
@@ -79,7 +79,7 @@ def ensure_logs_dir_exists():
         except FileExistsError:
             pass
 
-    _test_logs_dir = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
+    _test_logs_dir = NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
     if not _test_logs_dir.exists():
         """ensure test logs dir"""
         try:
@@ -88,7 +88,7 @@ def ensure_logs_dir_exists():
             pass
 
     _screenshot_dir = (
-        NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
+            NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
     )
     if not _screenshot_dir.exists():
         """ensure screenshots dir"""
@@ -97,7 +97,7 @@ def ensure_logs_dir_exists():
         except FileExistsError:
             pass
 
-    _allure_dir = NROBO_PATHS.EXEC_DIR / NREPORT.ALLURE_REPORT_PATH
+    _allure_dir = NroboPaths.EXEC_DIR / NREPORT.ALLURE_REPORT_PATH
     if not _allure_dir.exists():
         """ensure allure dir"""
         try:
@@ -139,15 +139,15 @@ def add_capabilities_from_file(options):
 
     and return updated options"""
     from nrobo.util.common import Common
-    from nrobo import NROBO_PATHS
+    from nrobo import NroboPaths
 
     if detect.production_machine() and not detect.developer_machine():
         capabilities = Common.read_yaml(
-            NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_YAML
+            NroboPaths.EXEC_DIR / NroboPaths.CAPABILITY_YAML
         )
     else:
         capabilities = Common.read_yaml(
-            NROBO_PATHS.NROBO_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.CAPABILITY_YAML
+            NroboPaths.NROBO_DIR / NroboPaths.NROBO / NroboPaths.CAPABILITY_YAML
         )
 
     for k, v in capabilities.items():
@@ -161,17 +161,17 @@ def get_appium_capabilities_from_file(cap_file_name):
 
     return appium_capabilities"""
     from nrobo.util.common import Common
-    from nrobo import NROBO_PATHS
+    from nrobo import NroboPaths
 
     if detect.production_machine() and not detect.developer_machine():
         capabilities = Common.read_yaml(
-            NROBO_PATHS.EXEC_DIR / NROBO_PATHS.APPIUM / cap_file_name
+            NroboPaths.EXEC_DIR / NroboPaths.APPIUM / cap_file_name
         )
     else:
         capabilities = Common.read_yaml(
-            NROBO_PATHS.EXEC_DIR
-            / NROBO_PATHS.NROBO
-            / NROBO_PATHS.APPIUM
+            NroboPaths.EXEC_DIR
+            / NroboPaths.NROBO
+            / NroboPaths.APPIUM
             / cap_file_name
         )
 
@@ -809,13 +809,13 @@ def pytest_configure(config):
     config.addinivalue_line("markers", "nogui: mark as NOGUI tests")
     config.addinivalue_line("markers", "unit: mark as unit test")
 
-    from nrobo import NROBO_PATHS
+    from nrobo import NroboPaths
 
     if detect.production_machine() and not detect.developer_machine():
-        markers = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.MARKERS_YAML)
+        markers = Common.read_yaml(NroboPaths.EXEC_DIR / NroboPaths.MARKERS_YAML)
     else:
         markers = Common.read_yaml(
-            NROBO_PATHS.EXEC_DIR / NROBO_PATHS.NROBO / NROBO_PATHS.MARKERS_YAML
+            NroboPaths.EXEC_DIR / NroboPaths.NROBO / NroboPaths.MARKERS_YAML
         )
     for marker, desc in markers.items():
         config.addinivalue_line("markers", f"{marker}: {desc}")
@@ -911,7 +911,7 @@ def pytest_runtest_setup(item):
 
 
 def pytest_html_report_title(report):
-    from nrobo import EnvKeys, NROBO_CONST
+    from nrobo import EnvKeys, NroboConst
     from nrobo.cli.cli_constants import NREPORT
     import os
 
@@ -921,7 +921,7 @@ def pytest_html_report_title(report):
     _title_env = os.environ[EnvKeys.TITLE]
     if _title_env not in [_suffix] and _title_env:
         _title = os.environ[EnvKeys.TITLE]
-    elif os.environ[EnvKeys.APP].lower() not in [NROBO_CONST.NROBO.lower()]:
+    elif os.environ[EnvKeys.APP].lower() not in [NroboConst.NROBO.lower()]:
         _title = f"{os.environ[EnvKeys.APP]} {_suffix}"
     else:
         _title = f"{_suffix}"

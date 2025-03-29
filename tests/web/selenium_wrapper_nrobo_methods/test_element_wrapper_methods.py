@@ -199,13 +199,13 @@ class TestWebElementWrapperMethods:
         page.maximize_window()
         page.get("https://the-internet.herokuapp.com/upload")
 
-        from nrobo import NROBO_PATHS
+        from nrobo import NroboPaths
 
         upload_file = (
-            NROBO_PATHS.NROBO
-            / NROBO_PATHS.FRAMEWORK
-            / NROBO_PATHS.TEST_DATA
-            / "nRoBo-Logo.png"
+                NroboPaths.NROBO
+                / NroboPaths.FRAMEWORK
+                / NroboPaths.TEST_DATA
+                / "nRoBo-Logo.png"
         )
 
         file_input = (By.CSS_SELECTOR, "input[type='file']")

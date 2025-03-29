@@ -16,16 +16,17 @@ nRoBo installation and many more...
 """
 
 import os
-from pathlib import Path
 
 from nrobo import EnvKeys, Environment
-from nrobo import NROBO_PATHS
+from nrobo import NroboPaths
 from nrobo.util.constants import EXT
+from nrobo.util.common import Common
+from cli.build import ENV_CLI_SWITCH
 
 
 def developer_machine() -> bool:
     """Return true if Developer machine else False"""
-    if (NROBO_PATHS.EXEC_DIR / NROBO_PATHS.PY_PROJECT_TOML_FILE).exists():
+    if (NroboPaths.EXEC_DIR / NroboPaths.PY_PROJECT_TOML_FILE).exists():
         return True
 
     return False
@@ -57,7 +58,7 @@ def development_machine() -> bool:
 
 def host_machine_has_nrobo() -> bool:
     """Returns True if host machine has nRoBo installed already else False"""
-    if (NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CONFTEST_PY).exists():
+    if (NroboPaths.EXEC_DIR / NroboPaths.CONFTEST_PY).exists():
         # if conftest file found on production_machine system,
         # meaning nrobo is already installed there
         return True
@@ -67,19 +68,16 @@ def host_machine_has_nrobo() -> bool:
 
 def build_version_from_version_files() -> str:
     """Return build version from version files."""
-    from nrobo.util.common import Common
-    from cli.build import ENV_CLI_SWITCH
 
     # Grab version number from version yaml files in version/ directory
     return Common.read_yaml(
-        NROBO_PATHS.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}", fail_on_failure=False
+        NroboPaths.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{EXT.YAML}", fail_on_failure=False
     )["version"]
 
 
-def ensure_pathces_dir() -> bool:
+def ensure_pathces_dir() -> None:
     """Ensures that patches dir is present on Host machine"""
-    import nrobo.cli.detection as detect
 
-    if detect.production_machine() and not detect.developer_machine():
-        if not (NROBO_PATHS.NROBO_DIR / NROBO_PATHS.PATCHES).exists():
-            os.mkdir(NROBO_PATHS.NROBO_DIR / NROBO_PATHS.PATCHES)
+    if production_machine() and not developer_machine():
+        if not (NroboPaths.NROBO_DIR / NroboPaths.PATCHES).exists():
+            os.mkdir(NroboPaths.NROBO_DIR / NroboPaths.PATCHES)

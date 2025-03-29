@@ -13,7 +13,7 @@ Unit tests for validating upgrade process.
 @email: erpanchdev@gmail.com
 """
 
-from nrobo import console, NROBO_CONST
+from nrobo import console, NroboConst
 
 
 class TestUpgradePkg:
@@ -31,7 +31,7 @@ class TestUpgradePkg:
 
         from nrobo.cli.upgrade import get_pypi_index
 
-        package = NROBO_CONST.NROBO
+        package = NroboConst.NROBO
         import subprocess
 
         result = subprocess.run(
@@ -62,7 +62,7 @@ class TestUpgradePkg:
         with console.status("Test if update not available"):
 
             # scenario-1: Update not available
-            package = NROBO_CONST.NROBO
+            package = NroboConst.NROBO
             from nrobo import __version__
 
             if Version(__version__) < Version(get_pypi_index(package)):

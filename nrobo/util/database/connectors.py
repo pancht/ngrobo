@@ -1,13 +1,17 @@
+"""
+Connectors.py
+"""
+from dataclasses import dataclass
 from nrobo.selenese import NRobo as nrobo
 
-
-class CONNECTOR_TYPE:
+@dataclass
+class ConnectorType:
     """Database Connector Types"""
 
     MYSQL = "mysql"
 
-
-class CONNECTOR_ATTRIBUTES:
+@dataclass
+class ConnectorAttributes:
     """Database connector attributes"""
 
     TYPE = "type"
@@ -31,13 +35,13 @@ def db_connector(config: {}):
 
     # Copy config, remove type attribute from config and pass it to connector
     copy_of_config = config.copy()
-    copy_of_config.pop(CONNECTOR_ATTRIBUTES.TYPE)
+    copy_of_config.pop(ConnectorAttributes.TYPE)
 
-    if config[CONNECTOR_ATTRIBUTES.TYPE] == CONNECTOR_TYPE.MYSQL:
+    if config[ConnectorAttributes.TYPE] == ConnectorType.MYSQL:
         return mysql_db_connector(config=copy_of_config)
     else:
         raise Exception(
-            f"Invalid database connector type: {config[CONNECTOR_ATTRIBUTES.TYPE]}"
+            f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}"
         )
 
 
@@ -49,7 +53,7 @@ def mysql_db_connector(config: {}):
     import mysql.connector
     from mysql.connector import errorcode
 
-    for each_attempt in range(CONNECTOR_ATTRIBUTES.MAX_RETRY):
+    for each_attempt in range(ConnectorAttributes.MAX_RETRY):
 
         try:
             _db_connection = mysql.connector.connect(**config)
@@ -65,6 +69,6 @@ def mysql_db_connector(config: {}):
             else:
                 print(err)
 
-            nrobo.wait(time_in_sec=CONNECTOR_ATTRIBUTES.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
+            nrobo.wait(time_in_sec=ConnectorAttributes.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
 
     raise Exception("Database connection did not established!!!")

@@ -10,18 +10,17 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-
 import os
 
-from nrobo import *
-from nrobo.exceptions import *
+from nrobo import EnvKeys
+from nrobo.exceptions import MissingCommandImplementation
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
 from nrobo.util.platform import PLATFORMS
-from nrobo.util.process import terminal, terminal_nogui
+from nrobo.util.process import terminal
 
 
-class N_COMMANDS:
+class NCommands:
     """N_COMMANDS class hold nrobo command mappings for host platform.
 
     Raises <MissingCommandImplementation> exception
@@ -40,16 +39,16 @@ def get_command(command) -> None:
     """Return the appropriate posix or windows <command> to caller."""
 
     try:
-        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
-            N_COMMANDS.CLEAR_SCREEN
+        return NCommands.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
+            NCommands.CLEAR_SCREEN
         ]
     except KeyError:
-        raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
+        raise MissingCommandImplementation(NCommands.CLEAR_SCREEN)
 
 
 def clear_screen():
     """Run the clear screen command."""
-    terminal([get_command(N_COMMANDS.CLEAR_SCREEN)])
+    terminal([get_command(NCommands.CLEAR_SCREEN)])
 
 
 def remove_files_recursively(directory) -> int:

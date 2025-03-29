@@ -12,17 +12,14 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-
 import os
+import sys
+from pathlib import Path
 
-from nrobo import *
-from nrobo.cli import *
-from nrobo.cli.cli_constants import *
-from nrobo.cli.install import *
+from nrobo import NroboPaths, CONST, console, STYLE, terminal, EnvKeys
+from nrobo.cli.cli_constants import PACKAGES, NREPORT, NCli
 from nrobo.cli.install import install_nrobo
-from nrobo.cli.nglobals import *
-
-from nrobo.util.process import *
+from nrobo.cli.nglobals import raise_exception_if_browser_not_supported, Browsers
 from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES, BoolArgs
 import nrobo.cli.detection as detect
 
@@ -102,14 +99,14 @@ def launcher_command(exit_on_failure=True):
         ]
         terminal(command=command, debug=True)
 
-        exit(0)
+        sys.exit(0)
 
     elif args.npm and args.npm not in PACKAGES.APPIUM:
         console.print(
             f"[{STYLE.HLRed}]{args.npm} package support is not in [{STYLE.HLOrange}]nRoBo[/].[/]"
             f"\nSupported packages are [{STYLE.HLOrange}]{PACKAGES.APPIUM}[/]."
         )
-        exit(1)
+        sys.exit(1)
 
     # build pytest launcher command
     command = ["pytest"]  # start with programme name
@@ -129,10 +126,11 @@ def launcher_command(exit_on_failure=True):
             if value:
                 # if key has value, then only proceed with current key
 
-                if type(value) is bool or isinstance(value, bool):
+                cli_arg_keys = NCli.ARGS.keys()
+                if isinstance(value, bool) or isinstance(value, bool):
                     # if a bool key is found, only add key to the launcher command,
                     # not the value and proceed with next key
-                    if key == NCli.FULLPAGE_SCREENSHOT or key == BoolArgs.PYARGS:
+                    if key in (NCli.FULLPAGE_SCREENSHOT, BoolArgs.PYARGS):
                         continue
                     elif key == NCli.SUPPRESS:
                         os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
@@ -151,7 +149,7 @@ def launcher_command(exit_on_failure=True):
                     else:
                         command.append(f"--{key}")
                         continue
-                elif key not in NCli.ARGS.keys():
+                elif key not in cli_arg_keys:  # noqa: R1714
                     # process special short keys(single letter keys)
                     # that does not have corresponding long key
                     if key == "c":
@@ -161,9 +159,7 @@ def launcher_command(exit_on_failure=True):
                     else:
                         # simply add long keys to launcher command
                         if (
-                            key == NCli.TARGET
-                            or key == NCli.FILES
-                            or key == BoolArgs.PYARGS
+                            key in (NCli.TARGET, NCli.FILES, BoolArgs.PYARGS)
                         ):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
 
@@ -313,7 +309,7 @@ def launcher_command(exit_on_failure=True):
     if args.pyargs:
         command.append(f"--{BoolArgs.PYARGS}")
         files = args.pyargs
-        [command.append(f) for f in files]
+        [command.append(f) for f in files]  # noqa: W0106
 
     if args.pyargs and args.files:
         # Error
@@ -327,11 +323,11 @@ def launcher_command(exit_on_failure=True):
     if not args.files:
         if args.appium:
             command.append(
-                str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE)
+                str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.MOBILE)
             )
         else:
             command.append(
-                str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB)
+                str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.WEB)
             )
 
     return command, args, command_builder_notes
@@ -367,15 +363,15 @@ def create_allure_report(command: list) -> int:
 
     console.print(f"[{STYLE.HLGreen}]Running tests and preparing allure report")
 
-    _ALLURE_DIR = "--alluredir"
+    _allure_dir = "--alluredir"
     allure_results = Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results"
-    if _ALLURE_DIR in command:
-        allure_results = command[command.index(_ALLURE_DIR) + 1]
+    if _allure_dir in command:
+        allure_results = command[command.index(_allure_dir) + 1]
     terminal(
-        command + [_ALLURE_DIR, allure_results], debug=True, use_os_system_call=True
+        command + [_allure_dir, allure_results], debug=True, use_os_system_call=True
     )
 
-    if _ALLURE_DIR in command:
+    if _allure_dir in command:
         allure_generated_report = Path(allure_results) / "allure-report"
     else:
         allure_generated_report = allure_results.parent / "allure-report"

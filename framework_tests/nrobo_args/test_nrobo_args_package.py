@@ -7,7 +7,7 @@ from nrobo.cli.launcher import launcher_command
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES, BoolArgs
 from nrobo.exceptions import NRoBoBrowserNotSupported
-from nrobo import NROBO_PATHS, set_environment
+from nrobo import NroboPaths, set_environment
 
 set_environment()
 
@@ -43,7 +43,7 @@ class TestNroboArgsPackage:
         "results/junit-report.xml",
         "--alluredir",
         "results/allure",
-        f"{str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB)}",
+        f"{str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.WEB)}",
     ]
 
     def _replace_and_get_default_key_value(self, key, value) -> [str]:

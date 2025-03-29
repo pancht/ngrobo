@@ -13,11 +13,8 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 import json
 import os.path as path
-import string
-import sys
 import random
 from pathlib import Path
-from time import time
 from typing import Union
 
 import yaml
@@ -243,8 +240,6 @@ class Common:
     @staticmethod
     def save_bytes_to_file(bytes, path: [str, Path] = None):
         """Save bytes to given path"""
-
-        import base64
 
         if path is None:
             path = "temp.jpg"

@@ -22,7 +22,7 @@ def downloads() -> str:
 
        Doc: https://pypi.org/project/pypinfo/
        Example: https://github.com/ofek/pypinfo"""
-    from nrobo import console, terminal, NROBO_CONST, Python, NROBO_PATHS
+    from nrobo import console, terminal, NroboConst, Python, NroboPaths
     from nrobo.util.common import Common
     from nrobo.util.filesystem import move
     import re
@@ -71,7 +71,7 @@ def downloads() -> str:
     # Get download stats
     result = terminal([Python.PYPINFO, '--start-date', '2023-01-06', '--end-date',
                        datetime.today().strftime("%Y-%m-%d"), '--all', '--limit', '200', '--percent',
-                       NROBO_CONST.NROBO, 'country'],
+                       NroboConst.NROBO, 'country'],
                       debug=True, text=True, capture_output=True)
     console.print(f"{result.stdout}")
 
@@ -102,13 +102,13 @@ def downloads() -> str:
         output = output.replace(m, _repl)
 
     # Read README.rst file
-    readme_file_content = Common.read_file_as_string(NROBO_PATHS.README_RST_FILE)
+    readme_file_content = Common.read_file_as_string(NroboPaths.README_RST_FILE)
     # Remove previous download stats section
     readme_file_content = re.sub(r'([\n]*.. list-table:: [*]+Download Statistics[*]+[\n :*.%,a-zA-Z\d-]*)', '', readme_file_content, count=1)
     # Append new download stats section
     readme_file_content = f"{readme_file_content}\n\n{output}"
     # Write back to README.rst file
-    Common.write_text_to_file(NROBO_PATHS.README_RST_FILE, readme_file_content)
+    Common.write_text_to_file(NroboPaths.README_RST_FILE, readme_file_content)
 
     console.rule(f"Added download statistics to README.rst")
 

@@ -13,8 +13,6 @@ networking functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmaill.com
 """
-
-import os
 import subprocess
 
 
