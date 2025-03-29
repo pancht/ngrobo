@@ -18,7 +18,10 @@ from nrobo.exceptions import NRoBoIncorrectVersion, NRoBoInvalidOperation
 
 
 class Version:
+    """Class Version."""
+
     def __init__(self, version):
+        """Constructor."""
         self._version = version
         self._major = int(self._version_parts()[0])
         self._minor = int(self._version_parts()[1])
@@ -34,131 +37,165 @@ class Version:
 
     @property
     def version(self):
+        """version."""
         return self._version
 
     @version.setter
     def version(self, version):
+        """version."""
         self._version = version
 
     @property
     def version_next(self):
+        """version_next."""
         return self._version_next
 
     @version_next.setter
     def version_next(self, version_next):
+        """version_next."""
         self._version_next = version_next
 
     @property
     def version_prev(self):
+        """version_prev."""
         return self._version_prev
 
     @version_prev.setter
     def version_prev(self, version_prev):
+        """version_prev."""
         self._version_prev = version_prev
 
     @property
     def major(self):
+        """major."""
         return self._major
 
     @major.setter
     def major(self, major):
+        """major."""
         self._major = major
 
     @property
     def major_next(self):
+        """major_next."""
         return self._major_next
 
     @major_next.setter
     def major_next(self, major_next):
+        """major_next."""
         self._major_next = major_next
 
     @property
     def major_prev(self):
+        """major_prev."""
         return self._major_prev
 
     @major_prev.setter
     def major_prev(self, major_prev):
+        """major_prev."""
         self._major_prev = major_prev
 
     @property
     def minor(self):
+        """minor."""
         return self._minor
 
     @minor.setter
     def minor(self, minor):
+        """minor."""
         self._minor = minor
 
     @property
     def minor_next(self):
+        """minor_next."""
         return self._minor_next
 
     @minor_next.setter
     def minor_next(self, minor_next):
+        """minor_next."""
         self._minor_next = minor_next
 
     @property
     def minor_prev(self):
+        """minor_prev."""
         return self._minor_prev
 
     @minor_prev.setter
     def minor_prev(self, minor_prev):
+        """minor_prev."""
         self._minor_prev = minor_prev
 
     @property
     def patch(self):
+        """patch."""
         return self._patch
 
     @patch.setter
     def patch(self, patch):
+        """patch."""
         self._patch = patch
 
     @property
     def patch_next(self):
+        """patch_next."""
         return self._patch_next
 
     @patch_next.setter
     def patch_next(self, patch_next):
+        """patch_next."""
         self._patch_next = patch_next
 
     @property
     def patch_prev(self):
+        """patch_prev."""
         return self._patch_prev
 
     @patch_prev.setter
     def patch_prev(self, patch_prev):
+        """patch_prev."""
         self._patch_prev = patch_prev
 
     def major_incremented(self) -> str:
+        """major_incremented."""
         return f"{self._major_next}.0.0"
 
     def major_decremented(self) -> str:
+        """major_decremented."""
         return f"{self._major_prev}.0.0"
 
     def minor_incremented(self) -> str:
+        """minor_incremented."""
         return f"{self._major}.{self._minor_next}.0"
 
     def minor_decremented(self) -> str:
+        """minor_decremented."""
         return f"{self._major}.{self._minor_prev}.0"
 
     def patch_incremented(self) -> str:
+        """patch_incremented."""
         return f"{self._major}.{self._minor}.{self._patch_next}"
 
     def patch_decremented(self) -> str:
+        """patch_decremented."""
         return f"{self._major}.{self._minor}.{self._patch_prev}"
 
     def version_incremented(self) -> str:
+        """version_incremented."""
         return f"{self._major}.{self._minor}.{self._patch_next}"
 
     def version_decremented(self) -> str:
+        """version_decremented."""
         return f"{self._major}.{self._minor}.{self._patch_prev}"
 
     @staticmethod
     def first_major_release(release_version):
+        """first_major_release."""
         _release_version = Version(release_version)
         return f"{_release_version._major}.0.0"
 
     @staticmethod
     def first_minor_release(release_version):
+        """first_minor_release."""
         _release_version = Version(release_version)
         return f"{_release_version._major}.{_release_version._minor}.{0}"
 
@@ -208,6 +245,7 @@ class Version:
         return False
 
     def _version_parts(self):
+        """_version_parts."""
         patten = r"(([\d]*)[.]([\d]*)[.]([\d]*))"
         import re
 
@@ -225,6 +263,7 @@ class Version:
         return [_major, _minor, _patch]
 
     def __lt__(self, other):
+        """__lt__."""
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation("<", type(other))
 
@@ -240,6 +279,7 @@ class Version:
         return False
 
     def __eq__(self, other):
+        """__eq__."""
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation("=", type(other))
 
@@ -253,6 +293,7 @@ class Version:
         return False
 
     def __gt__(self, other):
+        """__gt__."""
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation(">", type(other))
 
@@ -268,6 +309,7 @@ class Version:
         return False
 
     def __add__(self, other):
+        """__add__."""
         if not isinstance(other, int) and not isinstance(other, float):
             raise NRoBoInvalidOperation("+", type(other))
 
@@ -277,6 +319,7 @@ class Version:
         return Version(f"{self.major}.{self.minor}.{self.patch + other}")
 
     def __sub__(self, other):
+        """__sub__."""
         if not isinstance(other, int) and not isinstance(other, float):
             raise NRoBoInvalidOperation("-", type(other))
 
@@ -286,6 +329,7 @@ class Version:
         return Version(f"{self.major}.{self.minor}.{self.patch - other}")
 
     def __le__(self, other):
+        """__le__."""
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation("<=", type(other))
 
@@ -298,6 +342,7 @@ class Version:
         return False
 
     def __ge__(self, other):
+        """__ge__."""
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation(">=", type(other))
 

@@ -15,8 +15,8 @@ for rich formatted console outputs.
 @email: erpanchdev@gmail.com
 """
 
-from rich.theme import Theme
 from dataclasses import dataclass
+from rich.theme import Theme
 
 @dataclass
 class STYLE:

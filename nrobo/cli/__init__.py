@@ -31,7 +31,7 @@ def main():
         from nrobo.cli.launcher import launch_nrobo, launcher_command
         from nrobo.cli.upgrade import confirm_update
         from nrobo import EnvKeys, NROBO_CONST, NROBO_PATHS
-        from nrobo import greet_the_guest, NROBO_CONST, EnvKeys
+        from nrobo import greet_the_guest
         from nrobo.cli.nrobo_args import nrobo_cli_parser
         from nrobo.cli.install import (
             install_nrobo,

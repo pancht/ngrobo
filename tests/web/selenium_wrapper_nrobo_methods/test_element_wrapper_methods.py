@@ -193,7 +193,6 @@ class TestWebElementWrapperMethods:
         page.maximize_window()
         page.get("https://the-internet.herokuapp.com/upload")
 
-        from pathlib import Path
         from nrobo import NROBO_PATHS
         upload_file = NROBO_PATHS.NROBO / NROBO_PATHS.FRAMEWORK / NROBO_PATHS.TEST_DATA / 'nRoBo-Logo.png'
 

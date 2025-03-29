@@ -1,7 +1,5 @@
 import pytest
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-import allure
 
 from nrobo.framework.pages import Page
 
@@ -23,8 +21,6 @@ class TestWebSamples():
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 
-        title = driver.title
-
         driver.implicitly_wait(0.5)
 
         logger.info("Click on submit button. ")
@@ -34,9 +30,6 @@ class TestWebSamples():
         text_box.send_keys("Selenium")
         submit_button.click()
 
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
-
     @pytest.mark.sanity
     # @pytest.mark.skip
     def test_sample_2(self, driver, logger):
@@ -45,8 +38,6 @@ class TestWebSamples():
 
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
-
-        title = driver.title
 
         driver.implicitly_wait(0.5)
 
@@ -59,9 +50,6 @@ class TestWebSamples():
 
         logger.info("Click submit button")
         submit_button.click()
-
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
 
         raise Exception("Forcefully failed test for demonstration of screencapture feature!")
 
@@ -74,8 +62,6 @@ class TestWebSamples():
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 
-        title = driver.title
-
         driver.implicitly_wait(0.5)
 
         logger.info("Click on submit button.")
@@ -87,9 +73,6 @@ class TestWebSamples():
 
         logger.info("Click submit button")
         submit_button.click()
-
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
 
     def test_take_full_page_screenshot(self, driver, logger):
         page = Page(driver, logger)

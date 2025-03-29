@@ -1,11 +1,8 @@
 import argparse
 import sys
-from collections import OrderedDict
 from pathlib import Path
 
-import pytest
 
-from nrobo import terminal
 from nrobo.cli.launcher import launcher_command
 from nrobo.cli.cli_constants import NREPORT
 from nrobo.cli.nrobo_args import BOOL_SWITCHES, BoolArgs
@@ -101,7 +98,7 @@ class TestNroboArgsPackage():
            and assert."""
         try:
             launcher_command(exit_on_failure=False)
-        except argparse.ArgumentError as e:
+        except argparse.ArgumentError:
             return
 
         assert False  # If expected exception did not raise
@@ -211,7 +208,6 @@ class TestNroboArgsPackage():
     def test_nrobo_cli_arg_password_switch(self):
         """Validate nRoBo cli --password switch: --password PASSWORD"""
 
-        from nrobo.cli.launcher import launcher_command
         SWITCH = '--password'
         VALUE = 'PASSWORD'
         command = ['pytest', SWITCH, VALUE]
@@ -348,7 +344,7 @@ class TestNroboArgsPackage():
         command.remove(SWITCH)
         command.remove(VALUE)
 
-        self._assert_command_replace_default_values(f"--html", f"{Path(NREPORT.REPORT_DIR) / VALUE}")
+        self._assert_command_replace_default_values("--html", f"{Path(NREPORT.REPORT_DIR) / VALUE}")
 
     def test_nrobo_cli_arg_target_switch_without_value(self):
         """Validate nRoBo cli --target switch without value: --target TARGET """
@@ -374,7 +370,6 @@ class TestNroboArgsPackage():
         """Validate nRoBo cli --suppress switch: --suppress"""
 
         SWITCH = '--suppress'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -403,7 +398,6 @@ class TestNroboArgsPackage():
         SWITCH = '--browser'
         VALUE = 'chrome_headless'
 
-        from nrobo.cli.launcher import launcher_command
         command = [PYTEST, SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -469,7 +463,7 @@ class TestNroboArgsPackage():
 
         try:
             launcher_command()
-        except NRoBoBrowserNotSupported as e:
+        except NRoBoBrowserNotSupported:
             assert True
             return
 
@@ -617,7 +611,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--fixtures-per-test'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -866,7 +859,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--verbose'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -877,7 +869,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--no-header'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -888,7 +879,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--no-summary'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -899,7 +889,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--quiet'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -910,7 +899,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--verbosity'
         VALUE = '1'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -921,7 +909,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--verbosity'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -932,7 +919,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--extra-summary'
         VALUE = 'CHAR-CODES'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -943,7 +929,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--extra-summary'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -954,7 +939,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--disable-warnings'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -965,7 +949,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--showlocals'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -976,7 +959,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--tb'
         VALUE = 'STYLE'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -987,7 +969,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--tb'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -998,7 +979,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--show-capture'
         VALUE = 'STYLE'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1009,7 +989,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--show-capture'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1020,7 +999,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--full-trace'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1031,7 +1009,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--color'
         VALUE = 'auto'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1042,7 +1019,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--color'
         VALUE = 'yes'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1053,7 +1029,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--color'
         VALUE = 'no'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1064,7 +1039,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--color'
         VALUE = 'xxx'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1075,7 +1049,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--color'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1086,7 +1059,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--code-highlight'
         VALUE = 'yes'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1097,7 +1069,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--code-highlight'
         VALUE = 'no'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1108,7 +1079,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--code-highlight'
         VALUE = 'xxx'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1119,7 +1089,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--code-highlight'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1130,7 +1099,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--pastebin'
         VALUE = 'mode'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1141,7 +1109,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--pastebin'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1152,7 +1119,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--junit-xml'
         VALUE = 'filepath'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1163,7 +1129,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--junit-xml'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1174,7 +1139,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--junit-prefix'
         VALUE = 'prefix'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1185,7 +1149,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--junit-prefix'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1196,7 +1159,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--pythonwarnings'
         VALUE = 'pythonwarnings'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1207,7 +1169,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--pythonwarnings'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1218,7 +1179,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--maxfail'
         VALUE = 'num'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1229,7 +1189,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--maxfail'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1240,7 +1199,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--strict-config'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1251,7 +1209,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--strict-markers'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1262,7 +1219,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--strict'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1273,7 +1229,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--configuration'
         VALUE = 'file'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1284,7 +1239,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--configuration'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1295,7 +1249,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--continue-on-collection-errors'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1306,7 +1259,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--rootdir'
         VALUE = 'file'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1317,7 +1269,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--rootdir'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1326,7 +1277,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--co'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1337,7 +1287,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--collect-only'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1349,7 +1298,6 @@ class TestNroboArgsPackage():
         SWITCH = '--pyargs'
         VALUE = 'pkg.apple'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1360,7 +1308,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--ignore'
         VALUE = 'path'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1371,7 +1318,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--ignore'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1382,7 +1328,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--ignore-glob'
         VALUE = 'path'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1393,7 +1338,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--ignore-glob'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1404,7 +1348,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--deselect'
         VALUE = 'nodeid'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1415,7 +1358,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--deselect'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1426,7 +1368,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--confcutdir'
         VALUE = 'path'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1437,7 +1378,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--confcutdir'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1448,7 +1388,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--noconftest'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1459,7 +1398,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--keep-duplicates'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1470,7 +1408,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--collect-in-virtualenv'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1481,7 +1418,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--import-mode'
         VALUE = '{prepend,append,importlib}'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1492,7 +1428,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--import-mode'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1503,7 +1438,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-modules'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1514,7 +1448,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-report'
         VALUE = '{none,cdiff,ndiff,udiff,only_first_failure}'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1525,7 +1458,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-report'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1536,7 +1468,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-glob'
         VALUE = 'pat'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1547,7 +1478,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-glob'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1558,7 +1488,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-ignore-import-errors'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1569,7 +1498,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-continue-on-failure'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1580,7 +1508,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--doctest-continue-on-failure'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1591,7 +1518,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--basetemp'
         VALUE = 'dir'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1602,7 +1528,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--basetemp'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1613,7 +1538,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--version'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1624,7 +1548,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--plugin-module'
         VALUE = 'name'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1635,7 +1558,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--plugin-module'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1646,7 +1568,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--trace-config'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1657,7 +1578,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--debug'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1668,7 +1588,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--override-ini'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1679,7 +1598,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--assert'
         VALUE = 'plain | rewrite'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1690,7 +1608,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--assert'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1701,7 +1618,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--setup-only'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1712,7 +1628,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--setup-show'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1723,7 +1638,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--setup-plan'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1734,7 +1648,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-level'
         VALUE = 'LEVEL'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1745,7 +1658,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-level'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1756,7 +1668,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-format'
         VALUE = 'LOG_FORMAT'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1767,7 +1678,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1778,7 +1688,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-date-format'
         VALUE = 'LOG_DATE_FORMAT'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1789,7 +1698,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-date-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1800,7 +1708,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-level'
         VALUE = 'LOG_CLI_LEVEL'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1811,7 +1718,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-level'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1822,7 +1728,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-format'
         VALUE = 'LOG_CLI_FORMAT'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1833,7 +1738,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1844,7 +1748,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-date-format'
         VALUE = 'LOG_CLI_DATE_FORMAT'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1855,7 +1758,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-cli-date-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1866,7 +1768,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file'
         VALUE = 'LOG_FILE'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1877,7 +1778,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1888,7 +1788,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-level'
         VALUE = 'LOG_FILE_LEVEL'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1899,7 +1798,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-level'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1910,7 +1808,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-format'
         VALUE = 'LOG_FILE_FORMATE'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1921,7 +1818,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1932,7 +1828,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-date-format'
         VALUE = 'LOG_FILE_FORMATE'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1943,7 +1838,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-file-date-format'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 
@@ -1954,7 +1848,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-auto-indent'
         VALUE = 'LOG-AUTO-INDENT'
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH, VALUE]
         sys.argv = command.copy()
 
@@ -1965,7 +1858,6 @@ class TestNroboArgsPackage():
 
         SWITCH = '--log-auto-indent'
 
-        from nrobo.cli.launcher import launcher_command
         command = ['pytest', SWITCH]
         sys.argv = command.copy()
 

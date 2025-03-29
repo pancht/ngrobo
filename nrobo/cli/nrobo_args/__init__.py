@@ -17,19 +17,20 @@ Definitions of nRoBo command line arguments.
 # Define nrobo command line argument parser
 import argparse
 
-from nrobo.cli.cli_constants import nCLI, NREPORT
+from nrobo.cli.cli_constants import NCli, NREPORT
 from nrobo.cli.nglobals import Browsers
 from dataclasses import dataclass
 
 @dataclass
 class BoolArgs:
+    """Boolean arguments."""
     PYARGS = "pyargs"
 
 
 BOOL_SWITCHES = [
-    f"--{nCLI.INSTALL}",
-    f"--{nCLI.VERSION}",
-    f"--{nCLI.SUPPRESS}",
+    f"--{NCli.INSTALL}",
+    f"--{NCli.VERSION}",
+    f"--{NCli.SUPPRESS}",
     "--markers",
     "--exitfirst",
     "--fixtures",
@@ -91,7 +92,7 @@ SHOW_ONLY_SWITCHES = [
 ]
 
 
-def nrobo_cli_parser(exit_on_failure=True):
+def nrobo_cli_parser(exit_on_failure=True):  # noqa: R0915
     """Define nRoBo command line arguments
 
     and return args."""
@@ -103,23 +104,23 @@ def nrobo_cli_parser(exit_on_failure=True):
     )
     # Add NPM command line support
     parser.add_argument(
-        f"--{nCLI.NPM}",
-        help=f"Executed given npm command."
-        f"\n Usage:"
-        f"\n       --npm <package>"
-        f"\n "
-        f"\n  Example:"
-        f"\n       nrobo --npm appium"
-        f"\n Will install appium dependency as global package",
+        f"--{NCli.NPM}",
+        help="Executed given npm command."
+        "\n Usage:"
+        "\n       --npm <package>"
+        "\n "
+        "\n  Example:"
+        "\n       nrobo --npm appium"
+        "\n Will install appium dependency as global package",
     )
     parser.add_argument(
-        f"--{nCLI.APPIUM}",
-        help=f"Tells nRoBo to trigger via appium client",
+        f"--{NCli.APPIUM}",
+        help="Tells nRoBo to trigger via appium client",
         action="store_true",
         default=False,
     )
     parser.add_argument(
-        f"--{nCLI.CAP}",
+        f"--{NCli.CAP}",
         help="File name of appium capability file."
         "nRoBo will search the given capability file "
         "in appium directory under project root folder.",
@@ -128,68 +129,69 @@ def nrobo_cli_parser(exit_on_failure=True):
     # Add nrobo command line args
     parser.add_argument(
         "-i",
-        f"--{nCLI.INSTALL}",
+        f"--{NCli.INSTALL}",
         help="Install nRoBo requirements and framework on host system",
         action="store_true",
     )
     parser.add_argument(
-        f"--{nCLI.APP}",
+        f"--{NCli.APP}",
         help="Name of application under test. Name should not include special chars "
         "and should only having alphanumeric values.",
         default="nRoBo",
     )
-    parser.add_argument(f"--{nCLI.URL}", help="Application url under test.")
-    parser.add_argument(f"--{nCLI.USERNAME}", help="Username for login.", default="")
-    parser.add_argument(f"--{nCLI.PASSWORD}", help="Password for login.", default="")
+    parser.add_argument(f"--{NCli.URL}", help="Application url under test.")
+    parser.add_argument(f"--{NCli.USERNAME}", help="Username for login.", default="")
+    parser.add_argument(f"--{NCli.PASSWORD}", help="Password for login.", default="")
     parser.add_argument(
         "-n",
-        f"--{nCLI.INSTANCES}",
+        f"--{NCli.INSTANCES}",
         help="Number of parallel tests to reduce test-run-time. "
              "Default value is 1. Meaning single test at a time in sequence.",
         default=1,
     )
     parser.add_argument(
-        f"--{nCLI.RERUNS}",
-        help=f"Retries to rerun the failed tests n times specified by --{nCLI.RERUNS} switch.",
+        f"--{NCli.RERUNS}",
+        help=f"Retries to rerun the failed tests n times specified by --{NCli.RERUNS} switch.",
         default=0,
     )
     parser.add_argument(
-        f"--{nCLI.RERUNS_DELAY}",
+        f"--{NCli.RERUNS_DELAY}",
         help="Delay time in second(s) before a rerun for a failed test. Default is 1 second.",
         default=1,
     )
     parser.add_argument(
-        f"--{nCLI.REPORT}",
-        help="Defines type of test report. Two types are supported, Simple HTML or Rich Allure report. "
+        f"--{NCli.REPORT}",
+        help="Defines type of test report. "
+             "Two types are supported, Simple HTML or Rich Allure report. "
              "Options are <html> | <allure>. Default is <html>",
         default="html",
     )
     parser.add_argument(
-        f"--{nCLI.REPORT_TITLE}",
+        f"--{NCli.REPORT_TITLE}",
         help="Defines HTML Report title.",
         default=f"{NREPORT.DEFAULT_REPORT_TITLE}",
     )
     parser.add_argument(
-        f"--{nCLI.TARGET}", help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}"
+        f"--{NCli.TARGET}", help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}"
     )
     parser.add_argument(
-        f"--{nCLI.VERSION}", help="Shows nRoBo version", action="store_true"
+        f"--{NCli.VERSION}", help="Shows nRoBo version", action="store_true"
     )
     parser.add_argument(
-        f"--{nCLI.SUPPRESS}",
+        f"--{NCli.SUPPRESS}",
         help="Suppresses upgrade prompt on each test run",
         action="store_true",
         default=False,
     )
     parser.add_argument(
-        f"--{nCLI.FULLPAGE_SCREENSHOT}",
+        f"--{NCli.FULLPAGE_SCREENSHOT}",
         help="Take full page screenshot",
         action="store_true",
         default=False,
     )
     parser.add_argument(
         "-b",
-        f"--{nCLI.BROWSER}",
+        f"--{NCli.BROWSER}",
         help="""
         Target browser. Default is chrome.
         Options could be:
@@ -205,9 +207,9 @@ def nrobo_cli_parser(exit_on_failure=True):
             Browsers.EDGE,
         ),
     )
-    parser.add_argument(f"--{nCLI.FILES}", help="Input files", nargs="+")
+    parser.add_argument(f"--{NCli.FILES}", help="Input files", nargs="+")
     parser.add_argument(
-        f"--{nCLI.BROWSER_CONFIG}",
+        f"--{NCli.BROWSER_CONFIG}",
         help="""
             Path of browser-config-file containing additional options that is/are needed to be applied
             before browser instantiation. Each line in file should contain one option only.
@@ -222,7 +224,7 @@ def nrobo_cli_parser(exit_on_failure=True):
     )
     parser.add_argument(
         "-k",
-        f"--{nCLI.KEY}",
+        f"--{NCli.KEY}",
         help="""
         Only run tests that match the given substring
                             expression. An expression is a python resolvable
@@ -249,7 +251,7 @@ def nrobo_cli_parser(exit_on_failure=True):
         """,
     )
     parser.add_argument(
-        f"--{nCLI.GRID}",
+        f"--{NCli.GRID}",
         help="""
                 Remote Grid server url. Tests will be running on the machine when Grid server is running pointed by Grid url.
                 """,
@@ -340,7 +342,7 @@ def nrobo_cli_parser(exit_on_failure=True):
         """,
     )
     parser.add_argument(
-        "-s", f"--capture-no", help="shortcut for --capture=no.", action="store_true"
+        "-s", "--capture-no", help="shortcut for --capture=no.", action="store_true"
     )
     parser.add_argument(
         "--runxfail",

@@ -18,7 +18,7 @@ from nrobo.exceptions import NRoBoBrowserNotSupported
 from rich.console import *
 from nrobo.cli.formatting import *
 
-from nrobo.cli import *
+# from nrobo.cli import *
 
 console = Console(theme=themes)
 

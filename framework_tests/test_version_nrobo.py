@@ -4,9 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from nrobo import console, terminal, EnvKeys, NROBO_PATHS, NROBO_CONST
+from nrobo import terminal, EnvKeys, NROBO_PATHS, NROBO_CONST
 from nrobo.cli.nglobals import Browsers
-from nrobo.util.filesystem import remove_filetree
 
 
 class TestNRoboFramework():
@@ -76,7 +75,6 @@ class TestNRoboFramework():
     def test_version_in_nrobo_init_file_method(self):
         """Validate nrobo/__init__.py has correct published version"""
 
-        from nrobo.cli.upgrade import get_pypi_index
         import nrobo.cli.detection as detect
         from nrobo import __version__
 

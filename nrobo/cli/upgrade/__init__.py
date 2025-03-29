@@ -14,10 +14,11 @@ Definition of nRoBo update utility.
 """
 
 import os
+import sys
 import time
-from nrobo.util.network import internet_connectivity
-import subprocess
 import re
+import subprocess
+from nrobo.util.network import internet_connectivity
 import nrobo.cli.detection as detect
 
 
@@ -33,7 +34,7 @@ def get_pypi_index(package) -> None | str:
     return None otherwise."""
 
     if not internet_connectivity():
-        """Exit programme."""
+        # Exit programme.
         from nrobo import console, STYLE
 
         console.print(f"[{STYLE.HLRed}]No internet connectivity!")
@@ -41,7 +42,7 @@ def get_pypi_index(package) -> None | str:
         # HOW can I proceed without internet connectivity!
         # I need that for performing a few operations.
         # THUS, Quiting NOW!!!
-        exit(1)
+        sys.exit(1)
 
     result = subprocess.run(
         ["pip", "index", "versions", package],
@@ -115,7 +116,7 @@ def confirm_update() -> None:
                 f"[{STYLE.HLOrange}]NOTE: A silent major update was installed from "
                 f"{host_version.version} => {pypi_version.version}. Please rerun tests."
             )
-            exit(0)
+            sys.exit(0)
 
         elif Version.present_is_a_minor_release(
             pypi_version.version, host_version.version
@@ -137,7 +138,7 @@ def confirm_update() -> None:
                 f"[{STYLE.HLOrange}]NOTE: A silent minor update was installed from "
                 f"{host_version.version} => {pypi_version.version}. Please rerun tests."
             )
-            exit(0)
+            sys.exit(0)
 
         elif host_version <= Version("2024.12.0"):
             # forced update and apply patch delivered in give version
@@ -159,7 +160,7 @@ def confirm_update() -> None:
             and host_version <= Version("2024.12.0")
         ):
             console.rule(f"[{STYLE.HLOrange}]{EXIT_CODES['10001'][1]}")
-            exit(EXIT_CODES["10001"][0])
+            sys.exit(EXIT_CODES["10001"][0])
 
         # return  # Silent patch applied for version 2024.6.10, thus, just return!
 
@@ -172,43 +173,45 @@ def confirm_update() -> None:
         # Enabled Major and Minor release by default.
         # Thus, stopping patch releases from version 2024.25.8
         return
-
-        if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
-            """Return as --suppress switch is supplied"""
-            return
-
-        _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
-        from nrobo import console, terminal, STYLE
-        from rich.prompt import Prompt
-
-        reply = Prompt.ask(
-            f"An updated version ({_pypi_version}) is available for nrobo. "
-            f"\n Your nRoBo version is {get_host_version()}. "
-            f"\n Do you want to upgrade? "
-            f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)"
-            f"\nNOTE: To suppress this propmt, apply CLI switch, --suppress, to your launcher command."
-        )
-        if not reply.strip().lower() in ["yes", "y"]:
-            # Hmm! Host don't want an update.
-            # I don't know why he/she doesn't!!!
-            # Anyway, I've had to obey her/his command,
-            # Thus, I'm not going to update.
-            return  # Bye, Host!
-
-        with console.status("Updating nRoBo"):
-            # Host chose to allow update. Lets' update then!
-
-            console.print("Update started")
-
-            return_code = terminal(
-                ["pip", "install", "--upgrade", "nrobo", "--require-virtualenv"],
-                debug=True,
-            )
-
-            if return_code == 0:
-                console.print("Update completed successfully.")
-            else:
-                console.print("Update did not complete.")
-
-            # allow host system to do some stuff!
-            time.sleep(2)
+        #
+        # if int(os.environ[EnvKeys.SUPPRESS_PROMPT]):
+        #     """Return as --suppress switch is supplied"""
+        #     return
+        #
+        # _pypi_version = get_pypi_index(NROBO_CONST.NROBO)
+        # from nrobo import console, terminal, STYLE
+        # from rich.prompt import Prompt
+        #
+        # reply = Prompt.ask(
+        #     f"An updated version ({_pypi_version}) is available for nrobo. "
+        #     f"\n Your nRoBo version is {get_host_version()}. "
+        #     f"\n Do you want to upgrade? "
+        #     f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. "
+        #     f"Press any key to skip.)"
+        #     f"\nNOTE: To suppress this propmt, "
+        #     f"apply CLI switch, --suppress, to your launcher command."
+        # )
+        # if reply.strip().lower() not in ["yes", "y"]:
+        #     # Hmm! Host don't want an update.
+        #     # I don't know why he/she doesn't!!!
+        #     # Anyway, I've had to obey her/his command,
+        #     # Thus, I'm not going to update.
+        #     return  # Bye, Host!
+        #
+        # with console.status("Updating nRoBo"):
+        #     # Host chose to allow update. Lets' update then!
+        #
+        #     console.print("Update started")
+        #
+        #     return_code = terminal(
+        #         ["pip", "install", "--upgrade", "nrobo", "--require-virtualenv"],
+        #         debug=True,
+        #     )
+        #
+        #     if return_code == 0:
+        #         console.print("Update completed successfully.")
+        #     else:
+        #         console.print("Update did not complete.")
+        #
+        #     # allow host system to do some stuff!
+        #     time.sleep(2)

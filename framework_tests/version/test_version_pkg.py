@@ -35,7 +35,7 @@ class TestVersionPkg:
         try:
             Version("2010.d.45")
             assert False
-        except NRoBoIncorrectVersion as e:
+        except NRoBoIncorrectVersion:
             assert True
 
         major = 2024
@@ -81,13 +81,13 @@ class TestVersionPkg:
         try:
             assert version_1 > 2
             assert False
-        except NRoBoInvalidOperation as e:
+        except NRoBoInvalidOperation:
             assert True
 
         try:
             assert version_1 < 2
             assert False
-        except NRoBoInvalidOperation as e:
+        except NRoBoInvalidOperation:
             assert True
 
         version_1 = Version(f"{major}.{minor}.{patch}")

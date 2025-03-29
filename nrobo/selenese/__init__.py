@@ -128,7 +128,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
         try:
             __cur_window_handle = self.current_window_handle
-        except Exception as e:
+        except Exception:
             return
 
         self.windows = {}
@@ -138,7 +138,7 @@ class WebdriverWrapperNrobo(WebDriver):
             # add title and handle to windows
             try:
                 self.windows[self.title] = _wh
-            except UnexpectedAlertPresentException as e:
+            except UnexpectedAlertPresentException:
                 pass
 
         self.switch_to_window(__cur_window_handle)
@@ -193,7 +193,7 @@ class WebdriverWrapperNrobo(WebDriver):
     def execute(self, driver_command: str, params: dict = None) -> dict:
         """selenium webdriver wrapper method: execute"""
 
-        nprint(f"Executing script...")
+        nprint("Executing script...")
         return self.driver.execute(driver_command, dict)
 
     @property
@@ -1007,7 +1007,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         try:
             return self.find_element(by, value).is_selected()
-        except Exception as e:
+        except Exception:
             return False
 
     def is_enabled(self, by: AnyBy, value: Optional[str] = None) -> bool:
@@ -1015,7 +1015,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
 
         try:
             return self.find_element(by, value).is_enabled()
-        except Exception as e:
+        except Exception:
             return False
 
     def send_keys(self, by: AnyBy, value: Optional[str] = None, *text) -> None:
@@ -1057,7 +1057,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):
         """Whether the element is visible to a user."""
         try:
             return self.driver.find_element(by, value).is_displayed()
-        except NoSuchElementException as e:
+        except NoSuchElementException:
             return False
 
     def location_once_scrolled_into_view(
@@ -1225,7 +1225,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
                 expected_conditions.invisibility_of_element_located(locator)
             )
-        except Exception as e:
+        except Exception:
             return False
 
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])
@@ -1244,7 +1244,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                     expected_conditions.presence_of_element_located([by, value])
                 )
                 return True
-            except Exception as e:
+            except Exception:
                 return False
 
         try:
@@ -1252,7 +1252,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                 expected_conditions.presence_of_element_located([by, value])
             )
             return True
-        except Exception as e:
+        except Exception:
             return False
 
     def wait_for_element_to_be_disappeared(
@@ -1269,7 +1269,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
                 WebDriverWait(self.driver, wait).until(
                     expected_conditions.invisibility_of_element_located([by, value])
                 )
-            except Exception as e:
+            except Exception:
                 return False
 
             self.wait_for_a_while(self.nconfig[WAITS.WAIT])
@@ -1279,7 +1279,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
             WebDriverWait(self.driver, self.nconfig[WAITS.WAIT]).until(
                 expected_conditions.invisibility_of_element_located([by, value])
             )
-        except Exception as e:
+        except Exception:
             return False
 
         self.wait_for_a_while(self.nconfig[WAITS.WAIT])

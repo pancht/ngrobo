@@ -28,5 +28,5 @@ def internet_connectivity() -> bool:
             return True
         else:
             return False
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         return False

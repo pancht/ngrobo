@@ -74,7 +74,7 @@ class Common:
                 with open(file_path, "w", encoding=encoding) as f:
                     f.write(content)
 
-        except FileNotFoundError as file_not_found_error:
+        except FileNotFoundError:
             print("No such file or directory found: " + str(file_path))
 
     @staticmethod
@@ -98,7 +98,7 @@ class Common:
                 with open(file_path, "w", encoding=encoding) as f:
                     f.write(content)
 
-        except FileNotFoundError as file_not_found_error:
+        except FileNotFoundError:
             print("No such file or directory found: " + str(file_path))
 
     @staticmethod
@@ -116,7 +116,7 @@ class Common:
                 data = json.load(f)
                 return data
 
-        except FileNotFoundError as file_not_found_error:
+        except FileNotFoundError:
             print("No such file or directory found: " + file_path)
 
     @staticmethod

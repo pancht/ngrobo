@@ -14,6 +14,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 
 from nrobo.conftest import *
 
-import sys, os
+import sys
+import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), ""))

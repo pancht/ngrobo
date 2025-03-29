@@ -83,8 +83,8 @@ class Examples:
     @pytest.mark.skip(reason="Reason for skipping this test")
     def test_skip(self, driver, logger):
         logger.info(
-            f"skip the given test function with an optional reason. "
-            f"Example: skip(reason='no way of currently testing this') skips the test."
+            "skip the given test function with an optional reason. "
+            "Example: skip(reason='no way of currently testing this') skips the test."
         )
 
     @pytest.mark.skipif(

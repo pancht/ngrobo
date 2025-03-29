@@ -43,7 +43,7 @@ def get_command(command) -> None:
         return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
             N_COMMANDS.CLEAR_SCREEN
         ]
-    except KeyError as ke:
+    except KeyError:
         raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
 
 

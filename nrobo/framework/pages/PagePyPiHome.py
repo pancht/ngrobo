@@ -3,7 +3,6 @@
 @email: erpanchdev@gmail.com
 """
 
-import logging
 
 from selenium.webdriver.common.by import By
 from pages import Page
@@ -47,7 +46,7 @@ class PagePyPiHome(Page):
         self.send_keys(*self.txt_search, keyword)
 
     def search(self) -> PageSearch:
-        self.logger.info(f"Click on Search button.")
+        self.logger.info("Click on Search button.")
         self.click(*self.btn_search)
 
         return PageSearch(self.driver, self.logger)

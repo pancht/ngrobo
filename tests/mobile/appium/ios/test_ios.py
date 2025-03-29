@@ -1,4 +1,3 @@
-from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
 
 from nrobo.framework.pages import Page

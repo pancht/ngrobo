@@ -15,13 +15,10 @@ on developer machine.
 """
 
 import os
-import subprocess
-import sys
 
-from nrobo import set_environment, Environment, EnvKeys, STYLE
+from nrobo import set_environment, EnvKeys, STYLE
 from nrobo.cli.nglobals import Browsers
 from nrobo.util.process import terminal
-from nrobo.cli.cli_constants import nCLI
 
 
 def run_unit_tests(debug=False) -> int:

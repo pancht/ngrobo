@@ -35,7 +35,7 @@ class NREPORT:
     DEFAULT_REPORT_TITLE = "Test Automation Report"
 
 
-class nCLI:
+class NCli:
     """List of nrobo defined cli options.
 
     NOTE:
@@ -103,7 +103,7 @@ class nCLI:
         "--code-highlight": ["--code-highlight", "yes"],
         "--junit-xml": [
             "--junit-xml",
-            NREPORT.REPORT_DIR + os.sep + f"junit-report.xml",
+            NREPORT.REPORT_DIR + os.sep + "junit-report.xml",
         ],
     }
 

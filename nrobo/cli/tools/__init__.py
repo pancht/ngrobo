@@ -24,7 +24,7 @@ def nprint(msg, style=STYLE.HLGreen, logger=None):
     console.print(f"[{style}]{msg}")
 
     if logger is not None:
-        """if logger is given"""
+        # if logger is given.
 
         # log the msg
         logger.log(logging.INFO, f"{msg}")

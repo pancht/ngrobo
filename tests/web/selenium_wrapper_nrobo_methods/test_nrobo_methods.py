@@ -1,4 +1,3 @@
-import time
 
 import pytest
 
@@ -49,7 +48,6 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
 
         page.get("https://the-internet.herokuapp.com/")
-        main_window = "The Internet"
 
         lnkMultipleWindow = (By.CSS_SELECTOR, "a[href='/windows']")
         page.click(*lnkMultipleWindow)
@@ -95,14 +93,12 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
 
         page.get("https://the-internet.herokuapp.com/")
-        main_window_title = "The Internet"
 
         lnkMultipleWindow = (By.CSS_SELECTOR, "a[href='/windows']")
         page.click(*lnkMultipleWindow)
 
         lnkClickHere = (By.CSS_SELECTOR, "a[href='/windows/new']")
         page.click(*lnkClickHere)
-        another_window_title = "New Window"
 
         logger.info(f"all handles = {page.window_handles}")
         logger.info(f"all handles = {page.windows}")
@@ -180,7 +176,6 @@ class TestNRoBoSeleniumWrapperMethods:
         frmTop = "frame-top"
         page.frame(frmTop)  # Switch to Top level frame
 
-        frmLeft = "frame-left"
         page.frame("frame-left")  # Switch to Left frame now
         content = page.page_source
         logger.info(f"Left Frame Content\n{content}")
@@ -216,7 +211,6 @@ class TestNRoBoSeleniumWrapperMethods:
         frmTop = "frame-top"
         page.frame(frmTop)  # Switch to Top level frame
 
-        frmLeft = "frame-left"
         page.frame("frame-left")  # Switch to Left frame now
         content = page.page_source
         logger.info(f"Left Frame Content\n{content}")

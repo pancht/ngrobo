@@ -15,11 +15,12 @@ Installer for installing nrobo framework at host system.
 """
 
 import os
+import sys
 import subprocess
 import time
 from pathlib import Path
 from typing import Optional
-from nrobo.cli.cli_constants import nCLI
+from nrobo.cli.cli_constants import NCli
 from nrobo.util.common import Common
 from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree
 from nrobo.util.version import Version
@@ -28,7 +29,7 @@ import nrobo.cli.detection as detect
 from datetime import datetime
 
 
-def transfer_files_to_host_project() -> None:
+def transfer_files_to_host_project() -> None:  # noqa: R0914
     """Transfer nrobo project files to HOST project dir"""
     # Copy conftest.py and other files to current directory
     # =============================================================
@@ -46,7 +47,7 @@ def transfer_files_to_host_project() -> None:
 
     stop_auto_silent_update_version = Version("2024.19.3")
     host_version = Version(get_host_version())
-    pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
+    # pypi_version = Version(get_pypi_index(NROBO_CONST.NROBO))
     detect.ensure_pathces_dir()
 
     if detect.host_machine_has_nrobo():
@@ -72,7 +73,7 @@ def transfer_files_to_host_project() -> None:
                 f"Please take note of it. And rerun tests!"
             )
             print("\n")
-            exit(1)
+            sys.exit(1)
 
         if patch_2024_6_12.exists() and host_version < Version("2024.7.0"):
             return
@@ -118,13 +119,15 @@ def transfer_files_to_host_project() -> None:
             pass
         else:
             if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
-                """Create if not exist"""
+                # Create if not exist
                 copy_file(
                     NP.NROBO_DIR / NP.FRAMEWORK / NP.REQUIREMENTS_TXT_FILE,
                     NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE,
                 )
 
-            return  # Return from  installation if nRoBo is already installed on HOST system! SMART! RIGHT! :)
+            # Return from  installation
+            # if nRoBo is already installed on HOST system! SMART! RIGHT! :)
+            return
 
     # nRoBo was not found on HOST machine.
     # Lets' make it found then!!!
@@ -137,23 +140,23 @@ def transfer_files_to_host_project() -> None:
         host_version <= stop_auto_silent_update_version
         and not (NP.NROBO_DIR / patch_file).exists()
     ):
-        """force re-install"""
+        # force re-install
         force_reinstall = True
 
     if not (NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE).exists():
-        """Create if not exist"""
+        # Create if not exist
         copy_file(
             NP.NROBO_DIR / NP.FRAMEWORK / NP.REQUIREMENTS_TXT_FILE,
             NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE,
         )
 
     if force_reinstall:
-        print(f"Re-installing framework")
+        print("Re-installing framework")
     elif (NP.EXEC_DIR / NP.CONFTEST_PY).exists():
         return  # Framework already installed, thus, just do nothing and return.
     else:
         # Fresh install
-        print(f"Installing framework")
+        print("Installing framework")
 
     if (NP.EXEC_DIR / NP.CONFTEST_PY).exists():
         # create a copy of host conftest.py
@@ -221,7 +224,7 @@ def transfer_files_to_host_project() -> None:
     copy_dir(NP.NROBO_DIR / NP.BROWSER_CONFIGS, NP.EXEC_DIR / NP.BROWSER_CONFIGS)
 
     if force_reinstall:
-        print(f"Re-install complete")
+        print("Re-install complete")
 
         console.rule(
             f"[{STYLE.HLRed}]A silent re-install has been made to nrobo framework. "
@@ -229,9 +232,9 @@ def transfer_files_to_host_project() -> None:
             f"Please take an action on them and clean unwanted directory and files."
         )
         Common.write_text_to_file(NP.NROBO_DIR / patch_file, "")
-        exit()
+        sys.exit(1)
     else:
-        print(f"Installation complete")
+        print("Installation complete")
 
 
 def install_user_specified_requirements():
@@ -241,15 +244,15 @@ def install_user_specified_requirements():
     user_specified_requirements = Path(f"{NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE}")
 
     if detect.production_machine() and user_specified_requirements.exists():
-        """Install User Specified Requirements"""
+        # Install User Specified Requirements
 
-        print(f"Installing project requirements")
+        print("Installing project requirements")
         from nrobo import terminal, NROBO_CONST
 
         return_code = terminal(
             command=[
                 os.environ[EnvKeys.PIP_COMMAND],
-                nCLI.INSTALL,
+                NCli.INSTALL,
                 "-r",
                 user_specified_requirements,
             ],
@@ -258,28 +261,31 @@ def install_user_specified_requirements():
         )
 
         if return_code == NROBO_CONST.SUCCESS:
-            """return code zero means success"""
-            print(f"Project requirements are installed successfully.")
+            # return code zero means success
+            print("Project requirements are installed successfully.")
         else:
-            print(f"Project requirements are not installed successfully.")
+            print("Project requirements are not installed successfully.")
 
 
 def install_nrobo(
     requirements_file: Optional[str] = None, install_only: bool = False
 ) -> None:
-    """This will install nrobo framework and its dependencies on host system in the current directory
+    """This will install nrobo framework and
+    its dependencies on host system in the current directory
     from where nrobo command was executed in the Production environment.
 
-    This will only install nrobo dependencies if it is executed in the Developer environment.
+    This will only install nrobo dependencies
+    if it is executed in the Developer environment.
     """
 
-    # Inline imports to handle circular import exception while importing partially initialized module
-    from nrobo import set_environment, EnvKeys, Environment, NROBO_PATHS as NP
+    # Inline imports to handle circular import exception
+    # while importing partially initialized module
+    from nrobo import set_environment, EnvKeys, NROBO_PATHS as NP
 
     set_environment()
 
     if detect.production_machine() and not detect.host_machine_has_nrobo():
-        print(f"Installing requirements")
+        print("Installing requirements")
 
     if requirements_file is None:
         # Install nRoBo requirements
@@ -292,7 +298,7 @@ def install_nrobo(
         return_code = terminal(
             command=[
                 os.environ[EnvKeys.PIP_COMMAND],
-                nCLI.INSTALL,
+                NCli.INSTALL,
                 "-r",
                 requirements_file,
             ],
@@ -300,12 +306,12 @@ def install_nrobo(
             stderr=subprocess.STDOUT,
         )
 
+        # return code zero means success
         if return_code == NROBO_CONST.SUCCESS:
-            """return code zero means success"""
             if detect.production_machine() and not detect.host_machine_has_nrobo():
-                print(f"Requirements are installed successfully.")
+                print("Requirements are installed successfully.")
         else:
-            print(f"Requirements are not installed successfully!")
+            print("Requirements are not installed successfully!")
             return
 
     # triggers forced update or normal update by comparing host version and pypi version
@@ -320,7 +326,7 @@ def install_nrobo(
         return
 
     if detect.production_machine():
-        """Install or upgrading framework on Production environment"""
+        # Install or upgrading framework on Production environment
 
         # triggers forced update or normal update by comparing host version and pypi version
         from nrobo.cli.upgrade import confirm_update
@@ -332,10 +338,11 @@ def install_nrobo(
 
         # Heck logic to check if this is a developer machine in production_machine
         if detect.developer_machine():
-            # Developer machine in production_machine detected! I'm not going to install framework BRO!!! :)
+            # Developer machine in production_machine detected!
+            # I'm not going to install framework BRO!!! :)
             pass
         else:
-            """fresh installation"""
+            # fresh installation
             transfer_files_to_host_project()
 
 

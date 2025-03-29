@@ -42,7 +42,6 @@ import nrobo.cli.detection as detect
 
 from nrobo.util.constants import CONST
 from nrobo.appium import AutomationNames, CAPABILITY
-from selenium.common.exceptions import WebDriverException
 
 
 def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
@@ -63,14 +62,14 @@ def update_pytest_life_cycle_log_with_value(value: str):
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
     from nrobo.cli.cli_constants import NREPORT
-    from nrobo import EnvKeys, NROBO_PATHS
+    from nrobo import NROBO_PATHS
     _log_driver_file = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
 
     if not _log_driver_file.exists():
         """ensure driver logs dir"""
         try:
             os.makedirs(_log_driver_file)
-        except FileExistsError as e:
+        except FileExistsError:
             pass
 
     _test_logs_dir = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
@@ -78,7 +77,7 @@ def ensure_logs_dir_exists():
         """ensure test logs dir"""
         try:
             os.makedirs(_test_logs_dir)
-        except FileExistsError as e:
+        except FileExistsError:
             pass
 
     _screenshot_dir = NROBO_PATHS.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
@@ -86,7 +85,7 @@ def ensure_logs_dir_exists():
         """ensure screenshots dir"""
         try:
             os.makedirs(_screenshot_dir)
-        except FileExistsError as e:
+        except FileExistsError:
             pass
 
     _allure_dir = NROBO_PATHS.EXEC_DIR / NREPORT.ALLURE_REPORT_PATH
@@ -94,7 +93,7 @@ def ensure_logs_dir_exists():
         """ensure allure dir"""
         try:
             os.makedirs(_allure_dir)
-        except FileExistsError as e:
+        except FileExistsError:
             pass
 
 
@@ -129,7 +128,7 @@ def add_capabilities_from_file(options):
 
        and return updated options"""
     from nrobo.util.common import Common
-    from nrobo import NROBO_PATHS, Environment, EnvKeys
+    from nrobo import NROBO_PATHS
     if detect.production_machine() and not detect.developer_machine():
         capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.CAPABILITY_YAML)
     else:
@@ -147,7 +146,7 @@ def get_appium_capabilities_from_file(cap_file_name):
 
        return appium_capabilities"""
     from nrobo.util.common import Common
-    from nrobo import NROBO_PATHS, Environment, EnvKeys
+    from nrobo import NROBO_PATHS
     if detect.production_machine() and not detect.developer_machine():
         capabilities = Common.read_yaml(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.APPIUM / cap_file_name)
     else:
@@ -169,58 +168,58 @@ def pytest_addoption(parser):
     group = parser.getgroup("nrobo header options")
     # nRoBo appium options
     group.addoption(
-        f"--{nCLI.APPIUM}", help=f"Tells nRoBo to trigger via appium client",
+        f"--{NCli.APPIUM}", help="Tells nRoBo to trigger via appium client",
         action="store_true", default=False
     )
     group.addoption(
-        f"--{nCLI.CAP}", help="File name of appium capability file."
+        f"--{NCli.CAP}", help="File name of appium capability file."
                               "nRoBo will search the given capability file "
                               "in appium directory under project root folder."
     )
 
     # nRoBo webdriver options
     group.addoption(
-        f"--{nCLI.BROWSER}", help="""
+        f"--{NCli.BROWSER}", help="""
     Target browser name. Default is chrome.
     Options could be:
         chrome | firefox | safari | edge.
         (Only chrome is supported at present_release.)
     """
     )
-    group.addoption(f"--{nCLI.APP}", help="Name of your app project under test")
-    group.addoption(f"--{nCLI.REPORT_TITLE}", help="Defines HTML report title")
-    group.addoption(f"--{nCLI.URL}", help="Link of application under test")
-    group.addoption(f"--{nCLI.USERNAME}", help="Username for login", default="")
-    group.addoption(f"--{nCLI.PASSWORD}", help="Password for login", default="")
-    group.addoption(f"--{nCLI.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
-    group.addoption(f"--{nCLI.PACKAGES}", help="Browser config file path for setting requested options")
-    group.addoption(f"--{nCLI.GRID}", help="Url of remote selenium grid server")
-    group.addoption(f"--{nCLI.FULLPAGE_SCREENSHOT}",
+    group.addoption(f"--{NCli.APP}", help="Name of your app project under test")
+    group.addoption(f"--{NCli.REPORT_TITLE}", help="Defines HTML report title")
+    group.addoption(f"--{NCli.URL}", help="Link of application under test")
+    group.addoption(f"--{NCli.USERNAME}", help="Username for login", default="")
+    group.addoption(f"--{NCli.PASSWORD}", help="Password for login", default="")
+    group.addoption(f"--{NCli.BROWSER_CONFIG}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{NCli.PACKAGES}", help="Browser config file path for setting requested options")
+    group.addoption(f"--{NCli.GRID}", help="Url of remote selenium grid server")
+    group.addoption(f"--{NCli.FULLPAGE_SCREENSHOT}",
                     help="Take full page screenshot", action="store_true", default=False)
 
     # ini option
-    parser.addini(f"--{nCLI.APPIUM}", type='bool', help=f"Tells nRoBo to trigger via appium client")
-    parser.addini(f"--{nCLI.CAP}", type='string', help="File name of appium capability file."
+    parser.addini(f"--{NCli.APPIUM}", type='bool', help="Tells nRoBo to trigger via appium client")
+    parser.addini(f"--{NCli.CAP}", type='string', help="File name of appium capability file."
                                                        "nRoBo will search the given capability file "
                                                        "in appium directory under project root folder.")
-    parser.addini(f"{nCLI.APP}", type="string",
+    parser.addini(f"{NCli.APP}", type="string",
                   help="Name of your app project under test")
-    parser.addini(f"{nCLI.REPORT_TITLE}", type="string",
+    parser.addini(f"{NCli.REPORT_TITLE}", type="string",
                   help="Defines HTML report title")
-    parser.addini(f"{nCLI.URL}", type='string',
+    parser.addini(f"{NCli.URL}", type='string',
                   help="Link of application under test")
-    parser.addini(f"{nCLI.USERNAME}", type="string",
+    parser.addini(f"{NCli.USERNAME}", type="string",
                   help="Username for login")
-    parser.addini(f"{nCLI.PASSWORD}", type='string',
+    parser.addini(f"{NCli.PASSWORD}", type='string',
                   help="Password for login")
-    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{NCli.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{nCLI.BROWSER_CONFIG}", type='string',
+    parser.addini(f"{NCli.BROWSER_CONFIG}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"{nCLI.PACKAGES}", type='string',
+    parser.addini(f"{NCli.PACKAGES}", type='string',
                   help="Browser config file path for setting requested options")
-    parser.addini(f"--{nCLI.GRID}", type='string', help="Url of remote selenium grid server")
-    parser.addini(f"--{nCLI.FULLPAGE_SCREENSHOT}", type='bool',
+    parser.addini(f"--{NCli.GRID}", type='string', help="Url of remote selenium grid server")
+    parser.addini(f"--{NCli.FULLPAGE_SCREENSHOT}", type='bool',
                   help="Take full page screenshot")
 
 
@@ -231,7 +230,7 @@ def url(request):
     # Access pytest command line options
     update_pytest_life_cycle_log("url")
 
-    return request.config.getoption(f"--{nCLI.URL}")
+    return request.config.getoption(f"--{NCli.URL}")
 
 
 @pytest.fixture(scope='function')
@@ -242,7 +241,7 @@ def app(request):
 
     # Global fixture returning app name
     # Access pytest command line options
-    return request.config.getoption(f"--{nCLI.APP}")
+    return request.config.getoption(f"--{NCli.APP}")
 
 
 @pytest.fixture(scope='function')
@@ -253,7 +252,7 @@ def username(request):
 
     # Global fixture returning admin username
     # Access pytest command line options
-    return request.config.getoption(f"--{nCLI.USERNAME}")
+    return request.config.getoption(f"--{NCli.USERNAME}")
 
 
 @pytest.fixture(scope='function')
@@ -263,7 +262,7 @@ def password(request):
     update_pytest_life_cycle_log("password")
     # Global fixture returning admin password
     # Access pytest command line options
-    return request.config.getoption(f"--{nCLI.PASSWORD}")
+    return request.config.getoption(f"--{NCli.PASSWORD}")
 
 
 def get_fake_user_agents():
@@ -295,14 +294,14 @@ def driver(request):
 
     # Access pytest command line options
     from nrobo import EnvKeys, console
-    browser = request.config.getoption(f"--{nCLI.BROWSER}")
+    browser = request.config.getoption(f"--{NCli.BROWSER}")
 
     # get and set url
-    _url = request.config.getoption(f"--{nCLI.URL}")
+    _url = request.config.getoption(f"--{NCli.URL}")
     os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
 
     # get grid url
-    _grid_server_url = request.config.getoption(f"--{nCLI.GRID}")
+    _grid_server_url = request.config.getoption(f"--{NCli.GRID}")
 
     # initialize driver with None
     _driver = None
@@ -320,9 +319,8 @@ def driver(request):
 
         """get appium driver with given capabilities"""
         from appium import webdriver as _webdriver
-        from nrobo import NROBO_PATHS
 
-        capabilities = get_appium_capabilities_from_file(request.config.getoption(f"--{nCLI.CAP}"))
+        capabilities = get_appium_capabilities_from_file(request.config.getoption(f"--{NCli.CAP}"))
 
         if capabilities[CAPABILITY.AUTOMATION_NAME] == AutomationNames.UI_AUTOMATION2:
             """Create uiautomator2 driver instance"""
@@ -343,7 +341,7 @@ def driver(request):
 
         try:
             _driver = _webdriver.Remote(_grid_server_url, options=options)
-        except Exception as e:
+        except Exception:
             if _grid_url_missing:
                 console.rule(f"[{STYLE.HLRed}]\n\nAppium server url is missing![/]\n\n")
             else:
@@ -364,7 +362,7 @@ def driver(request):
         options = add_capabilities_from_file(options)
 
         # enable/disable chrome options from a file
-        _browser_options = read_browser_config_options(request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+        _browser_options = read_browser_config_options(request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -394,7 +392,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -418,7 +416,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply chrome options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -447,7 +445,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -471,7 +469,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -492,7 +490,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -521,7 +519,7 @@ def driver(request):
 
         # enable/disable chrome options from a file
         _browser_options = read_browser_config_options(
-            request.config.getoption(f"--{nCLI.BROWSER_CONFIG}"))
+            request.config.getoption(f"--{NCli.BROWSER_CONFIG}"))
         # apply Safari options
         [options.add_argument(_option) for _option in _browser_options]
 
@@ -629,7 +627,7 @@ def pytest_runtest_makereport(item, call):
             screenshot_relative_path = NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
 
             # Handle fullpagescreenshot cli switch
-            fullpagescreenshot = feature_request.config.getoption(f"--{nCLI.FULLPAGE_SCREENSHOT}")
+            fullpagescreenshot = feature_request.config.getoption(f"--{NCli.FULLPAGE_SCREENSHOT}")
 
             if fullpagescreenshot:
                 driver.maximize_window()
@@ -665,7 +663,7 @@ def pytest_runtest_makereport(item, call):
                 # add relative path to screenshot in the html report
                 extras.append(pytest_html.extras.url(screenshot_relative_path))
 
-            except Exception as e:
+            except Exception:
                 extras = []
 
         # update the report.extras
@@ -680,9 +678,9 @@ def pytest_configure(config):
     from nrobo.util.constants import CONST
     update_pytest_life_cycle_log("pytest_configure", "hook")
 
-    os.environ[EnvKeys.TITLE] = str(config.getoption(f'--{nCLI.REPORT_TITLE}')).replace(CONST.UNDERSCORE, CONST.SPACE)
-    os.environ[EnvKeys.APP] = str(config.getoption(f'--{nCLI.APP}')).replace(CONST.UNDERSCORE, CONST.SPACE)
-    os.environ[EnvKeys.APPIUM] = "1" if str(config.getoption(f'--{nCLI.APPIUM}')) == "True" else "0"
+    os.environ[EnvKeys.TITLE] = str(config.getoption(f'--{NCli.REPORT_TITLE}')).replace(CONST.UNDERSCORE, CONST.SPACE)
+    os.environ[EnvKeys.APP] = str(config.getoption(f'--{NCli.APP}')).replace(CONST.UNDERSCORE, CONST.SPACE)
+    os.environ[EnvKeys.APPIUM] = "1" if str(config.getoption(f'--{NCli.APPIUM}')) == "True" else "0"
 
     # add custom markers
     config.addinivalue_line("markers", "sanity: marks as sanity test")
@@ -717,23 +715,21 @@ def pytest_metadata(metadata):
 
 
 def pytest_runtest_setup(item):
-    from nrobo.util.common import Common
     update_pytest_life_cycle_log("pytest_runtest_setup", "hook")
     from pprint import pprint
-    from nrobo.util.common import Common
     try:
         callspec = item.callspec
-    except AttributeError as ae:
+    except AttributeError:
         callspec = None
 
     try:
         callobj = item.callobj
-    except AttributeError as ae:
+    except AttributeError:
         callobj = None
 
     try:
         fixtureinfo = item.fixtureinfo
-    except AttributeError as ae:
+    except AttributeError:
         fixtureinfo = None
 
     update_pytest_life_cycle_log_with_value(f"Function properties:\n"
@@ -761,15 +757,15 @@ def pytest_runtest_setup(item):
     _class = item.getparent(pytest.Class).obj
     print(f"class where this test {item.name} belong to")
     pprint(_class)
-    print(f"All attributes of test class")
+    print("All attributes of test class")
     pprint(_class.__dir__(item.name))
-    print(f"Get doc string")
+    print("Get doc string")
     print(_class.__dir__(item.name).__doc__)
     print("Check if item has attribute hello")
     pprint(hasattr(mod, "hello"))
-    print(f"node id")
+    print("node id")
     pprint(item.nodeid)
-    print(f"Nodeid dir object")
+    print("Nodeid dir object")
     pprint(item.nodeid.__dir__)
 
     if isinstance(item, pytest.Function):

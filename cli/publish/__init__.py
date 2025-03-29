@@ -20,7 +20,6 @@ from nrobo import *
 from nrobo.util.constants import CONST
 from nrobo.util.platform import PLATFORMS
 from nrobo.util.process import terminal
-from cli.build import ENV_CLI_SWITCH
 
 global __CUR_ENV__
 
@@ -42,7 +41,7 @@ def publish(target, *, debug: bool = False, override: bool = False):
     reply = Prompt.ask(
         f"Do You really want to publish version: [{STYLE.HLOrange}]{detect.build_version_from_version_files()}[/]"
         f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)")
-    if not reply.strip().lower() in ["yes", "y"]:
+    if reply.strip().lower() not in ["yes", "y"]:
         # Hmm! Host don't want an update.
         # I don't know why he/she doesn't!!!
         # Anyway, I've had to obey her/his command,
