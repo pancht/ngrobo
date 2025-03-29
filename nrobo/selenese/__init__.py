@@ -1,3 +1,4 @@
+# pylint: disable=C0302
 """
 =====================CAUTION=======================
 DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
@@ -72,7 +73,7 @@ class WAITS:
 
 
 @functools.lru_cache(maxsize=None)
-def read_nrobo_configs():
+def read_nrobo_configs():  # pylint: disable=R1710
     """Load nRoBo configurations from file nrobo-config.yaml from the root directory"""
 
     if detect.production_machine() and not detect.developer_machine():
@@ -90,11 +91,11 @@ def read_nrobo_configs():
         )
 
 
-class WebdriverWrapperNrobo(WebDriver):
+class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
     """Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
     This class is not instantiable."""
 
-    def __init__(self, driver: AnyDriver, logger: logging.Logger):
+    def __init__(self, driver: AnyDriver, logger: logging.Logger):  # pylint: disable=W0231
         """Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
@@ -116,7 +117,7 @@ class WebdriverWrapperNrobo(WebDriver):
         """windows."""
         self._windows = _windows
 
-    def update_windows(self, _window_handles: list[str] = None):
+    def update_windows(self, _window_handles: list[str] = None):  # pylint: disable=R1710
         """update windows."""
 
         if int(os.environ[EnvKeys.APPIUM]):
@@ -124,7 +125,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
         try:
             __cur_window_handle = self.current_window_handle
-        except Exception:
+        except Exception:  # pylint: disable=W0718
             return
 
         self.windows = {}
@@ -153,7 +154,7 @@ class WebdriverWrapperNrobo(WebDriver):
         return self.driver.name
 
     def _wait_page_load(self):
-        def wait_for_page_to_be_loaded(self):
+        def wait_for_page_to_be_loaded(self):  # pylint: disable=W0612
             """Waits for give timeout time for page to completely load.
             timeout time is configurable in nrobo-config.yaml"""
 
@@ -558,7 +559,7 @@ class WebdriverWrapperNrobo(WebDriver):
         """
         self.driver.timeouts = timeouts
 
-    def find_element(self, by: AnyBy, value: Optional[str] = None) -> WebElement:
+    def find_element(self, by: AnyBy, value: Optional[str] = None) -> WebElement:  # pylint: disable=W0222
         """Find an element given a By strategy and locator.
 
         :Usage:
@@ -575,7 +576,7 @@ class WebdriverWrapperNrobo(WebDriver):
 
         return self.driver.find_element(by, value)
 
-    def find_elements(self, by: AnyBy, value: Optional[str] = None) -> List[WebElement]:
+    def find_elements(self, by: AnyBy, value: Optional[str] = None) -> List[WebElement]:  # pylint: disable=W0222
         """Find elements given a By strategy and locator.
 
         :Usage:
@@ -870,7 +871,7 @@ class WebdriverWrapperNrobo(WebDriver):
 class WebElementWrapperNrobo(WebdriverWrapperNrobo):
     """NRobo webelement wrapper class"""
 
-    def __init__(self, driver: AnyDriver, logger: logging.Logger):
+    def __init__(self, driver: AnyDriver, logger: logging.Logger):  # pylint: disable=W0246
         """
         Constructor - NroboSeleniumWrapper
 
