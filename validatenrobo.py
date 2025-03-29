@@ -57,7 +57,7 @@ def run_unit_tests(debug=False) -> int:
         return return_code_unit_test_run
 
     web_test_report_name = "results-web-tests/web_tests_report.html"
-    return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.CHROME_HEADLESS,
+    return_code_web_test_run = terminal(['python', 'nrobo.py', '--browser', Browsers.FIREFOX_HEADLESS,
                                          '--instances', '10',
                                          '--app', 'NdiTestLabs',
                                          '--url', 'http://google.com',
