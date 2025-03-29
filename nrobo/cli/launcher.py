@@ -12,6 +12,7 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 import time
 
@@ -32,10 +33,10 @@ global __REQUIREMENTS__
 
 def launcher_command(exit_on_failure=True):
     """Prepares nrobo launcher command
-       by parsing command line switches
-       in order to trigger test suite launch.
+    by parsing command line switches
+    in order to trigger test suite launch.
 
-       Returns [str], args: command list, actual args
+    Returns [str], args: command list, actual args
     """
 
     # Need to import set_environment method here
@@ -47,6 +48,7 @@ def launcher_command(exit_on_failure=True):
 
     # parse command line arguments
     from nrobo.cli.nrobo_args import nrobo_cli_parser
+
     args = nrobo_cli_parser(exit_on_failure=exit_on_failure)
 
     # process each nrobo cli arguments
@@ -59,15 +61,18 @@ def launcher_command(exit_on_failure=True):
     if args.VERSION:
         # show version
         from nrobo import __version__
+
         console.print(f"nrobo {__version__}\n")
         return None, None, None
 
     if args.suppress:
         # suppress upgrade prompt
-        os.environ[EnvKeys.SUPPRESS_PROMPT] = '0'
+        os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
 
     if args.version:
-        result = terminal(['pytest', f"--version"], debug=True, text=True, capture_output=True)
+        result = terminal(
+            ["pytest", f"--version"], debug=True, text=True, capture_output=True
+        )
         console.print(f"{result.stdout}")
         return None, None, None
 
@@ -88,14 +93,24 @@ def launcher_command(exit_on_failure=True):
         # brew uninstall node
         # brew install node
         # Remove any file or dir that are being shown when run node -v command after uninstalling node
-        command = ['sudo', nCLI.NPM, 'install', '-g', args.npm, '--unsafe-perm=true', '--allow-root']
+        command = [
+            "sudo",
+            nCLI.NPM,
+            "install",
+            "-g",
+            args.npm,
+            "--unsafe-perm=true",
+            "--allow-root",
+        ]
         terminal(command=command, debug=True)
 
         exit(0)
 
     elif args.npm and args.npm not in PACKAGES.APPIUM:
-        console.print(f"[{STYLE.HLRed}]{args.npm} package support is not in [{STYLE.HLOrange}]nRoBo[/].[/]"
-                      f"\nSupported packages are [{STYLE.HLOrange}]{PACKAGES.APPIUM}[/].")
+        console.print(
+            f"[{STYLE.HLRed}]{args.npm} package support is not in [{STYLE.HLOrange}]nRoBo[/].[/]"
+            f"\nSupported packages are [{STYLE.HLOrange}]{PACKAGES.APPIUM}[/]."
+        )
         exit(1)
 
     # build pytest launcher command
@@ -111,29 +126,29 @@ def launcher_command(exit_on_failure=True):
             # handle hyphens in key names since argparser replaces hyphes with underscore
             # while parsing cli args
             # this, replace hyphen with dash if present_release in key
-            key = key.replace('_', '-')
+            key = key.replace("_", "-")
 
             if value:
                 """if key has value, then only proceed with current key"""
 
                 if type(value) is bool or isinstance(value, bool):
                     """if a bool key is found, only add key to the launcher command, not the value
-                        and proceed with next key"""
+                    and proceed with next key"""
                     if key == nCLI.FULLPAGE_SCREENSHOT or key == BoolArgs.PYARGS:
                         continue
                     elif key == nCLI.SUPPRESS:
                         os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
                     elif key in SHOW_ONLY_SWITCHES:
-                        terminal(['pytest', f"--{key}"], debug=True)
+                        terminal(["pytest", f"--{key}"], debug=True)
                         return None, None, None
                     elif key == args.version:
-                        terminal(['pytest', f"--{key}"], debug=True)
+                        terminal(["pytest", f"--{key}"], debug=True)
                         exit()
-                    elif key == 'capture-no':
-                        command.append('-s')
+                    elif key == "capture-no":
+                        command.append("-s")
                         continue
-                    elif key == 'extra-summary':
-                        command.append('-r')
+                    elif key == "extra-summary":
+                        command.append("-r")
                         continue
                     else:
                         command.append(f"--{key}")
@@ -146,7 +161,11 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                     else:
                         """simply add long keys to launcher command"""
-                        if key == nCLI.TARGET or key == nCLI.FILES or key == BoolArgs.PYARGS:
+                        if (
+                            key == nCLI.TARGET
+                            or key == nCLI.FILES
+                            or key == BoolArgs.PYARGS
+                        ):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
 
                         if f"--{key}" in nCLI.DEFAULT_ARGS:
@@ -156,7 +175,12 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                 elif key in nCLI.ARGS:
                     """process nrobo specific keys"""
-                    if key in [nCLI.URL, nCLI.USERNAME, nCLI.PASSWORD, nCLI.BROWSER_CONFIG]:
+                    if key in [
+                        nCLI.URL,
+                        nCLI.USERNAME,
+                        nCLI.PASSWORD,
+                        nCLI.BROWSER_CONFIG,
+                    ]:
                         if key == nCLI.URL:
                             os.environ[EnvKeys.URL] = value
                         elif key == nCLI.USERNAME:
@@ -171,14 +195,17 @@ def launcher_command(exit_on_failure=True):
 
                     if key == nCLI.BROWSER:
                         os.environ[EnvKeys.BROWSER] = value
-                        raise_exception_if_browser_not_supported(os.environ[EnvKeys.BROWSER])
+                        raise_exception_if_browser_not_supported(
+                            os.environ[EnvKeys.BROWSER]
+                        )
                         if args.fullpagescreenshot:
                             command.append(f"--{nCLI.BROWSER}")
                             command.append(str(Browsers.CHROME_HEADLESS))
                             if f"--{nCLI.FULLPAGE_SCREENSHOT}" not in command:
                                 command.append(f"--{nCLI.FULLPAGE_SCREENSHOT}")
                             command_builder_notes.append(
-                                f"[{STYLE.HLOrange}]\tOverride --browser switch value with {Browsers.CHROME_HEADLESS} because fullpagescreenshot switch is enabled...")
+                                f"[{STYLE.HLOrange}]\tOverride --browser switch value with {Browsers.CHROME_HEADLESS} because fullpagescreenshot switch is enabled..."
+                            )
                         else:
                             command.append(f"--{key}")
                             command.append(str(value))
@@ -200,7 +227,9 @@ def launcher_command(exit_on_failure=True):
                         continue
                     elif key == nCLI.REPORT:
                         if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
-                            console.print(f"Incorrect report type! Valid report types are html | allure.")
+                            console.print(
+                                f"Incorrect report type! Valid report types are html | allure."
+                            )
                             exit(1)
                         if str(value).lower() in NREPORT.HTML:
                             command.append(f"--{NREPORT.HTML}")
@@ -217,7 +246,9 @@ def launcher_command(exit_on_failure=True):
 
                         if key in [nCLI.APP, nCLI.REPORT_TITLE]:
                             command.append(f"--{key}")
-                            command.append(str(value).replace(CONST.SPACE, CONST.UNDERSCORE))
+                            command.append(
+                                str(value).replace(CONST.SPACE, CONST.UNDERSCORE)
+                            )
                         else:
                             command.append(f"--{key}")
                             command.append(value)
@@ -231,15 +262,18 @@ def launcher_command(exit_on_failure=True):
             command.append(f"--{nCLI.FULLPAGE_SCREENSHOT}")
             command_builder_notes.append(
                 f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME_HEADLESS} is "
-                f"selected because fullpagescreenshot switch is enabled...")
+                f"selected because fullpagescreenshot switch is enabled..."
+            )
         else:
             command.append(f"--{nCLI.BROWSER}")
             command.append(f"{Browsers.CHROME}")
             command_builder_notes.append(
-                f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected...")
+                f"[{STYLE.HLOrange}]\t--browser switch was missing. Default browser {Browsers.CHROME} is selected..."
+            )
     if not args.rootdir:
         command_builder_notes.append(
-            f"[{STYLE.HLOrange}]\t--rootdir switch was missing. Default test path <current-dir> is selected...")
+            f"[{STYLE.HLOrange}]\t--rootdir switch was missing. Default test path <current-dir> is selected..."
+        )
 
     if not args.alluredir:
         command.append(f"--alluredir")
@@ -276,16 +310,22 @@ def launcher_command(exit_on_failure=True):
 
     if args.pyargs and args.files:
         # Error
-        console.print(f"[{STYLE.HLRed}]--{BoolArgs.PYARGS} and --{nCLI.FILES} "
-                      f"switch can not be used in combination![/]")
+        console.print(
+            f"[{STYLE.HLRed}]--{BoolArgs.PYARGS} and --{nCLI.FILES} "
+            f"switch can not be used in combination![/]"
+        )
         exit(1)
 
     # select tests directory
     if not args.files:
         if args.appium:
-            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE))
+            command.append(
+                str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.MOBILE)
+            )
         else:
-            command.append(str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB))
+            command.append(
+                str(NROBO_PATHS.EXEC_DIR / NROBO_PATHS.TESTS / NROBO_PATHS.WEB)
+            )
 
     return command, args, command_builder_notes
 
@@ -298,12 +338,16 @@ def launch_nrobo():
     if command is None and args is None and command_builder_notes is None:
         return
 
-    with console.status(f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"):
+    with console.status(
+        f"[{STYLE.TASK}]:smiley: Running tests. Press Ctrl+C to exit nRoBo.\n"
+    ):
 
         if detect.developer_machine():
             console.print(f"[{STYLE.INFO}]{command}")
 
-        if args.report and args.report == NREPORT.ALLURE:  # test if needed allure report
+        if (
+            args.report and args.report == NREPORT.ALLURE
+        ):  # test if needed allure report
             create_allure_report(command)
         else:
             create_simple_html_report(command)
@@ -316,11 +360,13 @@ def create_allure_report(command: list) -> int:
 
     console.print(f"[{STYLE.HLGreen}]Running tests and preparing allure report")
 
-    _ALLURE_DIR = '--alluredir'
-    allure_results = (Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results")
+    _ALLURE_DIR = "--alluredir"
+    allure_results = Path(os.environ[EnvKeys.EXEC_DIR]) / "results" / "allure-results"
     if _ALLURE_DIR in command:
         allure_results = command[command.index(_ALLURE_DIR) + 1]
-    terminal(command + [_ALLURE_DIR, allure_results], debug=True, use_os_system_call=True)
+    terminal(
+        command + [_ALLURE_DIR, allure_results], debug=True, use_os_system_call=True
+    )
 
     if _ALLURE_DIR in command:
         allure_generated_report = Path(allure_results) / "allure-report"
@@ -329,8 +375,19 @@ def create_allure_report(command: list) -> int:
 
     console.print(f"[{STYLE.HLGreen}]Preparing allure report")
 
-    terminal([NREPORT.ALLURE, "generate", "--name", "nRoBo TEST REPORT", "-o", allure_generated_report, "--clean",
-              allure_results], use_os_system_call=True)
+    terminal(
+        [
+            NREPORT.ALLURE,
+            "generate",
+            "--name",
+            "nRoBo TEST REPORT",
+            "-o",
+            allure_generated_report,
+            "--clean",
+            allure_results,
+        ],
+        use_os_system_call=True,
+    )
 
     terminal([NREPORT.ALLURE, "serve", allure_results], use_os_system_call=True)
 
@@ -341,7 +398,8 @@ def create_simple_html_report(command: list) -> int:
 
     return_code = terminal(command, debug=True, use_os_system_call=True)
     console.rule(
-        f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+        f"[{STYLE.HLOrange}]Report is ready at file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}"
+    )
 
     return return_code
 

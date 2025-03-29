@@ -12,6 +12,7 @@ Constants module.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 from pathlib import Path
 
@@ -92,15 +93,18 @@ class nCLI:
         KEY: KEY,
         PACKAGES: PACKAGES,
         GRID: GRID,
-        MARKER: MARKER
+        MARKER: MARKER,
     }
 
     DEFAULT_ARGS = {
-        '--cache-clear': ['--cache-clear'],
-        '--color': ['--color', 'yes'],
-        '-r': ['-r', 'fE'],
-        '--code-highlight': ['--code-highlight', 'yes'],
-        '--junit-xml': ['--junit-xml', NREPORT.REPORT_DIR + os.sep + f"junit-report.xml"]
+        "--cache-clear": ["--cache-clear"],
+        "--color": ["--color", "yes"],
+        "-r": ["-r", "fE"],
+        "--code-highlight": ["--code-highlight", "yes"],
+        "--junit-xml": [
+            "--junit-xml",
+            NREPORT.REPORT_DIR + os.sep + f"junit-report.xml",
+        ],
     }
 
 
@@ -110,4 +114,4 @@ class PACKAGES:
     NROBO = "nrobo"
     CLI = "cli"
 
-    APPIUM = ['appium']
+    APPIUM = ["appium"]

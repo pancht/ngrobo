@@ -32,9 +32,7 @@ class N_COMMANDS:
         PLATFORMS.WINDOWS: {
             CLEAR_SCREEN: WINDOWS_COMMAND.CLS,
         },
-        PLATFORMS.DARWIN: {
-            CLEAR_SCREEN: POSIX_COMMAND.CLEAR
-        }
+        PLATFORMS.DARWIN: {CLEAR_SCREEN: POSIX_COMMAND.CLEAR},
     }
 
 
@@ -42,7 +40,9 @@ def get_command(command) -> None:
     """Return the appropriate posix or windows <command> to caller."""
 
     try:
-        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][N_COMMANDS.CLEAR_SCREEN]
+        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
+            N_COMMANDS.CLEAR_SCREEN
+        ]
     except KeyError as ke:
         raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
 
@@ -58,7 +58,11 @@ def remove_files_recursively(directory) -> int:
     :param directory:
     :return:"""
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
+    if os.environ[EnvKeys.HOST_PLATFORM] in [
+        PLATFORMS.DARWIN,
+        PLATFORMS.LINUX,
+        PLATFORMS.MACOS,
+    ]:
         try:
             return terminal(["rm", "-rf", directory])
         except Exception as e:

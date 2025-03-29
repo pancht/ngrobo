@@ -68,10 +68,10 @@ class Common:
 
         try:
             if encoding is None:
-                with open(file_path, 'w') as f:
+                with open(file_path, "w") as f:
                     f.write(content)
             else:
-                with open(file_path, 'w', encoding=encoding) as f:
+                with open(file_path, "w", encoding=encoding) as f:
                     f.write(content)
 
         except FileNotFoundError as file_not_found_error:
@@ -92,10 +92,10 @@ class Common:
 
         try:
             if encoding is None:
-                with open(file_path, 'a') as f:
+                with open(file_path, "a") as f:
                     f.write(content)
             else:
-                with open(file_path, 'w', encoding=encoding) as f:
+                with open(file_path, "w", encoding=encoding) as f:
                     f.write(content)
 
         except FileNotFoundError as file_not_found_error:
@@ -129,7 +129,7 @@ class Common:
         :return:
         """
 
-        with open(file_path, 'w') as file:  # Open given file in write mode
+        with open(file_path, "w") as file:  # Open given file in write mode
             json.dump(dictionary, file, sort_keys=True, indent=4)
 
     @staticmethod
@@ -143,7 +143,9 @@ class Common:
         return path.exists(file_path)
 
     @staticmethod
-    def read_yaml(file_path: Union[str, Path], /, *, fail_on_failure=True) -> Union[str, None]:
+    def read_yaml(
+        file_path: Union[str, Path], /, *, fail_on_failure=True
+    ) -> Union[str, None]:
         """
         Read yaml file at given path
 
@@ -155,7 +157,7 @@ class Common:
         if not path.exists(file_path) and not fail_on_failure:
             """if file does not exist, then let's create it first"""
 
-            with open(file_path, 'w') as file:
+            with open(file_path, "w") as file:
                 """Create a file"""
 
                 # initialize file with empty dictionary
@@ -169,7 +171,7 @@ class Common:
             pass
 
         # Read the file
-        with open(r'{0}'.format(file_path)) as file:
+        with open(r"{0}".format(file_path)) as file:
             # The FullLoader parameter handles the conversion from YAML
             # scalar values to Python the dictionary format
             data = yaml.load(file, Loader=yaml.SafeLoader)
@@ -187,7 +189,7 @@ class Common:
         :return: Nothin
         """
 
-        with open(file_path, 'w') as file:  # Open given file in write mode
+        with open(file_path, "w") as file:  # Open given file in write mode
             yaml.dump(dictionary, file)
 
     @staticmethod
@@ -220,7 +222,7 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, 'wb') as theFile:
+        with open(path, "wb") as theFile:
             theFile.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
@@ -235,7 +237,7 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, 'wb') as theFile:
+        with open(path, "wb") as theFile:
             theFile.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
@@ -250,5 +252,5 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, 'wb') as theFile:
+        with open(path, "wb") as theFile:
             theFile.write(bytes)

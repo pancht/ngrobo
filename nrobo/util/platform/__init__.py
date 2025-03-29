@@ -12,6 +12,7 @@ Platform functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 import platform
 

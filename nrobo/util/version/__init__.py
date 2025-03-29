@@ -13,6 +13,7 @@ Version class handles version operations smoothly.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from nrobo.exceptions import NRoBoIncorrectVersion, NRoBoInvalidOperation
 
 
@@ -167,7 +168,7 @@ class Version:
 
         :param present_release:
         :param previous_release:
-        :return: """
+        :return:"""
         _present_release = Version(present_release)
         _previous_release = Version(previous_release)
 
@@ -182,7 +183,7 @@ class Version:
 
         :param present_release:
         :param previous_release:
-        :return: """
+        :return:"""
         _present_release = Version(present_release)
         _previous_release = Version(previous_release)
 
@@ -197,7 +198,7 @@ class Version:
 
         :param present_release:
         :param previous_release:
-        :return: """
+        :return:"""
         _present_release = Version(present_release)
         _previous_release = Version(previous_release)
 
@@ -209,6 +210,7 @@ class Version:
     def _version_parts(self):
         patten = r"(([\d]*)[.]([\d]*)[.]([\d]*))"
         import re
+
         m = re.match(patten, self._version)
 
         if not m:
@@ -241,9 +243,11 @@ class Version:
         if not isinstance(other, Version):
             raise NRoBoInvalidOperation("=", type(other))
 
-        if self.major == other.major \
-                and self.minor == other.minor \
-                and self.patch == other.patch:
+        if (
+            self.major == other.major
+            and self.minor == other.minor
+            and self.patch == other.patch
+        ):
             return True
 
         return False
@@ -264,8 +268,7 @@ class Version:
         return False
 
     def __add__(self, other):
-        if not isinstance(other, int) \
-                and not isinstance(other, float):
+        if not isinstance(other, int) and not isinstance(other, float):
             raise NRoBoInvalidOperation("+", type(other))
 
         if isinstance(other, float):
@@ -274,8 +277,7 @@ class Version:
         return Version(f"{self.major}.{self.minor}.{self.patch + other}")
 
     def __sub__(self, other):
-        if not isinstance(other, int) \
-                and not isinstance(other, float):
+        if not isinstance(other, int) and not isinstance(other, float):
             raise NRoBoInvalidOperation("-", type(other))
 
         if isinstance(other, float):

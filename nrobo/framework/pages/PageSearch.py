@@ -9,7 +9,10 @@ class PageSearch(Page):
         super().__init__(driver, logger)
 
     # Page locators
-    linkNroboLink = (By.CSS_SELECTOR, "a[href='/project/nrobo/'] h3 span.package-snippet__name")
+    linkNroboLink = (
+        By.CSS_SELECTOR,
+        "a[href='/project/nrobo/'] h3 span.package-snippet__name",
+    )
 
     # associated page method
     def nrobo_link_is_present(self) -> bool:

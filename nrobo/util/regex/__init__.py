@@ -12,6 +12,7 @@ regex module holds regular expression wrapper methods.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import re
 
 
@@ -22,4 +23,4 @@ def substitute(pattern, repl, string, count=0, flags=0):
     if a string, backslash escapes in it are processed.  If it is
     a callable, it's passed the Match object and must return
     a replacement string to be used."""
-    return re.sub(pattern, repl,string, count=0, flags=flags)
+    return re.sub(pattern, repl, string, count=0, flags=flags)

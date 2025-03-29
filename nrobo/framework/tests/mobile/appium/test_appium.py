@@ -10,8 +10,4 @@ class TestAppium:
         """First appium test"""
         logger.info("Create page object")
         page = Page(driver=driver, logger=logger)
-        #page.click(by=AppiumBy.XPATH, value='//*[@text="Battery"]')
-
-
-
-
+        # page.click(by=AppiumBy.XPATH, value='//*[@text="Battery"]')

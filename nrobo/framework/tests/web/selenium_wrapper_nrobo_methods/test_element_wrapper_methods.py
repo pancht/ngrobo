@@ -126,7 +126,9 @@ class TestWebElementWrapperMethods:
         page.get("https://the-internet.herokuapp.com/")
 
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
-        logger.info(f"Size of element = {page.value_of_css_property('color', *lnkLogin)}")
+        logger.info(
+            f"Size of element = {page.value_of_css_property('color', *lnkLogin)}"
+        )
 
     @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_location_(self, driver, logger):
@@ -179,7 +181,8 @@ class TestWebElementWrapperMethods:
         screenshot = page.screenshot_as_base64(*lnkLogin)
 
         from nrobo.util.common import Common
-        Common.save_base64string(screenshot, 'element_screenshot.png')
+
+        Common.save_base64string(screenshot, "element_screenshot.png")
 
     @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_screenshot_as_png(self, driver, logger):
@@ -192,7 +195,10 @@ class TestWebElementWrapperMethods:
         screenshot_as_binary_data = page.screenshot_as_png(*lnkLogin)
 
         from nrobo.util.common import Common
-        Common.save_bytes_to_file(screenshot_as_binary_data, 'element_screenshot_as_binary.png')
+
+        Common.save_bytes_to_file(
+            screenshot_as_binary_data, "element_screenshot_as_binary.png"
+        )
 
     @pytest.mark.skip(reason="This test is an nRoBo example test.")
     def test_screenshot_as_file(self, driver, logger):
@@ -202,7 +208,7 @@ class TestWebElementWrapperMethods:
         page.get("https://the-internet.herokuapp.com/")
 
         lnkLogin = (By.CSS_SELECTOR, "[href='/login']")
-        page.screenshot('element_screenshot_as_file.png', *lnkLogin)
+        page.screenshot("element_screenshot_as_file.png", *lnkLogin)
 
     @pytest.mark.skip
     def test_uploads(self, driver, logger):
@@ -214,7 +220,8 @@ class TestWebElementWrapperMethods:
 
         from pathlib import Path
         from nrobo import NROBO_PATHS
-        upload_file = NROBO_PATHS.TEST_DATA / 'nRoBo-Logo.png'
+
+        upload_file = NROBO_PATHS.TEST_DATA / "nRoBo-Logo.png"
 
         file_input = (By.CSS_SELECTOR, "input[type='file']")
         btn_upload = (By.ID, "file-submit")
@@ -225,7 +232,3 @@ class TestWebElementWrapperMethods:
         file_name = file_name_element.text
 
         assert file_name == "nRoBo-Logo.png"
-
-
-
-

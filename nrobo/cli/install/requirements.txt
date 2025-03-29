@@ -37,4 +37,6 @@ Appium-Python-Client             == 3.2.1
 Faker                            >= 24.3.0
 # Database Testing
 mysql-connector-python           == 8.3.0
-
+pylint                           == 3.3.6
+black                            == 25.1.0
+mypy	                         == 1.15.0

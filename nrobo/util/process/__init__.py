@@ -10,6 +10,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 import subprocess
 
@@ -31,9 +32,25 @@ def get_os_system_command(command: [str]) -> str:
     return _command
 
 
-def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, capture_output=False, shell=False,
-             cwd=None, timeout=None, check=False, encoding=None, errors=None, text=None, env=None,
-             universal_newlines=None, debug=False, use_os_system_call=False) -> int:
+def terminal(
+    command=[],
+    stdin=None,
+    input=None,
+    stdout=None,
+    stderr=None,
+    capture_output=False,
+    shell=False,
+    cwd=None,
+    timeout=None,
+    check=False,
+    encoding=None,
+    errors=None,
+    text=None,
+    env=None,
+    universal_newlines=None,
+    debug=False,
+    use_os_system_call=False,
+) -> int:
     """Execute given command, command
 
     :param debug:
@@ -60,6 +77,7 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
     if debug is False:
         """check environment debug flag"""
         from nrobo import EnvKeys
+
         if str(os.environ[EnvKeys.DEBUG]) == "True":
             debug = True
 
@@ -80,7 +98,9 @@ def terminal(command=[], stdin=None, input=None, stdout=None, stderr=None, captu
                 return e.returncode
         if (stdout and stderr) or debug is False:
             try:
-                subprocess.check_call(command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+                subprocess.check_call(
+                    command, stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+                )
             except subprocess.CalledProcessError as e:
                 if e.returncode == 1:
                     print(f"Command failed with return code {e.returncode}: \n{e}")

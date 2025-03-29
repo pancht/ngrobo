@@ -9,6 +9,7 @@ from selenium.webdriver.common.by import By
 from pages import Page
 from pages.PageSearch import PageSearch
 
+
 class PagePyPiHome(Page):
     """Page class for PyPi.org home page"""
 
@@ -24,7 +25,7 @@ class PagePyPiHome(Page):
     # Page locators definition should go here
     # ----------------------------------------
     url = "https://pypi.org/"
-    txt_search = (By.ID, 'search')
+    txt_search = (By.ID, "search")
     btn_search = (By.CSS_SELECTOR, ".search-form__button")
     # lnkLogin = (By.ID, 'login2')
     # btnSubmit = (By, Value)

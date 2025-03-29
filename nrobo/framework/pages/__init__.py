@@ -10,6 +10,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import logging
 from selenium.webdriver.remote.webdriver import WebDriver
 from typing import Union
@@ -65,8 +66,13 @@ class Page(NRobo):
         # and so on per project need.
     """
 
-    def __init__(self, driver=AnyBrowser, logger=None | logging.Logger, duration: int = 250,
-                 devices: list[AnyDevice] | None = None):
+    def __init__(
+        self,
+        driver=AnyBrowser,
+        logger=None | logging.Logger,
+        duration: int = 250,
+        devices: list[AnyDevice] | None = None,
+    ):
         """constructor"""
         # call parent constructor
         super().__init__(driver, logger, duration=duration, devices=devices)

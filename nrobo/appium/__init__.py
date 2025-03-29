@@ -13,14 +13,18 @@ working with appium framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+from dataclasses import dataclass
 
 
+@dataclass
 class CAPABILITY:
-    AUTOMATION_NAME = 'automationName'
+    """Capability class."""
+    AUTOMATION_NAME = "automationName"
 
 
-class AUTOMATION_NAMES:
+@dataclass
+class AutomationNames:
     """Possible appium capabilities for automationName"""
 
-    UI_AUTOMATION2 = 'uiautomator2'
-    XCUITEST = 'XCUITest'
+    UI_AUTOMATION2 = "uiautomator2"
+    XCUITEST = "XCUITest"

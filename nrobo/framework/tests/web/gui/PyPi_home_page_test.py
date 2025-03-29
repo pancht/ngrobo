@@ -2,12 +2,13 @@
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import pytest
 from pages.PagePyPiHome import PagePyPiHome
 from pages import Page
 
 
-class TestPyPiHomePage():
+class TestPyPiHomePage:
 
     @pytest.mark.sanity
     def test_google_branding_displayed_on_home_page(self, driver, logger):
@@ -24,4 +25,3 @@ class TestPyPiHomePage():
 
         page = Page(driver, logger)
         page.get("https://namasteydigitalindia.com")
-
