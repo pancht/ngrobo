@@ -122,7 +122,7 @@ def write_new_version_to_nrobo_init_py_file(new_version) -> None:
 
     # pattern for finding version setting
     pattern_prefix = "__version__ = "
-    pattern_regular_expression = pattern_prefix + r"('[\d.]+')"
+    pattern_regular_expression = pattern_prefix + r"(\"[\d.]+\")"
 
     # Replacement text
     replacement_text = pattern_prefix + "\'" + new_version + "\'"
