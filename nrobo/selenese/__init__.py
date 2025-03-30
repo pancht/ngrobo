@@ -23,7 +23,7 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.common.print_page_options import (
+from selenium.webdriver.common.print_page_options import (  # pylint: disable=C0412
     PrintOptions,
 )  # pylint: disable=C0412
 from selenium.webdriver.common.timeouts import Timeouts
@@ -36,7 +36,7 @@ from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
 from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.webdriver import WebDriver
-from appium.webdriver.webdriver import (
+from appium.webdriver.webdriver import (  # pylint: disable=C0412
     WebDriver as AppiumWebDriver,
 )  # pylint: disable=C0412
 from selenium.webdriver.support.select import Select  # pylint: disable=C0412
@@ -123,7 +123,7 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
         """windows."""
         self._windows = _windows
 
-    def update_windows(
+    def update_windows(  # pylint: disable=R1710
         self, _window_handles: list[str] = None
     ):  # pylint: disable=R1710
         """update windows."""
@@ -567,7 +567,7 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
         """
         self.driver.timeouts = timeouts
 
-    def find_element(
+    def find_element(  # pylint: disable=W0222
         self, by: AnyBy, value: Optional[str] = None
     ) -> WebElement:  # pylint: disable=W0222
         """Find an element given a By strategy and locator.
@@ -586,7 +586,7 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
 
         return self.driver.find_element(by, value)
 
-    def find_elements(
+    def find_elements(  # pylint: disable=W0222
         self, by: AnyBy, value: Optional[str] = None
     ) -> List[WebElement]:  # pylint: disable=W0222
         """Find elements given a By strategy and locator.
@@ -942,7 +942,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):  # pylint: disable=R0904
     def clear_spl(self, by: AnyBy, value: Optional[str] = None):
         """clear_spl."""
         element = self.find_element(by, value)
-        self.action_chain().click(element).send_keys(
+        self.action_chain().click(element).send_keys(  # pylint: disable=E1101
             Keys.ARROW_LEFT
         ).double_click(  # pylint: disable=E1101
             self.find_element(by, value)
@@ -1032,7 +1032,7 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):  # pylint: disable=R0904
         except Exception:  # pylint: disable=W0718
             return False
 
-    def send_keys(
+    def send_keys(  # pylint: disable=W1113
         self, by: AnyBy, value: Optional[str] = None, *text
     ) -> None:  # pylint: disable=W1113
         """Simulates typing into the element.
@@ -1524,7 +1524,7 @@ class NRoBoCustomMethods(AppiumNrobo):  # pylint: disable=R0901
 
         self.click(upload_ele_by, upload_ele_value)
 
-    def type_into(
+    def type_into(  # pylint: disable=W1113
         self, by: AnyBy, value: Optional[str] = None, *text
     ) -> None:  # pylint: disable=W1113
         """Type given text into given element located by (by, value)"""

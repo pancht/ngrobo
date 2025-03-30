@@ -202,10 +202,10 @@ class TestWebElementWrapperMethods:
         from nrobo import NroboPaths
 
         upload_file = (
-                NroboPaths.NROBO
-                / NroboPaths.FRAMEWORK
-                / NroboPaths.TEST_DATA
-                / "nRoBo-Logo.png"
+            NroboPaths.NROBO
+            / NroboPaths.FRAMEWORK
+            / NroboPaths.TEST_DATA
+            / "nRoBo-Logo.png"
         )
 
         file_input = (By.CSS_SELECTOR, "input[type='file']")

@@ -68,9 +68,7 @@ def ensure_logs_dir_exists():
     from nrobo.cli.cli_constants import NReport
     from nrobo import NroboPaths
 
-    _log_driver_file = (
-            NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.LOG_DIR_DRIVER
-    )
+    _log_driver_file = NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.LOG_DIR_DRIVER
 
     if not _log_driver_file.exists():
         """ensure driver logs dir"""
@@ -87,9 +85,7 @@ def ensure_logs_dir_exists():
         except FileExistsError:
             pass
 
-    _screenshot_dir = (
-            NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.SCREENSHOTS_DIR
-    )
+    _screenshot_dir = NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.SCREENSHOTS_DIR
     if not _screenshot_dir.exists():
         """ensure screenshots dir"""
         try:
@@ -169,10 +165,7 @@ def get_appium_capabilities_from_file(cap_file_name):
         )
     else:
         capabilities = Common.read_yaml(
-            NroboPaths.EXEC_DIR
-            / NroboPaths.NROBO
-            / NroboPaths.APPIUM
-            / cap_file_name
+            NroboPaths.EXEC_DIR / NroboPaths.NROBO / NroboPaths.APPIUM / cap_file_name
         )
 
     return capabilities
@@ -367,12 +360,12 @@ def driver(request):
 
     ensure_logs_dir_exists()
     _driver_log_path = (
-            NReport.REPORT_DIR
-            + os.sep
-            + NReport.LOG_DIR_DRIVER
-            + os.sep
-            + test_method_name
-            + NReport.LOG_EXTENTION
+        NReport.REPORT_DIR
+        + os.sep
+        + NReport.LOG_DIR_DRIVER
+        + os.sep
+        + test_method_name
+        + NReport.LOG_EXTENTION
     )
 
     if int(os.environ[EnvKeys.APPIUM]):
@@ -654,12 +647,12 @@ def logger(request):
     logger = logging.getLogger("selenium")
     logger.setLevel(logging.DEBUG)
     _test_logs_path = (
-            NReport.REPORT_DIR
-            + os.sep
-            + NReport.LOG_DIR_TEST
-            + os.sep
-            + test_method_name
-            + NReport.LOG_EXTENTION
+        NReport.REPORT_DIR
+        + os.sep
+        + NReport.LOG_DIR_TEST
+        + os.sep
+        + test_method_name
+        + NReport.LOG_EXTENTION
     )
     handler = logging.FileHandler(_test_logs_path)
     logger.addHandler(handler)
@@ -723,14 +716,14 @@ def pytest_runtest_makereport(item, call):
 
             # build screenshot relative path for html report and actual path for saving screenshot
             screenshot_filepath = (
-                    NReport.REPORT_DIR
-                    + os.sep
-                    + NReport.SCREENSHOTS_DIR
-                    + os.sep
-                    + screenshot_filename
+                NReport.REPORT_DIR
+                + os.sep
+                + NReport.SCREENSHOTS_DIR
+                + os.sep
+                + screenshot_filename
             )
             screenshot_relative_path = (
-                    NReport.SCREENSHOTS_DIR + os.sep + screenshot_filename
+                NReport.SCREENSHOTS_DIR + os.sep + screenshot_filename
             )
 
             # Handle fullpagescreenshot cli switch

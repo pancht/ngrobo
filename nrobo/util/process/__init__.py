@@ -85,9 +85,9 @@ def terminal(  # pylint: disable=W0613,R0911,R0912,R0913,R0917,R0914,W0102
     try:
         if text and capture_output:
             try:
-                return subprocess.run(
+                return subprocess.run(  # pylint: disable=W1510
                     command, text=text, capture_output=capture_output
-                )  # pylint: disable=W1510
+                )
             except subprocess.CalledProcessError as e:
                 print(f"Command failed with return code {e.returncode}: \n{e}")
                 return e.returncode

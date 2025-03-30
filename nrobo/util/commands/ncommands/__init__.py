@@ -46,9 +46,9 @@ def get_command(command) -> None:  # pylint: disable=W0613
             NCommands.CLEAR_SCREEN
         ]
     except KeyError:  # pylint: disable=W0707
-        raise MissingCommandImplementation(
+        raise MissingCommandImplementation(  # pylint: disable=W0707
             NCommands.CLEAR_SCREEN
-        )  # pylint: disable=W0707
+        )
 
 
 def clear_screen():

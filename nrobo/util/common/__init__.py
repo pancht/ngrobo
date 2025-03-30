@@ -163,9 +163,9 @@ class Common:
 
         if not path.exists(str(file_path)) and fail_on_failure:
             # file does not exist
-            raise Exception(
+            raise Exception(  # pylint: disable=W0719
                 f"File {file_path} does not exist!"
-            )  # pylint: disable=W0719
+            )
 
         # Read the file
         with open(r"{0}".format(file_path)) as file:  # pylint: disable=W1514,C0209

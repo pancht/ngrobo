@@ -32,10 +32,10 @@ class TestNRoboFramework:
 
         # conftest_file_path_in_framework_folder
         conftest_in_framework_pkg = (
-                Path(os.environ[EnvKeys.EXEC_DIR])
-                / NroboConst.NROBO
-                / NroboPaths.FRAMEWORK
-                / NroboPaths.CONFTEST_PY
+            Path(os.environ[EnvKeys.EXEC_DIR])
+            / NroboConst.NROBO
+            / NroboPaths.FRAMEWORK
+            / NroboPaths.CONFTEST_PY
         )
         command = []
 
