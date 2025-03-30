@@ -13,6 +13,7 @@ process.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import sys
 from dataclasses import dataclass
 from cli.build import EnvCliSwitch
@@ -23,6 +24,7 @@ from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
 
 global __CUR_ENV__  # pylint: disable=W0604
+
 
 @dataclass
 class PublishTarget:

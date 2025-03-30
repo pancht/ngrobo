@@ -21,7 +21,7 @@ from nrobo import EnvKeys, Environment
 from nrobo import NroboPaths
 from nrobo.util.constants import Ext
 from nrobo.util.common import Common
-from cli.build import ENV_CLI_SWITCH
+from cli.build import EnvCliSwitch
 
 
 def developer_machine() -> bool:
@@ -71,7 +71,7 @@ def build_version_from_version_files() -> str:
 
     # Grab version number from version yaml files in version/ directory
     return Common.read_yaml(
-        NroboPaths.VERSIONS / f"{ENV_CLI_SWITCH.PROD}{Ext.YAML}", fail_on_failure=False
+        NroboPaths.VERSIONS / f"{EnvCliSwitch.PROD}{Ext.YAML}", fail_on_failure=False
     )["version"]
 
 
