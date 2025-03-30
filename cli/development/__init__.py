@@ -1,3 +1,4 @@
+# pylint: disable=R0401
 """
 =====================CAUTION=======================
 DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
@@ -12,20 +13,22 @@ No definitions yet!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+import sys
 
 from nrobo import *
 from nrobo.util.common import Common
-from cli.build import ENV_CLI_SWITCH
+from cli.build import EnvCliSwitch
 
 
-def set_switch_environment(env: str, debug=False):
+def set_switch_environment(env: str, debug=False):  # pylint: disable=W0613
     """sets the environment"""
 
-    if env not in [ENV_CLI_SWITCH.TEST, ENV_CLI_SWITCH.PROD]:
+    if env not in [EnvCliSwitch.TEST, EnvCliSwitch.PROD]:
         print(
-            f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}"
+            f"Wrong environment provided=> {env}. "
+            f"Valid options are {EnvCliSwitch.PROD} | {EnvCliSwitch.TEST}"
         )
-        exit()
+        sys.exit()
 
     # set the environment
     set_environment()
@@ -38,30 +41,31 @@ def set_switch_environment(env: str, debug=False):
 
     # update environment to production_machine
     # pattern for finding version setting
-    PATTERN = ""
+    pattern = ""
 
     # Replacement text
-    if env == ENV_CLI_SWITCH.TEST:
-        PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.PRODUCTION)"
-        REPLACEMENT_TEXT = (
+    if env == EnvCliSwitch.TEST:
+        pattern = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.PRODUCTION)"  # pylint: disable=W1401
+        replacement_text = (
             "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.DEVELOPMENT"
         )
-    elif env == ENV_CLI_SWITCH.PROD:
-        PATTERN = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.DEVELOPMENT)"
-        REPLACEMENT_TEXT = (
+    elif env == EnvCliSwitch.PROD:
+        pattern = "(os.environ\[EnvKeys.ENVIRONMENT\][ ]*=[ ]*Environment.DEVELOPMENT)"  # pylint: disable=W1401
+        replacement_text = (
             "os.environ[EnvKeys.ENVIRONMENT]" + " = Environment.PRODUCTION"
         )
     else:
         print(
-            f"Wrong environment provided=> {env}. Valid options are {ENV_CLI_SWITCH.PROD} | {ENV_CLI_SWITCH.TEST}"
+            f"Wrong environment provided=> {env}. "
+            f"Valid options are {EnvCliSwitch.PROD} | {EnvCliSwitch.TEST}"
         )
-        exit()
+        sys.exit()
 
-    PATTERN_REGULAR_EXPRESSION = PATTERN
+    pattern_regular_expression = pattern
 
     # Update version number in README file
     file_content = re.sub(
-        PATTERN_REGULAR_EXPRESSION, REPLACEMENT_TEXT, file_content, count=1
+        pattern_regular_expression, replacement_text, file_content, count=1
     )
 
     # Write file_content

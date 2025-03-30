@@ -15,6 +15,8 @@ Defines nRoBo command line switches.
 
 import argparse
 import os
+import sys
+from dataclasses import dataclass
 
 from cli.build import build
 from cli.check import check
@@ -25,7 +27,8 @@ from nrobo.util.commands.ncommands import clear_screen
 from nrobo.util.python import verify_set_python_install_pip_command
 
 
-class BUILD_VERSION:
+@dataclass
+class BuildVersion:
     """Build Version.
 
     Could be major | minor | patch"""
@@ -35,7 +38,7 @@ class BUILD_VERSION:
     PATCH = "patch"
 
 
-def nrobo_cli() -> None:
+def nrobo_cli() -> None:  # pylint: disable=R0912
     """Parses nrobo cli and executes the command."""
 
     clear_screen()
@@ -56,7 +59,8 @@ def nrobo_cli() -> None:
     parser.add_argument(
         "-e",
         "--env",
-        help="Set/switch environment between production_machine and development. Options: test | prod",
+        help="Set/switch environment between production_machine "
+        "and development. Options: test | prod",
     )
     parser.add_argument(
         "-d", "--debug", help="Build package", action="store_true", default=False
@@ -77,7 +81,7 @@ def nrobo_cli() -> None:
     # parse cli args
     args = parser.parse_args()
 
-    from nrobo import EnvKeys
+    from nrobo import EnvKeys  # pylint: disable=C0415
 
     os.environ[EnvKeys.DEBUG] = str(args.debug)
 
@@ -88,41 +92,41 @@ def nrobo_cli() -> None:
                 build(
                     args.target,
                     override=args.override,
-                    build_version=BUILD_VERSION.MAJOR,
+                    build_version=BuildVersion.MAJOR,
                     skip_tests=args.skip,
                 )
             elif args.minor:
                 build(
                     args.target,
                     override=args.override,
-                    build_version=BUILD_VERSION.MINOR,
+                    build_version=BuildVersion.MINOR,
                     skip_tests=args.skip,
                 )
             else:
                 build(
                     args.target,
                     override=args.override,
-                    build_version=BUILD_VERSION.PATCH,
+                    build_version=BuildVersion.PATCH,
                     skip_tests=args.skip,
                 )
         else:
             print("Missing CLI arg -t | --target")
-            exit(1)
+            sys.exit(1)
     elif args.check:
         check()
     elif args.downloads:
         downloads()
-        exit(0)
+        sys.exit(0)
     elif args.publish:
         if args.target:
             publish(args.target, override=args.override)
         else:
             print("Missing CLI arg -t | --target")
-            exit(1)
+            sys.exit(1)
     elif args.env:
 
         set_switch_environment(args.env)
 
     else:
         print("Invalid argument or missing arguments!")
-        exit(1)
+        sys.exit(1)

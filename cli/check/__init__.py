@@ -1,3 +1,4 @@
+# pylint: disable=R0401
 """
 =====================CAUTION=======================
 DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
