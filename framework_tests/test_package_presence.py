@@ -28,7 +28,7 @@ from nrobo import (
 )
 
 
-class TestNRoboFrameworkPaths:
+class TestNRoboFrameworkPaths:  # pylint: disable=R0904
     """nRobo tests"""
 
     def test_cli_package_is_present(self):
@@ -37,7 +37,7 @@ class TestNRoboFrameworkPaths:
 
         cli_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NroboPaths.CLI
 
-        assert cli_pkg_path.exists() == True
+        assert cli_pkg_path.exists()
 
         cli_pkg_init_path = cli_pkg_path / NroboPaths.INIT_PY
 
@@ -49,11 +49,11 @@ class TestNRoboFrameworkPaths:
 
         build_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NroboCliToolPath.BUILD
 
-        assert build_pkg_path.exists() == True
+        assert build_pkg_path.exists()
 
         build_pkg_init_path = build_pkg_path / NroboPaths.INIT_PY
 
-        assert build_pkg_init_path.exists() == True
+        assert build_pkg_init_path.exists()
 
     def test_check_pkg_is_present(self):
         """Validate that check package is present_release"""
@@ -61,11 +61,11 @@ class TestNRoboFrameworkPaths:
 
         check_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NroboCliToolPath.CHECK
 
-        assert check_pkg_path.exists() == True
+        assert check_pkg_path.exists()
 
         check_pkg_init_path = check_pkg_path / NroboPaths.INIT_PY
 
-        assert check_pkg_init_path.exists() == True
+        assert check_pkg_init_path.exists()
 
     def test_compile_pkg_is_present(self):
         """Validate that compile package is present_release"""
@@ -73,11 +73,11 @@ class TestNRoboFrameworkPaths:
 
         compile_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NroboCliToolPath.COMPILE
 
-        assert compile_pkg_path.exists() == True
+        assert compile_pkg_path.exists()
 
         compile_pkg_init_path = compile_pkg_path / NroboPaths.INIT_PY
 
-        assert compile_pkg_init_path.exists() == True
+        assert compile_pkg_init_path.exists()
 
     def test_development_pkg_is_present(self):
         """Validate that development package is present_release"""
@@ -87,11 +87,11 @@ class TestNRoboFrameworkPaths:
             Path(os.environ[EnvKeys.EXEC_DIR]) / NroboCliToolPath.DEVELOPMENT
         )
 
-        assert development_pkg_path.exists() == True
+        assert development_pkg_path.exists()
 
         development_pkg_init_path = development_pkg_path / NroboPaths.INIT_PY
 
-        assert development_pkg_init_path.exists() == True
+        assert development_pkg_init_path.exists()
 
     def test_publish_pkg_is_present(self):
         """Validate that publish package is present_release"""
@@ -99,29 +99,29 @@ class TestNRoboFrameworkPaths:
 
         publish_pkg_path = Path(os.environ[EnvKeys.EXEC_DIR]) / NroboCliToolPath.PUBLISH
 
-        assert publish_pkg_path.exists() == True
+        assert publish_pkg_path.exists()
 
         publish_pkg_init_path = publish_pkg_path / NroboPaths.INIT_PY
 
-        assert publish_pkg_init_path.exists() == True
+        assert publish_pkg_init_path.exists()
 
     def test_browser_configs_chrome_pkg_is_present(self):
         """Validate that browser_configs.chrome package is present_release"""
         set_environment()
 
-        browserConfigs_chrome_pkg_path = (
+        browser_configs_chrome_pkg_path = (
             Path(os.environ[EnvKeys.EXEC_DIR])
             / NroboConst.NROBO
             / NroboPaths.BROWSERS_CHROME_PKG
         )
 
-        assert browserConfigs_chrome_pkg_path.exists() == True
+        assert browser_configs_chrome_pkg_path.exists()
 
-        browserConfigs_chrome_pkg_init_path = (
-            browserConfigs_chrome_pkg_path / NroboPaths.INIT_PY
+        browser_configs_chrome_pkg_init_path = (
+            browser_configs_chrome_pkg_path / NroboPaths.INIT_PY
         )
 
-        assert browserConfigs_chrome_pkg_init_path.exists() == True
+        assert browser_configs_chrome_pkg_init_path.exists()
 
     def test_browsers_edge_pkg_is_present(self):
         """Validate that browsers.edge package is present_release"""
@@ -133,11 +133,11 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.BROWSERS_EDGE_PKG
         )
 
-        assert browsers_edge_pkg_path.exists() == True
+        assert browsers_edge_pkg_path.exists()
 
         browsers_edge_pkg_init_path = browsers_edge_pkg_path / NroboPaths.INIT_PY
 
-        assert browsers_edge_pkg_init_path.exists() == True
+        assert browsers_edge_pkg_init_path.exists()
 
     def test_browsers_firefox_pkg_is_present(self):
         """Validate that browsers.firefox package is present_release"""
@@ -149,11 +149,11 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.BROWSERS_FIREFOX_PKG
         )
 
-        assert browsers_firefox_pkg_path.exists() == True
+        assert browsers_firefox_pkg_path.exists()
 
         browsers_firefox_pkg_init_path = browsers_firefox_pkg_path / NroboPaths.INIT_PY
 
-        assert browsers_firefox_pkg_init_path.exists() == True
+        assert browsers_firefox_pkg_init_path.exists()
 
     def test_browsers_safari_pkg_is_present(self):
         """Validate that browsers.safari package is present_release"""
@@ -165,11 +165,11 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.BROWSERS_CHROME_PKG
         )
 
-        assert browsers_safari_pkg_path.exists() == True
+        assert browsers_safari_pkg_path.exists()
 
         browsers_safari_pkg_init_path = browsers_safari_pkg_path / NroboPaths.INIT_PY
 
-        assert browsers_safari_pkg_init_path.exists() == True
+        assert browsers_safari_pkg_init_path.exists()
 
     def test_cli_detection_pkg_is_present(self):
         """Validate that cli.detection package is present_release"""
@@ -181,7 +181,7 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.DETECTION_PKG
         )
 
-        assert cli_detection_pkg_path.exists() == True
+        assert cli_detection_pkg_path.exists()
 
     def test_cli_formatting_pkg_is_present(self):
         """Validate that cli.formatting package is present_release"""
@@ -193,7 +193,7 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.FORMATTING_PKG
         )
 
-        assert cli_formatting_pkg_path.exists() == True
+        assert cli_formatting_pkg_path.exists()
 
     def test_cli_install_pkg_is_present(self):
         """Validate that cli.install package is present_release"""
@@ -253,7 +253,7 @@ class TestNRoboFrameworkPaths:
             / NroboPaths.CLI_TOOLS_PKG
         )
 
-        assert cli_tools_pkg_path.exists() == True
+        assert cli_tools_pkg_path.exists()
 
     def test_cli_upgrade_pkg_is_present(self):
         """Validate that cli.upgrade package is present_release"""
@@ -387,7 +387,7 @@ class TestNRoboFrameworkPaths:
 
         assert markers_yaml_file.exists()
 
-    def test_cli_package_is_present(self):
+    def test_cli_package_is_present(self):  # pylint: disable=E0102
         """Validate that cli package is present_release"""
         set_environment()
 

@@ -14,7 +14,8 @@ conftest.py for running unit tests.
 """
 
 # import sys, os
-# sys.path.append(os.path.join(os.path.dirname(__file__), os.path.join(os.path.dirname(__file__), '')))
+# sys.path.append(os.path.join(os.path.dirname(__file__),
+# os.path.join(os.path.dirname(__file__), '')))
 # print(sys.path)
 
 

@@ -1,3 +1,6 @@
+"""
+Test version nrobo py.
+"""
 import os
 import time
 from pathlib import Path
@@ -9,6 +12,7 @@ from nrobo.cli.nglobals import Browsers
 
 
 class TestNRoboFramework:
+    """Test nrobo framework class."""
 
     @pytest.mark.skip
     def test_nrobo_framework_developer_tests(self):
@@ -28,7 +32,8 @@ class TestNRoboFramework:
 
     @pytest.mark.skip
     def test_nrobo_host_framework_tests(self):
-        """Validate that nrobo host framework tests passed located at root/nrobo/framework/tests dir"""
+        """Validate that nrobo host framework tests passed
+         located at root/nrobo/framework/tests dir"""
 
         # conftest_file_path_in_framework_folder
         conftest_in_framework_pkg = (
@@ -40,7 +45,7 @@ class TestNRoboFramework:
         command = []
 
         # copy conftest.py from root to nrobo/framework/tests dir
-        from nrobo.util.filesystem import copy_file, remove_file
+        from nrobo.util.filesystem import copy_file, remove_file  # pylint: disable=C0415
 
         if conftest_in_framework_pkg.exists():
             # already exists, then remove it
@@ -79,10 +84,10 @@ class TestNRoboFramework:
         assert return_code == 0
 
     @pytest.mark.skip
-    def test_upgrade_prompt_presence_in_older_version_of_nRoBo(self):
+    def test_upgrade_prompt_presence_in_older_version_of_nrobo(self):
         """Validate that upgrade prompt is showing up when host has lower version of nRoBo"""
 
-        from nrobo.cli.upgrade import get_pypi_index, get_host_version
+        from nrobo.cli.upgrade import get_pypi_index, get_host_version  # pylint: disable=C0415
 
         command = [
             "python",
@@ -98,10 +103,11 @@ class TestNRoboFramework:
         ]
 
         if get_host_version() == get_pypi_index("nrobo"):
-            """no upgrade prompt"""
-            assert True  # this scenario already covered in another test: test_nrobo_framework_simplest_way
+            # no upgrade prompt
+            # this scenario already covered in another test: test_nrobo_framework_simplest_way
+            assert True
         else:
-            """upgrade prompt"""
+            # upgrade prompt
             command.append("--suppress")
 
             assert terminal(command) == 0  # 0 means success
@@ -109,7 +115,7 @@ class TestNRoboFramework:
     def test_version_in_nrobo_init_file_method(self):
         """Validate nrobo/__init__.py has correct published version"""
 
-        import nrobo.cli.detection as detect
-        from nrobo import __version__
+        import nrobo.cli.detection as detect  # pylint: disable=C0415
+        from nrobo import __version__  # pylint: disable=C0415
 
         assert detect.build_version_from_version_files() == __version__
