@@ -18,6 +18,7 @@ from nrobo import console, NroboConst
 
 class TestUpgradePkg:
     """Test upgrade package."""
+
     def test_get_host_version_method(self):
         """Validate nrobo.cli.upgrade.get_host_version() method"""
 
@@ -56,7 +57,10 @@ class TestUpgradePkg:
     def test_update_available_method(self):
         """Validate nrobo.cli.upgrade.update_available() method"""
 
-        from nrobo.cli.upgrade import update_available, get_pypi_index  # pylint: disable=C0415
+        from nrobo.cli.upgrade import (  # pylint: disable=C0415
+            update_available,
+            get_pypi_index,
+        )
         from nrobo.util.version import Version  # pylint: disable=C0415
 
         with console.status("Test if update not available"):

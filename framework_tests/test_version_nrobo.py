@@ -1,6 +1,7 @@
 """
 Test version nrobo py.
 """
+
 import os
 import time
 from pathlib import Path
@@ -33,7 +34,7 @@ class TestNRoboFramework:
     @pytest.mark.skip
     def test_nrobo_host_framework_tests(self):
         """Validate that nrobo host framework tests passed
-         located at root/nrobo/framework/tests dir"""
+        located at root/nrobo/framework/tests dir"""
 
         # conftest_file_path_in_framework_folder
         conftest_in_framework_pkg = (
@@ -45,7 +46,10 @@ class TestNRoboFramework:
         command = []
 
         # copy conftest.py from root to nrobo/framework/tests dir
-        from nrobo.util.filesystem import copy_file, remove_file  # pylint: disable=C0415
+        from nrobo.util.filesystem import (  # pylint: disable=C0415
+            copy_file,
+            remove_file,
+        )
 
         if conftest_in_framework_pkg.exists():
             # already exists, then remove it
@@ -87,7 +91,10 @@ class TestNRoboFramework:
     def test_upgrade_prompt_presence_in_older_version_of_nrobo(self):
         """Validate that upgrade prompt is showing up when host has lower version of nRoBo"""
 
-        from nrobo.cli.upgrade import get_pypi_index, get_host_version  # pylint: disable=C0415
+        from nrobo.cli.upgrade import (  # pylint: disable=C0415
+            get_pypi_index,
+            get_host_version,
+        )
 
         command = [
             "python",
