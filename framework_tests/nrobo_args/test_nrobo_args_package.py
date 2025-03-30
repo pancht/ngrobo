@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 from nrobo.cli.launcher import launcher_command
-from nrobo.cli.cli_constants import NREPORT
+from nrobo.cli.cli_constants import NReport
 from nrobo.cli.nrobo_args import BOOL_SWITCHES, BoolArgs
 from nrobo.exceptions import NRoBoBrowserNotSupported
 from nrobo import NroboPaths, set_environment
@@ -344,10 +344,10 @@ class TestNroboArgsPackage:
 
         command.remove(SWITCH)
         command.remove(VALUE)
-        command.append(f"--{NREPORT.HTML}")
-        command.append(f"{Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}")
+        command.append(f"--{NReport.HTML}")
+        command.append(f"{Path(NReport.REPORT_DIR) / NReport.HTML_REPORT_NAME}")
         command.append("--alluredir")
-        command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
+        command.append(f"{NReport.ALLURE_REPORT_PATH}")
         expected_command = command + self.DEFAULT_NROBO_ARGS
         actual_command, args, notes = launcher_command()
 
@@ -377,7 +377,7 @@ class TestNroboArgsPackage:
         command.remove(VALUE)
 
         self._assert_command_replace_default_values(
-            "--html", f"{Path(NREPORT.REPORT_DIR) / VALUE}"
+            "--html", f"{Path(NReport.REPORT_DIR) / VALUE}"
         )
 
     def test_nrobo_cli_arg_target_switch_without_value(self):

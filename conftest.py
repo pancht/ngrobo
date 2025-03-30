@@ -42,7 +42,7 @@ import os.path as path
 import nrobo.cli.detection as detect
 
 from nrobo.util.constants import Const
-from nrobo.appium import AutomationNames, CAPABILITY
+from nrobo.appium import AutomationNames, Capability
 
 
 def update_pytest_life_cycle_log(life_cycle_item: str, item_type: str = "fixture"):
@@ -65,11 +65,11 @@ def update_pytest_life_cycle_log_with_value(value: str):
 
 def ensure_logs_dir_exists():
     """checks if driver logs dir exists. if not creates on the fly."""
-    from nrobo.cli.cli_constants import NREPORT
+    from nrobo.cli.cli_constants import NReport
     from nrobo import NroboPaths
 
     _log_driver_file = (
-            NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_DRIVER
+            NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.LOG_DIR_DRIVER
     )
 
     if not _log_driver_file.exists():
@@ -79,7 +79,7 @@ def ensure_logs_dir_exists():
         except FileExistsError:
             pass
 
-    _test_logs_dir = NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.LOG_DIR_TEST
+    _test_logs_dir = NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.LOG_DIR_TEST
     if not _test_logs_dir.exists():
         """ensure test logs dir"""
         try:
@@ -88,7 +88,7 @@ def ensure_logs_dir_exists():
             pass
 
     _screenshot_dir = (
-            NroboPaths.EXEC_DIR / NREPORT.REPORT_DIR / NREPORT.SCREENSHOTS_DIR
+            NroboPaths.EXEC_DIR / NReport.REPORT_DIR / NReport.SCREENSHOTS_DIR
     )
     if not _screenshot_dir.exists():
         """ensure screenshots dir"""
@@ -97,7 +97,7 @@ def ensure_logs_dir_exists():
         except FileExistsError:
             pass
 
-    _allure_dir = NroboPaths.EXEC_DIR / NREPORT.ALLURE_REPORT_PATH
+    _allure_dir = NroboPaths.EXEC_DIR / NReport.ALLURE_REPORT_PATH
     if not _allure_dir.exists():
         """ensure allure dir"""
         try:
@@ -363,16 +363,16 @@ def driver(request):
     # Set driver log name
     # current test function name
     test_method_name = request.node.name
-    from nrobo.cli.cli_constants import NREPORT
+    from nrobo.cli.cli_constants import NReport
 
     ensure_logs_dir_exists()
     _driver_log_path = (
-        NREPORT.REPORT_DIR
-        + os.sep
-        + NREPORT.LOG_DIR_DRIVER
-        + os.sep
-        + test_method_name
-        + NREPORT.LOG_EXTENTION
+            NReport.REPORT_DIR
+            + os.sep
+            + NReport.LOG_DIR_DRIVER
+            + os.sep
+            + test_method_name
+            + NReport.LOG_EXTENTION
     )
 
     if int(os.environ[EnvKeys.APPIUM]):
@@ -384,13 +384,13 @@ def driver(request):
             request.config.getoption(f"--{NCli.CAP}")
         )
 
-        if capabilities[CAPABILITY.AUTOMATION_NAME] == AutomationNames.UI_AUTOMATION2:
+        if capabilities[Capability.AUTOMATION_NAME] == AutomationNames.UI_AUTOMATION2:
             """Create uiautomator2 driver instance"""
             from appium.options.android import UiAutomator2Options
 
             options = UiAutomator2Options().load_capabilities(capabilities)
 
-        elif capabilities[CAPABILITY.AUTOMATION_NAME] == AutomationNames.XCUITEST:
+        elif capabilities[Capability.AUTOMATION_NAME] == AutomationNames.XCUITEST:
             from appium.options.ios import XCUITestOptions
 
             options = XCUITestOptions().load_capabilities(capabilities)
@@ -646,7 +646,7 @@ def logger(request):
     update_pytest_life_cycle_log("logger")
 
     test_method_name = request.node.name
-    from nrobo.cli.cli_constants import NREPORT
+    from nrobo.cli.cli_constants import NReport
 
     ensure_logs_dir_exists()
 
@@ -654,12 +654,12 @@ def logger(request):
     logger = logging.getLogger("selenium")
     logger.setLevel(logging.DEBUG)
     _test_logs_path = (
-        NREPORT.REPORT_DIR
-        + os.sep
-        + NREPORT.LOG_DIR_TEST
-        + os.sep
-        + test_method_name
-        + NREPORT.LOG_EXTENTION
+            NReport.REPORT_DIR
+            + os.sep
+            + NReport.LOG_DIR_TEST
+            + os.sep
+            + test_method_name
+            + NReport.LOG_EXTENTION
     )
     handler = logging.FileHandler(_test_logs_path)
     logger.addHandler(handler)
@@ -723,14 +723,14 @@ def pytest_runtest_makereport(item, call):
 
             # build screenshot relative path for html report and actual path for saving screenshot
             screenshot_filepath = (
-                NREPORT.REPORT_DIR
-                + os.sep
-                + NREPORT.SCREENSHOTS_DIR
-                + os.sep
-                + screenshot_filename
+                    NReport.REPORT_DIR
+                    + os.sep
+                    + NReport.SCREENSHOTS_DIR
+                    + os.sep
+                    + screenshot_filename
             )
             screenshot_relative_path = (
-                NREPORT.SCREENSHOTS_DIR + os.sep + screenshot_filename
+                    NReport.SCREENSHOTS_DIR + os.sep + screenshot_filename
             )
 
             # Handle fullpagescreenshot cli switch
@@ -912,12 +912,12 @@ def pytest_runtest_setup(item):
 
 def pytest_html_report_title(report):
     from nrobo import EnvKeys, NroboConst
-    from nrobo.cli.cli_constants import NREPORT
+    from nrobo.cli.cli_constants import NReport
     import os
 
     update_pytest_life_cycle_log("pytest_html_report_title", "hook")
 
-    _suffix = NREPORT.DEFAULT_REPORT_TITLE
+    _suffix = NReport.DEFAULT_REPORT_TITLE
     _title_env = os.environ[EnvKeys.TITLE]
     if _title_env not in [_suffix] and _title_env:
         _title = os.environ[EnvKeys.TITLE]

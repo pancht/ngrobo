@@ -454,7 +454,7 @@ class TestNRoboFrameworkPaths:
         assert nrobo_framework_pages_pkg_path.exists()
 
     def test_framework_pages_page_pypi_home_py_file_is_present(self):
-        """Validate that nrobo.framework.pages.PagePyPiHome.py file is present_release"""
+        """Validate that nrobo.framework.pages.page_pypi_home.py file is present_release"""
         set_environment()
 
         nrobo_framework_pages_page_pypi_homw_py_file_path = (
@@ -526,7 +526,7 @@ class TestNRoboFrameworkPaths:
         assert nrobo_framework_nrobo_config_yaml_file_path.exists()
 
     def test_framework_conftest_host_py_file_is_present(self):
-        """Validate that nrobo.framework.conftest-host.py file is present_release"""
+        """Validate that nrobo.framework.conftest_host.py file is present_release"""
         set_environment()
 
         nrobo_framework_conftest_host_py_file_path = (
