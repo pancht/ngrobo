@@ -1,4 +1,3 @@
-from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
 
 from nrobo.framework.pages import Page
@@ -13,7 +12,3 @@ class TestAppium:
         page = Page(driver=driver, logger=logger)
         page.click(by=AppiumBy.IOS_PREDICATE, value='name == "Safari"')
         page.wait_for_a_while(2)
-
-
-
-

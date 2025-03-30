@@ -13,27 +13,31 @@
 
 # requirements for nrobo framework
 
-rich==13.7.0
-pytest==8.0.0
-PyYAML==6.0.1
-selenium==4.17.2
-webdriver-manager==4.0.1
-undetected-chromedriver==3.5.5
-setuptools==69.1.1
-selenium-page-factory==2.6
-pytest-html==4.1.1
-pytest-xdist==3.5.0
-psutil==5.9.8
-pytest-rerunfailures==13.0
-allure-pytest==2.13.2
-pycurl==7.45.3
-pypinfo==21.0.0
-pytest-emoji==0.2.0
-pytest-check==2.3.1
-fake-useragent==1.5.1
-npm==0.1.1
-Appium-Python-Client==3.2.1
+rich                             == 13.7.0
+pytest                           == 8.0.0
+PyYAML                           == 6.0.1
+selenium                         == 4.17.2
+webdriver-manager                == 4.0.1
+undetected-chromedriver          == 3.5.5
+setuptools                       == 69.1.1
+selenium-page-factory            == 2.6
+pytest-html                      == 4.1.1
+pytest-xdist                     == 3.5.0
+psutil                           == 5.9.8
+pytest-rerunfailures             == 13.0
+allure-pytest                    == 2.13.2
+pycurl                           == 7.45.3
+pypinfo                          == 21.0.0
+pytest-emoji                     == 0.2.0
+pytest-check                     == 2.3.1
+fake-useragent                   == 1.5.1
+npm                              == 0.1.1
+Appium-Python-Client             == 3.2.1
 # test data generators
-Faker>=24.3.0
+Faker                            >= 24.3.0
 # Database Testing
-mysql-connector-python==8.3.0
+mysql-connector-python           == 8.3.0
+pylint                           == 3.3.6
+black                            == 25.1.0
+mypy	                         == 1.15.0
+ruff                             == 0.11.2

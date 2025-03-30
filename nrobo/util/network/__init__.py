@@ -13,19 +13,16 @@ networking functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmaill.com
 """
-import os
+
 import subprocess
 
 
 def internet_connectivity() -> bool:
     """Returns True if there is internet connectivity
-        else return False"""
+    else return False"""
     try:
-        from nrobo import terminal
-        if terminal(["ping", "-c", "1", "google.com"]) == 0:
-            return True
-        else:
-            return False
-    except subprocess.CalledProcessError as e:
-        return False
+        from nrobo import terminal  # pylint: disable=C0415
 
+        return terminal(["ping", "-c", "1", "google.com"]) == 0
+    except subprocess.CalledProcessError:
+        return False

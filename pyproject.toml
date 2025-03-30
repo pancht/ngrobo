@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 # Project details
 [project]
 name = "nrobo"
-version = "2024.40.1"
+version = "2025.0.0"
 authors = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 maintainers = [{name="Panchdev Singh Chauhan", email="erpanchdev@gmail.com"}]
 description = "Powerful! Yet, Easy to USE! Automated Testing Framework"
@@ -76,4 +76,7 @@ namespaces = true
 
 [tool.setuptools.package-data]
 "*" = ["*.*"]
+
+[tool.ruff]
+target-version = "py311"  # ✅ Set Python 3.11 as the target version
 

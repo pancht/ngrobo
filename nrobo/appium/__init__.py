@@ -1,3 +1,4 @@
+# pylint: disable=R0401
 """
 =====================CAUTION=======================
 DO NOT DELETE THIS FILE SINCE IT IS PART OF NROBO
@@ -14,13 +15,19 @@ working with appium framework.
 @email: erpanchdev@gmail.com
 """
 
-
-class CAPABILITY:
-    AUTOMATION_NAME = 'automationName'
+from dataclasses import dataclass
 
 
-class AUTOMATION_NAMES:
+@dataclass
+class Capability:
+    """Capability class."""
+
+    AUTOMATION_NAME = "automationName"
+
+
+@dataclass
+class AutomationNames:
     """Possible appium capabilities for automationName"""
 
-    UI_AUTOMATION2 = 'uiautomator2'
-    XCUITEST = 'XCUITest'
+    UI_AUTOMATION2 = "uiautomator2"
+    XCUITEST = "XCUITest"

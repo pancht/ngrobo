@@ -12,16 +12,18 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 """
 
 import os
+from dataclasses import dataclass
 
-from nrobo import *
-from nrobo.exceptions import *
-from nrobo.util.commands.posix import POSIX_COMMAND
-from nrobo.util.commands.windows import WINDOWS_COMMAND
-from nrobo.util.platform import PLATFORMS
-from nrobo.util.process import terminal, terminal_nogui
+from nrobo import EnvKeys
+from nrobo.exceptions import MissingCommandImplementation
+from nrobo.util.commands.posix import PosixCommand
+from nrobo.util.commands.windows import WindowsCommand
+from nrobo.util.platform import Platforms
+from nrobo.util.process import terminal
 
 
-class N_COMMANDS:
+@dataclass
+class NCommands:
     """N_COMMANDS class hold nrobo command mappings for host platform.
 
     Raises <MissingCommandImplementation> exception
@@ -29,27 +31,29 @@ class N_COMMANDS:
 
     CLEAR_SCREEN = "clear screen"
     COMMAND = {
-        PLATFORMS.WINDOWS: {
-            CLEAR_SCREEN: WINDOWS_COMMAND.CLS,
+        Platforms.WINDOWS: {
+            CLEAR_SCREEN: WindowsCommand.CLS,
         },
-        PLATFORMS.DARWIN: {
-            CLEAR_SCREEN: POSIX_COMMAND.CLEAR
-        }
+        Platforms.DARWIN: {CLEAR_SCREEN: PosixCommand.CLEAR},
     }
 
 
-def get_command(command) -> None:
+def get_command(command) -> None:  # pylint: disable=W0613
     """Return the appropriate posix or windows <command> to caller."""
 
     try:
-        return N_COMMANDS.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][N_COMMANDS.CLEAR_SCREEN]
-    except KeyError as ke:
-        raise MissingCommandImplementation(N_COMMANDS.CLEAR_SCREEN)
+        return NCommands.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
+            NCommands.CLEAR_SCREEN
+        ]
+    except KeyError:  # pylint: disable=W0707
+        raise MissingCommandImplementation(  # pylint: disable=W0707
+            NCommands.CLEAR_SCREEN
+        )
 
 
 def clear_screen():
     """Run the clear screen command."""
-    terminal([get_command(N_COMMANDS.CLEAR_SCREEN)])
+    terminal([get_command(NCommands.CLEAR_SCREEN)])
 
 
 def remove_files_recursively(directory) -> int:
@@ -58,16 +62,20 @@ def remove_files_recursively(directory) -> int:
     :param directory:
     :return:"""
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
+    if os.environ[EnvKeys.HOST_PLATFORM] in [
+        Platforms.DARWIN,
+        Platforms.LINUX,
+        Platforms.MACOS,
+    ]:
         try:
             return terminal(["rm", "-rf", directory])
-        except Exception as e:
+        except Exception as e:  # pylint: disable=W0718
             print(e)
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+    if os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
         try:
             return terminal(["del", "/q", "/S", directory + os.sep + "*.*"])
-        except Exception as e:
+        except Exception as e:  # pylint: disable=W0718
             print(e)
 
     return 1

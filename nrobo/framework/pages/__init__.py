@@ -10,20 +10,21 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-import logging
-from selenium.webdriver.remote.webdriver import WebDriver
-from typing import Union
-from nrobo.selenese import NRobo
 
-AnyBrowser = Union[None, WebDriver]
+import logging
+from typing import Union
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.actions.wheel_input import WheelInput
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.common.actions.key_input import KeyInput
+from nrobo.selenese import NRobo
+
+AnyBrowser = Union[None, WebDriver]
 
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 
 
-class Page(NRobo):
+class Page(NRobo):  # pylint: disable=R0901
     """
     Page class is the base class for every _page objects
     that one is going to be created for his/her project.
@@ -65,8 +66,13 @@ class Page(NRobo):
         # and so on per project need.
     """
 
-    def __init__(self, driver=AnyBrowser, logger=None | logging.Logger, duration: int = 250,
-                 devices: list[AnyDevice] | None = None):
+    def __init__(
+        self,
+        driver=AnyBrowser,
+        logger=None | logging.Logger,
+        duration: int = 250,
+        devices: list[AnyDevice] | None = None,
+    ):
         """constructor"""
         # call parent constructor
         super().__init__(driver, logger, duration=duration, devices=devices)

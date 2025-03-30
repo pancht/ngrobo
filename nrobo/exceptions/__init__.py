@@ -13,6 +13,7 @@ This class holds definition of nRoBo specific exceptions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from nrobo import *
 
 
@@ -21,7 +22,7 @@ class MissingCommandImplementation(Exception):
 
     # constructor
     def __init__(self, command):
-        self.value = f'Command <{command}> for host platform <{os.environ[EnvKeys.HOST_PLATFORM]}>'
+        self.value = f"Command <{command}> for host platform <{os.environ[EnvKeys.HOST_PLATFORM]}>"
 
     def __str__(self):
         return repr(self.value)
@@ -33,7 +34,7 @@ class NRoBoBrowserNotSupported(Exception):
 
     # constructor
     def __init__(self, browser):
-        self.value = f'browser <{browser}> is not supported in nrobo.'
+        self.value = f"browser <{browser}> is not supported in nrobo."
 
     def __str__(self):
         return repr(self.value)
@@ -42,11 +43,11 @@ class NRoBoBrowserNotSupported(Exception):
 class NRoBoIncorrectVersion(Exception):
     """Raises when an incorrect version is supplied to
 
-       nrobo.util.version.Version class."""
+    nrobo.util.version.Version class."""
 
     # constructor
     def __init__(self, version):
-        self.value = f'Incorrect version <{version}>'
+        self.value = f"Incorrect version <{version}>"
 
     def __str__(self):
         return repr(self.value)
@@ -55,13 +56,16 @@ class NRoBoIncorrectVersion(Exception):
 class NRoBoInvalidOperation(Exception):
     """Raises when an arithmetic operation is performed
 
-       over incompatible type.
+    over incompatible type.
 
-       Anything other than type Version is an Invalid Type."""
+    Anything other than type Version is an Invalid Type."""
 
     # constructor
     def __init__(self, operator: str, _type: type):
-        self.value = f"TypeError: unsupported operand type(s) for {operator}: 'Version' and '{_type}'"
+        self.value = (
+            f"TypeError: unsupported operand type(s) "
+            f"for {operator}: 'Version' and '{_type}'"
+        )
 
     def __str__(self):
         return repr(self.value)

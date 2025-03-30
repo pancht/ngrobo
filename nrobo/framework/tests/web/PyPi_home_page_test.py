@@ -2,11 +2,12 @@
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import pytest
 from pages.PagePyPiHome import PagePyPiHome
 
 
-class TestPyPiHomePage():
+class TestPyPiHomePage:
 
     @pytest.mark.unit
     @pytest.mark.skip(reason="Test is not yet complete")
@@ -27,7 +28,9 @@ class TestPyPiHomePage():
 
     @pytest.mark.unit
     @pytest.mark.skip
-    def test_pass_url_username_password_from_commandline_example(self, driver, logger, url, username, password):
+    def test_pass_url_username_password_from_commandline_example(
+        self, driver, logger, url, username, password
+    ):
         logger.info(f"URL={url}, Username={username} and Password={password}")
         driver.get(url)
 

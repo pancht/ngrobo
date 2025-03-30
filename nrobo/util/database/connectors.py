@@ -1,12 +1,20 @@
+"""
+Connectors.py
+"""
+
+from dataclasses import dataclass
 from nrobo.selenese import NRobo as nrobo
 
 
-class CONNECTOR_TYPE:
+@dataclass
+class ConnectorType:
     """Database Connector Types"""
+
     MYSQL = "mysql"
 
 
-class CONNECTOR_ATTRIBUTES:
+@dataclass
+class ConnectorAttributes:
     """Database connector attributes"""
 
     TYPE = "type"
@@ -17,42 +25,44 @@ class CONNECTOR_ATTRIBUTES:
 def db_connector(config: {}):
     """Universal Database connector
 
-       Based on CONNECTOR_ATTRIBUTES.TYPE,
-       it calls specific db connector.
+    Based on CONNECTOR_ATTRIBUTES.TYPE,
+    it calls specific db connector.
 
-       For example:
+    For example:
 
-          if config[CONNECTOR_ATTRIBUTES.TYPE] is 'mysql'
-             Then it calls mysql_db_connector.
+       if config[CONNECTOR_ATTRIBUTES.TYPE] is 'mysql'
+          Then it calls mysql_db_connector.
 
-       Possible Connector types are ['mysql']
-      """
+    Possible Connector types are ['mysql']
+    """
 
     # Copy config, remove type attribute from config and pass it to connector
     copy_of_config = config.copy()
-    copy_of_config.pop(CONNECTOR_ATTRIBUTES.TYPE)
+    copy_of_config.pop(ConnectorAttributes.TYPE)
 
-    if config[CONNECTOR_ATTRIBUTES.TYPE] == CONNECTOR_TYPE.MYSQL:
+    if config[ConnectorAttributes.TYPE] == ConnectorType.MYSQL:
         return mysql_db_connector(config=copy_of_config)
-    else:
-        raise Exception(f"Invalid database connector type: {config[CONNECTOR_ATTRIBUTES.TYPE]}")
+
+    raise Exception(  # pylint: disable=W0719
+        f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}"
+    )
 
 
 def mysql_db_connector(config: {}):
     """Dedicated database connector to established connection with mysql database instance
 
-       described by given config settings"""
+    described by given config settings"""
 
-    import mysql.connector
-    from mysql.connector import errorcode
+    import mysql.connector  # pylint: disable=C0415
+    from mysql.connector import errorcode  # pylint: disable=C0415
 
-    for each_attempt in range(CONNECTOR_ATTRIBUTES.MAX_RETRY):
+    for _ in range(ConnectorAttributes.MAX_RETRY):
 
         try:
             _db_connection = mysql.connector.connect(**config)
             db_cursor = _db_connection.cursor()
 
-            return {'connection': _db_connection, 'cursor': db_cursor}
+            return {"connection": _db_connection, "cursor": db_cursor}
 
         except mysql.connector.Error as err:
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
@@ -62,6 +72,8 @@ def mysql_db_connector(config: {}):
             else:
                 print(err)
 
-            nrobo.wait(time_in_sec=CONNECTOR_ATTRIBUTES.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
+            nrobo.wait(time_in_sec=ConnectorAttributes.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
 
-    raise Exception('Database connection did not established!!!')
+    raise Exception(  # pylint: disable=W0719
+        "Database connection did not established!!!"
+    )

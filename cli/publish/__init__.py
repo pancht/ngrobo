@@ -14,18 +14,20 @@ process.
 @email: erpanchdev@gmail.com
 """
 
-from cli.build import ENV_CLI_SWITCH
+import sys
+from dataclasses import dataclass
+from cli.build import EnvCliSwitch
 from cli.check import check
 from nrobo import *
-from nrobo.util.constants import CONST
-from nrobo.util.platform import PLATFORMS
+from nrobo.util.constants import Const
+from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
-from cli.build import ENV_CLI_SWITCH
 
-global __CUR_ENV__
+global __CUR_ENV__  # pylint: disable=W0604
 
 
-class PUBLISH_TARGET:
+@dataclass
+class PublishTarget:
     """Publishing target."""
 
     PYPI = "pypi"
@@ -37,37 +39,60 @@ def publish(target, *, debug: bool = False, override: bool = False):
 
     check(debug=debug)
 
-    from rich.prompt import Prompt
-    import nrobo.cli.detection as detect
+    from rich.prompt import Prompt  # pylint: disable=C0415
+    import nrobo.cli.detection as detect  # pylint: disable=C0415
+
     reply = Prompt.ask(
-        f"Do You really want to publish version: [{STYLE.HLOrange}]{detect.build_version_from_version_files()}[/]"
-        f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] to continue. Press any key to skip.)")
-    if not reply.strip().lower() in ["yes", "y"]:
+        f"Do You really want to publish version: [{STYLE.HLOrange}]"
+        f"{detect.build_version_from_version_files()}[/]"
+        f"\n(Type [{STYLE.HLGreen}]Yes[/] or [{STYLE.HLRed}]Y[/] "
+        f"to continue. Press any key to skip.)"
+    )
+    if reply.strip().lower() not in ["yes", "y"]:
         # Hmm! Host don't want an update.
         # I don't know why he/she doesn't!!!
         # Anyway, I've had to obey her/his command,
         # Thus, I'm not going to update.
-        console.print(f"[{STYLE.HLOrange}]Alright! You chose not to publish.\nPublish aborted by choice![/]")
+        console.print(
+            f"[{STYLE.HLOrange}]Alright! You chose not to publish.\nPublish aborted by choice![/]"
+        )
         return  # Bye, Host!
 
-    global __CUR_ENV__
+    global __CUR_ENV__  # pylint: disable=W0601
 
-    if str(target).lower() == ENV_CLI_SWITCH.TEST:
-        __CUR_ENV__ = PUBLISH_TARGET.TESTPYPI
-    elif str(target).lower() == ENV_CLI_SWITCH.PROD:
-        __CUR_ENV__ = PUBLISH_TARGET.PYPI
+    if str(target).lower() == EnvCliSwitch.TEST:
+        __CUR_ENV__ = PublishTarget.TESTPYPI
+    elif str(target).lower() == EnvCliSwitch.PROD:
+        __CUR_ENV__ = PublishTarget.PYPI
     else:
-        print(f"Invalid target environment <{target}>. Options: {ENV_CLI_SWITCH.TEST} | {ENV_CLI_SWITCH.PROD}")
-        exit(1)
+        print(
+            f"Invalid target environment <{target}>. "
+            f"Options: {EnvCliSwitch.TEST} | {EnvCliSwitch.PROD}"
+        )
+        sys.exit(1)
 
-    with console.status(f"Publish on {PUBLISH_TARGET.PYPI.upper()}..."):
+    with console.status(f"Publish on {PublishTarget.PYPI.upper()}..."):
         command = ""
-        if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.DARWIN, PLATFORMS.LINUX, PLATFORMS.MACOS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       "dist" + os.sep + "*"]
-        elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
-            command = ["twine", "upload", "--repository", __CUR_ENV__,
-                       CONST.DOT + os.sep + "dist" + os.sep + "*.*"]
+        if os.environ[EnvKeys.HOST_PLATFORM] in [
+            Platforms.DARWIN,
+            Platforms.LINUX,
+            Platforms.MACOS,
+        ]:
+            command = [
+                "twine",
+                "upload",
+                "--repository",
+                __CUR_ENV__,  # pylint: disable=E0601
+                "dist" + os.sep + "*",
+            ]
+        elif os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
+            command = [
+                "twine",
+                "upload",
+                "--repository",
+                __CUR_ENV__,
+                Const.DOT + os.sep + "dist" + os.sep + "*.*",
+            ]
 
         # add --skip-existing switch
         if override:
@@ -76,18 +101,25 @@ def publish(target, *, debug: bool = False, override: bool = False):
         # Run command
         console_output = terminal(command, text=True, capture_output=True)
 
-        if errors_in_console(r'(HTTPError:)', console_output.stdout):
+        if errors_in_console(r"(HTTPError:)", console_output.stdout):
             print(console_output.stdout)
-            exit(1)
+            sys.exit(1)
         else:
-            from cli.build import get_version_from_yaml_version_files, write_new_version_to_nrobo_init_py_file
+            from cli.build import (  # pylint: disable=C0415
+                get_version_from_yaml_version_files,
+                write_new_version_to_nrobo_init_py_file,
+            )
+
             build_version = get_version_from_yaml_version_files(target)
             write_new_version_to_nrobo_init_py_file(build_version)
 
-            console.rule(f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully.")
+            console.rule(
+                f"nRoBo {get_version_from_yaml_version_files(target)} is published successfully."
+            )
 
 
 def errors_in_console(pattern: str, string: str) -> bool:
     """return True if pattern is found in string else false."""
-    import re
+    import re  # pylint: disable=C0415,W0621
+
     return re.search(pattern, string)

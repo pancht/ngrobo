@@ -14,9 +14,9 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 # Holds python command to run other commands.
 # Options: python | python3
 import os
-import re
 import platform
-from nrobo.util.process import *
+import subprocess
+import sys
 
 
 def verify_set_python_install_pip_command() -> None:
@@ -27,29 +27,56 @@ def verify_set_python_install_pip_command() -> None:
 
     If found and sets python command, install pip as well."""
 
-    from nrobo import EnvKeys, Environment, NROBO_CONST, Python
     # regular expression to verify python version
     # major.minor.nightly-build
-    regx = re.compile(r'([\d]+).[\d]+.[\d]+.*')
+    import re  # pylint: disable=C0415
+
+    regx = re.compile(r"([\d]+).[\d]+.[\d]+.*")
 
     if regx.match(platform.python_version()) is None:
-        print("Required dependency python is not installed on system! Please, install python >= 3.8 and retry.")
-        exit(1)
+        print(
+            "Required dependency python is not installed on system! "
+            "Please, install python >= 3.8 and retry."
+        )
+        sys.exit(1)
     else:
         # python is installed on the host system
+        import re  # pylint: disable=W0404,C0415
+        from nrobo import terminal, NroboConst, EnvKeys  # pylint: disable=C0415
 
-        if int(re.search(r'[\d]+', platform.python_version())[0]) >= 3:
+        if int(re.search(r"[\d]+", platform.python_version())[0]) >= 3:
             # check if python version is >=3
 
             python3 = "python3"
 
-            if terminal([python3, "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT) == NROBO_CONST.SUCCESS:
+            if (
+                terminal(
+                    [python3, "--version"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
+                == NroboConst.SUCCESS
+            ):
                 os.environ[EnvKeys.PYTHON] = python3
-            elif terminal([os.environ[EnvKeys.PYTHON], "--version"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT) == NROBO_CONST.SUCCESS:
+            elif (
+                terminal(
+                    [os.environ[EnvKeys.PYTHON], "--version"],
+                    stdout=subprocess.DEVNULL,
+                    stderr=subprocess.STDOUT,
+                )
+                == NroboConst.SUCCESS
+            ):
                 pass
             else:
-                print("Required dependency python is not installed on system! Please, install python >= 3.8 and retry.")
-                exit()
+                print(
+                    "Required dependency python is not installed on system! "
+                    "Please, install python >= 3.8 and retry."
+                )
+                sys.exit()
 
     # Install pip now!
-    terminal([os.environ[EnvKeys.PYTHON], '-m', 'ensurepip', '--upgrade'], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
+    terminal(
+        [os.environ[EnvKeys.PYTHON], "-m", "ensurepip", "--upgrade"],
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.STDOUT,
+    )

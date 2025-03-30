@@ -15,18 +15,29 @@ nrobo module loads nRoBo globals.
 @email: erpanchdev@gmail.com
 """
 
-__version__ = '2024.40.1'
+__version__ = '2025.0.0'
 
 # install rich library
 import os
 from pathlib import Path
+import re
+from dataclasses import dataclass
+import subprocess
+from rich.console import Console
+from nrobo.util.process import terminal
+from nrobo.cli.formatting import themes as th, STYLE
+from nrobo.util.constants import Const
 
 
-class DB_CONNECTOR_TYPE:
+@dataclass
+class DbConnectorType:
     """Database Connector Types"""
+
     MYSQL = "mysql"
 
-class NROBO_CONST:
+
+@dataclass
+class NroboConst:
     """nrobo special constants"""
 
     NROBO = "nrobo"
@@ -34,6 +45,7 @@ class NROBO_CONST:
     SUCCESS = 0
 
 
+@dataclass
 class Python:
     """Information related to python"""
 
@@ -42,6 +54,7 @@ class Python:
     PYPINFO = "pypinfo"
 
 
+@dataclass
 class Environment:
     """Environments"""
 
@@ -49,6 +62,7 @@ class Environment:
     DEVELOPMENT = "Development"
 
 
+@dataclass
 class EnvKeys:
     """nRoBo environment keys
 
@@ -57,6 +71,7 @@ class EnvKeys:
 
         and many more such...
     """
+
     APPIUM = "appium"
     PIP_COMMAND = "Pip Command"
     EXEC_DIR = "Execution Directory"
@@ -92,8 +107,10 @@ os.environ[EnvKeys.DEBUG] = "False"
 os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
 
 
-class NROBO_PATHS:
+@dataclass
+class NroboPaths:
     """nRoBo framework directories and files"""
+
     EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
     NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])
     NODE_MODULES = Path("node_modules")
@@ -101,7 +118,7 @@ class NROBO_PATHS:
     NROBO = Path("nrobo")
     INIT_PY = Path("__init__.py")
     APPIUM = Path("appium")
-    BROWSER_CONFIGS = Path("browserConfigs")
+    BROWSER_CONFIGS = Path("browser_configs")
     CAPABILITY_YAML = BROWSER_CONFIGS / "capability.yaml"
     CAPABILITY_APPIUM_ANDROID_YAML = APPIUM / "android_capability.yaml"
     CAPABILITY_APPIUM_IOS_YAML = APPIUM / "ios_capability.yaml"
@@ -147,9 +164,9 @@ class NROBO_PATHS:
     # framework packages
     FRAMEWORK = Path("framework")
     PAGES = Path("pages")
-    TEST_DATA = Path('test-data')
+    TEST_DATA = Path("test_data")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
-    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
+    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("page_pypi_home.py")
     TESTS = Path("tests")
     MOBILE = Path("mobile")
     WEB = Path("web")
@@ -162,7 +179,7 @@ class NROBO_PATHS:
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
-    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest-host.py"
+    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest_host.py"
 
     SELENESE = Path("selenese")
 
@@ -209,11 +226,15 @@ class NROBO_PATHS:
     README_RST_FILE = Path("README.rst")
     VALIDATE_NROBO_PY_FILE = Path("validatenrobo.py")
 
-    PYTEST_LIFE_CYCLE_LOGS = Path("key") / "experiments" / "pytest" / "pytest-life-cycle-logs"
+    PYTEST_LIFE_CYCLE_LOGS = (
+        Path("key") / "experiments" / "pytest" / "pytest-life-cycle-logs"
+    )
 
 
-class NROBO_CLI_TOOL_PATH:
+@dataclass
+class NroboCliToolPath:
     """nRoBo CLI tool paths"""
+
     CLI = Path("cli")
     BUILD = CLI / Path("build")
     CHECK = CLI / Path("check")
@@ -222,22 +243,22 @@ class NROBO_CLI_TOOL_PATH:
     PUBLISH = CLI / Path("publish")
 
 
-class NROBO_FRAMEWORK_TESTS:
+@dataclass
+class NroboFrameworkTests:
     """nrobo_framework_tests package"""
-    NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / NROBO_PATHS.CONFTEST_PY
-    TEST_NROBO_FRAMEWORK_PY_FILE = NROBO_PATHS.NROBO_FRAMEWORK_TESTS / Path("test_package_presence.py")
+
+    NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = (
+        NroboPaths.NROBO_FRAMEWORK_TESTS / NroboPaths.CONFTEST_PY
+    )
+    TEST_NROBO_FRAMEWORK_PY_FILE = NroboPaths.NROBO_FRAMEWORK_TESTS / Path(
+        "test_package_presence.py"
+    )
 
 
-import subprocess
-from nrobo.util.process import terminal
+terminal(
+    ["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
+)
 
-terminal(["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT)
-
-from pathlib import Path
-import re
-from rich.console import Console
-from nrobo.cli.formatting import themes as th, STYLE
-from nrobo.util.constants import CONST
 
 # rich console
 console = Console(theme=th)
@@ -246,26 +267,28 @@ console = Console(theme=th)
 def greet_the_guest():
     """greet the guest with Indian way of greeting!"""
 
-    greet_msg = 'Namastey World! Thank you for choosing, nRoBo.'
-    formatted_heart_string = CONST.HEART_RED * len(greet_msg)
+    greet_msg = "Namastey World! Thank you for choosing, nRoBo."
+    formatted_heart_string = Const.HEART_RED * len(greet_msg)
 
-    console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')
+    console.print(f"[{STYLE.HLRed}]{formatted_heart_string}")
     console.print(f"[{STYLE.HLOrange}]{greet_msg}[/]")
-    console.print(f'[{STYLE.HLRed}]{formatted_heart_string}')
+    console.print(f"[{STYLE.HLRed}]{formatted_heart_string}")
 
 
 def set_environment() -> None:
     """set nrobo environment
 
-        Not complete implementation as the name suggests.
-        This implementation will be corrected in future versions..."""
+    Not complete implementation as the name suggests.
+    This implementation will be corrected in future versions..."""
 
     # get directory from where the script was executed
     os.environ[EnvKeys.EXEC_DIR] = os.getcwd()
     # get directory where this script resides
     nrobo_loader_file_path = os.path.dirname(os.path.realpath(__file__))
     # grab nrobo installation path
-    os.environ[EnvKeys.NROBO_DIR] = re.findall(f"(.*{NROBO_CONST.NROBO})", str(nrobo_loader_file_path))[0]
+    os.environ[EnvKeys.NROBO_DIR] = re.findall(
+        f"(.*{NroboConst.NROBO})", str(nrobo_loader_file_path)
+    )[0]
 
-    NROBO_PATHS.EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
-    NROBO_PATHS.NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])
+    NroboPaths.EXEC_DIR = Path(os.environ[EnvKeys.EXEC_DIR])
+    NroboPaths.NROBO_DIR = Path(os.environ[EnvKeys.NROBO_DIR])

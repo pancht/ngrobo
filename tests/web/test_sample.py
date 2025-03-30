@@ -1,15 +1,19 @@
+"""Sample tests module."""
+
 import pytest
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-import allure
 
 from nrobo.framework.pages import Page
 
 
-class TestWebSamples():
+class TestWebSamples:
+    """Web tests sample class."""
 
     @pytest.mark.regression
-    def test_pass_url_username_password_from_commandline(self, driver, logger, url, username, password):
+    def test_pass_url_username_password_from_commandline(  # pylint: disable=R0913,R0917
+        self, driver, logger, url, username, password
+    ):
+        """pass url username password cli test."""
         driver.get(url)
         logger.info(f"URL={url}, Username={username} and Password={password}")
 
@@ -23,8 +27,6 @@ class TestWebSamples():
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 
-        title = driver.title
-
         driver.implicitly_wait(0.5)
 
         logger.info("Click on submit button. ")
@@ -33,9 +35,6 @@ class TestWebSamples():
 
         text_box.send_keys("Selenium")
         submit_button.click()
-
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
 
     @pytest.mark.sanity
     # @pytest.mark.skip
@@ -46,8 +45,6 @@ class TestWebSamples():
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 
-        title = driver.title
-
         driver.implicitly_wait(0.5)
 
         logger.info("Click on submit button.")
@@ -60,10 +57,9 @@ class TestWebSamples():
         logger.info("Click submit button")
         submit_button.click()
 
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
-
-        raise Exception("Forcefully failed test for demonstration of screencapture feature!")
+        raise Exception(  # pylint: disable=W0719
+            "Forcefully failed test for demonstration of screencapture feature!"
+        )
 
     @pytest.mark.sanity
     # @pytest.mark.skip
@@ -74,8 +70,6 @@ class TestWebSamples():
         logger.info("Open url")
         driver.get("https://www.selenium.dev/selenium/web/web-form.html")
 
-        title = driver.title
-
         driver.implicitly_wait(0.5)
 
         logger.info("Click on submit button.")
@@ -88,11 +82,8 @@ class TestWebSamples():
         logger.info("Click submit button")
         submit_button.click()
 
-        message = driver.find_element(by=By.ID, value="message")
-        text = message.text
-
     def test_take_full_page_screenshot(self, driver, logger):
+        """full page screenshot test."""
         page = Page(driver, logger)
 
         page.get("https://namasteydigitalindia.com/")
-

@@ -1,4 +1,3 @@
-from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
 
 from nrobo.framework.pages import Page
@@ -12,8 +11,4 @@ class TestAppium:
         logger.info("Create page object")
         page = Page(driver=driver, logger=logger)
         page.click(by=AppiumBy.XPATH, value='//*[@text="Battery"]')
-        #page.wait_for_a_while(5)
-
-
-
-
+        # page.wait_for_a_while(5)

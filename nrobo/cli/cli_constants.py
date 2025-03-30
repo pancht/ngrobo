@@ -12,11 +12,14 @@ Constants module.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
 
-class NREPORT:
+@dataclass
+class NReport:
     """nRoBo report related constants"""
 
     HTML = "html"
@@ -34,7 +37,8 @@ class NREPORT:
     DEFAULT_REPORT_TITLE = "Test Automation Report"
 
 
-class nCLI:
+@dataclass
+class NCli:
     """List of nrobo defined cli options.
 
     NOTE:
@@ -92,22 +96,26 @@ class nCLI:
         KEY: KEY,
         PACKAGES: PACKAGES,
         GRID: GRID,
-        MARKER: MARKER
+        MARKER: MARKER,
     }
 
     DEFAULT_ARGS = {
-        '--cache-clear': ['--cache-clear'],
-        '--color': ['--color', 'yes'],
-        '-r': ['-r', 'fE'],
-        '--code-highlight': ['--code-highlight', 'yes'],
-        '--junit-xml': ['--junit-xml', NREPORT.REPORT_DIR + os.sep + f"junit-report.xml"]
+        "--cache-clear": ["--cache-clear"],
+        "--color": ["--color", "yes"],
+        "-r": ["-r", "fE"],
+        "--code-highlight": ["--code-highlight", "yes"],
+        "--junit-xml": [
+            "--junit-xml",
+            NReport.REPORT_DIR + os.sep + "junit-report.xml",
+        ],
     }
 
 
-class PACKAGES:
+@dataclass
+class Packages:
     """nRoBo packages"""
 
     NROBO = "nrobo"
     CLI = "cli"
 
-    APPIUM = ['appium']
+    APPIUM = ["appium"]

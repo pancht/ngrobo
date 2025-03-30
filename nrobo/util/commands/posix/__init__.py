@@ -11,8 +11,11 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @email: erpanchdev@gmail.com
 """
 
+from dataclasses import dataclass
 
-class POSIX_COMMAND:
+
+@dataclass
+class PosixCommand:
     """POSIX_COMMAND class holds posix command names."""
 
     CLEAR = "clear"

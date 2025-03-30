@@ -1,6 +1,3 @@
-from appium import webdriver
-from appium.webdriver.common.appiumby import AppiumBy
-
 from pages import Page
 
 
@@ -10,8 +7,4 @@ class TestAppium:
         """First appium test"""
         logger.info("Create page object")
         page = Page(driver=driver, logger=logger)
-        #page.click(by=AppiumBy.XPATH, value='//*[@text="Battery"]')
-
-
-
-
+        # page.click(by=AppiumBy.XPATH, value='//*[@text="Battery"]')

@@ -35,7 +35,7 @@ class TestVersionPkg:
         try:
             Version("2010.d.45")
             assert False
-        except NRoBoIncorrectVersion as e:
+        except NRoBoIncorrectVersion:
             assert True
 
         major = 2024
@@ -45,22 +45,34 @@ class TestVersionPkg:
         present_version = Version(f"{major + 1}.{minor}.{patch}")
         previous_version = Version(f"{major}.{minor}.{patch}")
 
-        assert Version.present_is_a_major_release(present_version.version, previous_version.version)
+        assert Version.present_is_a_major_release(
+            present_version.version, previous_version.version
+        )
 
         present_version = Version(f"{major}.{minor}.{patch}")
-        assert not Version.present_is_a_major_release(present_version.version, previous_version.version)
+        assert not Version.present_is_a_major_release(
+            present_version.version, previous_version.version
+        )
 
         present_version = Version(f"{major}.{minor + 1}.{patch}")
-        assert Version.present_is_a_minor_release(present_version.version, previous_version.version)
+        assert Version.present_is_a_minor_release(
+            present_version.version, previous_version.version
+        )
 
         present_version = Version(f"{major}.{minor}.{patch}")
-        assert not Version.present_is_a_minor_release(present_version.version, previous_version.version)
+        assert not Version.present_is_a_minor_release(
+            present_version.version, previous_version.version
+        )
 
         present_version = Version(f"{major}.{minor}.{patch + 1}")
-        assert Version.present_is_a_patch_release(present_version.version, previous_version.version)
+        assert Version.present_is_a_patch_release(
+            present_version.version, previous_version.version
+        )
 
         present_version = Version(f"{major}.{minor}.{patch}")
-        assert not Version.present_is_a_patch_release(present_version.version, previous_version.version)
+        assert not Version.present_is_a_patch_release(
+            present_version.version, previous_version.version
+        )
 
     def test_arithmetic_operations_on_Version_class(self):
 
@@ -81,13 +93,13 @@ class TestVersionPkg:
         try:
             assert version_1 > 2
             assert False
-        except NRoBoInvalidOperation as e:
+        except NRoBoInvalidOperation:
             assert True
 
         try:
             assert version_1 < 2
             assert False
-        except NRoBoInvalidOperation as e:
+        except NRoBoInvalidOperation:
             assert True
 
         version_1 = Version(f"{major}.{minor}.{patch}")

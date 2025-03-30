@@ -14,11 +14,15 @@ Definitions of CONSTANTS.
 @email: erpanchdev@gmail.com
 """
 
+from dataclasses import dataclass
 
-class CONST(object):
+
+@dataclass
+class Const:
     """
     Collection of CONSTANTS
     """
+
     NEWLINE = "\n"
 
     SINGLE_INVERTED_COMMA = "'"
@@ -59,22 +63,23 @@ class CONST(object):
     HOURS_PER_DAY = 24
     MINUTES_PER_HOUR = 60
     SECONDS_PER_MINUTE = 60
-    PERCENTAGE = '%'
+    PERCENTAGE = "%"
 
     # Currencies
     DOLLAR = "$"
-    RUPEE = u'\u20B9'
+    RUPEE = "\u20b9"
 
     # Greetings
-    FOLDED_HAND = '\uF09F\u998F'
-    HEART_RED = '\u2764\ufe0f'
+    FOLDED_HAND = "\uf09f\u998f"
+    HEART_RED = "\u2764\ufe0f"
 
     # Path seperators
     SLASH = FORWARD_SLASH
-    BACKSLASH = u'\u005C'
+    BACKSLASH = "\u005c"
 
 
-class EXT:
+@dataclass
+class Ext:
     """Constants for various extensions."""
 
     YAML = ".yaml"

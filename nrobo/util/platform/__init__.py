@@ -12,13 +12,15 @@ Platform functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 import platform
-
+from dataclasses import dataclass
 from nrobo import EnvKeys
 
 
-class PLATFORMS:
+@dataclass
+class Platforms:
     """PLATFORMS class holds possible platform names."""
 
     LINUX = "Linux"

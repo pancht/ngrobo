@@ -11,8 +11,11 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @email: erpanchdev@gmail.com
 """
 
+from dataclasses import dataclass
 
-class WINDOWS_COMMAND:
+
+@dataclass
+class WindowsCommand:
     """WINDOWS_COMMAND class holds windows command names."""
 
     CLS = "cls"

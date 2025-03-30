@@ -11,6 +11,7 @@ class TestFakerFixture:
         """Test for generating fake internet addresses using Faker lib"""
 
         from faker.providers import internet
+
         faker.add_provider(internet)
 
         print(faker.ipv4_private())
