@@ -1,3 +1,6 @@
+# pylint: disable=R0801
+"""test alert methods module."""
+
 import pytest
 from selenium.webdriver.common.by import By
 
@@ -5,6 +8,7 @@ from nrobo.framework.pages import Page
 
 
 class TestAlertMethods:
+    """Alert methods tests."""
 
     @pytest.mark.skip(reason="This test fails in Headless mode")
     def test_example_accept_alert(self, driver, logger):
@@ -13,11 +17,11 @@ class TestAlertMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
-        page.click(*lnkJavaScriptAlert)
+        lnk_java_script_alert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnk_java_script_alert)
 
-        btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
-        page.click(*btnJSAlert)
+        btn_js_alert = (By.XPATH, "//button[text()='Click for JS Alert']")
+        page.click(*btn_js_alert)
         page.accept_alert()
 
         page.wait_for_a_while(3)
@@ -29,11 +33,11 @@ class TestAlertMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
-        page.click(*lnkJavaScriptAlert)
+        lnk_java_script_alert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnk_java_script_alert)
 
-        btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
-        page.click(*btnJSAlert)
+        btn_js_alert = (By.XPATH, "//button[text()='Click for JS Alert']")
+        page.click(*btn_js_alert)
         page.dismiss_alert()
 
         page.wait_for_a_while(3)
@@ -45,11 +49,11 @@ class TestAlertMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
-        page.click(*lnkJavaScriptAlert)
+        lnk_java_script_alert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnk_java_script_alert)
 
-        btnJSPrompt = (By.XPATH, "//button[text()='Click for JS Prompt']")
-        page.click(*btnJSPrompt)
+        btn_js_prompt = (By.XPATH, "//button[text()='Click for JS Prompt']")
+        page.click(*btn_js_prompt)
 
         page.send_keys_and_accept_alert("Sending keys to the JS Alert prompt.")
 
@@ -62,11 +66,11 @@ class TestAlertMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
-        page.click(*lnkJavaScriptAlert)
+        lnk_java_script_alert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnk_java_script_alert)
 
-        btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
-        page.click(*btnJSAlert)
+        btn_js_alert = (By.XPATH, "//button[text()='Click for JS Alert']")
+        page.click(*btn_js_alert)
         logger.info(f"Alert text=> {page.get_alert_text()}")
         page.dismiss_alert()
 

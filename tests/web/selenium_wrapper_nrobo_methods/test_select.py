@@ -1,3 +1,5 @@
+"""Select methods."""
+
 import pytest
 from selenium.webdriver.common.by import By
 
@@ -5,6 +7,7 @@ from nrobo.framework.pages import Page
 
 
 class TestSelect:
+    """Select method tests."""
 
     def test_get_all_select_options(self, driver, logger):
         """Example of getting all options from a dropdown"""
@@ -12,11 +15,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        options = page.select(*drdDropDownList).options
+        drd_drop_down_list = (By.ID, "dropdown")
+        options = page.select(*drd_drop_down_list).options
 
         logger.info(f"Options=> {options}")
 
@@ -29,11 +32,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_index(1)
@@ -50,11 +53,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_index(1)
@@ -69,11 +72,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_value("1")
@@ -86,11 +89,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_index(2)
@@ -103,11 +106,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_visible_text("Option 2")
@@ -121,11 +124,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_visible_text("Option 2")
@@ -142,11 +145,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_visible_text("Option 2")
@@ -163,11 +166,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_visible_text("Option 2")
@@ -184,11 +187,11 @@ class TestSelect:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDropDown = (By.CSS_SELECTOR, "[href='/dropdown']")
-        page.click(*lnkDropDown)
+        lnk_drop_down = (By.CSS_SELECTOR, "[href='/dropdown']")
+        page.click(*lnk_drop_down)
 
-        drdDropDownList = (By.ID, "dropdown")
-        dropdown = page.select(*drdDropDownList)
+        drd_drop_down_list = (By.ID, "dropdown")
+        dropdown = page.select(*drd_drop_down_list)
 
         # select first option
         dropdown.select_by_visible_text("Option 2")

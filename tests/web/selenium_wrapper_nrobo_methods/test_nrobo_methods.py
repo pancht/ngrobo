@@ -1,11 +1,12 @@
-import pytest
+"""nrobo methods tests."""
 
+import pytest
+from selenium.webdriver.common.by import By
 from nrobo.framework.pages import Page
 
-from selenium.webdriver.common.by import By
 
-
-class TestNRoBoSeleniumWrapperMethods:
+class TestNRoBoSeleniumWrapperMethods:  # pylint: disable=R0904
+    """Class holding tests for testing selenium wrapper methods."""
 
     def test_open_an_url(self, driver, logger):
         """Example to see how to open an URL"""
@@ -48,11 +49,11 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkMultipleWindow = (By.CSS_SELECTOR, "a[href='/windows']")
-        page.click(*lnkMultipleWindow)
+        lnk_multiple_window = (By.CSS_SELECTOR, "a[href='/windows']")
+        page.click(*lnk_multiple_window)
 
-        lnkClickHere = (By.CSS_SELECTOR, "a[href='/windows/new']")
-        page.click(*lnkClickHere)
+        lnk_click_here = (By.CSS_SELECTOR, "a[href='/windows/new']")
+        page.click(*lnk_click_here)
         another_window = "New Window"
 
         # close the another window
@@ -68,11 +69,11 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkMultipleWindow = (By.CSS_SELECTOR, "a[href='/windows']")
-        page.click(*lnkMultipleWindow)
+        lnk_multiple_window = (By.CSS_SELECTOR, "a[href='/windows']")
+        page.click(*lnk_multiple_window)
 
-        lnkClickHere = (By.CSS_SELECTOR, "a[href='/windows/new']")
-        page.click(*lnkClickHere)
+        lnk_click_here = (By.CSS_SELECTOR, "a[href='/windows/new']")
+        page.click(*lnk_click_here)
 
         page.quit()
 
@@ -93,11 +94,11 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkMultipleWindow = (By.CSS_SELECTOR, "a[href='/windows']")
-        page.click(*lnkMultipleWindow)
+        lnk_multiple_window = (By.CSS_SELECTOR, "a[href='/windows']")
+        page.click(*lnk_multiple_window)
 
-        lnkClickHere = (By.CSS_SELECTOR, "a[href='/windows/new']")
-        page.click(*lnkClickHere)
+        lnk_click_here = (By.CSS_SELECTOR, "a[href='/windows/new']")
+        page.click(*lnk_click_here)
 
         logger.info(f"all handles = {page.window_handles}")
         logger.info(f"all handles = {page.windows}")
@@ -131,7 +132,7 @@ class TestNRoBoSeleniumWrapperMethods:
         page.get("https://the-internet.herokuapp.com/")
         result = page.print_page()
 
-        from nrobo.util.common import Common
+        from nrobo.util.common import Common  # pylint: disable=C0415
 
         Common.save_as_pdf(result)
 
@@ -151,11 +152,11 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkJavaScriptAlert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
-        page.click(*lnkJavaScriptAlert)
+        lnk_java_script_alert = (By.CSS_SELECTOR, "[href='/javascript_alerts']")
+        page.click(*lnk_java_script_alert)
 
-        btnJSAlert = (By.XPATH, "//button[text()='Click for JS Alert']")
-        page.click(*btnJSAlert)
+        btn_js_alert = (By.XPATH, "//button[text()='Click for JS Alert']")
+        page.click(*btn_js_alert)
         page.accept_alert()
 
         page.wait_for_a_while(3)
@@ -166,15 +167,15 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
-        page.click(*lnkFrames)
+        lnk_frames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnk_frames)
 
-        lnkNestedFrames = (By.CSS_SELECTOR, "[href='/nested_frames']")
-        page.click(*lnkNestedFrames)
+        lnk_nested_frames = (By.CSS_SELECTOR, "[href='/nested_frames']")
+        page.click(*lnk_nested_frames)
         logger.info(f"Title of the landing page={page.title}")
 
-        frmTop = "frame-top"
-        page.frame(frmTop)  # Switch to Top level frame
+        frm_top = "frame-top"
+        page.frame(frm_top)  # Switch to Top level frame
 
         page.frame("frame-left")  # Switch to Left frame now
         content = page.page_source
@@ -184,11 +185,11 @@ class TestNRoBoSeleniumWrapperMethods:
         page.switch_to_default_content()
         logger.info(f"default content title={page.title}")
 
-        frmTop = "frame-top"
-        page.frame(frmTop)  # Switch again to Top level frame
+        frm_top = "frame-top"
+        page.frame(frm_top)  # Switch again to Top level frame
 
-        frmRight = "frame-right"
-        page.frame(frmRight)  # Switch to Right frame now
+        frm_right = "frame-right"
+        page.frame(frm_right)  # Switch to Right frame now
         content = page.page_source
         logger.info(f"Right Frame Content\n{content}")
 
@@ -201,15 +202,15 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
-        page.click(*lnkFrames)
+        lnk_frames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnk_frames)
 
-        lnkNestedFrames = (By.CSS_SELECTOR, "[href='/nested_frames']")
-        page.click(*lnkNestedFrames)
+        lnk_nested_frames = (By.CSS_SELECTOR, "[href='/nested_frames']")
+        page.click(*lnk_nested_frames)
         logger.info(f"Title of the landing page={page.title}")
 
-        frmTop = "frame-top"
-        page.frame(frmTop)  # Switch to Top level frame
+        frm_top = "frame-top"
+        page.frame(frm_top)  # Switch to Top level frame
 
         page.frame("frame-left")  # Switch to Left frame now
         content = page.page_source
@@ -219,8 +220,8 @@ class TestNRoBoSeleniumWrapperMethods:
         page.switch_to_parent_frame()
         logger.info(f"default content title={page.title}")
 
-        frmRight = "frame-right"
-        page.frame(frmRight)  # Switch to Right frame now
+        frm_right = "frame-right"
+        page.frame(frm_right)  # Switch to Right frame now
         content = page.page_source
         logger.info(f"Right Frame Content\n{content}")
 
@@ -254,8 +255,8 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkFrames = (By.CSS_SELECTOR, "[href='/frames']")
-        page.click(*lnkFrames)
+        lnk_frames = (By.CSS_SELECTOR, "[href='/frames']")
+        page.click(*lnk_frames)
         page.wait_for_a_while(2)
 
         # Perform browser back action
@@ -358,8 +359,8 @@ class TestNRoBoSeleniumWrapperMethods:
 
         page.implicitly_wait(10)
 
-        lnkArbitraryLink = (By.ID, "xxxhhhssjjsjjs")
-        page.find_element(*lnkArbitraryLink)
+        lnk_arbitrary_link = (By.ID, "xxxhhhssjjsjjs")
+        page.find_element(*lnk_arbitrary_link)
 
     def test_set_script_timeout(self, driver, logger):
         """set script timeout"""
@@ -407,8 +408,8 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkABTesting = (By.CSS_SELECTOR, '[href="/abtest"]')
-        page.find_element(*lnkABTesting).click()
+        lnk_ab_testing = (By.CSS_SELECTOR, '[href="/abtest"]')
+        page.find_element(*lnk_ab_testing).click()
         page.wait_for_a_while(5)
 
     def test_findelementssss(self, driver, logger):
@@ -417,8 +418,8 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        allLinks = (By.CSS_SELECTOR, "ul li a")
-        elements = page.find_elements(*allLinks)
+        all_links = (By.CSS_SELECTOR, "ul li a")
+        elements = page.find_elements(*all_links)
         logger.info(f"Count of all links = {len(elements)}")
         page.wait_for_a_while(2)
 
@@ -448,9 +449,9 @@ class TestNRoBoSeleniumWrapperMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        bytes = page.get_screenshot_as_png()
+        bytes = page.get_screenshot_as_png()  # pylint: disable=W0622
 
-        from nrobo.util.common import Common
+        from nrobo.util.common import Common  # pylint: disable=C0415
 
         Common.save_bytes_to_file(bytes, "downloads/screenshot_as_png.png")
 
@@ -462,7 +463,7 @@ class TestNRoBoSeleniumWrapperMethods:
 
         base64string = page.get_screenshot_as_base64()
 
-        from nrobo.util.common import Common
+        from nrobo.util.common import Common  # pylint: disable=C0415
 
         Common.save_base64string(
             base64string, "downloads/screenshot_as_base64string.png"

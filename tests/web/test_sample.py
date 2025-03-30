@@ -1,3 +1,5 @@
+"""Sample tests module."""
+
 import pytest
 from selenium.webdriver.common.by import By
 
@@ -5,11 +7,13 @@ from nrobo.framework.pages import Page
 
 
 class TestWebSamples:
+    """Web tests sample class."""
 
     @pytest.mark.regression
-    def test_pass_url_username_password_from_commandline(
+    def test_pass_url_username_password_from_commandline(  # pylint: disable=R0913,R0917
         self, driver, logger, url, username, password
     ):
+        """pass url username password cli test."""
         driver.get(url)
         logger.info(f"URL={url}, Username={username} and Password={password}")
 
@@ -53,7 +57,7 @@ class TestWebSamples:
         logger.info("Click submit button")
         submit_button.click()
 
-        raise Exception(
+        raise Exception(  # pylint: disable=W0719
             "Forcefully failed test for demonstration of screencapture feature!"
         )
 
@@ -79,6 +83,7 @@ class TestWebSamples:
         submit_button.click()
 
     def test_take_full_page_screenshot(self, driver, logger):
+        """full page screenshot test."""
         page = Page(driver, logger)
 
         page.get("https://namasteydigitalindia.com/")

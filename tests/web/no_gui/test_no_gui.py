@@ -1,7 +1,11 @@
+"""Test no gui module."""
+
 import pytest
 
 
 class TestNoGUI:
+    """No gui test."""
+
     def f2(self):
         """Verify no gui test f2"""
         raise ExceptionGroup(
@@ -21,6 +25,7 @@ class TestNoGUI:
         assert not excinfo.group_contains(TypeError)
 
     def f(self):
+        """f self."""
         raise SystemExit(1)
 
     @pytest.mark.nogui

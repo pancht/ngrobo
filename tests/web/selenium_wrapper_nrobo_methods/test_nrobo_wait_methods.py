@@ -1,9 +1,12 @@
+"""Nrobo wait methods."""
+
 from selenium.webdriver.common.by import By
 
 from nrobo.framework.pages import Page
 
 
 class TestNroboWaitMethods:
+    """Nrobo wait method tests."""
 
     def test_wait_for_page_to_be_loaded(self, driver, logger):
         """Example of wait for page to be loaded"""
@@ -27,12 +30,12 @@ class TestNroboWaitMethods:
         page = Page(driver, logger)
         page.get("https://the-internet.herokuapp.com/")
 
-        lnkDisappearingElements = (By.CSS_SELECTOR, "[href='/disappearing_elements']")
-        page.click(*lnkDisappearingElements)
+        lnk_disappearing_elements = (By.CSS_SELECTOR, "[href='/disappearing_elements']")
+        page.click(*lnk_disappearing_elements)
 
-        mnuPortfolio = (By.CSS_SELECTOR, "[href='/portfolio/']")
-        eleMnuPortfolio = page.find_element(*mnuPortfolio)
-        page.click(*mnuPortfolio)
-        page.wait_for_element_to_be_invisible(eleMnuPortfolio)
+        mnu_portfolio = (By.CSS_SELECTOR, "[href='/portfolio/']")
+        ele_mnu_portfolio = page.find_element(*mnu_portfolio)
+        page.click(*mnu_portfolio)
+        page.wait_for_element_to_be_invisible(ele_mnu_portfolio)
 
         page.wait_for_a_while(3)
