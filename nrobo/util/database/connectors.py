@@ -39,21 +39,18 @@ def db_connector(config: {}):
 
     if config[ConnectorAttributes.TYPE] == ConnectorType.MYSQL:
         return mysql_db_connector(config=copy_of_config)
-    else:
-        raise Exception(
-            f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}"
-        )
 
+    raise Exception(f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}")  # pylint: disable=W0719
 
 def mysql_db_connector(config: {}):
     """Dedicated database connector to established connection with mysql database instance
 
     described by given config settings"""
 
-    import mysql.connector
-    from mysql.connector import errorcode
+    import mysql.connector  # pylint: disable=C0415
+    from mysql.connector import errorcode # pylint: disable=C0415
 
-    for each_attempt in range(ConnectorAttributes.MAX_RETRY):
+    for _ in range(ConnectorAttributes.MAX_RETRY):
 
         try:
             _db_connection = mysql.connector.connect(**config)
@@ -71,4 +68,4 @@ def mysql_db_connector(config: {}):
 
             nrobo.wait(time_in_sec=ConnectorAttributes.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
 
-    raise Exception("Database connection did not established!!!")
+    raise Exception("Database connection did not established!!!")  # pylint: disable=W0719

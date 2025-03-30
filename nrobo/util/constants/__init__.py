@@ -13,9 +13,10 @@ Definitions of CONSTANTS.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+from dataclasses import dataclass
 
-
-class CONST(object):
+@dataclass
+class Const:
     """
     Collection of CONSTANTS
     """
@@ -75,7 +76,8 @@ class CONST(object):
     BACKSLASH = "\u005c"
 
 
-class EXT:
+@dataclass
+class Ext:
     """Constants for various extensions."""
 
     YAML = ".yaml"

@@ -32,22 +32,22 @@ def get_os_system_command(command: [str]) -> str:
     return _command
 
 
-def terminal(
+def terminal(  # pylint: disable=W0613,R0911,R0912
     command=[],
-    stdin=None,
-    input=None,
+    stdin=None,  # pylint: disable=W0613
+    input=None,  # pylint: disable=W0613
     stdout=None,
     stderr=None,
     capture_output=False,
-    shell=False,
-    cwd=None,
-    timeout=None,
-    check=False,
-    encoding=None,
-    errors=None,
+    shell=False,  # pylint: disable=W0613
+    cwd=None,  # pylint: disable=W0613
+    timeout=None,  # pylint: disable=W0613
+    check=False,  # pylint: disable=W0613
+    encoding=None,  # pylint: disable=W0613
+    errors=None,  # pylint: disable=W0613
     text=None,
-    env=None,
-    universal_newlines=None,
+    env=None,  # pylint: disable=W0613
+    universal_newlines=None,  # pylint: disable=W0613
     debug=False,
     use_os_system_call=False,
 ) -> int:

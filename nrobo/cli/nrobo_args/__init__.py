@@ -93,7 +93,7 @@ SHOW_ONLY_SWITCHES = [
 ]
 
 
-def nrobo_cli_parser(exit_on_failure=True):  # noqa: R0915
+def nrobo_cli_parser(exit_on_failure=True):  # pylint: disable=R0915
     """Define nRoBo command line arguments
 
     and return args."""

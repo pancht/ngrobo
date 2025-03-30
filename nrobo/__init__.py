@@ -26,7 +26,7 @@ import subprocess
 from rich.console import Console
 from nrobo.util.process import terminal
 from nrobo.cli.formatting import themes as th, STYLE
-from nrobo.util.constants import CONST
+from nrobo.util.constants import Const
 
 @dataclass
 class DbConnectorType:
@@ -265,7 +265,7 @@ def greet_the_guest():
     """greet the guest with Indian way of greeting!"""
 
     greet_msg = "Namastey World! Thank you for choosing, nRoBo."
-    formatted_heart_string = CONST.HEART_RED * len(greet_msg)
+    formatted_heart_string = Const.HEART_RED * len(greet_msg)
 
     console.print(f"[{STYLE.HLRed}]{formatted_heart_string}")
     console.print(f"[{STYLE.HLOrange}]{greet_msg}[/]")

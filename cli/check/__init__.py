@@ -15,7 +15,7 @@ This module has actions pertaining to nRoBo verifying packages.
 import os
 
 from nrobo import terminal, EnvKeys
-from nrobo.util.platform import PLATFORMS
+from nrobo.util.platform import Platforms
 
 
 def check(debug=False) -> None:
@@ -24,12 +24,12 @@ def check(debug=False) -> None:
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "twine"])
     terminal([os.environ[EnvKeys.PYTHON], "-m", "pip", "install", "--upgrade", "twine"])
     if os.environ[EnvKeys.HOST_PLATFORM] in [
-        PLATFORMS.DARWIN,
-        PLATFORMS.LINUX,
-        PLATFORMS.MACOS,
+        Platforms.DARWIN,
+        Platforms.LINUX,
+        Platforms.MACOS,
     ]:
         terminal(["twine", "check", "dist" + os.sep + "*"], debug=debug)
-    elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+    elif os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
         terminal(
             ["twine", "check", "." + os.sep + "dist" + os.sep + "*.*"], debug=debug
         )

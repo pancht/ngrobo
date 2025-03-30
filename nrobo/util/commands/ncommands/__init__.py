@@ -16,7 +16,7 @@ from nrobo import EnvKeys
 from nrobo.exceptions import MissingCommandImplementation
 from nrobo.util.commands.posix import POSIX_COMMAND
 from nrobo.util.commands.windows import WINDOWS_COMMAND
-from nrobo.util.platform import PLATFORMS
+from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
 
 
@@ -28,10 +28,10 @@ class NCommands:
 
     CLEAR_SCREEN = "clear screen"
     COMMAND = {
-        PLATFORMS.WINDOWS: {
+        Platforms.WINDOWS: {
             CLEAR_SCREEN: WINDOWS_COMMAND.CLS,
         },
-        PLATFORMS.DARWIN: {CLEAR_SCREEN: POSIX_COMMAND.CLEAR},
+        Platforms.DARWIN: {CLEAR_SCREEN: POSIX_COMMAND.CLEAR},
     }
 
 
@@ -58,16 +58,16 @@ def remove_files_recursively(directory) -> int:
     :return:"""
 
     if os.environ[EnvKeys.HOST_PLATFORM] in [
-        PLATFORMS.DARWIN,
-        PLATFORMS.LINUX,
-        PLATFORMS.MACOS,
+        Platforms.DARWIN,
+        Platforms.LINUX,
+        Platforms.MACOS,
     ]:
         try:
             return terminal(["rm", "-rf", directory])
         except Exception as e:
             print(e)
 
-    if os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+    if os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
         try:
             return terminal(["del", "/q", "/S", directory + os.sep + "*.*"])
         except Exception as e:

@@ -41,7 +41,7 @@ from nrobo.cli.cli_constants import *
 import os.path as path
 import nrobo.cli.detection as detect
 
-from nrobo.util.constants import CONST
+from nrobo.util.constants import Const
 from nrobo.appium import AutomationNames, CAPABILITY
 
 
@@ -352,7 +352,7 @@ def driver(request):
 
     # get and set url
     _url = request.config.getoption(f"--{NCli.URL}")
-    os.environ[EnvKeys.URL] = _url if _url else CONST.EMPTY
+    os.environ[EnvKeys.URL] = _url if _url else Const.EMPTY
 
     # get grid url
     _grid_server_url = request.config.getoption(f"--{NCli.GRID}")
@@ -714,11 +714,11 @@ def pytest_runtest_makereport(item, call):
             screenshot_filename = (
                 f'{node_id}_{datetime.today().strftime("%Y-%m-%d_%H:%M")}'
                 f"_{Common.generate_random_numbers(1000, 9999)}.png".replace(
-                    CONST.FORWARD_SLASH, CONST.UNDERSCORE
+                    Const.FORWARD_SLASH, Const.UNDERSCORE
                 )
-                .replace(CONST.SCOPE_RESOLUTION_OPERATOR, CONST.UNDERSCORE)
-                .replace(CONST.COLON, CONST.EMPTY)
-                .replace(".py", CONST.EMPTY)
+                .replace(Const.SCOPE_RESOLUTION_OPERATOR, Const.UNDERSCORE)
+                .replace(Const.COLON, Const.EMPTY)
+                .replace(".py", Const.EMPTY)
             )
 
             # build screenshot relative path for html report and actual path for saving screenshot
@@ -787,15 +787,15 @@ def pytest_configure(config):
     Description
         configure pytest.
     """
-    from nrobo.util.constants import CONST
+    from nrobo.util.constants import Const
 
     update_pytest_life_cycle_log("pytest_configure", "hook")
 
     os.environ[EnvKeys.TITLE] = str(config.getoption(f"--{NCli.REPORT_TITLE}")).replace(
-        CONST.UNDERSCORE, CONST.SPACE
+        Const.UNDERSCORE, Const.SPACE
     )
     os.environ[EnvKeys.APP] = str(config.getoption(f"--{NCli.APP}")).replace(
-        CONST.UNDERSCORE, CONST.SPACE
+        Const.UNDERSCORE, Const.SPACE
     )
     os.environ[EnvKeys.APPIUM] = (
         "1" if str(config.getoption(f"--{NCli.APPIUM}")) == "True" else "0"

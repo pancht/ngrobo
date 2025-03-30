@@ -16,6 +16,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 import os
 import platform
 import subprocess
+import sys
 
 
 def verify_set_python_install_pip_command() -> None:
@@ -28,18 +29,19 @@ def verify_set_python_install_pip_command() -> None:
 
     # regular expression to verify python version
     # major.minor.nightly-build
-    import re
+    import re  # pylint: disable=C0415
     regx = re.compile(r"([\d]+).[\d]+.[\d]+.*")
 
     if regx.match(platform.python_version()) is None:
         print(
-            "Required dependency python is not installed on system! Please, install python >= 3.8 and retry."
+            "Required dependency python is not installed on system! "
+            "Please, install python >= 3.8 and retry."
         )
-        exit(1)
+        sys.exit(1)
     else:
         # python is installed on the host system
-        import re
-        from nrobo import terminal, NroboConst, EnvKeys
+        import re  # pylint: disable=W0404,C0415
+        from nrobo import terminal, NroboConst, EnvKeys  # pylint: disable=C0415
         if int(re.search(r"[\d]+", platform.python_version())[0]) >= 3:
             # check if python version is >=3
 
@@ -65,9 +67,10 @@ def verify_set_python_install_pip_command() -> None:
                 pass
             else:
                 print(
-                    "Required dependency python is not installed on system! Please, install python >= 3.8 and retry."
+                    "Required dependency python is not installed on system! "
+                    "Please, install python >= 3.8 and retry."
                 )
-                exit()
+                sys.exit()
 
     # Install pip now!
     terminal(

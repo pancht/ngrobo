@@ -19,7 +19,7 @@ import shutil
 from pathlib import Path
 
 
-def copy_dir(
+def copy_dir(  # pylint: disable=R0913,R0917
     src,
     dst,
     symlinks=False,
@@ -119,7 +119,7 @@ def remove_filetree(
     onerror is deprecated and only remains for backwards compatibility.
     If both onerror and onexc are set, onerror is ignored and onexc is used.
     """
-    shutil.rmtree(
+    shutil.rmtree(  # pylint: disable=W4903
         path, ignore_errors=ignore_errors, onerror=onerror, onexc=onexc, dir_fd=dir_fd
     )
 
@@ -139,7 +139,7 @@ def get_files_list(
 
     Return only list of files if a pattern is supplied.
     Return list of files from subdirectories too if recursion flag is True."""
-    import re
+    import re  # pylint: disable=C0415
 
     if isinstance(path, str):
         # covert string to path
@@ -162,8 +162,7 @@ def get_files_list(
         for d in sub_dirs:
             _files = _files + get_files_list(d, pattern=pattern)
         return _files
-    else:
-        return _files
+    return _files
 
 
 def move(src, dst, copy_function=shutil.copy2):

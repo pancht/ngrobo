@@ -20,11 +20,7 @@ def internet_connectivity() -> bool:
     """Returns True if there is internet connectivity
     else return False"""
     try:
-        from nrobo import terminal
-
-        if terminal(["ping", "-c", "1", "google.com"]) == 0:
-            return True
-        else:
-            return False
+        from nrobo import terminal  # pylint: disable=C0415
+        return terminal(["ping", "-c", "1", "google.com"]) == 0
     except subprocess.CalledProcessError:
         return False

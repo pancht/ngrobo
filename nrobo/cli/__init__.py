@@ -13,13 +13,15 @@ Trigger for nrobo framework!
 @email: erpanchdev@gmail.com
 
 """
+import sys
+
 from nrobo.util.python import verify_set_python_install_pip_command
 
 def main():
     """Entry point of nrobo command-line-utility."""
 
     try:
-        import os
+        import os  # pylint: disable=W0611
         from nrobo.util.process import terminal
         import subprocess
 
@@ -29,25 +31,25 @@ def main():
             stderr=subprocess.STDOUT,
         )
         from nrobo.cli.launcher import launch_nrobo, launcher_command
-        from nrobo.cli.upgrade import confirm_update
-        from nrobo import EnvKeys, NroboConst, NroboPaths
+        from nrobo.cli.upgrade import confirm_update  # pylint: disable=W0611
+        from nrobo import EnvKeys, NroboConst, NroboPaths  # pylint: disable=W0611
         from nrobo import greet_the_guest
-        from nrobo.cli.nrobo_args import nrobo_cli_parser
+        from nrobo.cli.nrobo_args import nrobo_cli_parser  # pylint: disable=W0611
         from nrobo.cli.install import (
             install_nrobo,
             install_user_specified_requirements,
             missing_user_files_on_production,
         )
-        from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively
+        from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively  # pylint: disable=C0415
         from nrobo.util.process import terminal
-        from nrobo.util.constants import CONST
+        from nrobo.util.constants import Const  # pylint: disable=W0611
 
 
         # clear screen
         clear_screen()
 
         # called to set EnvKeys dependent on args
-        command, args, command_builder_notes = launcher_command()
+        command, args, command_builder_notes = launcher_command()  # pylint: disable=W0612
         if command is None:
             if missing_user_files_on_production():
                 install_nrobo(install_only=False)

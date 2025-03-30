@@ -31,7 +31,7 @@ from nrobo import terminal, NroboConst
 from nrobo import set_environment, EnvKeys, NroboPaths as NP
 from nrobo import console, STYLE
 
-def transfer_files_to_host_project() -> None:  # noqa: R0914
+def transfer_files_to_host_project() -> None:  # pylint: disable=R0912,R0915
     """Transfer nrobo project files to HOST project dir"""
     # Copy conftest.py and other files to current directory
     # =============================================================

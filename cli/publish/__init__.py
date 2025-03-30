@@ -17,8 +17,8 @@ process.
 from cli.build import ENV_CLI_SWITCH
 from cli.check import check
 from nrobo import *
-from nrobo.util.constants import CONST
-from nrobo.util.platform import PLATFORMS
+from nrobo.util.constants import Const
+from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
 
 global __CUR_ENV__
@@ -68,9 +68,9 @@ def publish(target, *, debug: bool = False, override: bool = False):
     with console.status(f"Publish on {PUBLISH_TARGET.PYPI.upper()}..."):
         command = ""
         if os.environ[EnvKeys.HOST_PLATFORM] in [
-            PLATFORMS.DARWIN,
-            PLATFORMS.LINUX,
-            PLATFORMS.MACOS,
+            Platforms.DARWIN,
+            Platforms.LINUX,
+            Platforms.MACOS,
         ]:
             command = [
                 "twine",
@@ -79,13 +79,13 @@ def publish(target, *, debug: bool = False, override: bool = False):
                 __CUR_ENV__,
                 "dist" + os.sep + "*",
             ]
-        elif os.environ[EnvKeys.HOST_PLATFORM] in [PLATFORMS.WINDOWS]:
+        elif os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
             command = [
                 "twine",
                 "upload",
                 "--repository",
                 __CUR_ENV__,
-                CONST.DOT + os.sep + "dist" + os.sep + "*.*",
+                Const.DOT + os.sep + "dist" + os.sep + "*.*",
             ]
 
         # add --skip-existing switch

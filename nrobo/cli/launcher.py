@@ -16,7 +16,7 @@ import os
 import sys
 from pathlib import Path
 
-from nrobo import NroboPaths, CONST, console, STYLE, terminal, EnvKeys
+from nrobo import NroboPaths, Const, console, STYLE, terminal, EnvKeys
 from nrobo.cli.cli_constants import PACKAGES, NREPORT, NCli
 from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import raise_exception_if_browser_not_supported, Browsers
@@ -26,7 +26,7 @@ import nrobo.cli.detection as detect
 global __REQUIREMENTS__
 
 
-def launcher_command(exit_on_failure=True):
+def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
     """Prepares nrobo launcher command
     by parsing command line switches
     in order to trigger test suite launch.
@@ -36,12 +36,12 @@ def launcher_command(exit_on_failure=True):
 
     # Need to import set_environment method here
     # to handle circular import of partially initialized module
-    from nrobo import set_environment
+    from nrobo import set_environment  # pylint: disable=C0415
 
     set_environment()
 
     # parse command line arguments
-    from nrobo.cli.nrobo_args import nrobo_cli_parser
+    from nrobo.cli.nrobo_args import nrobo_cli_parser  # pylint: disable=C0415
 
     args = nrobo_cli_parser(exit_on_failure=exit_on_failure)
 
@@ -115,7 +115,7 @@ def launcher_command(exit_on_failure=True):
 
     # process other switches
     with console.status(f"[{STYLE.TASK}]Parsing command-line-args...\n"):
-        for key, value in args.__dict__.items():
+        for key, value in args.__dict__.items():  # pylint: disable=R1702
             # break each arg into key, value pairs and process each key
 
             # handle hyphens in key names since argparser replaces hyphes with underscore
@@ -127,7 +127,7 @@ def launcher_command(exit_on_failure=True):
                 # if key has value, then only proceed with current key
 
                 cli_arg_keys = NCli.ARGS.keys()
-                if isinstance(value, bool) or isinstance(value, bool):
+                if isinstance(value, bool):
                     # if a bool key is found, only add key to the launcher command,
                     # not the value and proceed with next key
                     if key in (NCli.FULLPAGE_SCREENSHOT, BoolArgs.PYARGS):
@@ -188,7 +188,7 @@ def launcher_command(exit_on_failure=True):
                         command.append(str(value))
                         continue
 
-                    if key == NCli.BROWSER:
+                    if key == NCli.BROWSER:  # pylint: disable=R1724
                         os.environ[EnvKeys.BROWSER] = value
                         raise_exception_if_browser_not_supported(
                             os.environ[EnvKeys.BROWSER]
@@ -238,13 +238,13 @@ def launcher_command(exit_on_failure=True):
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
                     else:
-                        if key == NCli.TARGET or key == NCli.FILES:
+                        if key in (NCli.TARGET, NCli.FILES):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
 
                         if key in [NCli.APP, NCli.REPORT_TITLE]:
                             command.append(f"--{key}")
                             command.append(
-                                str(value).replace(CONST.SPACE, CONST.UNDERSCORE)
+                                str(value).replace(Const.SPACE, Const.UNDERSCORE)
                             )
                         else:
                             command.append(f"--{key}")
@@ -303,13 +303,13 @@ def launcher_command(exit_on_failure=True):
     # Process files
     if args.files:
         files = args.files
-        [command.append(f) for f in files]
+        [command.append(f) for f in files]  # pylint: disable=W0106
 
     # Process files
     if args.pyargs:
         command.append(f"--{BoolArgs.PYARGS}")
         files = args.pyargs
-        [command.append(f) for f in files]  # noqa: W0106
+        [command.append(f) for f in files]  # pylint: disable=W0106
 
     if args.pyargs and args.files:
         # Error
@@ -402,8 +402,7 @@ def create_simple_html_report(command: list) -> int:
     return_code = terminal(command, debug=True, use_os_system_call=True)
     console.rule(
         f"[{STYLE.HLOrange}]Report is ready at "
-        f"file://{Path(os.environ[EnvKeys.EXEC_DIR]) / 
-                  Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}"
+        f"file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}"
     )
 
     return return_code
