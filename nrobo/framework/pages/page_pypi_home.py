@@ -4,14 +4,14 @@
 """
 
 from selenium.webdriver.common.by import By
-from pages import Page
-from pages.PageSearch import PageSearch
+from pages import Page  # pylint: disable=E0401
+from pages.PageSearch import PageSearch  # pylint: disable=E0401
 
 
 class PagePyPiHome(Page):
     """Page class for PyPi.org home page"""
 
-    def __init__(self, driver, logger):
+    def __init__(self, driver, logger):  # pylint: disable=W0246
         """page constructor"""
 
         # Mandatory call to parent constructor

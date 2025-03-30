@@ -12,7 +12,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 """
 
 import json
-import os.path as path
+import os.path as path  # pylint: disable=R0402
 import random
 from pathlib import Path
 from typing import Union
@@ -21,7 +21,8 @@ import yaml
 
 
 class Common:
-    """Customized Selenium WebDriver class which contains all the useful methods that can be re used.
+    """Customized Selenium WebDriver class
+    which contains all the useful methods that can be re used.
     These methods _help to in the following cases:
     To reduce the time required to write automation script.
     To take the screenshot in case of test case failure.
@@ -39,7 +40,7 @@ class Common:
 
         try:
             if encoding is None:
-                with open(file_path, "r") as f:
+                with open(file_path, "r") as f:  # pylint: disable=W1514
                     content = f.read()
                     return content
             else:
@@ -65,7 +66,7 @@ class Common:
 
         try:
             if encoding is None:
-                with open(file_path, "w") as f:
+                with open(file_path, "w") as f:  # pylint: disable=W1514
                     f.write(content)
             else:
                 with open(file_path, "w", encoding=encoding) as f:
@@ -89,7 +90,7 @@ class Common:
 
         try:
             if encoding is None:
-                with open(file_path, "a") as f:
+                with open(file_path, "a") as f:  # pylint: disable=W1514
                     f.write(content)
             else:
                 with open(file_path, "w", encoding=encoding) as f:
@@ -99,7 +100,7 @@ class Common:
             print("No such file or directory found: " + str(file_path))
 
     @staticmethod
-    def read_json(file_path: Union[str, Path]):
+    def read_json(file_path: Union[str, Path]):  # pylint: disable=R1710
         """
         Read Json
 
@@ -109,7 +110,7 @@ class Common:
 
         try:
 
-            with open(file_path) as f:
+            with open(file_path) as f:  # pylint: disable=W1514
                 data = json.load(f)
                 return data
 
@@ -126,7 +127,7 @@ class Common:
         :return:
         """
 
-        with open(file_path, "w") as file:  # Open given file in write mode
+        with open(file_path, "w") as file:  # pylint: disable=W1514
             json.dump(dictionary, file, sort_keys=True, indent=4)
 
     @staticmethod
@@ -152,23 +153,21 @@ class Common:
         """
 
         if not path.exists(file_path) and not fail_on_failure:
-            """if file does not exist, then let's create it first"""
+            # if file does not exist, then let's create it first
 
-            with open(file_path, "w") as file:
-                """Create a file"""
+            with open(file_path, "w") as file:  # pylint: disable=W1514
+                # Create a file
 
                 # initialize file with empty dictionary
                 yaml.dump({}, file)
 
         if not path.exists(str(file_path)) and fail_on_failure:
-            """file does not exist"""
-            raise Exception(f"File {file_path} does not exist!")
-        else:
-            """Do Nothing as file exists"""
-            pass
+            # file does not exist
+            raise Exception(f"File {file_path} does not exist!")  # pylint: disable=W0719
+
 
         # Read the file
-        with open(r"{0}".format(file_path)) as file:
+        with open(r"{0}".format(file_path)) as file:  # pylint: disable=W1514,C0209
             # The FullLoader parameter handles the conversion from YAML
             # scalar values to Python the dictionary format
             data = yaml.load(file, Loader=yaml.SafeLoader)
@@ -186,11 +185,11 @@ class Common:
         :return: Nothin
         """
 
-        with open(file_path, "w") as file:  # Open given file in write mode
+        with open(file_path, "w") as file:  # pylint: disable=W1514
             yaml.dump(dictionary, file)
 
     @staticmethod
-    def generate_random_numbers(min, max):
+    def generate_random_numbers(min, max):  # pylint: disable=W0622
         """
         Generate and return a random number in given range denoted by min and max
 
@@ -198,20 +197,18 @@ class Common:
         :param max:
         :return:
         """
-        """
-        Returns a random string of given length
+        # Returns a random string of given length
+        # @Returns string a random string
 
-        @Returns string a random string
-        """
         random_number = random.randint(min, max)
 
         return random_number
 
     @staticmethod
-    def save_as_pdf(file_content_as_string, path: [str, Path] = None):
+    def save_as_pdf(file_content_as_string, path: [str, Path] = None):  # pylint: disable=W0621
         """Save as pdf to given path"""
 
-        import base64
+        import base64  # pylint: disable=C0415
 
         if path is None:
             path = "downloads/temp.pdf"
@@ -219,14 +216,14 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, "wb") as theFile:
-            theFile.write(base64.b64decode(file_content_as_string))
+        with open(path, "wb") as the_file:
+            the_file.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
-    def save_base64string(file_content_as_string, path: [str, Path] = None):
+    def save_base64string(file_content_as_string, path: [str, Path] = None):  # pylint: disable=W0621
         """Save base64string as given path"""
 
-        import base64
+        import base64  # pylint: disable=C0415
 
         if path is None:
             path = "downloads/temp.pdf"
@@ -234,11 +231,11 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, "wb") as theFile:
-            theFile.write(base64.b64decode(file_content_as_string))
+        with open(path, "wb") as the_file:
+            the_file.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
-    def save_bytes_to_file(bytes, path: [str, Path] = None):
+    def save_bytes_to_file(bytes, path: [str, Path] = None):  # pylint: disable=W0622,W0621
         """Save bytes to given path"""
 
         if path is None:
@@ -247,5 +244,5 @@ class Common:
         if isinstance(path, Path):
             path = str(path)
 
-        with open(path, "wb") as theFile:
-            theFile.write(bytes)
+        with open(path, "wb") as the_file:
+            the_file.write(bytes)

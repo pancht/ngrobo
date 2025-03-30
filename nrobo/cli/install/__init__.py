@@ -92,7 +92,7 @@ def transfer_files_to_host_project() -> None:  # pylint: disable=R0912,R0915
                 copy_file(
                     NP.EXEC_DIR / NP.CONFTEST_PY, NP.EXEC_DIR / "copy-conftest.py"
                 )
-                # copy nrobo conftest-host.py
+                # copy nrobo conftest_host.py
                 copy_file(
                     NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE,
                     NP.EXEC_DIR / NP.CONFTEST_PY,
@@ -158,7 +158,7 @@ def transfer_files_to_host_project() -> None:  # pylint: disable=R0912,R0915
             f"_{Common.generate_random_numbers(1000, 9999)}.py",
         )
 
-    # copy nrobo conftest-host.py
+    # copy nrobo conftest_host.py
     copy_file(NP.NROBO_DIR / NP.NROBO_CONFTEST_HOST_FILE, NP.EXEC_DIR / NP.CONFTEST_PY)
 
     if (NP.EXEC_DIR / NP.INIT_PY).exists():

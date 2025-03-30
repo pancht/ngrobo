@@ -17,32 +17,32 @@ import sys
 
 from nrobo.util.python import verify_set_python_install_pip_command
 
-def main():
+def main():  # pylint: disable=R0914
     """Entry point of nrobo command-line-utility."""
 
     try:
-        import os  # pylint: disable=W0611
-        from nrobo.util.process import terminal
-        import subprocess
+        import os  # pylint: disable=W0611,C0415
+        from nrobo.util.process import terminal  # pylint: disable=C0415
+        import subprocess  # pylint: disable=C0415
 
         terminal(
             ["pip", "install", "PyYAML"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.STDOUT,
         )
-        from nrobo.cli.launcher import launch_nrobo, launcher_command
-        from nrobo.cli.upgrade import confirm_update  # pylint: disable=W0611
-        from nrobo import EnvKeys, NroboConst, NroboPaths  # pylint: disable=W0611
-        from nrobo import greet_the_guest
-        from nrobo.cli.nrobo_args import nrobo_cli_parser  # pylint: disable=W0611
-        from nrobo.cli.install import (
+        from nrobo.cli.launcher import launch_nrobo, launcher_command  # pylint: disable=C0415
+        from nrobo.cli.upgrade import confirm_update  # pylint: disable=W0611,C0415
+        from nrobo import EnvKeys, NroboConst, NroboPaths  # pylint: disable=W0611,C0415
+        from nrobo import greet_the_guest  # pylint: disable=W0611,C0415
+        from nrobo.cli.nrobo_args import nrobo_cli_parser  # pylint: disable=W0611,C0415
+        from nrobo.cli.install import (  # pylint: disable=W0611,C0415
             install_nrobo,
             install_user_specified_requirements,
             missing_user_files_on_production,
         )
         from nrobo.util.commands.ncommands import clear_screen, remove_files_recursively  # pylint: disable=C0415
-        from nrobo.util.process import terminal
-        from nrobo.util.constants import Const  # pylint: disable=W0611
+        from nrobo.util.process import terminal  # pylint: disable=W0611,C0415
+        from nrobo.util.constants import Const  # pylint: disable=W0611,C0415
 
 
         # clear screen

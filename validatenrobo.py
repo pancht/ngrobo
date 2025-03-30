@@ -166,20 +166,20 @@ def run_unit_tests(debug=False) -> int:
     )
     # file:///Users/einsteinpanchdev/webdev/nrobo/results-unittests/nrobo_unit_tests_run_report.html
 
-    from nrobo.cli.cli_constants import NREPORT
+    from nrobo.cli.cli_constants import NReport
 
     exec_dir = Path(os.environ[EnvKeys.EXEC_DIR])
     console.rule(
         f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Unit tests report at: [/] file://{exec_dir / target}"
     )
     console.rule(
-        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Web tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / web_test_report_name}"
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Web tests report at: [/] file://{exec_dir / NReport.REPORT_DIR / web_test_report_name}"
     )
     console.rule(
-        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Android mobile tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / android_mobile_test_report_name}"
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]Android mobile tests report at: [/] file://{exec_dir / NReport.REPORT_DIR / android_mobile_test_report_name}"
     )
     console.rule(
-        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]iOS mobile tests report at: [/] file://{exec_dir / NREPORT.REPORT_DIR / ios_mobile_test_report}"
+        f"\n\n[{STYLE.HLOrange}][{STYLE.ITALIC}]iOS mobile tests report at: [/] file://{exec_dir / NReport.REPORT_DIR / ios_mobile_test_report}"
     )
 
     return 0  # A SUCCESS

@@ -12,17 +12,13 @@ nRoBo Constants.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
-
+from rich.console import *  # pylint: disable=W0401,W0614
 from nrobo.exceptions import NRoBoBrowserNotSupported
-
-from rich.console import *
-from nrobo.cli.formatting import *
-
-# from nrobo.cli import *
+from nrobo.cli.formatting import *  # pylint: disable=W0401
 
 console = Console(theme=themes)
 
-
+@dataclass
 class Browsers:
     """browser names constants"""
 
@@ -57,9 +53,10 @@ def raise_exception_if_browser_not_supported(browser_name):
 
     if str(browser_name).lower() in supported_browsers_in_future:
         console.print(
-            f"[{STYLE.HLOrange}]Support for {browser_name} browser will be coming in upcoming releases. Sorry for the "
+            f"[{STYLE.HLOrange}]Support for {browser_name} browser will "
+            f"be coming in upcoming releases. Sorry for the "
             f"convenience."
         )
-        exit(1)
+        sys.exit(1)
     if browser_name not in supported_browsers:
         raise NRoBoBrowserNotSupported(browser_name)

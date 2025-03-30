@@ -17,13 +17,13 @@ import sys
 from pathlib import Path
 
 from nrobo import NroboPaths, Const, console, STYLE, terminal, EnvKeys
-from nrobo.cli.cli_constants import PACKAGES, NREPORT, NCli
+from nrobo.cli.cli_constants import Packages, NReport, NCli
 from nrobo.cli.install import install_nrobo
 from nrobo.cli.nglobals import raise_exception_if_browser_not_supported, Browsers
 from nrobo.cli.nrobo_args import SHOW_ONLY_SWITCHES, BoolArgs
 import nrobo.cli.detection as detect
 
-global __REQUIREMENTS__
+global __REQUIREMENTS__  # pylint: disable=W0604
 
 
 def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
@@ -54,7 +54,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
 
     if args.VERSION:
         # show version
-        from nrobo import __version__
+        from nrobo import __version__  # pylint: disable=C0415
 
         console.print(f"nrobo {__version__}\n")
         return None, None, None
@@ -70,7 +70,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
         console.print(f"{result.stdout}")
         return None, None, None
 
-    if args.npm and args.npm in PACKAGES.APPIUM:
+    if args.npm and args.npm in Packages.APPIUM:
         # command = ['sudo', 'npm', 'cache', 'clean', '-f']
         # terminal(command=command, debug=True)
         # command = ['sudo', 'npm', 'install', '-g', 'n']
@@ -101,10 +101,10 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
 
         sys.exit(0)
 
-    elif args.npm and args.npm not in PACKAGES.APPIUM:
+    elif args.npm and args.npm not in Packages.APPIUM:
         console.print(
             f"[{STYLE.HLRed}]{args.npm} package support is not in [{STYLE.HLOrange}]nRoBo[/].[/]"
-            f"\nSupported packages are [{STYLE.HLOrange}]{PACKAGES.APPIUM}[/]."
+            f"\nSupported packages are [{STYLE.HLOrange}]{Packages.APPIUM}[/]."
         )
         sys.exit(1)
 
@@ -132,7 +132,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
                     # not the value and proceed with next key
                     if key in (NCli.FULLPAGE_SCREENSHOT, BoolArgs.PYARGS):
                         continue
-                    elif key == NCli.SUPPRESS:
+                    if key == NCli.SUPPRESS:
                         os.environ[EnvKeys.SUPPRESS_PROMPT] = "1"
                     elif key in SHOW_ONLY_SWITCHES:
                         terminal(["pytest", f"--{key}"], debug=True)
@@ -223,17 +223,17 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
                         command.append(value)
                         continue
                     elif key == NCli.REPORT:
-                        if str(value).lower() not in [NREPORT.HTML, NREPORT.ALLURE]:
+                        if str(value).lower() not in [NReport.HTML, NReport.ALLURE]:
                             console.print(
                                 "Incorrect report type! Valid report types are html | allure."
                             )
                             sys.exit(1)
-                        if str(value).lower() in NREPORT.HTML:
-                            command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
-                        elif str(value).lower() in NREPORT.ALLURE:
-                            command.append(f"--{NREPORT.HTML}")
-                            command.append(f"{Path(NREPORT.REPORT_DIR) / args.target}")
+                        if str(value).lower() in NReport.HTML:
+                            command.append(f"--{NReport.HTML}")
+                            command.append(f"{Path(NReport.REPORT_DIR) / args.target}")
+                        elif str(value).lower() in NReport.ALLURE:
+                            command.append(f"--{NReport.HTML}")
+                            command.append(f"{Path(NReport.REPORT_DIR) / args.target}")
                             # command.append(f"--allure-no-capture")
 
                             # Doc: https://allurereport.org/docs/gettingstarted-installation/
@@ -277,7 +277,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
 
     if not args.alluredir:
         command.append("--alluredir")
-        command.append(f"{NREPORT.ALLURE_REPORT_PATH}")
+        command.append(f"{NReport.ALLURE_REPORT_PATH}")
 
     if not args.pythonwarnings and args.browser == Browsers.ANTI_BOT_CHROME:
         # Suppress DeprecationWarning when running in undetected_chromedriver
@@ -349,7 +349,7 @@ def launch_nrobo():
             console.print(f"[{STYLE.INFO}]{command}")
 
         if (
-            args.report and args.report == NREPORT.ALLURE
+            args.report and args.report == NReport.ALLURE
         ):  # test if needed allure report
             create_allure_report(command)
         else:
@@ -380,7 +380,7 @@ def create_allure_report(command: list) -> int:
 
     terminal(
         [
-            NREPORT.ALLURE,
+            NReport.ALLURE,
             "generate",
             "--name",
             "nRoBo TEST REPORT",
@@ -392,7 +392,7 @@ def create_allure_report(command: list) -> int:
         use_os_system_call=True,
     )
 
-    terminal([NREPORT.ALLURE, "serve", allure_results], use_os_system_call=True)
+    terminal([NReport.ALLURE, "serve", allure_results], use_os_system_call=True)
 
 
 def create_simple_html_report(command: list) -> int:
@@ -402,7 +402,7 @@ def create_simple_html_report(command: list) -> int:
     return_code = terminal(command, debug=True, use_os_system_call=True)
     console.rule(
         f"[{STYLE.HLOrange}]Report is ready at "
-        f"file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NREPORT.REPORT_DIR) / NREPORT.HTML_REPORT_NAME}"
+        f"file://{Path(os.environ[EnvKeys.EXEC_DIR]) / Path(NReport.REPORT_DIR) / NReport.HTML_REPORT_NAME}"  # pylint: disable=C0301
     )
 
     return return_code

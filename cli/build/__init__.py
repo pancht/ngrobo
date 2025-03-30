@@ -177,7 +177,7 @@ def execute_unittests(debug=False) -> None:
 
 
 def copy_conftest_file() -> None:
-    """Copies conftest-host.py file from nrobo framework package to nrobo package."""
+    """Copies conftest_host.py file from nrobo framework package to nrobo package."""
 
     import shutil
     try:

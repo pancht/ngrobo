@@ -12,19 +12,19 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 """
 
 import logging
-from selenium.webdriver.remote.webdriver import WebDriver
 from typing import Union
-from nrobo.selenese import NRobo
-
-AnyBrowser = Union[None, WebDriver]
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.common.actions.wheel_input import WheelInput
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 from selenium.webdriver.common.actions.key_input import KeyInput
+from nrobo.selenese import NRobo
+
+AnyBrowser = Union[None, WebDriver]
 
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 
 
-class Page(NRobo):
+class Page(NRobo):  # pylint: disable=R0901
     """
     Page class is the base class for every _page objects
     that one is going to be created for his/her project.

@@ -16,7 +16,7 @@ regex module holds regular expression wrapper methods.
 import re
 
 
-def substitute(pattern, repl, string, count=0, flags=0):
+def substitute(pattern, repl, string, count=0, flags=0):  # pylint: disable=W0613
     """Return the string obtained by replacing the leftmost
     non-overlapping occurrences of the pattern in string by the
     replacement repl.  repl can be either a string or a callable;

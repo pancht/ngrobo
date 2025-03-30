@@ -17,7 +17,7 @@ Definitions of nRoBo command line arguments.
 # Define nrobo command line argument parser
 import argparse
 from dataclasses import dataclass
-from nrobo.cli.cli_constants import NCli, NREPORT
+from nrobo.cli.cli_constants import NCli, NReport
 from nrobo.cli.nglobals import Browsers
 
 
@@ -170,10 +170,10 @@ def nrobo_cli_parser(exit_on_failure=True):  # pylint: disable=R0915
     parser.add_argument(
         f"--{NCli.REPORT_TITLE}",
         help="Defines HTML Report title.",
-        default=f"{NREPORT.DEFAULT_REPORT_TITLE}",
+        default=f"{NReport.DEFAULT_REPORT_TITLE}",
     )
     parser.add_argument(
-        f"--{NCli.TARGET}", help="Report name", default=f"{NREPORT.HTML_REPORT_NAME}"
+        f"--{NCli.TARGET}", help="Report name", default=f"{NReport.HTML_REPORT_NAME}"
     )
     parser.add_argument(
         f"--{NCli.VERSION}", help="Shows nRoBo version", action="store_true"

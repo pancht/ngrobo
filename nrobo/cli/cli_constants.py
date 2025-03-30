@@ -14,10 +14,11 @@ Constants module.
 """
 
 import os
+from dataclasses import dataclass
 from pathlib import Path
 
-
-class NREPORT:
+@dataclass
+class NReport:
     """nRoBo report related constants"""
 
     HTML = "html"
@@ -34,7 +35,7 @@ class NREPORT:
     PATCHES = Path("patches")
     DEFAULT_REPORT_TITLE = "Test Automation Report"
 
-
+@dataclass
 class NCli:
     """List of nrobo defined cli options.
 
@@ -103,12 +104,13 @@ class NCli:
         "--code-highlight": ["--code-highlight", "yes"],
         "--junit-xml": [
             "--junit-xml",
-            NREPORT.REPORT_DIR + os.sep + "junit-report.xml",
+            NReport.REPORT_DIR + os.sep + "junit-report.xml",
         ],
     }
 
 
-class PACKAGES:
+@dataclass
+class Packages:
     """nRoBo packages"""
 
     NROBO = "nrobo"

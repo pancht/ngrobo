@@ -133,7 +133,7 @@ def remove_file(file_full_path: [str, Path]):
 
 
 def get_files_list(
-    path: [str, Path], *, pattern: [str, None] = None, recursion: bool = False
+    path: [str, Path], *, pattern: [str, None] = None, recursion: bool = False  # pylint: disable=W0613
 ) -> [Path]:
     """Returns list of files from the given <path>.
 

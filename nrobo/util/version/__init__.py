@@ -17,7 +17,7 @@ Version class handles version operations smoothly.
 from nrobo.exceptions import NRoBoIncorrectVersion, NRoBoInvalidOperation
 
 
-class Version:
+class Version:  # pylint: disable=R0902,R0904
     """Class Version."""
 
     def __init__(self, version):
@@ -191,13 +191,13 @@ class Version:
     def first_major_release(release_version):
         """first_major_release."""
         _release_version = Version(release_version)
-        return f"{_release_version._major}.0.0"
+        return f"{_release_version._major}.0.0"  # pylint: disable=W0212
 
     @staticmethod
     def first_minor_release(release_version):
         """first_minor_release."""
         _release_version = Version(release_version)
-        return f"{_release_version._major}.{_release_version._minor}.{0}"
+        return f"{_release_version._major}.{_release_version._minor}.{0}"    # pylint: disable=W0212
 
     @staticmethod
     def present_is_a_major_release(present_release: str, previous_release: str) -> bool:
@@ -247,7 +247,7 @@ class Version:
     def _version_parts(self):
         """_version_parts."""
         patten = r"(([\d]*)[.]([\d]*)[.]([\d]*))"
-        import re
+        import re  # pylint: disable=C0415
 
         m = re.match(patten, self._version)
 

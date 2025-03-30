@@ -11,15 +11,16 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @email: erpanchdev@gmail.com
 """
 import os
+from dataclasses import dataclass
 
 from nrobo import EnvKeys
 from nrobo.exceptions import MissingCommandImplementation
-from nrobo.util.commands.posix import POSIX_COMMAND
-from nrobo.util.commands.windows import WINDOWS_COMMAND
+from nrobo.util.commands.posix import PosixCommand
+from nrobo.util.commands.windows import WindowsCommand
 from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
 
-
+@dataclass
 class NCommands:
     """N_COMMANDS class hold nrobo command mappings for host platform.
 
@@ -29,21 +30,21 @@ class NCommands:
     CLEAR_SCREEN = "clear screen"
     COMMAND = {
         Platforms.WINDOWS: {
-            CLEAR_SCREEN: WINDOWS_COMMAND.CLS,
+            CLEAR_SCREEN: WindowsCommand.CLS,
         },
-        Platforms.DARWIN: {CLEAR_SCREEN: POSIX_COMMAND.CLEAR},
+        Platforms.DARWIN: {CLEAR_SCREEN: PosixCommand.CLEAR},
     }
 
 
-def get_command(command) -> None:
+def get_command(command) -> None:  # pylint: disable=W0613
     """Return the appropriate posix or windows <command> to caller."""
 
     try:
         return NCommands.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
             NCommands.CLEAR_SCREEN
         ]
-    except KeyError:
-        raise MissingCommandImplementation(NCommands.CLEAR_SCREEN)
+    except KeyError: # pylint: disable=W0707
+        raise MissingCommandImplementation(NCommands.CLEAR_SCREEN)  # pylint: disable=W0707
 
 
 def clear_screen():
@@ -64,13 +65,13 @@ def remove_files_recursively(directory) -> int:
     ]:
         try:
             return terminal(["rm", "-rf", directory])
-        except Exception as e:
+        except Exception as e:  # pylint: disable=W0718
             print(e)
 
     if os.environ[EnvKeys.HOST_PLATFORM] in [Platforms.WINDOWS]:
         try:
             return terminal(["del", "/q", "/S", directory + os.sep + "*.*"])
-        except Exception as e:
+        except Exception as e:  # pylint: disable=W0718
             print(e)
 
     return 1

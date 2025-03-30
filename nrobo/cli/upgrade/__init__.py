@@ -45,7 +45,7 @@ def get_pypi_index(package) -> None | str:
         # THUS, Quiting NOW!!!
         sys.exit(1)
 
-    result = subprocess.run(
+    result = subprocess.run(  # pylint: disable=W1510
         ["pip", "index", "versions", package],
         text=True,
         capture_output=True,

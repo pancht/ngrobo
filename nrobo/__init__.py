@@ -162,7 +162,7 @@ class NroboPaths:
     PAGES = Path("pages")
     TEST_DATA = Path("test_data")
     FRAMEWORK_PAGES = FRAMEWORK / PAGES
-    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("PagePyPiHome.py")
+    FRAMEWORK_PAGE_PYPI_HOME_PY_FILE = FRAMEWORK_PAGES / Path("page_pypi_home.py")
     TESTS = Path("tests")
     MOBILE = Path("mobile")
     WEB = Path("web")
@@ -175,7 +175,7 @@ class NroboPaths:
     FRAMEWORK_TESTS = FRAMEWORK / TESTS
     NROBO_CONFIG_FILE = Path("nrobo-config.yaml")
     FRAMEWORK_NROBO_CONFIG = FRAMEWORK / NROBO_CONFIG_FILE
-    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest-host.py"
+    NROBO_CONFTEST_HOST_FILE = FRAMEWORK / "conftest_host.py"
 
     SELENESE = Path("selenese")
 

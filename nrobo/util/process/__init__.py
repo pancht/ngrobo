@@ -32,10 +32,10 @@ def get_os_system_command(command: [str]) -> str:
     return _command
 
 
-def terminal(  # pylint: disable=W0613,R0911,R0912
-    command=[],
+def terminal(  # pylint: disable=W0613,R0911,R0912,R0913,R0917,R0914,W0102
+    command=[],  # pylint: disable=W0102
     stdin=None,  # pylint: disable=W0613
-    input=None,  # pylint: disable=W0613
+    input=None,  # pylint: disable=W0613,W0622
     stdout=None,
     stderr=None,
     capture_output=False,
@@ -75,8 +75,8 @@ def terminal(  # pylint: disable=W0613,R0911,R0912
         return os.system(get_os_system_command(command))
 
     if debug is False:
-        """check environment debug flag"""
-        from nrobo import EnvKeys
+        # check environment debug flag
+        from nrobo import EnvKeys  # pylint: disable=C0415
 
         if str(os.environ[EnvKeys.DEBUG]) == "True":
             debug = True
@@ -84,7 +84,7 @@ def terminal(  # pylint: disable=W0613,R0911,R0912
     try:
         if text and capture_output:
             try:
-                return subprocess.run(command, text=text, capture_output=capture_output)
+                return subprocess.run(command, text=text, capture_output=capture_output)  # pylint: disable=W1510
             except subprocess.CalledProcessError as e:
                 print(f"Command failed with return code {e.returncode}: \n{e}")
                 return e.returncode
@@ -115,7 +115,7 @@ def terminal(  # pylint: disable=W0613,R0911,R0912
     except FileNotFoundError as e:
         print(f"Command failed with FileNotFoundError!\n{e}")
         return 100
-    except Exception as e:
+    except Exception as e:  # pylint: disable=W0718
         print(f"Command failed with exception:\n\t{e}")
         return 100
 
