@@ -30,6 +30,7 @@ def verify_set_python_install_pip_command() -> None:
     # regular expression to verify python version
     # major.minor.nightly-build
     import re  # pylint: disable=C0415
+
     regx = re.compile(r"([\d]+).[\d]+.[\d]+.*")
 
     if regx.match(platform.python_version()) is None:
@@ -42,6 +43,7 @@ def verify_set_python_install_pip_command() -> None:
         # python is installed on the host system
         import re  # pylint: disable=W0404,C0415
         from nrobo import terminal, NroboConst, EnvKeys  # pylint: disable=C0415
+
         if int(re.search(r"[\d]+", platform.python_version())[0]) >= 3:
             # check if python version is >=3
 
@@ -57,12 +59,12 @@ def verify_set_python_install_pip_command() -> None:
             ):
                 os.environ[EnvKeys.PYTHON] = python3
             elif (
-                    terminal(
+                terminal(
                     [os.environ[EnvKeys.PYTHON], "--version"],
                     stdout=subprocess.DEVNULL,
                     stderr=subprocess.STDOUT,
                 )
-                    == NroboConst.SUCCESS
+                == NroboConst.SUCCESS
             ):
                 pass
             else:

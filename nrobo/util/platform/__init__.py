@@ -18,6 +18,7 @@ import platform
 from dataclasses import dataclass
 from nrobo import EnvKeys
 
+
 @dataclass
 class Platforms:
     """PLATFORMS class holds possible platform names."""

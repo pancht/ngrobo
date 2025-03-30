@@ -10,7 +10,9 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from dataclasses import dataclass
+
 
 @dataclass
 class PosixCommand:

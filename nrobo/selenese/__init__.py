@@ -23,7 +23,9 @@ from selenium.webdriver import ActionChains
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.common.print_page_options import PrintOptions  # pylint: disable=C0412
+from selenium.webdriver.common.print_page_options import (
+    PrintOptions,
+)  # pylint: disable=C0412
 from selenium.webdriver.common.timeouts import Timeouts
 from selenium.webdriver.common.virtual_authenticator import (
     VirtualAuthenticatorOptions,
@@ -34,7 +36,9 @@ from selenium.webdriver.common.window import WindowTypes
 from selenium.webdriver.remote.file_detector import FileDetector
 from selenium.webdriver.remote.shadowroot import ShadowRoot
 from selenium.webdriver.remote.webdriver import WebDriver
-from appium.webdriver.webdriver import WebDriver as AppiumWebDriver  # pylint: disable=C0412
+from appium.webdriver.webdriver import (
+    WebDriver as AppiumWebDriver,
+)  # pylint: disable=C0412
 from selenium.webdriver.support.select import Select  # pylint: disable=C0412
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.common import TimeoutException
@@ -59,6 +63,7 @@ import nrobo.cli.detection as detect
 AnyDevice = Union[PointerInput, KeyInput, WheelInput]
 AnyBy = Union[By, AppiumBy]
 AnyDriver = Union[None, WebDriver, AppiumWebDriver]
+
 
 @dataclass
 class WAITS:
@@ -94,7 +99,9 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
     """Customized wrapper in nrobo of selenium-webdriver commands with enhanced functionality.
     This class is not instantiable."""
 
-    def __init__(self, driver: AnyDriver, logger: logging.Logger):  # pylint: disable=W0231
+    def __init__(
+        self, driver: AnyDriver, logger: logging.Logger
+    ):  # pylint: disable=W0231
         """Constructor - NroboSeleniumWrapper
 
         :param driver: reference to selenium webdriver
@@ -116,7 +123,9 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
         """windows."""
         self._windows = _windows
 
-    def update_windows(self, _window_handles: list[str] = None):  # pylint: disable=R1710
+    def update_windows(
+        self, _window_handles: list[str] = None
+    ):  # pylint: disable=R1710
         """update windows."""
 
         if int(os.environ[EnvKeys.APPIUM]):
@@ -558,7 +567,9 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
         """
         self.driver.timeouts = timeouts
 
-    def find_element(self, by: AnyBy, value: Optional[str] = None) -> WebElement:  # pylint: disable=W0222
+    def find_element(
+        self, by: AnyBy, value: Optional[str] = None
+    ) -> WebElement:  # pylint: disable=W0222
         """Find an element given a By strategy and locator.
 
         :Usage:
@@ -575,7 +586,9 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
 
         return self.driver.find_element(by, value)
 
-    def find_elements(self, by: AnyBy, value: Optional[str] = None) -> List[WebElement]:  # pylint: disable=W0222
+    def find_elements(
+        self, by: AnyBy, value: Optional[str] = None
+    ) -> List[WebElement]:  # pylint: disable=W0222
         """Find elements given a By strategy and locator.
 
         :Usage:
@@ -870,7 +883,9 @@ class WebdriverWrapperNrobo(WebDriver):  # pylint: disable=R0904
 class WebElementWrapperNrobo(WebdriverWrapperNrobo):  # pylint: disable=R0904
     """NRobo webelement wrapper class"""
 
-    def __init__(self, driver: AnyDriver, logger: logging.Logger):  # pylint: disable=W0246
+    def __init__(
+        self, driver: AnyDriver, logger: logging.Logger
+    ):  # pylint: disable=W0246
         """
         Constructor - NroboSeleniumWrapper
 
@@ -927,9 +942,13 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):  # pylint: disable=R0904
     def clear_spl(self, by: AnyBy, value: Optional[str] = None):
         """clear_spl."""
         element = self.find_element(by, value)
-        self.action_chain().click(element).send_keys(Keys.ARROW_LEFT).double_click(  # pylint: disable=E1101
+        self.action_chain().click(element).send_keys(
+            Keys.ARROW_LEFT
+        ).double_click(  # pylint: disable=E1101
             self.find_element(by, value)
-        ).send_keys(Keys.DELETE).perform()
+        ).send_keys(
+            Keys.DELETE
+        ).perform()
         # self.wait_for_a_while(1)
 
     def clear(self, by: AnyBy, value: Optional[str] = None) -> None:
@@ -1013,7 +1032,9 @@ class WebElementWrapperNrobo(WebdriverWrapperNrobo):  # pylint: disable=R0904
         except Exception:  # pylint: disable=W0718
             return False
 
-    def send_keys(self, by: AnyBy, value: Optional[str] = None, *text) -> None:  # pylint: disable=W1113
+    def send_keys(
+        self, by: AnyBy, value: Optional[str] = None, *text
+    ) -> None:  # pylint: disable=W1113
         """Simulates typing into the element.
 
         :Args:
@@ -1152,7 +1173,9 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
     Nrobo implementation of wait methods
     """
 
-    def __init__(self, driver: AnyDriver, logger: logging.Logger):  # pylint: disable=W0246
+    def __init__(
+        self, driver: AnyDriver, logger: logging.Logger
+    ):  # pylint: disable=W0246
         """
         Constructor - NroboSeleniumWrapper
 
@@ -1296,6 +1319,7 @@ class WaitImplementationsNrobo(WebElementWrapperNrobo):
 
 class ActionChainsNrobo(WaitImplementationsNrobo):
     """Action chains nrobo."""
+
     def __init__(
         self,
         driver: AnyDriver,
@@ -1321,6 +1345,7 @@ class ActionChainsNrobo(WaitImplementationsNrobo):
 
 class AlertNrobo(ActionChainsNrobo):
     """Alert nrobo."""
+
     def __init__(
         self,
         driver: AnyDriver,
@@ -1408,6 +1433,7 @@ class DesiredCapabilitiesNrobo(ByNrobo):  # pylint: disable=R0901
 
 class SelectNrobo(DesiredCapabilitiesNrobo):  # pylint: disable=R0901
     """Select nrobo."""
+
     def __init__(
         self,
         driver: AnyDriver,
@@ -1498,7 +1524,9 @@ class NRoBoCustomMethods(AppiumNrobo):  # pylint: disable=R0901
 
         self.click(upload_ele_by, upload_ele_value)
 
-    def type_into(self, by: AnyBy, value: Optional[str] = None, *text) -> None:  # pylint: disable=W1113
+    def type_into(
+        self, by: AnyBy, value: Optional[str] = None, *text
+    ) -> None:  # pylint: disable=W1113
         """Type given text into given element located by (by, value)"""
         self.send_keys(by, value, text)
 

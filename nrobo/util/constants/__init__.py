@@ -13,7 +13,9 @@ Definitions of CONSTANTS.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from dataclasses import dataclass
+
 
 @dataclass
 class Const:

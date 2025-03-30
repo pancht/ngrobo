@@ -86,7 +86,6 @@ def confirm_update() -> None:
         )
     ):
 
-
         # version_forced_update = Version(host_version.version)
 
         if Version.present_is_a_major_release(

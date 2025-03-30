@@ -17,6 +17,7 @@ import os
 from dataclasses import dataclass
 from pathlib import Path
 
+
 @dataclass
 class NReport:
     """nRoBo report related constants"""
@@ -34,6 +35,7 @@ class NReport:
     NROBO_FRAMEWORK_TESTS_DIR = "nrobo_framework_tests"
     PATCHES = Path("patches")
     DEFAULT_REPORT_TITLE = "Test Automation Report"
+
 
 @dataclass
 class NCli:

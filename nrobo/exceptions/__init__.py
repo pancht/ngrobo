@@ -62,8 +62,10 @@ class NRoBoInvalidOperation(Exception):
 
     # constructor
     def __init__(self, operator: str, _type: type):
-        self.value = (f"TypeError: unsupported operand type(s) "
-                      f"for {operator}: 'Version' and '{_type}'")
+        self.value = (
+            f"TypeError: unsupported operand type(s) "
+            f"for {operator}: 'Version' and '{_type}'"
+        )
 
     def __str__(self):
         return repr(self.value)

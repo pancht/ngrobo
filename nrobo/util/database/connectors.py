@@ -1,14 +1,17 @@
 """
 Connectors.py
 """
+
 from dataclasses import dataclass
 from nrobo.selenese import NRobo as nrobo
+
 
 @dataclass
 class ConnectorType:
     """Database Connector Types"""
 
     MYSQL = "mysql"
+
 
 @dataclass
 class ConnectorAttributes:
@@ -40,7 +43,10 @@ def db_connector(config: {}):
     if config[ConnectorAttributes.TYPE] == ConnectorType.MYSQL:
         return mysql_db_connector(config=copy_of_config)
 
-    raise Exception(f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}")  # pylint: disable=W0719
+    raise Exception(
+        f"Invalid database connector type: {config[ConnectorAttributes.TYPE]}"
+    )  # pylint: disable=W0719
+
 
 def mysql_db_connector(config: {}):
     """Dedicated database connector to established connection with mysql database instance
@@ -48,7 +54,7 @@ def mysql_db_connector(config: {}):
     described by given config settings"""
 
     import mysql.connector  # pylint: disable=C0415
-    from mysql.connector import errorcode # pylint: disable=C0415
+    from mysql.connector import errorcode  # pylint: disable=C0415
 
     for _ in range(ConnectorAttributes.MAX_RETRY):
 
@@ -68,4 +74,6 @@ def mysql_db_connector(config: {}):
 
             nrobo.wait(time_in_sec=ConnectorAttributes.MAX_WAIT_BETWEEN_EACH_ATTEMPT)
 
-    raise Exception("Database connection did not established!!!")  # pylint: disable=W0719
+    raise Exception(
+        "Database connection did not established!!!"
+    )  # pylint: disable=W0719

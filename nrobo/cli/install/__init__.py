@@ -22,7 +22,13 @@ from typing import Optional
 from datetime import datetime
 from nrobo.cli.cli_constants import NCli
 from nrobo.util.common import Common
-from nrobo.util.filesystem import copy_file, copy_dir, move, remove_filetree, remove_file
+from nrobo.util.filesystem import (
+    copy_file,
+    copy_dir,
+    move,
+    remove_filetree,
+    remove_file,
+)
 from nrobo.util.version import Version
 from nrobo.cli.upgrade import get_host_version
 import nrobo.cli.detection as detect
@@ -30,6 +36,7 @@ from nrobo.cli.upgrade import confirm_update
 from nrobo import terminal, NroboConst
 from nrobo import set_environment, EnvKeys, NroboPaths as NP
 from nrobo import console, STYLE
+
 
 def transfer_files_to_host_project() -> None:  # pylint: disable=R0912,R0915
     """Transfer nrobo project files to HOST project dir"""
@@ -232,7 +239,6 @@ def transfer_files_to_host_project() -> None:  # pylint: disable=R0912,R0915
 def install_user_specified_requirements():
     """Install User specified requirements"""
 
-
     user_specified_requirements = Path(f"{NP.EXEC_DIR / NP.REQUIREMENTS_TXT_FILE}")
 
     if detect.production_machine() and user_specified_requirements.exists():
@@ -272,7 +278,6 @@ def install_nrobo(
     # Inline imports to handle circular import exception
     # while importing partially initialized module
 
-
     set_environment()
 
     if detect.production_machine() and not detect.host_machine_has_nrobo():
@@ -305,7 +310,6 @@ def install_nrobo(
 
     # triggers forced update or normal update by comparing host version and pypi version
 
-
     if detect.production_machine() and not detect.developer_machine():
         confirm_update()
 
@@ -318,7 +322,6 @@ def install_nrobo(
         # Install or upgrading framework on Production environment
 
         # triggers forced update or normal update by comparing host version and pypi version
-
 
         if detect.production_machine() and not detect.developer_machine():
             confirm_update()

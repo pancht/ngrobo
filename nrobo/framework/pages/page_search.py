@@ -1,4 +1,5 @@
 """Page Search page."""
+
 from pages import Page  # pylint: disable=E0401
 
 from selenium.webdriver.common.by import By

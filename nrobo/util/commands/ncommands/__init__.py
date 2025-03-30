@@ -10,6 +10,7 @@ FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 from dataclasses import dataclass
 
@@ -19,6 +20,7 @@ from nrobo.util.commands.posix import PosixCommand
 from nrobo.util.commands.windows import WindowsCommand
 from nrobo.util.platform import Platforms
 from nrobo.util.process import terminal
+
 
 @dataclass
 class NCommands:
@@ -43,8 +45,10 @@ def get_command(command) -> None:  # pylint: disable=W0613
         return NCommands.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
             NCommands.CLEAR_SCREEN
         ]
-    except KeyError: # pylint: disable=W0707
-        raise MissingCommandImplementation(NCommands.CLEAR_SCREEN)  # pylint: disable=W0707
+    except KeyError:  # pylint: disable=W0707
+        raise MissingCommandImplementation(
+            NCommands.CLEAR_SCREEN
+        )  # pylint: disable=W0707
 
 
 def clear_screen():

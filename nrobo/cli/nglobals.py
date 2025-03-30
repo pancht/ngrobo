@@ -12,11 +12,13 @@ nRoBo Constants.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 from rich.console import *  # pylint: disable=W0401,W0614
 from nrobo.exceptions import NRoBoBrowserNotSupported
 from nrobo.cli.formatting import *  # pylint: disable=W0401
 
 console = Console(theme=themes)
+
 
 @dataclass
 class Browsers:

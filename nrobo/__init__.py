@@ -28,11 +28,13 @@ from nrobo.util.process import terminal
 from nrobo.cli.formatting import themes as th, STYLE
 from nrobo.util.constants import Const
 
+
 @dataclass
 class DbConnectorType:
     """Database Connector Types"""
 
     MYSQL = "mysql"
+
 
 @dataclass
 class NroboConst:
@@ -58,6 +60,7 @@ class Environment:
 
     PRODUCTION = "Production"
     DEVELOPMENT = "Development"
+
 
 @dataclass
 class EnvKeys:
@@ -102,6 +105,7 @@ os.environ[EnvKeys.BROWSER] = ""
 os.environ[EnvKeys.HOST_PLATFORM] = ""
 os.environ[EnvKeys.DEBUG] = "False"
 os.environ[EnvKeys.SUPPRESS_PROMPT] = "0"
+
 
 @dataclass
 class NroboPaths:
@@ -226,6 +230,7 @@ class NroboPaths:
         Path("key") / "experiments" / "pytest" / "pytest-life-cycle-logs"
     )
 
+
 @dataclass
 class NroboCliToolPath:
     """nRoBo CLI tool paths"""
@@ -237,24 +242,22 @@ class NroboCliToolPath:
     DEVELOPMENT = CLI / Path("development")
     PUBLISH = CLI / Path("publish")
 
+
 @dataclass
 class NroboFrameworkTests:
     """nrobo_framework_tests package"""
 
     NROBO_FRAMEWORK_TESTS_CONFTEST_PY_FILE = (
-            NroboPaths.NROBO_FRAMEWORK_TESTS / NroboPaths.CONFTEST_PY
+        NroboPaths.NROBO_FRAMEWORK_TESTS / NroboPaths.CONFTEST_PY
     )
     TEST_NROBO_FRAMEWORK_PY_FILE = NroboPaths.NROBO_FRAMEWORK_TESTS / Path(
         "test_package_presence.py"
     )
 
 
-
-
 terminal(
     ["pip", "install", "rich"], stdout=subprocess.DEVNULL, stderr=subprocess.STDOUT
 )
-
 
 
 # rich console

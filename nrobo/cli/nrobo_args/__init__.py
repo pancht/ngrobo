@@ -194,9 +194,9 @@ def nrobo_cli_parser(exit_on_failure=True):  # pylint: disable=R0915
         "-b",
         f"--{NCli.BROWSER}",
         help=f"Target browser. Default is chrome. "
-             f"Options could be: {Browsers.CHROME} | {Browsers.CHROME_HEADLESS} | "
-             f"{Browsers.ANTI_BOT_CHROME} | {Browsers.FIREFOX} | "
-             f"{Browsers.FIREFOX_HEADLESS} | {Browsers.SAFARI} | {Browsers.EDGE}",
+        f"Options could be: {Browsers.CHROME} | {Browsers.CHROME_HEADLESS} | "
+        f"{Browsers.ANTI_BOT_CHROME} | {Browsers.FIREFOX} | "
+        f"{Browsers.FIREFOX_HEADLESS} | {Browsers.SAFARI} | {Browsers.EDGE}",
     )
     parser.add_argument(f"--{NCli.FILES}", help="Input files", nargs="+")
     parser.add_argument(

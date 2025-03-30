@@ -13,6 +13,7 @@ networking functions.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmaill.com
 """
+
 import subprocess
 
 
@@ -21,6 +22,7 @@ def internet_connectivity() -> bool:
     else return False"""
     try:
         from nrobo import terminal  # pylint: disable=C0415
+
         return terminal(["ping", "-c", "1", "google.com"]) == 0
     except subprocess.CalledProcessError:
         return False

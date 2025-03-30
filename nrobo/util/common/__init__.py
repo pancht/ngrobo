@@ -163,8 +163,9 @@ class Common:
 
         if not path.exists(str(file_path)) and fail_on_failure:
             # file does not exist
-            raise Exception(f"File {file_path} does not exist!")  # pylint: disable=W0719
-
+            raise Exception(
+                f"File {file_path} does not exist!"
+            )  # pylint: disable=W0719
 
         # Read the file
         with open(r"{0}".format(file_path)) as file:  # pylint: disable=W1514,C0209
@@ -205,7 +206,9 @@ class Common:
         return random_number
 
     @staticmethod
-    def save_as_pdf(file_content_as_string, path: [str, Path] = None):  # pylint: disable=W0621
+    def save_as_pdf(
+        file_content_as_string, path: [str, Path] = None
+    ):  # pylint: disable=W0621
         """Save as pdf to given path"""
 
         import base64  # pylint: disable=C0415
@@ -220,7 +223,9 @@ class Common:
             the_file.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
-    def save_base64string(file_content_as_string, path: [str, Path] = None):  # pylint: disable=W0621
+    def save_base64string(
+        file_content_as_string, path: [str, Path] = None
+    ):  # pylint: disable=W0621
         """Save base64string as given path"""
 
         import base64  # pylint: disable=C0415
@@ -235,7 +240,9 @@ class Common:
             the_file.write(base64.b64decode(file_content_as_string))
 
     @staticmethod
-    def save_bytes_to_file(bytes, path: [str, Path] = None):  # pylint: disable=W0622,W0621
+    def save_bytes_to_file(
+        bytes, path: [str, Path] = None
+    ):  # pylint: disable=W0622,W0621
         """Save bytes to given path"""
 
         if path is None:

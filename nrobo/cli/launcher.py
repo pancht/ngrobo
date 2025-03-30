@@ -12,6 +12,7 @@ Launcher for nRoBo framework.
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
 """
+
 import os
 import sys
 from pathlib import Path
@@ -158,9 +159,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
                         command.append(str(value))
                     else:
                         # simply add long keys to launcher command
-                        if (
-                            key in (NCli.TARGET, NCli.FILES, BoolArgs.PYARGS)
-                        ):
+                        if key in (NCli.TARGET, NCli.FILES, BoolArgs.PYARGS):
                             continue  # DO NOT ADD TO PYTEST LAUNCHER
 
                         if f"--{key}" in NCli.DEFAULT_ARGS:
@@ -326,9 +325,7 @@ def launcher_command(exit_on_failure=True):  # pylint: disable=R0915,R0912
                 str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.MOBILE)
             )
         else:
-            command.append(
-                str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.WEB)
-            )
+            command.append(str(NroboPaths.EXEC_DIR / NroboPaths.TESTS / NroboPaths.WEB))
 
     return command, args, command_builder_notes
 
