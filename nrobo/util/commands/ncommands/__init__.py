@@ -43,16 +43,16 @@ def get_command(command) -> None:  # pylint: disable=W0613
 
     try:
         return NCommands.COMMAND[os.environ[EnvKeys.HOST_PLATFORM]][
-            NCommands.CLEAR_SCREEN
+            command
         ]
     except KeyError:  # pylint: disable=W0707
         raise MissingCommandImplementation(  # pylint: disable=W0707
-            NCommands.CLEAR_SCREEN
+            command
         )
 
 
 def clear_screen():
-    """Run the clear screen command."""
+    """Runs clear screen command."""
     terminal([get_command(NCommands.CLEAR_SCREEN)])
 
 

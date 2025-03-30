@@ -7,17 +7,14 @@ TO LATEST NROBO VERSION, PLEASE DO NOT DELETE THIS
 FILE OR ALTER ITS LOCATION OR ALTER ITS CONTENT!!!
 ===================================================
 
-Trigger for nrobo framework!
+Entry point of nrobo framework.
 
 @author: Panchdev Singh Chauhan
 @email: erpanchdev@gmail.com
-
 """
 
 import sys
-
 from nrobo.util.python import verify_set_python_install_pip_command
-
 
 def main():  # pylint: disable=R0914
     """Entry point of nrobo command-line-utility."""
